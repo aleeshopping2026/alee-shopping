@@ -213,5 +213,8 @@
     else if (target === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank','noopener,noreferrer');
     else { const pages={instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/',youtube:'https://www.youtube.com/'}; const opened=window.open(pages[target],'_blank','noopener,noreferrer'); await copyShopLink(); if(opened)document.getElementById('shareStatus').textContent=`Profile link copied. Paste it into ${button.textContent.trim()}.`; }
   });
-  loadShop();
+  const loader=document.getElementById('siteLoader');
+  const hideLoader=()=>loader?.classList.add('hidden');
+  window.setTimeout(hideLoader,8000);
+  loadShop().catch(error=>{console.error(error);renderProfile();}).finally(hideLoader);
 })();

@@ -50,6 +50,17 @@ create table if not exists public.seller_chat_preferences (
   updated_at timestamptz not null default now(),
   primary key (user_id, conversation_id)
 );
+alter table public.seller_chat_preferences add column if not exists is_archived boolean not null default false;
+alter table public.seller_chat_preferences add column if not exists is_muted boolean not null default false;
+
+-- A block by either participant prevents further messages.
+create table if not exists public.seller_chat_blocks (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  blocked_user_id uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, blocked_user_id),
+  constraint seller_chat_blocks_no_self check (user_id <> blocked_user_id)
+);
 
 create index if not exists seller_conversations_buyer_recent_idx
   on public.seller_conversations (buyer_id, last_message_at desc);
@@ -61,6 +72,7 @@ create index if not exists seller_messages_conversation_recent_idx
 alter table public.seller_conversations enable row level security;
 alter table public.seller_messages enable row level security;
 alter table public.seller_chat_preferences enable row level security;
+alter table public.seller_chat_blocks enable row level security;
 
 drop policy if exists "Chat participants can read their conversations" on public.seller_conversations;
 create policy "Chat participants can read their conversations" on public.seller_conversations
@@ -82,6 +94,11 @@ create policy "Participants can send their own messages" on public.seller_messag
     sender_id = (select auth.uid()) and exists (
       select 1 from public.seller_conversations c
       where c.id = conversation_id and (select auth.uid()) in (c.buyer_id, c.seller_id)
+        and not exists (
+          select 1 from public.seller_chat_blocks b
+          where (b.user_id = (select auth.uid()) and b.blocked_user_id in (c.buyer_id,c.seller_id))
+             or (b.blocked_user_id = (select auth.uid()) and b.user_id in (c.buyer_id,c.seller_id))
+        )
     )
   );
 
@@ -108,6 +125,23 @@ create policy "Users can update their own chat preferences" on public.seller_cha
     where c.id = conversation_id and (select auth.uid()) in (c.buyer_id, c.seller_id)
   ));
 grant select, insert, update on public.seller_chat_preferences to authenticated;
+
+drop policy if exists "Users can read their chat blocks" on public.seller_chat_blocks;
+create policy "Users can read their chat blocks" on public.seller_chat_blocks
+  for select to authenticated using (user_id = (select auth.uid()));
+drop policy if exists "Users can block chat participants" on public.seller_chat_blocks;
+create policy "Users can block chat participants" on public.seller_chat_blocks
+  for insert to authenticated with check (
+    user_id = (select auth.uid()) and exists (
+      select 1 from public.seller_conversations c
+      where (select auth.uid()) in (c.buyer_id,c.seller_id)
+        and blocked_user_id in (c.buyer_id,c.seller_id)
+    )
+  );
+drop policy if exists "Users can unblock chat participants" on public.seller_chat_blocks;
+create policy "Users can unblock chat participants" on public.seller_chat_blocks
+  for delete to authenticated using (user_id = (select auth.uid()));
+grant select, insert, delete on public.seller_chat_blocks to authenticated;
 
 -- Private file bucket. Files can only be fetched by chat participants through signed URLs.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)

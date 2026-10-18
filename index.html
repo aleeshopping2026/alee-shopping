@@ -72,6 +72,11 @@
     .account-form.active { display:block; }
     .account-form input { width:100%; padding:12px; margin:0 0 10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
     .account-form .btn { width:100%; }
+    .phone-login-label { display:block; margin:0 0 7px; color:var(--text-white); font-size:13px; font-weight:700; }
+    .phone-change-button { display:block; margin:10px auto 0; padding:6px 10px; border:0; background:transparent; color:var(--light-leaf); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+    #phoneForm .iti { width:100%; margin-bottom:10px; }
+    #phoneForm .iti input { margin-bottom:0; }
+    #phoneForm .iti__dropdown-content { z-index:12000; }
     .account-tabs { display:flex; gap:8px; margin-bottom:15px; }
     .account-tab { flex:1; padding:10px; border:1px solid var(--glass-border); background:var(--bg-dark); color:var(--text-white); border-radius:10px; cursor:pointer; font-weight:700; }
     .account-tab.active { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
@@ -128,6 +133,7 @@
     .mobile-sheet { width:100%; max-height:75vh; overflow:auto; padding:18px 16px calc(18px + env(safe-area-inset-bottom)); background:var(--card-bg); color:var(--text-white); border-radius:18px 18px 0 0; box-shadow:0 -8px 30px #0003; }
     .mobile-sheet h2 { margin:0 0 14px; font-size:18px; }
     .mobile-category-list { display:grid; gap:8px; }
+    .mobile-shop-search { width:100%; margin:0 0 12px; padding:12px 13px; border:1px solid var(--glass-border); border-radius:11px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
     .mobile-category-option { width:100%; text-align:left; padding:13px 14px; border:1px solid var(--glass-border); border-radius:10px; color:var(--text-white); background:var(--bg-dark); font:inherit; }
     .mobile-account-email { padding:12px; border-radius:10px; background:var(--bg-dark); overflow-wrap:anywhere; margin-bottom:12px; }
     .mobile-sheet-action { width:100%; padding:12px; margin:5px 0; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
@@ -227,12 +233,18 @@
     .shops-strip-control { flex:0 0 30px; width:30px; height:30px; border:1px solid var(--glass-border); border-radius:50%; background:var(--bg-dark); color:var(--light-leaf); cursor:pointer; }
     .shops-strip-control:hover { background:var(--light-leaf); color:#fff; }
     .shops-strip { display:flex; flex:1 1 auto; gap:12px; min-width:0; overflow-x:auto; padding:2px 1px 7px; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scroll-behavior:smooth; touch-action:pan-x; }
-    .shop-tile { flex:0 0 98px; min-height:118px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:9px 7px; color:#3f2637; text-decoration:none; text-align:center; background:linear-gradient(145deg,#fff1f5 0%,#fce7f3 55%,#fdf2f8 100%); border:1px solid #f4b6d2; border-radius:12px; box-shadow:0 4px 14px rgba(190,24,93,.08); transition:transform .18s,border-color .18s,box-shadow .18s; }
+    .shop-tile { flex:0 0 82px; min-height:104px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:5px 3px; color:var(--text-white); text-decoration:none; text-align:center; background:transparent; border:0; border-radius:12px; transition:transform .18s; }
     .shop-tile:hover { transform:translateY(-2px); border-color:#ec4899; box-shadow:0 7px 18px rgba(190,24,93,.14); }
-    .shop-tile img { width:54px; height:54px; object-fit:cover; border-radius:50%; border:2px solid var(--shop-accent,#ff6900); background:#fff; box-shadow:0 2px 8px rgba(15,23,42,.14); }
+    .shop-tile img { width:64px; height:64px; object-fit:cover; border-radius:50%; border:3px solid var(--shop-accent,#ff6900); background:#fff; box-shadow:0 2px 10px color-mix(in srgb,var(--shop-accent,#ff6900) 24%,transparent); }
     .shop-tile strong { width:100%; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
     .shop-rating { display:flex; justify-content:center; gap:1px; color:#d1d5db; font-size:9px; line-height:1; white-space:nowrap; }
     .shop-rating .filled { color:#f59e0b; }
+    .site-loader { position:fixed; inset:0; z-index:50000; display:grid; place-content:center; justify-items:center; gap:12px; background:#fff; transition:opacity .2s,visibility .2s; }
+    .site-loader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+    .site-loader-ring { width:76px; height:76px; padding:5px; border:3px solid #ff6900; border-top-color:#f4a261; border-right-color:#ffb703; border-radius:50%; animation:aleeLoaderSpin .8s linear infinite; }
+    .site-loader-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; animation:aleeLoaderSpin .8s linear infinite reverse; }
+    .site-loader span { color:#ff6900; font-size:13px; font-weight:800; }
+    @keyframes aleeLoaderSpin { to { transform:rotate(360deg); } }
     .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:4px 0 2px; color:var(--text-white); font-size:10px; font-weight:700; }
     .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -426,6 +438,9 @@
     .seller-panel h3 { margin:0 0 10px; color:var(--light-leaf); }
     .seller-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 12px; }
     .seller-panel label { display:grid; gap:6px; margin:10px 0; font-size:13px; font-weight:700; }
+    .phone-entry { display:grid; grid-template-columns:112px minmax(0,1fr); gap:7px; }
+    .phone-entry select,.phone-entry input { width:100%; min-width:0; }
+    .phone-preview { color:#64748b; font-size:11px; font-weight:500; }
     .seller-panel input,.seller-panel textarea,.seller-panel select { width:100%; padding:11px; border:1px solid var(--glass-border); border-radius:9px; background:var(--card-bg); color:var(--text-white); font:inherit; }
     .seller-panel textarea { min-height:75px; resize:vertical; }
     .seller-panel input[type=file] { font-size:12px; }
@@ -468,17 +483,19 @@
   </style>
 </head>
 <body class="has-top-searches">
+  <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading ALEE SHOPPING…</span></div>
 
   <!-- ================= ACCOUNT MODAL ================= -->
   <div id="accountModal" aria-hidden="true">
     <div class="account-card">
       <span class="account-close" onclick="closeAccountModal()">&times;</span>
       <h2>ALEE SHOPPING</h2>
-      <div class="account-note">Sign in with Google to create your shop and add products, or use email sign-in.</div>
+      <div class="account-note">Sign in with Google, email, or a verified phone number.</div>
       <button class="btn" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
       <div class="account-tabs" role="tablist" aria-label="Account access">
         <button class="account-tab active" id="signInTab" type="button" onclick="showAccountForm('signin')">Sign In</button>
         <button class="account-tab" id="signUpTab" type="button" onclick="showAccountForm('signup')">Create Account</button>
+        <button class="account-tab" id="phoneTab" type="button" onclick="showAccountForm('phone')">Phone</button>
       </div>
       <form id="signInForm" class="account-form active" onsubmit="signInWithEmail(event)">
         <input id="signInEmail" type="email" placeholder="Email address" autocomplete="email" required>
@@ -489,6 +506,13 @@
         <input id="signUpEmail" type="email" placeholder="Email address" autocomplete="email" required>
         <input id="signUpPassword" type="password" placeholder="Create a password (at least 6 characters)" autocomplete="new-password" minlength="6" required>
         <button class="btn" type="submit">Create Account</button>
+      </form>
+      <form id="phoneForm" class="account-form" onsubmit="signInWithPhone(event)">
+        <label class="phone-login-label" for="phoneLoginInput">Phone number</label>
+        <input id="phoneLoginInput" type="tel" inputmode="tel" autocomplete="tel" placeholder="Enter your phone number" required>
+        <input id="phoneOtpInput" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit SMS code" maxlength="8" hidden>
+        <button class="btn" id="phoneSubmitButton" type="submit">Send SMS code</button>
+        <button class="phone-change-button" id="phoneChangeButton" type="button" onclick="resetPhoneLogin()" hidden>Change phone number</button>
       </form>
       <div class="account-status" id="accountStatus" role="status" aria-live="polite"></div>
     </div>
@@ -523,6 +547,7 @@
         
         <!-- Dropdown Menu for Logout / Switch Email -->
         <div class="profile-dropdown" id="profileDropdown">
+          <div class="dropdown-item" onclick="editAccountDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</div>
           <div class="dropdown-item" onclick="openAccountModal()">
             <i class="fa-solid fa-right-to-bracket"></i> Sign In / Create Account
           </div>
@@ -575,7 +600,7 @@
     </div>
 
     <section class="shops-section" id="shopsSection" aria-label="Shops">
-      <h2 class="shops-heading">Shops <small>Choose a shop to see its products</small></h2>
+      <h2 class="shops-heading">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800">Search all →</a></span></h2>
       <div class="shops-strip-wrap">
         <button class="shops-strip-control" type="button" onclick="scrollShopStrip(-1)" aria-label="Scroll shops left"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="shops-strip" id="shopsStrip" tabindex="0" aria-label="Shop list; swipe or scroll horizontally"></div>
@@ -595,6 +620,7 @@
     <div class="mobile-sheet-backdrop" id="mobileShopsSheet" onclick="if(event.target===this)closeMobileSheet('mobileShopsSheet')">
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileShopsTitle">
         <h2 id="mobileShopsTitle">Shops</h2>
+        <input class="mobile-shop-search" id="mobileShopSearch" type="search" placeholder="Search shops…" aria-label="Search shops">
         <div class="mobile-sheet-shop-list" id="mobileShopList"></div>
       </section>
     </div>
@@ -744,7 +770,8 @@
     <div class="seller-card">
       <div class="seller-header"><div><h2 id="buyerDashboardTitle">Buyer Profile</h2><div class="seller-subtitle">Your ALEE SHOPPING account</div></div><button class="seller-close" type="button" onclick="closeBuyerAccount()" aria-label="Close">&times;</button></div>
       <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Buyer profile picture"></div><h3 id="buyerProfileName">Buyer</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
-        <div class="seller-action-row"><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
+        <form id="buyerDetailsForm" onsubmit="saveBuyerDetails(event)" hidden><label>Display name<input id="buyerDisplayName" maxlength="80" required></label><button class="seller-action-button primary" type="submit">Save details</button><div class="seller-notice" id="buyerDetailsStatus" role="status"></div></form>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
       </section>
     </div>
   </div>
@@ -765,8 +792,8 @@
           <label>Shop name<input name="shopName" minlength="2" maxlength="80" required placeholder="Your shop name"></label>
           <label>Shop category<select name="shopCategory" id="sellerShopCategory" required></select></label>
           <label>Business bio<textarea name="bio" maxlength="600" placeholder="Tell customers about your business"></textarea></label>
-          <label>Phone number<input name="phone" type="tel" maxlength="40" required placeholder="+94..."></label>
-          <label>Second phone number (optional)<input name="phone2" type="tel" maxlength="40" placeholder="+94..."></label>
+          <label>Phone number<span class="phone-entry"><select name="phoneCountry" data-phone-country aria-label="Phone country code"><option value="+94">🇱🇰 +94</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option><option value="+61">🇦🇺 +61</option><option value="+91">🇮🇳 +91</option><option value="+971">🇦🇪 +971</option></select><input name="phone" data-phone-local type="tel" inputmode="tel" maxlength="24" required placeholder="76 123 4567"></span><small class="phone-preview" data-phone-preview>Full number: +94</small></label>
+          <label>Second phone number (optional)<span class="phone-entry"><select name="phone2Country" data-phone-country aria-label="Second phone country code"><option value="+94">🇱🇰 +94</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option><option value="+61">🇦🇺 +61</option><option value="+91">🇮🇳 +91</option><option value="+971">🇦🇪 +971</option></select><input name="phone2" data-phone-local type="tel" inputmode="tel" maxlength="24" placeholder="76 123 4567"></span><small class="phone-preview" data-phone-preview>Optional</small></label>
           <label>Shop address<textarea name="address" minlength="3" maxlength="400" required placeholder="Shop address"></textarea></label>
           <label>Facebook link<input name="facebook" type="url" maxlength="500" placeholder="https://www.facebook.com/..."></label>
           <label>Instagram link<input name="instagram" type="url" maxlength="500" placeholder="https://www.instagram.com/..."></label>
@@ -812,6 +839,9 @@
     const supabaseClient = window.aleeSupabase || null;
     let activeUser = null;
     let currentSellerShop = null;
+    let phoneLoginInstance = null;
+    let phoneLoginPendingNumber = '';
+    let phoneInputLibraryPromise = null;
     let sellerProducts = [];
     let editingSellerProductId = null;
 
@@ -892,6 +922,35 @@
 
     function closeBuyerAccount() { document.getElementById('buyerDashboard').classList.remove('show'); }
 
+    async function editAccountDetails() {
+      document.getElementById('profileDropdown')?.classList.remove('show');
+      if(!activeUser){openAccountModal();return;}
+      if(getAccountRole()==='seller'){
+        await openSellerAccount(true);
+        if(currentSellerShop)editSellerShop();
+      } else { openBuyerAccount();editBuyerDetails(); }
+    }
+
+    function editBuyerDetails() {
+      if(!activeUser)return;
+      const form=document.getElementById('buyerDetailsForm');
+      form.hidden=false;
+      document.getElementById('buyerDisplayName').value=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'';
+    }
+
+    async function saveBuyerDetails(event) {
+      event.preventDefault();
+      const name=document.getElementById('buyerDisplayName').value.trim();
+      const status=document.getElementById('buyerDetailsStatus');
+      if(!name||!supabaseClient){status.textContent='Could not update details. Please sign in again.';return;}
+      status.textContent='Saving…';
+      const {data,error}=await supabaseClient.auth.updateUser({data:{full_name:name,name}});
+      if(error){status.textContent=error.message;return;}
+      setLoggedInUser(data.user||activeUser);
+      document.getElementById('buyerProfileName').textContent=name;
+      status.textContent='Details saved.';
+    }
+
     async function openSellerAccount(skipRolePrompt=false) {
       document.getElementById('profileDropdown')?.classList.remove('show');
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in with Google first to create a shop and add items.';return;}
@@ -910,6 +969,36 @@
     function mapSellerProduct(row) {
       return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:Number(row.price),discountPercent:0,category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
     }
+
+    function normalizeShopPhone(value,countryCode) {
+      const raw=String(value||'').trim();if(!raw)return '';
+      const digits=raw.replace(/\D/g,'');
+      if(raw.startsWith('+'))return `+${digits}`;
+      if(raw.startsWith('00'))return `+${digits.slice(2)}`;
+      const national=digits.replace(/^0+/,'');
+      return `${countryCode||'+94'}${national}`;
+    }
+
+    function updatePhonePreview(input) {
+      const label=input.closest('label'),country=label.querySelector('[data-phone-country]'),preview=label.querySelector('[data-phone-preview]');
+      const full=normalizeShopPhone(input.value,country.value);
+      preview.textContent=full?`Full number: ${full}`:(input.name==='phone2'?'Optional':`Full number: ${country.value}`);
+    }
+
+    function fillPhoneField(name,value) {
+      const input=document.querySelector(`[name="${name}"]`),label=input.closest('label'),country=label.querySelector('[data-phone-country]');
+      const raw=String(value||'');
+      const matched=[...country.options].sort((a,b)=>b.value.length-a.value.length).find(option=>raw.startsWith(option.value));
+      if(matched){country.value=matched.value;input.value=raw.slice(matched.value.length).replace(/^0+/,'');}
+      else input.value=raw;
+      updatePhonePreview(input);
+    }
+
+    document.querySelectorAll('[data-phone-local]').forEach(input=>{
+      input.addEventListener('input',()=>updatePhonePreview(input));
+      input.closest('label').querySelector('[data-phone-country]').addEventListener('change',()=>updatePhonePreview(input));
+      updatePhonePreview(input);
+    });
 
     function fillSellerShopCategories(selected='Other') {
       const select=document.getElementById('sellerShopCategory');
@@ -1013,7 +1102,7 @@
     function editSellerShop() {
       if(!currentSellerShop)return;
       const form=document.getElementById('sellerShopForm');
-      form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.bio.value=currentSellerShop.bio||'';form.elements.phone.value=currentSellerShop.phone||'';form.elements.phone2.value=currentSellerShop.phone2||'';
+      form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.bio.value=currentSellerShop.bio||'';fillPhoneField('phone',currentSellerShop.phone||'');fillPhoneField('phone2',currentSellerShop.phone2||'');
       form.elements.address.value=currentSellerShop.address||'';form.elements.externalLink.value=currentSellerShop.external_link||'';
       form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.tiktok.value=currentSellerShop.tiktok_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
       form.elements.shopCategory.value=currentSellerShop.shop_category||'Other';form.elements.logo.value='';form.elements.logo.required=false;
@@ -1033,7 +1122,7 @@
       event.preventDefault();
       if(!activeUser||!supabaseClient)return;
       const form=event.currentTarget,status=document.getElementById('sellerShopStatus');
-      const name=form.elements.shopName.value.trim(),phone=form.elements.phone.value.trim(),address=form.elements.address.value.trim(),externalLink=form.elements.externalLink.value.trim();
+      const name=form.elements.shopName.value.trim(),phone=normalizeShopPhone(form.elements.phone.value,form.elements.phoneCountry.value),address=form.elements.address.value.trim(),externalLink=form.elements.externalLink.value.trim();
       const socialValues={facebook_url:form.elements.facebook.value.trim(),instagram_url:form.elements.instagram.value.trim(),tiktok_url:form.elements.tiktok.value.trim(),youtube_url:form.elements.youtube.value.trim()};
       const socialUrl=Object.values(socialValues).find(value=>value&&!/^https?:\/\//i.test(value));
       if(externalLink&&!/^https?:\/\//i.test(externalLink)){status.textContent='Shop link must start with https:// or http://';return;}
@@ -1041,7 +1130,7 @@
       const button=document.getElementById('sellerShopSubmit'),logoFile=form.elements.logo.files[0];button.disabled=true;status.textContent='Saving your shop profile…';
       let uploadedLogo=null;
       try {
-        const phone2=form.elements.phone2.value.trim();
+        const phone2=normalizeShopPhone(form.elements.phone2.value,form.elements.phone2Country.value);
         if(!currentSellerShop&&!logoFile)throw new Error('Add a shop profile picture before submitting.');
         if(logoFile)uploadedLogo=await uploadSellerImage(logoFile,`${activeUser.id}/shop-profile`);
         const payload={owner_id:activeUser.id,shop_name:name,bio:form.elements.bio.value.trim(),phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
@@ -1055,7 +1144,8 @@
         currentSellerShop=data;
         await loadSellerCatalog();
         await loadSellerWorkspace();
-        document.getElementById('sellerDashboardStatus').textContent=isNewShop?'Shop profile submitted. Use “Send Details to ALEE SHOPPING” to share it on WhatsApp.':'Shop profile updated.';
+        document.getElementById('sellerDashboardStatus').textContent=isNewShop?'Shop profile saved. Opening your public profile…':'Shop profile updated.';
+        if(isNewShop)window.setTimeout(()=>{location.href=shopPublicUrl(currentSellerShop.id);},900);
       } catch(error) { console.error(error);if(uploadedLogo)try{await supabaseClient.storage.from('seller-uploads').remove([uploadedLogo.path]);}catch(cleanupError){}status.textContent=`Could not save your shop profile. Check Supabase setup and try again. ${error.message||''}`; }
       finally {button.disabled=false;}
     }
@@ -1197,10 +1287,69 @@
     function showAccountForm(mode) {
       const signIn = mode === 'signin';
       document.getElementById('signInForm').classList.toggle('active', signIn);
-      document.getElementById('signUpForm').classList.toggle('active', !signIn);
+      document.getElementById('signUpForm').classList.toggle('active', mode === 'signup');
+      document.getElementById('phoneForm').classList.toggle('active', mode === 'phone');
       document.getElementById('signInTab').classList.toggle('active', signIn);
-      document.getElementById('signUpTab').classList.toggle('active', !signIn);
+      document.getElementById('signUpTab').classList.toggle('active', mode === 'signup');
+      document.getElementById('phoneTab').classList.toggle('active', mode === 'phone');
       document.getElementById('accountStatus').textContent = '';
+      if(mode==='phone')loadPhoneInputLibrary();
+    }
+
+    function loadPhoneInputLibrary() {
+      if(phoneLoginInstance)return Promise.resolve(phoneLoginInstance);
+      if(phoneInputLibraryPromise)return phoneInputLibraryPromise;
+      const css=document.createElement('link');css.rel='stylesheet';css.href='https://cdn.jsdelivr.net/npm/intl-tel-input@29.5.0/dist/css/intlTelInput.css';document.head.appendChild(css);
+      phoneInputLibraryPromise=new Promise((resolve,reject)=>{
+        const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/intl-tel-input@29.5.0/dist/js/intlTelInput.min.js';script.async=true;
+        script.onload=()=>{
+          const input=document.getElementById('phoneLoginInput');
+          phoneLoginInstance=window.intlTelInput(input,{
+            countryOrder:['lk'],separateDialCode:true,showFlags:true,countrySearch:true,countrySelectorMode:'AUTO',
+            loadUtils:()=>import('https://cdn.jsdelivr.net/npm/intl-tel-input@29.5.0/dist/js/utils.js'),
+            initialCountryLookup:async()=>{
+              try {const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),2500);const response=await fetch('https://ipapi.co/json/',{signal:controller.signal});clearTimeout(timer);if(response.ok){const result=await response.json();if(result.country_code)return String(result.country_code).toLowerCase();}}catch(error){}
+              const region=(navigator.language||'').match(/[-_]([A-Za-z]{2})$/)?.[1];return region?region.toLowerCase():'lk';
+            }
+          });
+          phoneLoginInstance.promise.then(()=>resolve(phoneLoginInstance)).catch(()=>resolve(phoneLoginInstance));
+        };
+        script.onerror=()=>{phoneInputLibraryPromise=null;reject(new Error('Could not load the country selector. Check your internet connection.'));};
+        document.head.appendChild(script);
+      });
+      phoneInputLibraryPromise.catch(error=>{document.getElementById('accountStatus').textContent=error.message;});
+      return phoneInputLibraryPromise;
+    }
+
+    function resetPhoneLogin() {
+      phoneLoginPendingNumber='';
+      document.getElementById('phoneOtpInput').hidden=true;
+      document.getElementById('phoneOtpInput').value='';
+      document.getElementById('phoneSubmitButton').textContent='Send SMS code';
+      document.getElementById('phoneChangeButton').hidden=true;
+      document.getElementById('phoneLoginInput').disabled=false;
+      document.getElementById('accountStatus').textContent='';
+    }
+
+    async function signInWithPhone(event) {
+      event.preventDefault();
+      const status=document.getElementById('accountStatus'),button=document.getElementById('phoneSubmitButton');
+      if(!supabaseClient){status.textContent='Phone sign-in is not configured yet.';return;}
+      try {
+        await loadPhoneInputLibrary();await phoneLoginInstance.promise;button.disabled=true;
+        if(!phoneLoginPendingNumber){
+          if(!phoneLoginInstance.isValidNumber()){status.textContent='Enter a valid phone number for the selected country.';return;}
+          phoneLoginPendingNumber=phoneLoginInstance.getNumber();status.textContent='Sending SMS code…';
+          const {error}=await supabaseClient.auth.signInWithOtp({phone:phoneLoginPendingNumber,options:{shouldCreateUser:true}});
+          if(error){phoneLoginPendingNumber='';throw error;}
+          document.getElementById('phoneLoginInput').disabled=true;document.getElementById('phoneOtpInput').hidden=false;document.getElementById('phoneChangeButton').hidden=false;button.textContent='Verify & Sign In';status.textContent=`We sent a code to ${phoneLoginPendingNumber}.`;document.getElementById('phoneOtpInput').focus();
+        } else {
+          const token=document.getElementById('phoneOtpInput').value.trim();if(!/^\d{6,8}$/.test(token)){status.textContent='Enter the SMS verification code.';return;}
+          status.textContent='Verifying code…';const {data,error}=await supabaseClient.auth.verifyOtp({phone:phoneLoginPendingNumber,token,type:'sms'});if(error)throw error;
+          setLoggedInUser(data.user);closeAccountModal();await loadSellerCatalog();showAccountRoleDialog();
+        }
+      } catch(error) {console.error(error);status.textContent=error.message||'Phone sign-in failed. Check the number and try again.';}
+      finally {button.disabled=false;}
     }
 
     function openAccountModal() {
@@ -1290,6 +1439,9 @@
       closeBuyerAccount();closeAccountRoleDialog();
     }
 
+    const siteLoader=document.getElementById('siteLoader');
+    const hideSiteLoader=()=>siteLoader?.classList.add('hidden');
+    window.setTimeout(hideSiteLoader,8000);
     window.addEventListener('DOMContentLoaded', async () => {
       const shop = document.getElementById('shopPageContent');
       shop.style.display = 'block';
@@ -1314,6 +1466,7 @@
       await loadSellerCatalog();
       const requestedProduct = new URLSearchParams(location.search).get('product');
       if (requestedProduct) openProductPopup(Number(requestedProduct));
+      hideSiteLoader();
     });
 
     function escapeHTML(value) {
@@ -1386,8 +1539,15 @@
 
     function openMobileShops() {
       document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Shops')));
+      const search=document.getElementById('mobileShopSearch');if(search)search.value='';filterMobileShops();
       document.getElementById('mobileShopsSheet').classList.add('show');
     }
+
+    function filterMobileShops() {
+      const query=(document.getElementById('mobileShopSearch')?.value||'').trim().toLocaleLowerCase();
+      document.querySelectorAll('#mobileShopList .shop-tile').forEach(tile=>{tile.hidden=!tile.textContent.toLocaleLowerCase().includes(query);});
+    }
+    document.getElementById('mobileShopSearch')?.addEventListener('input',filterMobileShops);
 
     function toggleProfileDropdown(e) {
       e.stopPropagation();

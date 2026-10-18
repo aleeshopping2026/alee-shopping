@@ -15,29 +15,33 @@
     .brand{display:flex;align-items:center;gap:9px;color:var(--orange);font-size:18px;font-weight:800;text-decoration:none}.brand img{width:34px;height:34px;object-fit:cover;border-radius:8px}
     .back{color:var(--orange);font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
     main{max-width:1180px;margin:26px auto;padding:0 16px}h1{margin:0;color:var(--ink);font-size:clamp(24px,4vw,34px)}.intro{margin:7px 0 20px;color:var(--muted);font-size:14px}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .shop-card{display:flex;align-items:center;gap:14px;min-width:0;padding:16px;color:var(--ink);text-decoration:none;background:linear-gradient(120deg,#fff,#fff7f2 65%,#fff0f6);border:1px solid var(--shop-accent,#ff6900);border-radius:16px;box-shadow:0 5px 18px #1720330a;transition:transform .18s,box-shadow .18s}
-    .shop-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px #17203318}.shop-card img{width:70px;height:70px;flex:0 0 70px;object-fit:cover;border:3px solid var(--shop-accent,#ff6900);border-radius:50%;background:#fff}
-    .copy{min-width:0}.copy strong{display:block;overflow-wrap:anywhere;font-size:16px}.copy small{display:block;margin-top:5px;color:var(--muted);font-size:12px}.stars{margin-top:5px;color:#f59e0b;font-size:13px;letter-spacing:1px}.arrow{margin-left:auto;color:var(--shop-accent,#ff6900)}
+    .search{width:100%;height:48px;margin:4px 0 20px;padding:0 15px 0 44px;border:1px solid #e2e8f0;border-radius:14px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") no-repeat 14px center;color:var(--ink);font:inherit;outline:none}.search:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff690022}
+    .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 10px}
+    .shop-card{display:flex;min-width:0;flex-direction:column;align-items:center;gap:8px;padding:6px 3px 10px;color:var(--ink);text-decoration:none;text-align:center;border-radius:14px;transition:transform .18s,background .18s}
+    .shop-card:hover{transform:translateY(-2px);background:#fff}.logo-ring{width:76px;height:76px;display:grid;place-items:center;padding:4px;border:2px solid var(--shop-accent,#ff6900);border-radius:50%;background:#fff;box-shadow:0 3px 12px color-mix(in srgb,var(--shop-accent,#ff6900) 18%,transparent)}.shop-card img{width:100%;height:100%;object-fit:cover;border-radius:50%;background:#fff}
+    .copy{width:100%;min-width:0}.copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.stars{display:none}.arrow{display:none}
     .empty{padding:24px;background:#fff;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
-    @media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
-    @media(max-width:480px){.top{padding:9px 12px}.brand{font-size:15px}.brand img{width:30px;height:30px}main{margin:18px auto;padding:0 12px}.grid{grid-template-columns:1fr;gap:10px}.shop-card{padding:13px}.shop-card img{width:60px;height:60px;flex-basis:60px}}
+    @media(min-width:760px){.grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:28px 14px}.logo-ring{width:90px;height:90px}.copy strong{font-size:13px}}
+    @media(max-width:380px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 7px}.logo-ring{width:64px;height:64px}}
+    .site-loader{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:12px;background:#fff;transition:opacity .2s,visibility .2s}.site-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}.loader-ring{width:76px;height:76px;padding:5px;border:3px solid #ff6900;border-top-color:#f4a261;border-right-color:#ffb703;border-radius:50%;animation:spin .8s linear infinite}.loader-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%;animation:spin .8s linear infinite reverse}.site-loader span{color:#ff6900;font-size:13px;font-weight:800}@keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
+  <div class="site-loader" id="siteLoader" aria-live="polite"><div class="loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading shops…</span></div>
   <header class="top"><a class="brand" href="index.html"><img src="assets/alee-logo.png" alt=""><span>ALEE SHOPPING</span></a><a class="back" href="index.html">← Back to home</a></header>
-  <main><h1>Shops</h1><p class="intro">Choose a shop to browse its products and contact details.</p><section class="grid" id="shopGrid" aria-label="All shops"></section></main>
+  <main><h1>Shops</h1><p class="intro">Search for a shop, then tap its round logo to browse products and contact details.</p><input id="shopSearch" class="search" type="search" placeholder="Search shops…" aria-label="Search shops"><section class="grid" id="shopGrid" aria-label="All shops"></section></main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="backend-config.js"></script><script src="shops.js"></script><script src="products.js"></script>
   <script>
     const shops=Array.isArray(window.aleeShops)?window.aleeShops:[];
     const products=Array.isArray(window.aleeProducts)?window.aleeProducts:[];
     const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const grid=document.getElementById('shopGrid');
+    let shopEntries=[];
     async function renderShopDirectory(){
       if(window.aleeSupabase){
         const [{data:shopRows},{data:productRows}]=await Promise.all([
           window.aleeSupabase.from('seller_shops_profile_public').select('*'),
-          window.aleeSupabase.from('seller_products_public').select('id,shop_id')
+          window.aleeSupabase.from('seller_products_profile_public').select('id,shop_id')
         ]);
         (shopRows||[]).forEach(row=>shops.push({id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',facebook:row.facebook_url||'',instagram:row.instagram_url||'',youtube:row.youtube_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5}));
         (productRows||[]).forEach(row=>products.push({id:`seller-${row.id}`,shopId:String(row.shop_id)}));
@@ -46,15 +50,25 @@
         const rankA=Number(a.shop.rank),rankB=Number(b.shop.rank);
         return (Number.isFinite(rankA)&&rankA>0?rankA:a.index+1)-(Number.isFinite(rankB)&&rankB>0?rankB:b.index+1)||a.index-b.index;
       });
-      if(!entries.length)grid.innerHTML='<div class="empty">No shops have been added yet.</div>';
-      else grid.innerHTML=entries.map(({shop})=>{
+      shopEntries=entries.map(({shop})=>{
         const accent=/^#[0-9a-f]{6}$/i.test(shop.accentColor||'')?shop.accentColor:'#ff6900';
         const rating=Math.min(5,Math.max(1,Math.round(Number(shop.rating)||5)));
         const count=products.filter(product=>String(product.shopId||shops[0]?.id||'alee-shopping')===String(shop.id)).length;
-        return `<a class="shop-card" style="--shop-accent:${accent}" href="shop.html?shop=${encodeURIComponent(shop.id)}"><img src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" onerror="this.src='assets/alee-logo.png'"><span class="copy"><strong>${esc(shop.name)}</strong><small>${count} product${count===1?'':'s'}</small><span class="stars" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</span></span><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i></a>`;
-      }).join('');
+        return {shop,accent,rating,count};
+      });
+      paintShopEntries();
     }
-    renderShopDirectory();
+    function paintShopEntries(){
+      const query=document.getElementById('shopSearch').value.trim().toLocaleLowerCase();
+      const filtered=shopEntries.filter(({shop})=>`${shop.name||''} ${shop.shopCategory||''}`.toLocaleLowerCase().includes(query));
+      if(!filtered.length){grid.innerHTML=`<div class="empty">${shopEntries.length?'No shops match your search.':'No shops have been added yet.'}</div>`;return;}
+      grid.innerHTML=filtered.map(({shop,accent,rating,count})=>`<a class="shop-card" style="--shop-accent:${accent}" href="shop.html?shop=${encodeURIComponent(shop.id)}"><span class="logo-ring"><img loading="lazy" decoding="async" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"></span><span class="copy"><strong title="${esc(shop.name)}">${esc(shop.name)}</strong><small>${count} ad${count===1?'':'s'}</small><span class="stars" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</span></span><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i></a>`).join('');
+    }
+    document.getElementById('shopSearch').addEventListener('input',paintShopEntries);
+    const loader=document.getElementById('siteLoader');
+    const hideLoader=()=>loader.classList.add('hidden');
+    window.setTimeout(hideLoader,8000);
+    renderShopDirectory().catch(error=>{console.error(error);paintShopEntries();}).finally(hideLoader);
   </script>
 </body>
 </html>
