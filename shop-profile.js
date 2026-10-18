@@ -13,6 +13,8 @@
   const isUuid = value => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ''));
   const profileOverlay = document.getElementById('profileOverlay');
   const profileStatus = () => document.getElementById('profileStatus');
+  let profileDialogHistoryOpen = false;
+  let shareDialogHistoryOpen = false;
 
   function setTheme(dark) {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
@@ -25,15 +27,17 @@
   document.getElementById('themeToggle').addEventListener('click', () => setTheme(document.documentElement.dataset.theme !== 'dark'));
 
   function openProfileDialog(title, content) {
+    if (!profileOverlay.classList.contains('show')) { history.pushState({...history.state,aleeShopProfileDialog:true},'',location.href); profileDialogHistoryOpen = true; }
     document.getElementById('profileDialogTitle').textContent = title;
     document.getElementById('profileDialogContent').innerHTML = content;
     profileOverlay.classList.add('show');
     profileOverlay.setAttribute('aria-hidden', 'false');
     document.getElementById('profileClose').focus();
   }
-  function closeProfileDialog() {
+  function closeProfileDialog(fromHistory = false) {
     profileOverlay.classList.remove('show');
     profileOverlay.setAttribute('aria-hidden', 'true');
+    if (profileDialogHistoryOpen) { profileDialogHistoryOpen = false; if (!fromHistory) history.back(); }
   }
   document.getElementById('profileClose').addEventListener('click', closeProfileDialog);
   profileOverlay.addEventListener('click', event => { if (event.target === profileOverlay) closeProfileDialog(); });
@@ -61,6 +65,7 @@
   }
   function openShareDialog() {
     const overlay = document.getElementById('shareOverlay'), qr = document.getElementById('shareQr');
+    if (!overlay.classList.contains('show')) { history.pushState({...history.state,aleeShopShareDialog:true},'',location.href); shareDialogHistoryOpen = true; }
     overlay.classList.add('show'); overlay.setAttribute('aria-hidden', 'false');
     document.getElementById('shareTitle').textContent = `Share ${shop.name}`;
     document.getElementById('shareUrl').textContent = shareUrl();
@@ -70,10 +75,24 @@
     else qr.textContent = 'QR code could not load. Use Copy link below.';
     document.getElementById('copyShopLink').focus();
   }
-  function closeShareDialog() {
+  function closeShareDialog(fromHistory = false) {
     const overlay = document.getElementById('shareOverlay');
     if (!overlay) return;
     overlay.classList.remove('show'); overlay.setAttribute('aria-hidden', 'true');
+    if (shareDialogHistoryOpen) { shareDialogHistoryOpen = false; if (!fromHistory) history.back(); }
+  }
+  window.addEventListener('popstate', event => {
+    if (shareDialogHistoryOpen && !event.state?.aleeShopShareDialog) { closeShareDialog(true); return; }
+    if (profileDialogHistoryOpen && !event.state?.aleeShopProfileDialog) closeProfileDialog(true);
+  });
+
+  function refreshProfileStats() {
+    const followers = document.querySelector('#followersStat strong');
+    const following = document.querySelector('#followingStat strong');
+    const followButton = document.getElementById('followButton');
+    if (followers) followers.textContent = String(followerCount);
+    if (following) following.textContent = String(followingCount);
+    if (followButton) { followButton.textContent = isFollowing ? 'Following' : 'Follow'; followButton.classList.toggle('is-following', isFollowing); }
   }
 
   function renderContact() {
@@ -102,7 +121,7 @@
       followerCount = Number(row.follower_count || 0);
       followingCount = Number(row.following_count || 0);
       isFollowing = Boolean(row.is_following);
-      renderProfile();
+      refreshProfileStats();
     }
   }
   function labelForUser(user) {
@@ -121,7 +140,7 @@
     if (error) { status.textContent = 'Could not update Follow. Run the updated seller profile SQL, then try again.'; return; }
     isFollowing = !isFollowing;
     followerCount += isFollowing ? 1 : -1;
-    renderProfile();
+    refreshProfileStats();
   }
   async function showFollowers() {
     if (!isUuid(shop.id) || !supabase) { openProfileDialog('Followers', '<p>Follower details are not available for this shop yet.</p>'); return; }
@@ -154,14 +173,14 @@
     document.getElementById('headerShopName').textContent = shop.name;
     document.getElementById('headerShopLogo').src = shop.logo || 'assets/alee-logo.png';
     const items = products.filter(item => String(item.shopId || shops[0]?.id || 'alee-shopping') === String(shop.id));
-    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" onerror="this.src='assets/alee-logo.png'"><div class="profile-identity"><h2 class="profile-name">${esc(shop.name)}</h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${items.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
+    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="profile-identity"><h2 class="profile-name">${esc(shop.name)}</h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${items.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
     document.getElementById('followersStat').addEventListener('click', showFollowers);
     document.getElementById('followingStat').addEventListener('click', showFollowing);
     document.getElementById('adsStat').addEventListener('click', () => document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'}));
     document.getElementById('followButton').addEventListener('click', toggleFollow);
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
-    document.getElementById('products').innerHTML = items.length ? items.map(item => `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" onerror="this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">LKR ${Number(item.price||0).toLocaleString()}</div></a>`).join('') : '<div class="empty">This business has no ads yet.</div>';
+    document.getElementById('products').innerHTML = items.length ? items.map(item => `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">LKR ${Number(item.price||0).toLocaleString()}</div></a>`).join('') : '<div class="empty">This business has no ads yet.</div>';
   }
 
   async function loadShop() {

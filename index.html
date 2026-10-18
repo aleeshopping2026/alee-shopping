@@ -15,7 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
   <style>
     /* Light theme is the default. */
@@ -506,7 +505,7 @@
       <div class="header-actions">
         <a class="header-shop-button" href="shops.html" target="_blank" rel="noopener"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
         <button class="header-account-button" type="button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i> My Account</button>
-        <button class="header-chat-button" type="button" onclick="aleeChat.openHome()"><i class="fa-regular fa-comments"></i> Messages</button>
+        <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
         <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
         <div class="support-dropdown" id="supportDropdown" role="menu">
@@ -619,7 +618,7 @@
       <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><i class="fa-solid fa-house"></i><span>Home</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><i class="fa-solid fa-border-all"></i><span>Categories</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><i class="fa-solid fa-store"></i><span>Shops</span></button>
-      <button type="button" class="mobile-nav-button" onclick="aleeChat.openHome()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
       <button type="button" class="mobile-nav-button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
 
@@ -832,7 +831,7 @@
       if(!supabaseClient){status.textContent='Supabase login is not configured. See the setup guide.';return;}
       status.textContent='Opening Google sign-in…';
       try{sessionStorage.setItem('alee-login-pending','1');}catch(error){}
-      const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0]}});
+      const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0],queryParams:{prompt:'select_account'}}});
       if(error){try{sessionStorage.removeItem('alee-login-pending');}catch(storageError){}status.textContent=`Google sign-in failed: ${error.message}`;}
     }
 
@@ -841,8 +840,24 @@
       try{return localStorage.getItem(`alee-account-role:${activeUser.id}`);}catch(error){return null;}
     }
 
+    function openMessagesForCurrentRole() {
+      if(!activeUser) {
+        openAccountModal();
+        document.getElementById('accountStatus').textContent='Sign in to open your messages.';
+        return;
+      }
+      const role=getAccountRole();
+      if(!role) {
+        window.aleePendingMessages=true;
+        showAccountRoleDialog();
+        return;
+      }
+      if(window.aleeChat) window.aleeChat.openInbox(role);
+    }
+
     function showAccountRoleDialog() {
       if(!activeUser)return;
+      if(getAccountRole())return;
       if(document.getElementById('accountRoleDialog').classList.contains('show'))return;
       closeAccountModal();
       document.getElementById('accountRoleEmail').textContent=activeUser.email||'Signed in';
@@ -855,6 +870,7 @@
       if(!activeUser||!['buyer','seller'].includes(role))return;
       try{localStorage.setItem(`alee-account-role:${activeUser.id}`,role);}catch(error){}
       closeAccountRoleDialog();
+      if(window.aleePendingMessages) { window.aleePendingMessages=false; if(window.aleeChat) window.aleeChat.openInbox(role); return; }
       if(role==='buyer')openBuyerAccount();else openSellerAccount(true);
     }
 
@@ -925,23 +941,29 @@
       if(paths.length){const {error}=await supabaseClient.storage.from('seller-uploads').remove(paths);if(error)throw error;}
     }
 
+    let sellerCatalogLoadPromise = null;
     async function loadSellerCatalog() {
       if(!supabaseClient)return;
-      const [{data:shopRows,error:shopError},{data:productRows,error:productError}]=await Promise.all([
-        supabaseClient.from('seller_shops_profile_public').select('*'),
-        supabaseClient.from('seller_products_profile_public').select('*')
-      ]);
-      if(shopError||productError){console.warn('Seller catalog is not configured yet.',shopError||productError);return;}
-      for(let i=shops.length-1;i>=0;i--) if(shops[i]?._sellerManaged) shops.splice(i,1);
-      for(let i=products.length-1;i>=0;i--) if(products[i]?._sellerManaged) products.splice(i,1);
-      shops.push(...(shopRows||[]).map(mapSellerShop));
-      const mappedProducts=(productRows||[]).map(mapSellerProduct);
-      products.push(...mappedProducts);
-      const knownCategories=new Set(categories.map(category=>String(category.id)));
-      mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
-      renderCategoryBar();
-      renderShopDirectory();
-      displayProducts(products);
+      if(sellerCatalogLoadPromise)return sellerCatalogLoadPromise;
+      const request=(async()=>{
+        const [{data:shopRows,error:shopError},{data:productRows,error:productError}]=await Promise.all([
+          supabaseClient.from('seller_shops_profile_public').select('*'),
+          supabaseClient.from('seller_products_profile_public').select('*')
+        ]);
+        if(shopError||productError){console.warn('Seller catalog is not configured yet.',shopError||productError);return;}
+        for(let i=shops.length-1;i>=0;i--) if(shops[i]?._sellerManaged) shops.splice(i,1);
+        for(let i=products.length-1;i>=0;i--) if(products[i]?._sellerManaged) products.splice(i,1);
+        shops.push(...(shopRows||[]).map(mapSellerShop));
+        const mappedProducts=(productRows||[]).map(mapSellerProduct);
+        products.push(...mappedProducts);
+        const knownCategories=new Set(categories.map(category=>String(category.id)));
+        mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
+        renderCategoryBar();
+        renderShopDirectory();
+        displayProducts(products);
+      })();
+      sellerCatalogLoadPromise=request;
+      try { await request; } finally { if(sellerCatalogLoadPromise===request)sellerCatalogLoadPromise=null; }
     }
 
     async function loadSellerWorkspace() {
@@ -1318,7 +1340,7 @@
         const accent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
         const ratingValue=Number(shop.rating), rating=Number.isFinite(ratingValue)?Math.min(5,Math.max(1,Math.round(ratingValue))):5;
         const stars=Array.from({length:5},(_,index)=>`<span class="${index<rating?'filled':''}" aria-hidden="true">★</span>`).join('');
-        return `<a class="shop-tile" style="--shop-accent:${accent}" href="${url}" target="_blank" rel="noopener"><img loading="lazy" src="${logo}" alt="${name} logo" onerror="this.src='assets/alee-logo.png'"><strong>${name}</strong><span class="shop-rating" role="img" aria-label="${rating} out of 5 stars">${stars}</span></a>`;
+        return `<a class="shop-tile" style="--shop-accent:${accent}" href="${url}"><img loading="lazy" decoding="async" src="${logo}" alt="${name} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><strong>${name}</strong><span class="shop-rating" role="img" aria-label="${rating} out of 5 stars">${stars}</span></a>`;
       }).join('');
       strip.innerHTML = markup || '<p style="color:#888;font-size:12px">No shops have been added yet.</p>';
       mobileList.innerHTML = markup;
@@ -1468,8 +1490,8 @@
     function bannerMediaMarkup(banner, index) {
       const alt = String(banner.alt || `ALEE Shopping banner ${index + 1}`).replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
       const source = String(banner.video || banner.image || '').replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
-      if (banner.video) return `<video src="${source}" aria-label="${alt}" autoplay muted loop playsinline preload="metadata"></video>`;
-      return `<img src="${source}" alt="${alt}">`;
+      if (banner.video) return `<video src="${source}" aria-label="${alt}" autoplay muted loop playsinline preload="none"></video>`;
+      return `<img src="${source}" alt="${alt}" decoding="async" fetchpriority="high">`;
     }
     function bannerSlideMarkup(banner, index) {
       const media = bannerMediaMarkup(banner, index);
@@ -1491,11 +1513,20 @@
       document.querySelectorAll('.hero-nav').forEach(button => button.hidden = true);
       heroDots.hidden = true;
     }
+    let bannerChangePending = false;
     function showBanner(index) {
       if (!bannerList.length) return;
-      activeBannerIndex = (index + bannerList.length) % bannerList.length;
-      heroTrack.style.opacity = '.25';
-      window.setTimeout(() => { renderActiveBanner(); heroTrack.style.opacity = '1'; }, 120);
+      const nextIndex = (index + bannerList.length) % bannerList.length;
+      if (bannerChangePending || nextIndex === activeBannerIndex) return;
+      const next = bannerList[nextIndex];
+      if (next.video || !next.image) { activeBannerIndex = nextIndex; renderActiveBanner(); return; }
+      bannerChangePending = true;
+      const preload = new Image();
+      const commit = () => { bannerChangePending = false; activeBannerIndex = nextIndex; renderActiveBanner(); };
+      preload.onload = commit;
+      preload.onerror = commit;
+      preload.src = next.image;
+      if (preload.complete) commit();
     }
     function changeBanner(direction) { showBanner(activeBannerIndex + direction); }
     if (bannerList.length > 1) setInterval(() => showBanner(activeBannerIndex + 1), 5000);
@@ -1598,6 +1629,7 @@
 
     let activeGalleryProduct = null;
     let activeGalleryIndex = 0;
+    let productPopupHistoryOpen = false;
 
     function productPriceMarkup(product) {
       const price = Number(product.price);
@@ -1682,19 +1714,21 @@
         productList.innerHTML = "<p style='grid-column:1/-1;text-align:center;color:#888;padding:20px;'>No products found.</p>";
         return;
       }
+      const cards=[];
       visibleProducts.forEach(p => {
         const imgUrl = (p.images && p.images[0]) ? p.images[0] : 'assets/alee-logo.png';
         const shop = getShopForProduct(p);
         const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
         const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
-        productList.innerHTML += `
+        cards.push(`
           <div class="card" onclick="openProductPopup(${p.id})">
-            <div class="card-image-wrap"><img loading="lazy" src="${imgUrl}" onerror="this.src='assets/alee-logo.png'" alt="${p.name}">${p.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div>
-            <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>
-            <h3>${p.name}</h3>
+            <div class="card-image-wrap"><img loading="${cards.length < 4 ? 'eager' : 'lazy'}" decoding="async" ${cards.length < 4 ? 'fetchpriority="high"' : ''} src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(p.name)}">${p.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div>
+            <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>
+            <h3>${escapeHTML(p.name)}</h3>
             <div class="price-block">${productPriceMarkup(p)}</div>
-          </div>`;
+          </div>`);
       });
+      productList.innerHTML = cards.join('');
     }
 
     function renderTopSearches() {
@@ -2004,7 +2038,9 @@
       document.getElementById("popupQuantity").value = 1;
       document.getElementById("popupAddBtn").onclick = () => { addToCart(id); };
       document.getElementById("popupBuyBtn").onclick = () => { buyNow(id); };
-      document.getElementById("productPopup").style.display = "block";
+      const popup=document.getElementById("productPopup");
+      if(popup.style.display!=='block'){history.pushState({...history.state,aleeProductPopup:true},'',location.href);productPopupHistoryOpen=true;}
+      popup.style.display = "block";
       document.body.style.overflow = 'hidden';
     }
 
@@ -2133,7 +2169,8 @@
       }
     });
 
-    function closeProductPopup() { document.getElementById("productPopup").style.display = "none"; document.body.style.overflow = ''; }
+    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
+    window.addEventListener('popstate',event=>{if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
         if (e.key === 'Escape') { if (document.getElementById('imageZoom').classList.contains('open')) closeImageZoom(); else closeProductPopup(); }
@@ -2274,6 +2311,6 @@
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
-  <script src="chat.js?v=20261018-chat-webrtc"></script>
+  <script src="chat.js?v=20261018-chat-back-role"></script>
 </body>
 </html>

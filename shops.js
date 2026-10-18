@@ -10,7 +10,7 @@ window.aleeShops = [
   {
     "id": "klevora-fashion",
     "name": "klevora fashion",
-    "logo": "images/shop-klevora-fashion-mve3vemy.jpeg",
+    "logo": "images/shop-klevora.jpeg",
     "rank": 2,
     "rating": 4,
     "phone": "077 627 3453",
