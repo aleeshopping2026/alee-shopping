@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop විස්තර — ALEE SHOPPING</title>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="shops.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font:16px Arial,sans-serif}.wrap{max-width:760px;margin:28px auto;padding:24px;background:#fff;border:1px solid #fed7aa;border-radius:18px;box-shadow:0 12px 35px #0001}h1{color:#ff6900;margin-top:0}p{line-height:1.6}.help{background:#fff7ed;border-radius:10px;padding:12px 14px}label{display:grid;gap:7px;font-weight:700;margin:14px 0}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}textarea{min-height:76px;resize:vertical}button{background:#ff6900;color:#fff;border:0;border-radius:9px;padding:13px 18px;font-weight:800;font-size:16px;cursor:pointer}.muted{color:#64748b;font-size:13px}.status{margin-top:12px;color:#166534}.shop-preview{display:flex;align-items:center;gap:12px;margin:15px 0}.shop-preview img{width:60px;height:60px;object-fit:cover;border-radius:50%;border:2px solid #ff6900;background:white}@media(max-width:600px){.wrap{margin:10px;padding:16px}}
+</style>
+</head>
+<body><main class="wrap">
+<h1>Shop එකක් එක් කරන්න හෝ විස්තර වෙනස් කරන්න</h1>
+<p class="help">දැනට තියෙන shop එකක් තෝරා phone number, ලිපිනය සහ Facebook / Instagram / TikTok සබැඳි වෙනස් කරන්න. අලුත් shop එකක් නම් නම සහ logo එකත් ඇතුළත් කරන්න. Phone අංකය +94 රටේ කේතයත් සමඟ දෙන්න. ZIP එක වෙබ් අඩවියේ ප්‍රධාන folder එකට Extract කර නැවත publish කරන්න.</p>
+<p id="shopCount" class="muted"></p>
+<form id="shopForm">
+<label>වෙනස් කරන Shop එක<select id="shopPicker" name="shopPicker"></select><span class="muted">අලුත් shop එකක් එක් කරන්න නම් “අලුත් Shop එකක්” තෝරන්න.</span></label>
+<label>Shop නම<input name="name" maxlength="60" placeholder="උදා: ALEE Fashion" required></label>
+<label>Shop අනුපිළිවෙළ / Rank<input name="rank" type="number" min="1" step="1" required><span class="muted">1 දුන්නොත් shop එක ලැයිස්තුවේ මුලින් පෙන්වයි. Rank එක වෙනස් කරලා පිළිවෙළ මාරු කරන්න.</span></label>
+<label>Shop Rating<input name="rating" type="number" min="1" max="5" step="1" required><span class="muted">පෙන්විය යුතු stars ගණන 1 සිට 5 දක්වා තෝරන්න.</span></label>
+<label>සම්බන්ධතා දුරකථන අංකය<input name="phone" type="tel" placeholder="උදා: +94 76 123 4567"></label>
+<label>Shop ලිපිනය<textarea name="address" placeholder="Shop එකේ ලිපිනය"></textarea></label>
+<label>Facebook පිටුවේ සබැඳිය<input name="facebook" type="url" placeholder="https://facebook.com/..."></label>
+<label>Instagram පිටුවේ සබැඳිය<input name="instagram" type="url" placeholder="https://instagram.com/..."></label>
+<label>TikTok පිටුවේ සබැඳිය<input name="tiktok" type="url" placeholder="https://tiktok.com/@..."></label>
+<label>Logo එක වටේ border පාට<input name="accentColor" type="color" value="#ff6900"><span class="muted">Logo එකට ගැළපෙන පාටක් තෝරන්න.</span></label>
+<label>Shop logo / පින්තූරය<input name="logo" type="file" accept="image/*"><span class="muted">අලුත් shop එකකට logo එකක් අනිවාර්යයි. පැරණි shop එකක logo එක වෙනස් කරන්න අලුත් පින්තූරයක් තෝරන්න.</span></label>
+<div class="shop-preview" id="preview" hidden><img id="previewImage" alt="Shop logo පෙරදසුන"><strong id="previewName"></strong></div>
+<button id="submitButton" type="submit">Shop ZIP ගොනුව හදන්න</button><div id="status" class="status" role="status" aria-live="polite"></div>
+</form>
+</main>
+<script>
+const shopCatalog = Array.isArray(window.aleeShops) ? [...window.aleeShops] : [];
+const newLogoFiles = [];
+const slug = value => value.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase() || 'shop';
+const form=document.getElementById('shopForm'), picker=document.getElementById('shopPicker'), logoInput=form.elements.logo;
+const updateCount=()=>document.getElementById('shopCount').textContent=`දැනට shop ${shopCatalog.length}ක් ඇත.`;
+function fillShopFields(shop){
+ form.elements.name.value=shop?.name||''; form.elements.phone.value=shop?.phone||''; form.elements.address.value=shop?.address||'';
+ form.elements.rank.value=shop?.rank|| (shop?shopCatalog.indexOf(shop)+1:Math.max(0,...shopCatalog.map(item=>Number(item.rank)||0))+1); form.elements.rating.value=shop?.rating||5;
+ form.elements.facebook.value=shop?.facebook||''; form.elements.instagram.value=shop?.instagram||''; form.elements.tiktok.value=shop?.tiktok||'';
+ form.elements.accentColor.value=/^#[0-9a-f]{6}$/i.test(shop?.accentColor||'')?shop.accentColor:'#ff6900';
+ document.getElementById('previewImage').style.borderColor=form.elements.accentColor.value;
+ logoInput.value=''; logoInput.required=!shop;
+ document.getElementById('submitButton').textContent=shop?'Shop විස්තර යාවත්කාලීන කර ZIP හදන්න':'Shop ZIP ගොනුව හදන්න';
+ document.getElementById('previewName').textContent=shop?.name||'';
+ document.getElementById('previewImage').src=shop?.logo||'';
+ document.getElementById('preview').hidden=!shop?.logo;
+}
+function renderShopPicker(selectedId='__new__'){
+ picker.replaceChildren(new Option('අලුත් Shop එකක්','__new__'));
+ shopCatalog.forEach(shop=>picker.add(new Option(shop.name,String(shop.id))));
+ picker.value=selectedId; fillShopFields(shopCatalog.find(shop=>String(shop.id)===selectedId)||null);
+}
+renderShopPicker(); updateCount();
+picker.addEventListener('change',()=>fillShopFields(shopCatalog.find(shop=>String(shop.id)===picker.value)||null));
+form.elements.name.addEventListener('input',event=>{document.getElementById('previewName').textContent=event.target.value;});
+form.elements.accentColor.addEventListener('input',event=>{document.getElementById('previewImage').style.borderColor=event.target.value;});
+logoInput.addEventListener('change',event=>{const file=event.target.files[0];if(!file)return;document.getElementById('previewImage').src=URL.createObjectURL(file);document.getElementById('preview').hidden=false;});
+document.getElementById('shopForm').addEventListener('submit', async event => {
+ event.preventDefault();
+ const name=String(form.elements.name.value||'').trim(), file=logoInput.files[0], status=document.getElementById('status');
+ const selectedId=picker.value, existingIndex=shopCatalog.findIndex(shop=>String(shop.id)===selectedId), existing=existingIndex>=0?shopCatalog[existingIndex]:null;
+ if(!existing&&!file){status.textContent='අලුත් shop එකකට logo පින්තූරයක් තෝරන්න.';return;}
+ const rank=Number(form.elements.rank.value), rating=Number(form.elements.rating.value);
+ if(!Number.isInteger(rank)||rank<1){status.textContent='Rank එක 1 හෝ ඊට වැඩි පූර්ණ සංඛ්‍යාවක් විය යුතුයි.';return;}
+ if(!Number.isInteger(rating)||rating<1||rating>5){status.textContent='Rating එක 1 සහ 5 අතර පූර්ණ සංඛ්‍යාවක් විය යුතුයි.';return;}
+ if(!window.JSZip){status.textContent='ZIP සකස් කිරීමට අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කරන්න.';return;}
+ if(shopCatalog.some(shop=>shop.name.toLowerCase()===name.toLowerCase()&&String(shop.id)!==String(existing?.id))){status.textContent='මේ නමින් shop එකක් දැනටමත් තියෙනවා.';return;}
+ for(const field of ['facebook','instagram','tiktok']){const value=String(form.elements[field].value||'').trim();if(value&&!/^https?:\/\//i.test(value)){status.textContent='Social link එක https:// හෝ http:// වලින් ආරම්භ කරන්න.';return;}}
+ status.textContent='ZIP ගොනුව සකස් කරනවා…';
+ try{
+  let id=existing?.id||slug(name); if(!existing&&shopCatalog.some(shop=>String(shop.id)===id)) id += `-${Date.now().toString(36)}`;
+  let logo=existing?.logo||'';
+  if(file){const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();logo=`images/shop-${id}-${Date.now().toString(36)}.${ext}`;newLogoFiles.push({path:logo,file});}
+  const record={...existing,id,name,logo,rank,rating,phone:form.elements.phone.value.trim(),address:form.elements.address.value.trim(),facebook:form.elements.facebook.value.trim(),instagram:form.elements.instagram.value.trim(),tiktok:form.elements.tiktok.value.trim(),accentColor:form.elements.accentColor.value};
+  if(existing)shopCatalog[existingIndex]=record;else shopCatalog.push(record);
+  const zip=new JSZip();
+  zip.file('shops.js',`window.aleeShops = ${JSON.stringify(shopCatalog,null,2)};\n`);
+  for(const item of newLogoFiles) zip.file(item.path,await item.file.arrayBuffer());
+  const blob=await zip.generateAsync({type:'blob'}), url=URL.createObjectURL(blob), link=document.createElement('a');
+  link.href=url; link.download='alee-shops.zip'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),30000);
+  updateCount(); renderShopPicker(existing?String(existing.id):'__new__');
+  status.textContent=`${existing?'Shop විස්තර වෙනස් කළා':'අලුත් Shop එක එකතු කළා'}. ZIP එක බාගත වුණා. එය වෙබ් අඩවියේ ප්‍රධාන folder එකට Extract කර නැවත publish කරන්න.`;
+ }catch(error){console.error(error);status.textContent='ZIP එක හදන්න බැරි වුණා. නැවත උත්සාහ කරන්න.';}
+});
+</script></body></html>

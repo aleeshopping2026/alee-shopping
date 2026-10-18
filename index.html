@@ -1,0 +1,2277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff6900">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ALEE SHOPPING">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/alee-app-icon-192.png">
+  <link rel="apple-touch-icon" href="assets/alee-app-icon-180.png">
+  <title>ALEE SHOPPING — Fast & Safe Delivery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    /* Light theme is the default. */
+    :root {
+      --primary-green: #FF6900;
+      --light-leaf: #FF6900;
+      --bg-dark: #F8FAFC;
+      --glass-bg: rgba(255, 255, 255, 0.9);
+      --glass-border: rgba(249, 115, 22, 0.25);
+      --text-white: #0F172A;
+      --card-bg: #FFFFFF;
+      --detail-copy: #171717;
+    }
+
+    [data-theme="dark"] {
+      --primary-green: #FF6900;
+      --light-leaf: #FF6900;
+      --bg-dark: #000000;
+      --glass-bg: rgba(10, 10, 10, 0.85);
+      --glass-border: rgba(249, 115, 22, 0.25);
+      --text-white: #F1F5F9;
+      --card-bg: #0D0D0D;
+      --detail-copy: #F4F4F4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-white);
+      position: relative;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+
+    /* --- ACCOUNT / LOGIN (opened only from the profile menu) --- */
+    #loginPageWrapper { display:none !important; }
+    #accountModal {
+      display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,.82);
+      backdrop-filter:blur(7px); padding:20px; overflow:auto;
+    }
+    #accountModal.show { display:flex; align-items:center; justify-content:center; }
+    .account-card {
+      width:min(430px,100%); background:var(--card-bg); border:1px solid var(--glass-border);
+      border-radius:22px; padding:24px 20px; box-shadow:0 25px 60px rgba(0,0,0,.65); position:relative;
+    }
+    .account-card h2 { text-align:center; margin-bottom:6px; }
+    .account-card .account-note { text-align:center; color:#888; font-size:12px; margin-bottom:18px; }
+    .account-tabs { display:flex; gap:8px; margin-bottom:15px; }
+    .account-tab { flex:1; padding:10px; border:1px solid var(--glass-border); background:var(--bg-dark); color:var(--text-white); border-radius:10px; cursor:pointer; font-weight:700; }
+    .account-tab.active { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
+    .account-form { display:none; }
+    .account-form.active { display:block; }
+    .account-form input { width:100%; padding:12px; margin:0 0 10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
+    .account-form .btn { width:100%; }
+    .account-tabs { display:flex; gap:8px; margin-bottom:15px; }
+    .account-tab { flex:1; padding:10px; border:1px solid var(--glass-border); background:var(--bg-dark); color:var(--text-white); border-radius:10px; cursor:pointer; font-weight:700; }
+    .account-tab.active { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
+    .account-form { display:none; }
+    .account-form.active { display:block; }
+    .account-close { position:absolute; right:15px; top:10px; font-size:28px; color:var(--light-leaf); cursor:pointer; }
+    .account-status { min-height:18px; text-align:center; font-size:12px; margin-top:10px; color:#aaa; }
+
+    /* --- SHOP PAGE STYLES --- */
+    #shopPageContent { display: none; opacity: 0; transition: opacity 0.5s ease; }
+
+    .header { background: var(--card-bg); padding: 10px 3%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; border-bottom: 1px solid var(--glass-border); z-index: 100; }
+    .logo-area { display: flex; align-items: center; gap: 8px; }
+    .logo-img { height: 32px; width: 32px; border-radius: 6px; object-fit: cover; border: 1px solid var(--glass-border); }
+    .logo-text { font-size: 18px; font-weight: 800; color: var(--light-leaf); }
+    .logo-text span { color: var(--text-white); }
+    
+    .header-actions { display: flex; align-items: center; gap: 8px; position: relative; }
+    
+    /* Interactive Profile Badge (Dropdown for Logout / Switch Account) */
+    .profile-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg-dark); border: 1px solid var(--glass-border);
+      padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      color: var(--text-white); cursor: pointer; transition: 0.3s;
+    }
+    .profile-badge:hover { border-color: var(--light-leaf); background: rgba(249, 115, 22, 0.08); }
+    .profile-badge i { color: var(--light-leaf); }
+    .profile-badge.guest { border-color: rgba(255,105,0,.55); box-shadow: 0 0 0 1px rgba(255,105,0,.12), 0 6px 18px rgba(255,105,0,.08); }
+    .profile-badge.guest::after { content: " • Sign In"; color: var(--light-leaf); font-weight: 800; font-size: 10px; }
+
+    /* Profile Dropdown Menu */
+    .profile-dropdown {
+      display: none; position: absolute; top: 40px; right: 60px;
+      background: var(--card-bg); border: 1px solid var(--glass-border);
+      border-radius: 12px; width: 180px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 1000; overflow: hidden; padding: 5px 0;
+    }
+    .profile-dropdown.show { display: block; }
+    .support-button { border:1px solid rgba(255,105,0,.55); background:var(--card-bg); color:var(--light-leaf); padding:7px 11px; border-radius:18px; font-size:11px; font-weight:800; cursor:pointer; white-space:nowrap; }
+    .support-button:hover { background:rgba(249,115,22,.1); }
+    .header-shop-button { display:inline-flex; align-items:center; text-decoration:none; border:1px solid rgba(255,105,0,.55); background:var(--card-bg); color:var(--light-leaf); padding:7px 11px; border-radius:18px; font-size:11px; font-weight:800; white-space:nowrap; }
+    .header-shop-button:hover { background:rgba(249,115,22,.1); }
+    .header-account-button { display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,105,0,.55); background:var(--card-bg); color:var(--light-leaf); padding:7px 11px; border-radius:18px; font-size:11px; font-weight:800; white-space:nowrap; cursor:pointer; }
+    .header-account-button:hover { background:rgba(249,115,22,.1); }
+    .header-chat-button { display:inline-flex; align-items:center; gap:6px; border:1px solid #f2a4c7; background:#e83e8c; color:#fff; padding:7px 11px; border-radius:18px; font-size:11px; font-weight:800; white-space:nowrap; cursor:pointer; }
+    .header-chat-button:hover { background:#d72d7b; }
+    .support-dropdown { display:none; position:absolute; top:42px; left:0; width:230px; background:var(--card-bg); border:1px solid var(--glass-border); border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,.2); z-index:1000; overflow:hidden; padding:5px 0; }
+    .support-dropdown.show { display:block; }
+    .support-dropdown .dropdown-item { padding:11px 14px; font-size:12px; }
+    .mobile-bottom-nav { display:none; }
+    .mobile-sheet-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.48); z-index:12000; align-items:flex-end; }
+    .mobile-sheet-backdrop.show { display:flex; }
+    .mobile-sheet { width:100%; max-height:75vh; overflow:auto; padding:18px 16px calc(18px + env(safe-area-inset-bottom)); background:var(--card-bg); color:var(--text-white); border-radius:18px 18px 0 0; box-shadow:0 -8px 30px #0003; }
+    .mobile-sheet h2 { margin:0 0 14px; font-size:18px; }
+    .mobile-category-list { display:grid; gap:8px; }
+    .mobile-category-option { width:100%; text-align:left; padding:13px 14px; border:1px solid var(--glass-border); border-radius:10px; color:var(--text-white); background:var(--bg-dark); font:inherit; }
+    .mobile-account-email { padding:12px; border-radius:10px; background:var(--bg-dark); overflow-wrap:anywhere; margin-bottom:12px; }
+    .mobile-sheet-action { width:100%; padding:12px; margin:5px 0; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
+    .dropdown-item {
+      padding: 10px 15px; font-size: 12px; color: var(--text-white); cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: 0.2s;
+    }
+    .dropdown-item:hover { background: rgba(249, 115, 22, 0.15); color: var(--light-leaf); }
+    .dropdown-item i { font-size: 13px; }
+
+    .cart-btn { background: var(--light-leaf); color: #fff; padding: 7px 14px; border-radius: 20px; border: none; font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    /* Search Bar */
+    .search-bar { background: var(--card-bg); padding: 10px 3%; border-bottom: 1px solid var(--glass-border); position: sticky; top: 53px; z-index: 99; }
+    .search-container { position: relative; width: 100%; display: flex; align-items: center; }
+    .search-container input {
+      width: 100%; padding: 10px 152px 10px 15px; border-radius: 20px;
+      border: 1px solid var(--glass-border); background: var(--bg-dark);
+      color: var(--text-white); font-size: 13px; outline: none; transition: 0.3s;
+    }
+    .search-container input:focus { border-color: var(--light-leaf); box-shadow: 0 0 10px rgba(249, 115, 22, 0.2); }
+    .top-searches { display:flex; align-items:center; gap:8px; margin-top:8px; min-width:0; color:var(--text-white); font-size:11px; }
+    .top-search-label { display:inline-flex; align-items:center; gap:5px; flex:0 0 auto; color:var(--light-leaf); font-weight:800; white-space:nowrap; }
+    .top-search-list { display:flex; align-items:center; gap:6px; min-width:0; overflow-x:auto; scrollbar-width:none; }
+    .top-search-list::-webkit-scrollbar { display:none; }
+    .top-search-chip { flex:0 0 auto; padding:4px 9px; border:1px solid var(--glass-border); border-radius:14px; background:var(--bg-dark); color:var(--text-white); font:inherit; cursor:pointer; white-space:nowrap; }
+    .top-search-chip:hover { border-color:var(--light-leaf); color:var(--light-leaf); }
+    .top-search-empty { color:#888; white-space:nowrap; }
+    .search-extras { display:none; }
+    .search-bar.search-expanded .search-extras { display:block; }
+    body.has-top-searches .categories-bar { top:112px; }
+    body.has-top-searches.search-extras-open .categories-bar { top:148px; }
+    .finder-trigger { display:inline-flex; align-items:center; gap:7px; margin-top:8px; padding:7px 12px; border:1px solid var(--glass-border); border-radius:18px; background:linear-gradient(110deg,rgba(255,105,0,.13),rgba(255,105,0,.04)); color:var(--text-white); font-size:12px; font-weight:700; cursor:pointer; }
+    .finder-trigger:hover { border-color:var(--light-leaf); color:var(--light-leaf); }
+    .finder-overlay { display:none; position:fixed; inset:0; z-index:11000; padding:18px; background:rgba(0,0,0,.72); align-items:center; justify-content:center; }
+    .finder-overlay.show { display:flex; }
+    .finder-dialog { width:min(620px,100%); max-height:min(85vh,760px); overflow:auto; padding:20px; border:1px solid var(--glass-border); border-radius:18px; background:var(--card-bg); color:var(--text-white); box-shadow:0 20px 70px rgba(0,0,0,.35); }
+    .finder-title-row { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:8px; }
+    .finder-title-row h2 { margin:0; font-size:20px; }
+    .finder-close { border:0; background:transparent; color:var(--text-white); font-size:26px; cursor:pointer; line-height:1; }
+    .finder-help { margin:0 0 14px; color:var(--detail-copy,#777); font-size:13px; line-height:1.5; }
+    .finder-input { width:100%; min-height:92px; resize:vertical; padding:12px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
+    .finder-submit { margin-top:10px; padding:10px 16px; border:0; border-radius:10px; background:var(--light-leaf); color:#fff; font-weight:800; cursor:pointer; }
+    .finder-status { min-height:20px; margin:12px 0; color:var(--detail-copy,#777); font-size:13px; }
+    .finder-results { display:grid; gap:8px; }
+    .finder-result { display:grid; grid-template-columns:58px 1fr auto; align-items:center; gap:10px; padding:8px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); color:var(--text-white); text-align:left; cursor:pointer; }
+    .finder-result img { width:58px; height:58px; border-radius:8px; object-fit:contain; background:#fff; }
+    .finder-result strong,.finder-result small { display:block; }
+    .finder-result small { margin-top:3px; color:var(--detail-copy,#777); }
+    .finder-price { color:var(--light-leaf); font-weight:800; white-space:nowrap; }
+
+    .search-theme-btn {
+      position: absolute; right: 4px; background: transparent; border: none; color: var(--text-white);
+      width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+      cursor: pointer; transition: 0.3s; font-size: 13px;
+    }
+    .search-theme-btn:hover { background: rgba(249, 115, 22, 0.15); color: var(--light-leaf); transform: scale(1.1); }
+    .photo-search-btn { position:absolute; right:40px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--text-white); cursor:pointer; font-size:15px; }
+    .photo-search-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
+    .search-submit-btn { position:absolute; right:76px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--light-leaf); cursor:pointer; font-size:15px; }
+    .search-submit-btn:hover { background:rgba(249,115,22,.15); transform:scale(1.08); }
+    .search-clear-btn { position:absolute; right:112px; width:36px; height:36px; display:none; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--detail-copy,#777); cursor:pointer; font-size:14px; }
+    .search-clear-btn.show { display:flex; }
+    .search-clear-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
+    .photo-search-input { display:none !important; }
+    .photo-search-notice { display:none; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font-size:13px; }
+    .photo-search-notice.show { display:flex; }
+    .photo-search-clear { padding:6px 10px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); cursor:pointer; white-space:nowrap; }
+
+    /* Categories Bar */
+    .categories-bar {
+      display: flex; gap: 8px; padding: 10px 3%; background: var(--card-bg); overflow-x: auto; border-bottom: 1px solid var(--glass-border);
+      -webkit-overflow-scrolling: touch; position: sticky; top: 112px; z-index: 98;
+    }
+    .categories-bar::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: var(--bg-dark); color: var(--text-white); border: 1px solid var(--glass-border); padding: 6px 12px; border-radius: 14px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: 600; transition: 0.3s;
+    }
+    .cat-btn.active, .cat-btn:hover { background: var(--light-leaf); color: #fff; border-color: var(--light-leaf); }
+
+    .hero-banner { width:100%; background:#ef7919; border-bottom:1px solid var(--glass-border); overflow:hidden; position:relative; }
+    .hero-track { display:flex; width:100%; transition:opacity .35s ease; will-change:opacity; }
+    .hero-slide { display:block; flex:0 0 100%; aspect-ratio:2.3 / 1; background:#ef7919; overflow:hidden; }
+    .hero-slide img, .hero-slide video { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
+    .hero-nav { position:absolute; top:50%; transform:translateY(-50%); z-index:2; width:38px; height:38px; border:0; border-radius:50%; color:#fff; background:rgba(0,0,0,.42); font-size:20px; cursor:pointer; }
+    .hero-nav:hover { background:rgba(0,0,0,.7); }
+    .hero-nav.prev { left:12px; } .hero-nav.next { right:12px; }
+    .hero-dots { position:absolute; bottom:10px; left:0; right:0; z-index:2; display:flex; justify-content:center; gap:7px; }
+    .hero-dot { width:9px; height:9px; border:0; border-radius:50%; background:rgba(255,255,255,.55); cursor:pointer; }
+    .hero-dot.active { background:#fff; transform:scale(1.2); }
+    .hero-counter { color:#fff; background:rgba(0,0,0,.45); border-radius:12px; padding:3px 9px; font-size:11px; font-weight:700; }
+    .hero-banner .banner-caption { display:none; }
+    .shops-section { padding:12px 3%; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
+    .shops-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 9px; color:var(--light-leaf); font-size:15px; }
+    .shops-heading small { color:#888; font-size:11px; font-weight:500; }
+    .shops-strip-wrap { display:flex; align-items:center; gap:8px; min-width:0; }
+    .shops-strip-control { flex:0 0 30px; width:30px; height:30px; border:1px solid var(--glass-border); border-radius:50%; background:var(--bg-dark); color:var(--light-leaf); cursor:pointer; }
+    .shops-strip-control:hover { background:var(--light-leaf); color:#fff; }
+    .shops-strip { display:flex; flex:1 1 auto; gap:12px; min-width:0; overflow-x:auto; padding:2px 1px 7px; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scroll-behavior:smooth; touch-action:pan-x; }
+    .shop-tile { flex:0 0 98px; min-height:118px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:9px 7px; color:#3f2637; text-decoration:none; text-align:center; background:linear-gradient(145deg,#fff1f5 0%,#fce7f3 55%,#fdf2f8 100%); border:1px solid #f4b6d2; border-radius:12px; box-shadow:0 4px 14px rgba(190,24,93,.08); transition:transform .18s,border-color .18s,box-shadow .18s; }
+    .shop-tile:hover { transform:translateY(-2px); border-color:#ec4899; box-shadow:0 7px 18px rgba(190,24,93,.14); }
+    .shop-tile img { width:54px; height:54px; object-fit:cover; border-radius:50%; border:2px solid var(--shop-accent,#ff6900); background:#fff; box-shadow:0 2px 8px rgba(15,23,42,.14); }
+    .shop-tile strong { width:100%; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
+    .shop-rating { display:flex; justify-content:center; gap:1px; color:#d1d5db; font-size:9px; line-height:1; white-space:nowrap; }
+    .shop-rating .filled { color:#f59e0b; }
+    .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:4px 0 2px; color:var(--text-white); font-size:10px; font-weight:700; }
+    .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .popup-shop-meta { display:flex; align-items:center; gap:8px; padding:2px 2px 8px; color:var(--light-leaf); font-size:12px; font-weight:800; }
+    .popup-shop-meta a { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; cursor:pointer; }
+    .popup-shop-meta a:hover span { text-decoration:underline; }
+    .popup-shop-meta img { width:34px; height:34px; object-fit:cover; border:2px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .mobile-sheet-shop-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    @media (max-width: 700px) {
+      body { padding-bottom:calc(66px + env(safe-area-inset-bottom)); }
+      .header { min-height:56px; padding:8px 9px; }
+      .logo-text { font-size:14px; white-space:nowrap; }
+      .header-actions { display:flex; }
+      .support-button { padding:6px 7px; font-size:9px; }
+      .header-shop-button { display:none; }
+      .profile-badge, .profile-dropdown, .header-chat-button { display:none !important; }
+      .cart-btn { display:inline-flex; align-items:center; gap:3px; padding:6px 5px; font-size:9px; white-space:nowrap; }
+      .categories-bar { display:flex; top:112px; }
+      .mobile-bottom-nav { position:fixed; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); left:0; right:0; bottom:0; z-index:1100; min-height:62px; padding:5px 5px calc(5px + env(safe-area-inset-bottom)); background:var(--card-bg); border-top:1px solid var(--glass-border); box-shadow:0 -4px 16px rgba(0,0,0,.08); }
+      .mobile-nav-button { min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:3px; padding:4px 2px; border:0; background:transparent; color:var(--text-white); font:inherit; cursor:pointer; }
+      .mobile-nav-button i { font-size:18px; color:var(--light-leaf); }
+      .mobile-nav-button span { display:block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; line-height:1.2; }
+      .mobile-nav-button.active span { color:var(--light-leaf); font-weight:800; }
+      .mobile-sheet-backdrop { display:none; }
+      .mobile-sheet-backdrop.show { display:flex; }
+      .hero-slide { aspect-ratio:1.8 / 1; }
+      .hero-nav { width:30px; height:30px; font-size:16px; }
+      .hero-nav.prev { left:6px; } .hero-nav.next { right:6px; }
+    }
+
+    .container { max-width: 1400px; margin: 15px auto; padding: 0 2%; }
+    
+    .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } }
+
+    .card {
+      background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid var(--glass-border);
+      cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .card:hover { border-color: var(--light-leaf); transform: translateY(-2px); }
+    .card-image-wrap { position:relative; }
+    .card-image-wrap > img { display:block; }
+    .card .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; padding:0; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .free-shipping-badge { display:inline-flex; align-items:center; gap:4px; padding:5px 8px; border-radius:6px; background:#facc15; border:1px solid #eab308; color:#422006; font-size:10px; line-height:1.15; font-weight:900; box-shadow:0 2px 7px #0002; }
+    .card-image-wrap .free-shipping-badge { position:absolute; top:7px; left:7px; }
+    .card img { width: 100%; height: 145px; object-fit: contain; border-radius: 9px; background: #fff; padding: 8px; border: 1px solid rgba(255,105,0,.10); }
+    @media (min-width: 768px) { .card img { height: 190px; } }
+    
+    .card h3 { font-size: 11px; margin: 5px 0; height: 28px; overflow: hidden; color: var(--text-white); line-height: 1.2; }
+    @media (min-width: 768px) { .card h3 { font-size: 14px; height: 40px; } }
+    
+    .price { color: var(--light-leaf); font-size: 12px; font-weight: 800; }
+    @media (min-width: 768px) { .price { font-size: 18px; } }
+    .price-block { display:flex; flex-direction:column; gap:4px; }
+    .card .price-block { min-height:34px; }
+    .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
+    .discount-badge { display:inline-flex; align-items:center; padding:3px 6px; border-radius:5px; background:#15803d; border:1px solid #166534; color:#fff; font-size:10px; line-height:1.2; font-weight:900; letter-spacing:.2px; }
+    .popup-price-block .price { font-size:22px; font-weight:900; }
+    .popup-price-block .old-price { font-size:14px; }
+    .popup-price-block .discount-badge { font-size:12px; padding:4px 8px; }
+
+    /* --- PRODUCT POPUP / DARAZ-STYLE PRODUCT DETAILS --- */
+    .btn { background: var(--light-leaf); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: 800; font-size: 15px; transition: 0.3s; }
+    .btn:hover { box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+
+    .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-y: auto; padding: 12px 8px 30px; backdrop-filter: blur(7px); }
+    .popup-content {
+      background: var(--card-bg); max-width: 1040px; margin: 10px auto; border-radius: 16px;
+      padding: 14px; position: relative; width: 100%; border: 1px solid var(--glass-border); box-shadow: 0 25px 70px rgba(0,0,0,0.7);
+    }
+    .close-popup { position: absolute; top: 8px; right: 12px; z-index: 20; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(0,0,0,.55); font-size:25px; cursor:pointer; color:#fff; transition:0.3s; }
+    .close-popup:hover { transform:scale(1.08); background:var(--light-leaf); }
+
+    .gallery-main-wrap { position:relative; }
+    .slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; border-radius:12px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; background:#fff; }
+    .slider img { width:100%; min-width:100%; height:360px; object-fit:contain; background:#fff; border-radius:12px; scroll-snap-align:center; border:1px solid rgba(255,105,0,.18); }
+    .slider img { cursor:zoom-in; }
+    .slider::-webkit-scrollbar { height:7px; }
+    .slider::-webkit-scrollbar-thumb { background:var(--light-leaf); border-radius:10px; }
+    .gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border:0; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; cursor:pointer; z-index:5; font-size:18px; }
+    .gallery-arrow:hover { background:var(--light-leaf); }
+    .gallery-arrow.prev { left:8px; } .gallery-arrow.next { right:8px; }
+    .gallery-count { text-align:center; font-size:11px; color:#777; margin-top:5px; }
+    .thumb-strip { display:flex; gap:8px; overflow-x:auto; padding:8px 2px 3px; scroll-behavior:smooth; }
+    .thumb-strip::-webkit-scrollbar { height:5px; }
+    .thumb { flex:0 0 74px; height:62px; padding:3px; border:1px solid var(--glass-border); border-radius:8px; background:#fff; cursor:pointer; opacity:.72; }
+    .thumb.active { opacity:1; border:2px solid var(--light-leaf); }
+    .thumb img { width:100%; height:100%; object-fit:contain; border-radius:5px; }
+    .image-zoom { display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,.96); align-items:center; justify-content:center; padding:56px 64px; }
+    .image-zoom.open { display:flex; }
+    .image-zoom img { display:block; max-width: min(94vw, 1500px); max-height: 88vh; width:auto; height:auto; object-fit:contain; border-radius:8px; background:#fff; }
+    .image-zoom-close, .image-zoom-arrow { position:absolute; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:rgba(255,255,255,.18); color:#fff; cursor:pointer; }
+    .image-zoom-close { top:16px; right:18px; width:44px; height:44px; font-size:30px; }
+    .image-zoom-arrow { top:50%; transform:translateY(-50%); width:48px; height:48px; font-size:24px; }
+    .image-zoom-arrow.prev { left:14px; } .image-zoom-arrow.next { right:14px; }
+    .image-zoom-close:hover, .image-zoom-arrow:hover { background:var(--light-leaf); }
+    @media (max-width:700px) { .image-zoom { padding:54px 12px; } .image-zoom img { max-width:96vw; max-height:82vh; } .image-zoom-arrow { width:40px; height:40px; } .image-zoom-arrow.prev { left:5px; } .image-zoom-arrow.next { right:5px; } }
+
+    .popup-details { display:flex; flex-direction:column; gap:12px; margin-top:12px; padding:0 2px 5px; }
+    .popup-main-grid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(300px, .9fr); gap:20px; align-items:start; }
+    .popup-media { position:sticky; top:0; }
+    .popup-recommendations { margin-top:18px; padding-top:16px; border-top:1px solid var(--glass-border); }
+    .recommendation-categories { display:flex; gap:7px; overflow-x:auto; padding:3px 0 12px; -webkit-overflow-scrolling:touch; }
+    .recommendation-categories::-webkit-scrollbar { display:none; }
+    .popup-recommendations h3, .reviews-section h3 { color:var(--light-leaf); font-size:17px; margin-bottom:12px; }
+    .recommendation-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .recommendation-card { min-width:0; padding:8px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); cursor:pointer; color:var(--text-white); }
+    .recommendation-card img { width:100%; height:105px; object-fit:contain; background:#fff; border-radius:7px; }
+    .recommendation-card strong { display:block; margin:6px 0 3px; font-size:11px; line-height:1.3; height:29px; overflow:hidden; }
+    .recommendation-price .price { font-size:11px; }
+    .recommendation-price .old-price { font-size:9px; }
+    .recommendation-price .discount-badge { font-size:9px; padding:2px 4px; }
+    .reviews-section { margin-top:18px; padding:16px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); }
+    .review-form { display:grid; gap:8px; margin-bottom:14px; }
+    .review-form textarea { min-height:82px; resize:vertical; }
+    .review-status { color:#999; font-size:12px; min-height:18px; }
+    .review-list { display:grid; gap:10px; }
+    .review-card { padding:10px; background:var(--card-bg); border:1px solid var(--glass-border); border-radius:9px; }
+    .review-card strong { font-size:12px; }
+    .review-card time { color:#888; font-size:10px; margin-left:8px; }
+    .review-card p { color:#bbb; font-size:13px; margin-top:5px; line-height:1.5; white-space:pre-wrap; }
+    .popup-title-row { padding:4px 2px 8px; border-bottom:1px solid var(--glass-border); }
+    .popup-details h2 { font-size:21px; font-weight:800; color:var(--text-white); line-height:1.35; margin-bottom:6px; padding-right:36px; }
+    .popup-details .price { font-size:22px; font-weight:900; color:var(--light-leaf); }
+    .detail-section { background:var(--bg-dark); border:1px solid var(--glass-border); border-radius:12px; padding:13px; }
+    .detail-section h3 { font-size:15px; color:var(--light-leaf); margin-bottom:9px; }
+    .detail-section p { color:var(--detail-copy); line-height:1.75; font-size:15px; font-weight:500; white-space:pre-line; }
+    .feature-list { display:grid; gap:7px; }
+    .feature-item { display:flex; gap:9px; align-items:flex-start; color:var(--detail-copy); font-size:14px; font-weight:500; line-height:1.6; }
+    .feature-item i { color:var(--light-leaf); margin-top:2px; }
+    .variant-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .variant-controls label { display:grid; gap:5px; font-size:12px; font-weight:700; }
+    .variant-controls select { width:100%; padding:10px; border:1px solid var(--glass-border); border-radius:8px; background:var(--card-bg); color:var(--text-white); font:inherit; }
+    .order-info { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .info-chip { text-align:center; background:#fff4bf; border:1px solid #eab308; border-radius:10px; padding:9px 5px; font-size:10px; color:#493b10; }
+    .info-chip strong { display:block; color:#a16207; font-size:12px; margin-bottom:2px; }
+    .popup-sticky-action { position:sticky; bottom:0; z-index:10; background:linear-gradient(180deg, transparent 0%, var(--card-bg) 20%); padding-top:12px; display:grid; grid-template-columns:72px 1fr 1fr; gap:8px; align-items:center; }
+    .popup-quantity { width:100%; height:46px; padding:0 6px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); font:inherit; text-align:center; }
+    .popup-sticky-action .btn { margin-top:0; min-height:46px; padding:8px 5px; font-size:14px; }
+    .popup-sticky-action .buy-now-btn { background:#16803c; }
+    @media (max-width: 700px) {
+      .popup-content { margin:0 auto; border-radius:14px; padding:10px; }
+      .popup-main-grid { grid-template-columns:1fr; gap:6px; }
+      .popup-media { position:relative; }
+      .slider img { height:280px; }
+      .card img { height:115px; padding:5px; }
+      .popup-details h2 { font-size:18px; }
+      .order-info { grid-template-columns:repeat(3,1fr); }
+      .recommendation-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .recommendation-card img { height:120px; }
+      .popup-sticky-action { grid-template-columns:58px 1fr 1fr; gap:5px; }
+      .popup-sticky-action .btn { font-size:12px; }
+      .support-dropdown { left:0; width:210px; }
+      .support-button { padding:6px 8px; font-size:10px; }
+    }
+    /* Cart Drawer */
+    .cart-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; }
+    .cart-box { position: fixed; right: 0; top: 0; width: 100%; max-width: 380px; height: 100%; background: var(--card-bg); padding: 20px; overflow-y: auto; border-left: 1px solid var(--glass-border); color: var(--text-white); }
+    .close-cart { float: right; font-size: 24px; cursor: pointer; color: var(--light-leaf); }
+    
+    .cart-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; background: var(--bg-dark); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border); }
+    .delete-item-btn { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 8px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 12px; }
+    .delete-item-btn:hover { background: #ef4444; color: #fff; }
+
+    .input-field { width: 100%; padding: 12px; margin: 6px 0; background: var(--bg-dark); border: 1px solid var(--glass-border); color: var(--text-white); border-radius: 8px; font-size: 14px; outline: none; }
+    .input-field:focus { border-color: var(--light-leaf); }
+    .clear-checkout-details { display:block; margin:2px 0 8px auto; padding:6px 9px; border:1px solid var(--glass-border); border-radius:7px; background:transparent; color:var(--text-white); font-size:11px; cursor:pointer; }
+    .order-whatsapp-actions { display:grid; gap:7px; margin-top:8px; }
+    .order-whatsapp-actions[hidden] { display:none; }
+    .order-whatsapp-link { display:block; padding:11px 12px; border-radius:8px; background:#25d366; color:#073b1d; font-size:13px; font-weight:800; text-align:center; text-decoration:none; }
+    .order-whatsapp-link:hover { background:#20bd5a; }
+
+    .footer { background: var(--card-bg); color: #737373; text-align: center; padding: 25px 15px; margin-top: 40px; border-top: 1px solid var(--glass-border); font-size: 13px; }
+    .social-icons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+    .social-icons a { display: inline-flex; width: 40px; height: 40px; background: var(--bg-dark); border-radius: 50%; align-items: center; justify-content: center; transition: 0.3s; border: 1px solid var(--glass-border); }
+    .social-icons a:hover { background: var(--light-leaf); transform: scale(1.1); }
+    .social-icons svg { width: 20px; height: 20px; fill: var(--text-white); }
+    .social-icons a:hover svg { fill: #fff; }
+  
+    .cart-toast { position: fixed; z-index: 10000; top: 22px; left: 50%; transform: translate(-50%, -14px); padding: 13px 22px; border-radius: 10px; background: #16803c; color: #fff; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,.22); opacity: 0; transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
+    .cart-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .seller-overlay { display:none; position:fixed; inset:0; z-index:13000; padding:18px; overflow:auto; background:rgba(0,0,0,.72); align-items:flex-start; justify-content:center; }
+    .seller-overlay.show { display:flex; }
+    .seller-card { position:relative; width:min(900px,100%); margin:2vh auto; padding:22px; color:var(--text-white); background:var(--card-bg); border:1px solid var(--glass-border); border-radius:18px; box-shadow:0 24px 70px #0008; }
+    .seller-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .seller-header h2 { margin:0; color:var(--light-leaf); }
+    .seller-close { border:0; border-radius:50%; width:38px; height:38px; color:var(--text-white); background:var(--bg-dark); font-size:24px; cursor:pointer; }
+    .seller-subtitle,.seller-muted { color:#999; font-size:13px; line-height:1.5; }
+    .seller-panel { margin:14px 0; padding:16px; background:var(--bg-dark); border:1px solid var(--glass-border); border-radius:13px; }
+    .seller-panel h3 { margin:0 0 10px; color:var(--light-leaf); }
+    .seller-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 12px; }
+    .seller-panel label { display:grid; gap:6px; margin:10px 0; font-size:13px; font-weight:700; }
+    .seller-panel input,.seller-panel textarea,.seller-panel select { width:100%; padding:11px; border:1px solid var(--glass-border); border-radius:9px; background:var(--card-bg); color:var(--text-white); font:inherit; }
+    .seller-panel textarea { min-height:75px; resize:vertical; }
+    .seller-panel input[type=file] { font-size:12px; }
+    .seller-notice { min-height:20px; margin-top:8px; color:#fbbf24; font-size:13px; overflow-wrap:anywhere; }
+    .seller-shop-link { display:block; margin:8px 0; color:#93c5fd; overflow-wrap:anywhere; }
+    .seller-logo-wrap { position:relative; width:88px; margin:4px 0 12px; }
+    .seller-logo-preview { display:block; width:88px; height:88px; object-fit:cover; border:3px solid var(--light-leaf); border-radius:22px; background:#fff; }
+    .seller-logo-edit { position:absolute; right:-7px; bottom:-7px; width:34px; height:34px; border:2px solid var(--card-bg); border-radius:50%; background:var(--light-leaf); color:#fff; cursor:pointer; }
+    .seller-social-links { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+    .seller-social-links a { color:#93c5fd; overflow-wrap:anywhere; }
+    .seller-action-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .seller-action-button,.seller-item-action { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:40px; padding:8px 12px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; }
+    .seller-action-button.primary,.seller-item-action.edit { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
+    .seller-item-action.delete { color:#ef4444; }
+    .seller-product-row { display:grid; grid-template-columns:64px minmax(0,1fr) auto; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--glass-border); }
+    .seller-product-row:last-child { border-bottom:0; }
+    .seller-product-row img { width:64px; height:58px; object-fit:contain; border-radius:8px; background:white; }
+    .seller-product-row small { display:block; margin-top:4px; color:#aaa; }
+    .seller-product-actions { display:flex; gap:5px; }
+    .seller-item-action { min-height:36px; padding:7px 9px; font-size:12px; }
+    .seller-analytics-controls { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+    .seller-analytics-controls input { width:auto; min-height:40px; }
+    .seller-analytics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .seller-analytics-card { padding:14px; border:1px solid var(--glass-border); border-radius:12px; background:var(--card-bg); }
+    .seller-analytics-card span { display:block; color:#aaa; font-size:12px; }
+    .seller-analytics-card strong { display:block; margin-top:6px; color:var(--light-leaf); font-size:22px; }
+    .role-overlay { display:none; position:fixed; inset:0; z-index:12000; align-items:center; justify-content:center; padding:18px; background:#000b; }
+    .role-overlay.show { display:flex; }
+    .role-card { width:min(430px,100%); padding:22px; border:1px solid var(--glass-border); border-radius:18px; background:var(--card-bg); color:var(--text-white); box-shadow:0 20px 60px #0008; }
+    .role-card h2 { margin:0 0 6px; color:var(--light-leaf); }
+    .role-card p { margin:0 0 16px; color:#aaa; font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+    .role-option { display:flex; width:100%; align-items:center; gap:12px; margin-top:10px; padding:14px; text-align:left; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); color:var(--text-white); cursor:pointer; }
+    .role-option i { width:26px; color:var(--light-leaf); font-size:20px; text-align:center; }
+    .role-option strong,.role-option small { display:block; }
+    .role-option small { margin-top:4px; color:#aaa; }
+    .buyer-profile-email { padding:12px; border-radius:10px; background:var(--bg-dark); overflow-wrap:anywhere; }
+    .seller-empty { padding:12px 0; color:#aaa; font-size:13px; }
+    @media(max-width:700px) { .header-account-button { display:none; } .seller-overlay { padding:0; } .seller-card { min-height:100vh; margin:0; padding:18px 14px calc(24px + env(safe-area-inset-bottom)); border-radius:0; } .seller-form-grid { grid-template-columns:1fr; } .seller-product-row { grid-template-columns:54px minmax(0,1fr); } .seller-product-row img { width:54px; height:54px; } .seller-product-actions { grid-column:1/-1; justify-content:flex-end; } .seller-item-action { min-height:42px; padding:8px 12px; } .seller-analytics-grid { grid-template-columns:1fr 1fr; } }
+
+  </style>
+</head>
+<body class="has-top-searches">
+
+  <!-- ================= ACCOUNT MODAL ================= -->
+  <div id="accountModal" aria-hidden="true">
+    <div class="account-card">
+      <span class="account-close" onclick="closeAccountModal()">&times;</span>
+      <h2>ALEE SHOPPING</h2>
+      <div class="account-note">Sign in with Google to create your shop and add products, or use email sign-in.</div>
+      <button class="btn" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
+      <div class="account-tabs" role="tablist" aria-label="Account access">
+        <button class="account-tab active" id="signInTab" type="button" onclick="showAccountForm('signin')">Sign In</button>
+        <button class="account-tab" id="signUpTab" type="button" onclick="showAccountForm('signup')">Create Account</button>
+      </div>
+      <form id="signInForm" class="account-form active" onsubmit="signInWithEmail(event)">
+        <input id="signInEmail" type="email" placeholder="Email address" autocomplete="email" required>
+        <input id="signInPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+        <button class="btn" type="submit">Sign In</button>
+      </form>
+      <form id="signUpForm" class="account-form" onsubmit="signUpWithEmail(event)">
+        <input id="signUpEmail" type="email" placeholder="Email address" autocomplete="email" required>
+        <input id="signUpPassword" type="password" placeholder="Create a password (at least 6 characters)" autocomplete="new-password" minlength="6" required>
+        <button class="btn" type="submit">Create Account</button>
+      </form>
+      <div class="account-status" id="accountStatus" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- ================= 2. SHOP PAGE ================= -->
+  <div id="shopPageContent">
+    <div class="header">
+      <div class="logo-area">
+        <img src="assets/alee-logo.png" class="logo-img" alt="Logo" onerror="this.src='assets/alee-logo.png'">
+        <div class="logo-text">ALEE SHOPPING</div>
+      </div>
+      
+      <div class="header-actions">
+        <a class="header-shop-button" href="shops.html" target="_blank" rel="noopener"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
+        <button class="header-account-button" type="button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i> My Account</button>
+        <button class="header-chat-button" type="button" onclick="aleeChat.openHome()"><i class="fa-regular fa-comments"></i> Messages</button>
+        <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+        <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
+        <div class="support-dropdown" id="supportDropdown" role="menu">
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Help Center')"><i class="fa-solid fa-headset"></i> Help Center</div>
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Contact Customer Care')"><i class="fa-solid fa-comment-dots"></i> Contact Customer Care</div>
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Order')"><i class="fa-solid fa-box"></i> Order</div>
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Shipping & Delivery')"><i class="fa-solid fa-truck"></i> Shipping &amp; Delivery</div>
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Payment')"><i class="fa-solid fa-money-bill-wave"></i> Payment</div>
+          <div class="dropdown-item" role="menuitem" onclick="contactSupport('Returns & Refunds')"><i class="fa-solid fa-rotate-left"></i> Returns &amp; Refunds</div>
+        </div>
+        <!-- Profile Badge with Click Dropdown for Switch/Logout -->
+        <div class="profile-badge guest" onclick="handleProfileClick(event)" title="Guest: tap to sign in or create an account">
+          <i class="fa-solid fa-user-circle"></i> <span id="profileNameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
+        </div>
+        
+        <!-- Dropdown Menu for Logout / Switch Email -->
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="dropdown-item" onclick="openAccountModal()">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In / Create Account
+          </div>
+        <div class="dropdown-item" onclick="openSellerAccount()"><i class="fa-solid fa-store"></i> My Shop &amp; Items</div>
+        <div class="dropdown-item" onclick="location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</div>
+          <div class="dropdown-item" onclick="logoutUser()" style="color: #ef4444;">
+            <i class="fa-solid fa-right-from-bracket"></i> Log Out
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="🔍 Search products..." oninput="searchProducts()">
+        <input type="file" id="photoSearchInput" class="photo-search-input" accept="image/*" onchange="searchProductsByPhoto(this.files[0]);this.value=''">
+        <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+        <button type="button" class="photo-search-btn" onclick="document.getElementById('photoSearchInput').click()" title="Search with a photo" aria-label="Search with a photo"><i class="fa-solid fa-camera"></i></button>
+        <button class="search-theme-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to dark mode" aria-label="Switch to dark mode">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+      <div class="search-extras" id="searchExtras">
+        <div class="top-searches" id="topSearches">
+          <span class="top-search-label"><i class="fa-solid fa-fire"></i> Top Searches</span>
+          <div class="top-search-list" id="topSearchList"><span class="top-search-empty">Popular products appear here as people search</span></div>
+        </div>
+        <button type="button" class="finder-trigger" onclick="openProductFinder()"><i class="fa-solid fa-wand-magic-sparkles"></i> Smart product finder</button>
+      </div>
+    </div>
+
+    <div class="finder-overlay" id="productFinder" onclick="if(event.target===this)closeProductFinder()" role="dialog" aria-modal="true" aria-labelledby="finderTitle">
+      <div class="finder-dialog">
+        <div class="finder-title-row"><h2 id="finderTitle">Find the right product</h2><button class="finder-close" type="button" onclick="closeProductFinder()" aria-label="Close">&times;</button></div>
+        <textarea class="finder-input" id="finderQuery" maxlength="300" placeholder="What are you looking for? (e.g. a useful gift under LKR 5,000)"></textarea>
+        <button type="button" class="finder-submit" onclick="findRecommendedProducts()">Show matching products</button>
+        <div class="finder-status" id="finderStatus" aria-live="polite"></div>
+        <div class="finder-results" id="finderResults"></div>
+      </div>
+    </div>
+
+    <div class="hero-banner" id="heroBanner" aria-label="ALEE promotional banner">
+      <button class="hero-nav prev" type="button" onclick="changeBanner(-1)" aria-label="Previous banner">&#10094;</button>
+      <div class="hero-track" id="heroTrack"></div>
+      <button class="hero-nav next" type="button" onclick="changeBanner(1)" aria-label="Next banner">&#10095;</button>
+      <div class="hero-dots" id="heroDots" aria-label="Choose banner"></div>
+    </div>
+
+    <section class="shops-section" id="shopsSection" aria-label="Shops">
+      <h2 class="shops-heading">Shops <small>Choose a shop to see its products</small></h2>
+      <div class="shops-strip-wrap">
+        <button class="shops-strip-control" type="button" onclick="scrollShopStrip(-1)" aria-label="Scroll shops left"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="shops-strip" id="shopsStrip" tabindex="0" aria-label="Shop list; swipe or scroll horizontally"></div>
+        <button class="shops-strip-control" type="button" onclick="scrollShopStrip(1)" aria-label="Scroll shops right"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Categories Bar: directly below the promotional banners -->
+    <div class="categories-bar" id="categoryBar" aria-label="Product categories"></div>
+
+    <div class="mobile-sheet-backdrop" id="mobileCategorySheet" onclick="if(event.target===this)closeMobileSheet('mobileCategorySheet')">
+      <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileCategoryTitle">
+        <h2 id="mobileCategoryTitle">Categories</h2>
+        <div class="mobile-category-list" id="mobileCategoryList"></div>
+      </section>
+    </div>
+    <div class="mobile-sheet-backdrop" id="mobileShopsSheet" onclick="if(event.target===this)closeMobileSheet('mobileShopsSheet')">
+      <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileShopsTitle">
+        <h2 id="mobileShopsTitle">Shops</h2>
+        <div class="mobile-sheet-shop-list" id="mobileShopList"></div>
+      </section>
+    </div>
+    <div class="mobile-sheet-backdrop" id="mobileAccountSheet" onclick="if(event.target===this)closeMobileSheet('mobileAccountSheet')">
+      <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileAccountTitle">
+        <h2 id="mobileAccountTitle">My Account</h2>
+        <div class="mobile-account-email" id="mobileAccountEmail"></div>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</button>
+        <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet');openSellerAccount()">My Shop &amp; Items</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet');openAccountModal()">Sign In / Create Account</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser();closeMobileSheet('mobileAccountSheet')">Log Out</button>
+      </section>
+    </div>
+
+    <div class="container">
+      <div class="photo-search-notice" id="photoSearchNotice" role="status" aria-live="polite"><span id="photoSearchMessage"></span><button type="button" class="photo-search-clear" onclick="clearPhotoSearch()">Clear</button></div>
+      <div class="products" id="productList"></div>
+    </div>
+
+    <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+      <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><i class="fa-solid fa-house"></i><span>Home</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><i class="fa-solid fa-border-all"></i><span>Categories</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><i class="fa-solid fa-store"></i><span>Shops</span></button>
+      <button type="button" class="mobile-nav-button" onclick="aleeChat.openHome()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
+    </nav>
+
+    <!-- Product Popup / Daraz-style details -->
+    <div class="product-popup" id="productPopup" onclick="popupBackdropClose(event)">
+      <div class="popup-content">
+        <span class="close-popup" onclick="closeProductPopup()">&times;</span>
+        <div class="popup-main-grid">
+        <div class="popup-media"><div class="gallery-main-wrap">
+          <button class="gallery-arrow prev" onclick="galleryPrev(event)" aria-label="Previous photo">&#10094;</button>
+          <div class="slider" id="popupSlider"></div>
+          <button class="gallery-arrow next" onclick="galleryNext(event)" aria-label="Next photo">&#10095;</button>
+        </div>
+        <div class="gallery-count" id="galleryCount">1 / 1</div>
+        <div class="thumb-strip" id="popupThumbs"></div>
+        <div class="popup-shop-meta" id="popupShopMeta"></div>
+        </div>
+        <div class="popup-details">
+          <div class="popup-title-row">
+            <h2 id="popupName"></h2>
+            <div class="price-block popup-price-block" id="popupPrice"></div>
+          </div>
+          <section class="detail-section">
+            <h3>Product Description</h3>
+            <p id="popupDesc"></p>
+          </section>
+          <section class="detail-section">
+            <h3>Key Features</h3>
+            <div class="feature-list" id="popupFeatures"></div>
+          </section>
+          <section class="detail-section" id="variantSection" hidden>
+            <h3>Choose options</h3>
+            <div class="variant-controls" id="variantControls"></div>
+          </section>
+          <section class="detail-section">
+            <h3>Order & Delivery</h3>
+            <div class="order-info">
+              <div class="info-chip"><strong>🚚 Delivery</strong><span id="popupShippingStatus">Island-wide</span></div>
+              <div class="info-chip"><strong>💵 Payment</strong>Cash on Delivery</div>
+              <div class="info-chip"><strong>💬 Order</strong>WhatsApp</div>
+            </div>
+          </section>
+        </div>
+        </div>
+        <div class="popup-sticky-action">
+          <input class="popup-quantity" id="popupQuantity" type="number" min="1" max="20" value="1" aria-label="Quantity, up to 20">
+          <button class="btn" id="popupAddBtn" type="button">Add to Cart</button>
+          <button class="btn buy-now-btn" id="popupBuyBtn" type="button">Buy Now</button>
+        </div>
+        <section class="popup-recommendations">
+          <h3>More products in this category</h3>
+          <div class="recommendation-categories" id="recommendationCategories" aria-label="Choose a product category"></div>
+          <div id="recommendationList" class="recommendation-grid"></div>
+        </section>
+        <section class="reviews-section">
+          <h3>Customer comments</h3>
+          <form class="review-form" onsubmit="submitProductReview(event)">
+            <textarea id="reviewText" class="input-field" maxlength="1000" placeholder="Share your experience with this product…" required></textarea>
+            <button class="btn" id="reviewSubmitBtn" type="submit" style="margin-top:0">Post comment</button>
+            <div class="review-status" id="reviewStatus"></div>
+          </form>
+          <div class="review-list" id="reviewList"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="image-zoom" id="imageZoom" onclick="if(event.target===this)closeImageZoom()" role="dialog" aria-modal="true" aria-label="Enlarged product photo">
+      <button class="image-zoom-close" type="button" onclick="closeImageZoom()" aria-label="Close enlarged photo">&times;</button>
+      <button class="image-zoom-arrow prev" type="button" onclick="zoomGalleryStep(-1,event)" aria-label="Previous photo">&#10094;</button>
+      <img id="imageZoomPhoto" alt="Enlarged product photo">
+      <button class="image-zoom-arrow next" type="button" onclick="zoomGalleryStep(1,event)" aria-label="Next photo">&#10095;</button>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay">
+      <div class="cart-box">
+        <span class="close-cart" onclick="closeCart()">&times;</span>
+        <h2>Your Cart</h2>
+        <div id="cartItems" style="margin-top: 12px;"></div>
+        <hr style="margin: 15px 0; border-color: var(--glass-border);">
+        <h3 style="font-size: 16px;">Total: LKR <span id="total">0</span></h3>
+        <input type="text" id="customerName" placeholder="Your Full Name *" class="input-field" autocomplete="name">
+        <input type="text" id="customerAddress" placeholder="Full Delivery Address *" class="input-field" autocomplete="street-address">
+        <input type="tel" id="customerPhone1" placeholder="Phone Number 1 *" class="input-field" autocomplete="tel">
+        <input type="tel" id="customerPhone2" placeholder="Phone Number 2 - Optional" class="input-field" autocomplete="tel">
+        <textarea id="customerNote" placeholder="Note - Optional" class="input-field" rows="3"></textarea>
+        <small style="display:block;color:#777;margin:2px 0 8px;">Name, address and phone numbers are saved on this device for your next order. You can edit them anytime.</small>
+        <small style="display:block;color:#777;margin:0 0 8px;">Order details are saved securely in the ALEE SHOPPING order inbox so the shop can process your request.</small>
+        <button class="clear-checkout-details" type="button" onclick="clearCheckoutDetails()">Clear saved details</button>
+        <button class="btn" onclick="submitOrder()">Place Order</button>
+        <div id="orderStatus" role="status" aria-live="polite" style="margin-top:8px;font-size:12px;color:var(--text-white);"></div>
+        <div id="orderWhatsappActions" class="order-whatsapp-actions" hidden></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>ALEE SHOPPING  | Shop Everything</p>
+      <p>📍 Colombo, Sri Lanka | 📞 076 138 9936</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/profile.php?id=61594937084284&mibextid=ZbWKwL" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
+        <a href="https://instagram.com/alee_shoppingnew?exln=MWdmdzJzYmduYXltbg%3D%3D" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zm4.5-7.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z
+
+
+"/></svg></a>
+        <a href="https://www.tiktok.com/@aleeshoppingnew3?_r=1&_t=ZS-9AVjwpuMye4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12.5 2h2.5c.8 6 5.4 6.1 8 6.1V11c-2.3 0-4.2-.7-5.5-1.8v4.8c0 3.5-2.9 6.3-6.5 6.3S4.5 17.5 4.5 14s2.9-6.3 6.5-6.3c.4 0 .8 0 1.2.1V10c-.4-.1-.8-.1-1.2-.1-1.9 0-3.5 1.6-3.5 3.5s1.6 3.5 3.5 3.5 3.5-1.6 3.5-3.5V2z"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="role-overlay" id="accountRoleDialog" onclick="if(event.target===this)closeAccountRoleDialog()" role="dialog" aria-modal="true" aria-labelledby="accountRoleTitle">
+    <section class="role-card">
+      <h2 id="accountRoleTitle">Welcome to ALEE SHOPPING</h2>
+      <p id="accountRoleEmail"></p>
+      <p>Login successful. Choose Buyer for a personal profile or Seller to create and manage a shop.</p>
+      <p>Choose how you want to use your account.</p>
+      <button class="role-option" type="button" onclick="chooseAccountRole('buyer')"><i class="fa-solid fa-bag-shopping"></i><span><strong>Buyer</strong><small>Browse products, place orders, and message shops.</small></span></button>
+      <button class="role-option" type="button" onclick="chooseAccountRole('seller')"><i class="fa-solid fa-store"></i><span><strong>Seller</strong><small>Create and manage your shop and products.</small></span></button>
+      <div class="seller-notice" id="accountRoleStatus" role="status" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <div class="seller-overlay" id="buyerDashboard" onclick="if(event.target===this)closeBuyerAccount()" role="dialog" aria-modal="true" aria-labelledby="buyerDashboardTitle">
+    <div class="seller-card">
+      <div class="seller-header"><div><h2 id="buyerDashboardTitle">Buyer Profile</h2><div class="seller-subtitle">Your ALEE SHOPPING account</div></div><button class="seller-close" type="button" onclick="closeBuyerAccount()" aria-label="Close">&times;</button></div>
+      <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Buyer profile picture"></div><h3 id="buyerProfileName">Buyer</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
+        <div class="seller-action-row"><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="seller-overlay" id="sellerDashboard" onclick="if(event.target===this)closeSellerAccount()" role="dialog" aria-modal="true" aria-labelledby="sellerDashboardTitle">
+    <div class="seller-card">
+      <div class="seller-header"><div><h2 id="sellerDashboardTitle">Seller Dashboard</h2><div class="seller-subtitle" id="sellerAccountEmail"></div></div><button class="seller-close" type="button" onclick="closeSellerAccount()" aria-label="Close">&times;</button></div>
+      <section class="seller-panel" id="sellerShopProfile" hidden>
+        <div class="seller-logo-wrap"><img class="seller-logo-preview" id="sellerShopLogo" src="assets/alee-logo.png" alt="Shop profile picture"><button class="seller-logo-edit" type="button" onclick="editSellerShop()" aria-label="Edit shop profile"><i class="fa-solid fa-pencil"></i></button></div>
+        <h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div>
+        <div class="seller-social-links" id="sellerShopSocials"></div>
+        <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Buyer Profile</button></div>
+        <button class="seller-action-button primary" id="sendShopDetailsButton" type="button" onclick="sendShopDetailsToAlee()"><i class="fa-brands fa-whatsapp"></i> Send Details to ALEE SHOPPING</button>
+      </section>
+      <section class="seller-panel" id="sellerShopFormPanel"><h3 id="sellerShopFormTitle">Create Shop</h3><form id="sellerShopForm" onsubmit="saveSellerShop(event)">
+        <div class="seller-form-grid">
+          <label>Shop name<input name="shopName" minlength="2" maxlength="80" required placeholder="Your shop name"></label>
+          <label>Shop category<select name="shopCategory" id="sellerShopCategory" required></select></label>
+          <label>Phone number<input name="phone" type="tel" maxlength="40" required placeholder="+94..."></label>
+          <label>Second phone number (optional)<input name="phone2" type="tel" maxlength="40" placeholder="+94..."></label>
+          <label>Shop address<textarea name="address" minlength="3" maxlength="400" required placeholder="Shop address"></textarea></label>
+          <label>Facebook link<input name="facebook" type="url" maxlength="500" placeholder="https://www.facebook.com/..."></label>
+          <label>Instagram link<input name="instagram" type="url" maxlength="500" placeholder="https://www.instagram.com/..."></label>
+          <label>YouTube link<input name="youtube" type="url" maxlength="500" placeholder="https://www.youtube.com/..."></label>
+          <label>Website or other shop link (optional)<input name="externalLink" type="url" maxlength="500" placeholder="https://..."></label>
+        </div>
+        <label>Shop profile picture<input name="logo" id="sellerShopLogoFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif"><span class="seller-muted" id="sellerLogoHelp">Choose a profile picture for your shop.</span></label>
+        <div class="seller-action-row"><button class="seller-action-button primary" id="sellerShopSubmit" type="submit">Submit Shop Details</button><button class="seller-action-button" id="sellerShopCancel" type="button" onclick="cancelEditSellerShop()" hidden>Cancel</button></div>
+        <div class="seller-notice" id="sellerShopStatus" role="status" aria-live="polite"></div>
+      </form></section>
+      <section class="seller-panel" id="sellerProductPanel" hidden><button class="seller-action-button primary" id="sellerAddItemToggle" type="button" onclick="toggleSellerProductForm()"><i class="fa-solid fa-plus"></i> Add Item</button><form id="sellerProductForm" onsubmit="saveSellerProduct(event)" hidden>
+        <h3 id="sellerProductFormTitle">Add Item</h3>
+        <div class="seller-form-grid">
+          <label>Item name<input name="name" minlength="2" maxlength="120" required></label>
+          <label>Price (LKR)<input name="price" type="number" min="1" step="1" required></label>
+          <label>Category<input name="category" maxlength="80" list="sellerCategoryOptions" required placeholder="Choose or type a category"><datalist id="sellerCategoryOptions"></datalist></label>
+          <label>Size options<input name="sizes" maxlength="250" placeholder="e.g. S, M, L, XL"></label>
+        </div>
+        <label>Description<textarea name="description" maxlength="2000" required></textarea></label>
+        <label>Key features<textarea name="features" maxlength="1200" placeholder="One feature per line"></textarea></label>
+        <label>Product photos (up to 10)<input name="photos" id="sellerProductPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple required><span class="seller-muted" id="sellerProductPhotoHelp">Choose up to 10 photos. Each image is uploaded to secure shop storage.</span></label>
+        <div class="seller-action-row"><button class="seller-action-button primary" id="sellerProductSubmit" type="submit">Add Item</button><button class="seller-action-button" id="sellerProductCancel" type="button" onclick="cancelEditSellerProduct()" hidden>Cancel</button></div>
+        <div class="seller-notice" id="sellerProductStatus" role="status" aria-live="polite"></div>
+      </form></section>
+      <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
+      <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsMonth">Month</label><input id="sellerAnalyticsMonth" type="month" onchange="loadSellerAnalytics()"></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Orders this month (excluding cancelled)</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Order value (excluding cancelled)</span><strong id="sellerAnalyticsValue">—</strong></div></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
+      <div class="seller-notice" id="sellerDashboardStatus" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backend-config.js"></script>
+  <script src="products.js"></script>
+  <script src="banners.js"></script>
+  <script src="categories.js"></script>
+  <script src="shops.js"></script>
+  <script>
+    const products = window.aleeProducts || [];
+    const categories = Array.isArray(window.aleeCategories) ? window.aleeCategories : [];
+    const shops = Array.isArray(window.aleeShops) ? window.aleeShops : [];
+    // Email and password sign-in uses Supabase Auth.
+    const supabaseClient = window.aleeSupabase || null;
+    let activeUser = null;
+    let currentSellerShop = null;
+    let sellerProducts = [];
+    let editingSellerProductId = null;
+
+    const newId = () => window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
+    const shopPublicUrl = shopId => { const url=new URL('shop.html',location.href); url.searchParams.set('shop',shopId); return url.href; };
+    const productPublicUrl = productId => { const url=new URL('index.html',location.href); url.searchParams.set('product',String(1000000000+Number(productId))); return url.href; };
+    const splitSellerList = value => String(value||'').split(/[,\n]/).map(item=>item.trim()).filter(Boolean).slice(0,30);
+    function reserveWhatsappWindow() { const popup=window.open('about:blank','_blank'); if(popup) popup.opener=null; return popup; }
+    function sendSellerWhatsappDraft(popup,message,statusElement) {
+      const url=`https://wa.me/${whatsappNumber}?${new URLSearchParams({text:message})}`;
+      if(popup&&!popup.closed) { popup.location.href=url; statusElement.textContent='Saved. WhatsApp opened with the message ready; tap Send there to deliver it.'; }
+      else { statusElement.innerHTML=`Saved. <a href="${escapeHTML(url)}" target="_blank" rel="noopener">Open WhatsApp message</a> and tap Send.`; }
+    }
+
+    async function signInWithGoogle() {
+      const status=document.getElementById('accountStatus');
+      if(!supabaseClient){status.textContent='Supabase login is not configured. See the setup guide.';return;}
+      status.textContent='Opening Google sign-in…';
+      try{sessionStorage.setItem('alee-login-pending','1');}catch(error){}
+      const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0]}});
+      if(error){try{sessionStorage.removeItem('alee-login-pending');}catch(storageError){}status.textContent=`Google sign-in failed: ${error.message}`;}
+    }
+
+    function getAccountRole() {
+      if(!activeUser)return null;
+      try{return localStorage.getItem(`alee-account-role:${activeUser.id}`);}catch(error){return null;}
+    }
+
+    function showAccountRoleDialog() {
+      if(!activeUser)return;
+      if(document.getElementById('accountRoleDialog').classList.contains('show'))return;
+      closeAccountModal();
+      document.getElementById('accountRoleEmail').textContent=activeUser.email||'Signed in';
+      document.getElementById('accountRoleDialog').classList.add('show');
+    }
+
+    function closeAccountRoleDialog() { document.getElementById('accountRoleDialog').classList.remove('show'); }
+
+    function chooseAccountRole(role) {
+      if(!activeUser||!['buyer','seller'].includes(role))return;
+      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,role);}catch(error){}
+      closeAccountRoleDialog();
+      if(role==='buyer')openBuyerAccount();else openSellerAccount(true);
+    }
+
+    function switchAccountRole(role) {
+      if(!activeUser)return;
+      closeBuyerAccount();closeSellerAccount();
+      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,role);}catch(error){}
+      if(role==='buyer')openBuyerAccount();else openSellerAccount(true);
+    }
+
+    function openBuyerAccount() {
+      if(!activeUser)return;
+      document.getElementById('profileDropdown')?.classList.remove('show');
+      document.getElementById('buyerProfileEmail').textContent=activeUser.email||'Signed in';
+      document.getElementById('buyerProfileName').textContent=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'Buyer';
+      document.getElementById('buyerProfileImage').src=activeUser.user_metadata?.avatar_url||activeUser.user_metadata?.picture||'assets/alee-logo.png';
+      document.getElementById('buyerDashboard').classList.add('show');
+    }
+
+    function closeBuyerAccount() { document.getElementById('buyerDashboard').classList.remove('show'); }
+
+    async function openSellerAccount(skipRolePrompt=false) {
+      document.getElementById('profileDropdown')?.classList.remove('show');
+      if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in with Google first to create a shop and add items.';return;}
+      const role=getAccountRole();
+      if(!role&&!skipRolePrompt){showAccountRoleDialog();return;}
+      if(role==='buyer'&&!skipRolePrompt){openBuyerAccount();return;}
+      document.getElementById('sellerDashboard').classList.add('show');
+      document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
+      await loadSellerWorkspace();
+    }
+    function closeSellerAccount() { document.getElementById('sellerDashboard').classList.remove('show'); }
+
+    function mapSellerShop(row) {
+      return {id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',rank:9999,rating:5,_sellerManaged:true};
+    }
+    function mapSellerProduct(row) {
+      return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:Number(row.price),discountPercent:0,category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
+    }
+
+    function fillSellerShopCategories(selected='Other') {
+      const select=document.getElementById('sellerShopCategory');
+      const options=[...new Map(categories.map(item=>[String(item.label||item.id),String(item.label||item.id)])).values()];
+      if(!options.includes('Other'))options.push('Other');
+      if(selected&&!options.includes(selected))options.push(selected);
+      select.replaceChildren(new Option('Choose a shop category',''),...options.sort((a,b)=>a.localeCompare(b)).map(value=>new Option(value,value)));
+      select.value=selected||'';
+    }
+
+    function getSellerStoragePath(url) {
+      const marker='/storage/v1/object/public/seller-uploads/';
+      const value=String(url||''),index=value.indexOf(marker);
+      return index<0?'':decodeURIComponent(value.slice(index+marker.length));
+    }
+
+    async function uploadSellerImage(file,folder) {
+      if(!file||!['image/jpeg','image/png','image/webp','image/gif','image/avif'].includes(file.type))throw new Error('Choose a JPG, PNG, WEBP, GIF, or AVIF image.');
+      if(file.size>10*1024*1024)throw new Error('Each image must be 10 MB or smaller.');
+      const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();
+      const path=`${folder}/${newId()}.${ext}`;
+      const {error}=await supabaseClient.storage.from('seller-uploads').upload(path,file,{contentType:file.type,upsert:false});
+      if(error)throw error;
+      return {path,url:supabaseClient.storage.from('seller-uploads').getPublicUrl(path).data.publicUrl};
+    }
+
+    async function removeSellerImages(urls) {
+      const paths=(urls||[]).map(getSellerStoragePath).filter(Boolean);
+      if(paths.length){const {error}=await supabaseClient.storage.from('seller-uploads').remove(paths);if(error)throw error;}
+    }
+
+    async function loadSellerCatalog() {
+      if(!supabaseClient)return;
+      const [{data:shopRows,error:shopError},{data:productRows,error:productError}]=await Promise.all([
+        supabaseClient.from('seller_shops_public').select('*'),
+        supabaseClient.from('seller_products_public').select('*')
+      ]);
+      if(shopError||productError){console.warn('Seller catalog is not configured yet.',shopError||productError);return;}
+      for(let i=shops.length-1;i>=0;i--) if(shops[i]?._sellerManaged) shops.splice(i,1);
+      for(let i=products.length-1;i>=0;i--) if(products[i]?._sellerManaged) products.splice(i,1);
+      shops.push(...(shopRows||[]).map(mapSellerShop));
+      const mappedProducts=(productRows||[]).map(mapSellerProduct);
+      products.push(...mappedProducts);
+      const knownCategories=new Set(categories.map(category=>String(category.id)));
+      mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
+      renderCategoryBar();
+      renderShopDirectory();
+      displayProducts(products);
+    }
+
+    async function loadSellerWorkspace() {
+      const status=document.getElementById('sellerDashboardStatus');
+      status.textContent='Loading your shop…';
+      if(!supabaseClient){status.textContent='Supabase is not configured.';return;}
+      try {
+        const {data:shop,error:shopError}=await supabaseClient.from('seller_shops').select('*').eq('owner_id',activeUser.id).maybeSingle();
+        if(shopError) throw shopError;
+        currentSellerShop=shop||null;
+        const profile=document.getElementById('sellerShopProfile'), formPanel=document.getElementById('sellerShopFormPanel');
+        const productPanel=document.getElementById('sellerProductPanel'),listPanel=document.getElementById('sellerProductListPanel');
+        if(currentSellerShop){
+          profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;
+          document.getElementById('sellerShopName').textContent=currentSellerShop.shop_name;
+          document.getElementById('sellerShopLogo').src=currentSellerShop.logo_url||'assets/alee-logo.png';
+          document.getElementById('sellerShopDetails').textContent=[currentSellerShop.shop_category||'Other',currentSellerShop.phone,currentSellerShop.phone2,currentSellerShop.address].filter(Boolean).join(' · ');
+          const socials=document.getElementById('sellerShopSocials');
+          socials.innerHTML=[['facebook_url','Facebook'],['instagram_url','Instagram'],['youtube_url','YouTube']].filter(([key])=>/^https?:\/\//i.test(String(currentSellerShop[key]||''))).map(([key,label])=>`<a href="${escapeHTML(currentSellerShop[key])}" target="_blank" rel="noopener">${label}</a>`).join('');
+          const link=shopPublicUrl(currentSellerShop.id);const linkEl=document.getElementById('sellerShopLink');linkEl.href=link;linkEl.textContent=link;
+          document.getElementById('sellerShopFormTitle').textContent='Edit shop details';
+          document.getElementById('sellerShopLogoFile').required=false;
+          document.getElementById('sellerLogoHelp').textContent='Choose a new picture only if you want to replace the current one.';
+          document.getElementById('sellerShopCancel').hidden=true;
+          document.getElementById('sellerShopSubmit').textContent='Submit Shop Details';
+          const sendDetails=document.getElementById('sendShopDetailsButton');sendDetails.hidden=!currentSellerShop;
+          fillSellerShopCategories(currentSellerShop.shop_category||'Other');
+          const categoryList=document.getElementById('sellerCategoryOptions');categoryList.replaceChildren(...categories.map(category=>new Option(category.label,category.label)));
+          const {data:items,error:itemError}=await supabaseClient.from('seller_products').select('*').eq('owner_id',activeUser.id).order('created_at',{ascending:false});
+          if(itemError) throw itemError;
+          sellerProducts=items||[];renderSellerProductList();
+        } else {
+          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;
+          document.getElementById('sellerShopFormTitle').textContent='Create Shop';
+          document.getElementById('sellerShopForm').reset();
+          document.getElementById('sellerShopLogoFile').required=true;
+          document.getElementById('sellerLogoHelp').textContent='Add a profile picture for your shop.';
+          document.getElementById('sellerShopCancel').hidden=true;
+          document.getElementById('sendShopDetailsButton').hidden=true;
+          document.getElementById('sellerShopSubmit').textContent='Submit Shop Details';
+          fillSellerShopCategories('Other');
+        }
+        status.textContent='';
+      } catch(error) { console.error(error);status.textContent='Could not load your shop. Run seller-marketplace-schema.sql in Supabase, then reload.'; }
+    }
+
+    function editSellerShop() {
+      if(!currentSellerShop)return;
+      const form=document.getElementById('sellerShopForm');
+      form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.phone.value=currentSellerShop.phone||'';form.elements.phone2.value=currentSellerShop.phone2||'';
+      form.elements.address.value=currentSellerShop.address||'';form.elements.externalLink.value=currentSellerShop.external_link||'';
+      form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
+      form.elements.shopCategory.value=currentSellerShop.shop_category||'Other';form.elements.logo.value='';form.elements.logo.required=false;
+      document.getElementById('sellerShopProfile').hidden=true;document.getElementById('sellerShopFormPanel').hidden=false;
+      document.getElementById('sellerShopFormTitle').textContent='Edit Shop Profile';document.getElementById('sellerShopSubmit').textContent='Save Shop Profile';document.getElementById('sellerShopCancel').hidden=false;
+      document.getElementById('sellerShopLogoFile').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+
+    function cancelEditSellerShop() {
+      if(!currentSellerShop)return;
+      document.getElementById('sellerShopForm').reset();
+      document.getElementById('sellerShopFormPanel').hidden=true;document.getElementById('sellerShopProfile').hidden=false;
+      document.getElementById('sellerShopCancel').hidden=true;document.getElementById('sellerShopStatus').textContent='';
+    }
+
+    async function saveSellerShop(event) {
+      event.preventDefault();
+      if(!activeUser||!supabaseClient)return;
+      const form=event.currentTarget,status=document.getElementById('sellerShopStatus');
+      const name=form.elements.shopName.value.trim(),phone=form.elements.phone.value.trim(),address=form.elements.address.value.trim(),externalLink=form.elements.externalLink.value.trim();
+      const socialValues={facebook_url:form.elements.facebook.value.trim(),instagram_url:form.elements.instagram.value.trim(),youtube_url:form.elements.youtube.value.trim()};
+      const socialUrl=Object.values(socialValues).find(value=>value&&!/^https?:\/\//i.test(value));
+      if(externalLink&&!/^https?:\/\//i.test(externalLink)){status.textContent='Shop link must start with https:// or http://';return;}
+      if(socialUrl){status.textContent='Social links must start with https:// or http://';return;}
+      const button=document.getElementById('sellerShopSubmit'),logoFile=form.elements.logo.files[0];button.disabled=true;status.textContent='Saving your shop profile…';
+      let uploadedLogo=null;
+      try {
+        const phone2=form.elements.phone2.value.trim();
+        if(!currentSellerShop&&!logoFile)throw new Error('Add a shop profile picture before submitting.');
+        if(logoFile)uploadedLogo=await uploadSellerImage(logoFile,`${activeUser.id}/shop-profile`);
+        const payload={owner_id:activeUser.id,shop_name:name,phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
+        payload.logo_url=uploadedLogo?.url||currentSellerShop?.logo_url||null;
+        const query=currentSellerShop
+          ? supabaseClient.from('seller_shops').update(payload).eq('id',currentSellerShop.id).select().single()
+          : supabaseClient.from('seller_shops').insert(payload).select().single();
+        const isNewShop=!currentSellerShop;
+        const {data,error}=await query;if(error)throw error;
+        if(uploadedLogo&&currentSellerShop?.logo_url){try{await removeSellerImages([currentSellerShop.logo_url]);}catch(cleanupError){console.warn('Old shop picture could not be removed.',cleanupError);}}
+        currentSellerShop=data;
+        await loadSellerCatalog();
+        await loadSellerWorkspace();
+        document.getElementById('sellerDashboardStatus').textContent=isNewShop?'Shop profile submitted. Use “Send Details to ALEE SHOPPING” to share it on WhatsApp.':'Shop profile updated.';
+      } catch(error) { console.error(error);if(uploadedLogo)try{await supabaseClient.storage.from('seller-uploads').remove([uploadedLogo.path]);}catch(cleanupError){}status.textContent=`Could not save your shop profile. Check Supabase setup and try again. ${error.message||''}`; }
+      finally {button.disabled=false;}
+    }
+
+    function sendShopDetailsToAlee() {
+      if(!currentSellerShop)return;
+      const message=[
+        'ALEE SHOPPING — Seller shop profile',
+        `Shop: ${currentSellerShop.shop_name}`,
+        `Category: ${currentSellerShop.shop_category||'Other'}`,
+        `Phone: ${currentSellerShop.phone||'Not provided'}`,
+        `Second phone: ${currentSellerShop.phone2||'Not provided'}`,
+        `Address: ${currentSellerShop.address||'Not provided'}`,
+        `Facebook: ${currentSellerShop.facebook_url||'Not provided'}`,
+        `Instagram: ${currentSellerShop.instagram_url||'Not provided'}`,
+        `YouTube: ${currentSellerShop.youtube_url||'Not provided'}`,
+        `Other link: ${currentSellerShop.external_link||'Not provided'}`,
+        `Shop picture: ${currentSellerShop.logo_url||'Not provided'}`,
+        `Shop page: ${shopPublicUrl(currentSellerShop.id)}`,
+        `Seller email: ${activeUser?.email||'Not provided'}`
+      ].join('\n');
+      const url=`https://wa.me/${whatsappNumber}?${new URLSearchParams({text:message})}`;
+      window.open(url,'_blank','noopener,noreferrer');
+    }
+
+    function showSellerAnalytics() {
+      const panel=document.getElementById('sellerAnalyticsPanel');
+      panel.hidden=!panel.hidden;
+      if(!panel.hidden){
+        const now=new Date(),month=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+        document.getElementById('sellerAnalyticsMonth').value=month;
+        loadSellerAnalytics();panel.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    }
+
+    async function loadSellerAnalytics() {
+      const status=document.getElementById('sellerAnalyticsStatus');
+      const month=document.getElementById('sellerAnalyticsMonth').value;
+      if(!currentSellerShop||!month)return;
+      const [year,monthIndex]=month.split('-').map(Number);
+      const start=new Date(year,monthIndex-1,1),end=new Date(year,monthIndex,1);
+      status.textContent='Loading order analytics…';
+      try {
+        const {data,error}=await supabaseClient.from('store_orders').select('total,status,created_at').eq('shop_id',currentSellerShop.id).gte('created_at',start.toISOString()).lt('created_at',end.toISOString());
+        if(error)throw error;
+        const orders=(data||[]).filter(order=>order.status!=='cancelled');
+        const total=orders.reduce((sum,order)=>sum+Number(order.total||0),0);
+        document.getElementById('sellerAnalyticsOrders').textContent=orders.length.toLocaleString('en');
+        document.getElementById('sellerAnalyticsValue').textContent=`LKR ${total.toLocaleString('en-LK',{maximumFractionDigits:2})}`;
+        status.textContent=`Showing ${new Date(year,monthIndex-1).toLocaleString('en',{month:'long',year:'numeric'})}. Cancelled orders are excluded from the order count and value.`;
+      } catch(error) {
+        console.error(error);
+        document.getElementById('sellerAnalyticsOrders').textContent='—';document.getElementById('sellerAnalyticsValue').textContent='—';
+        status.textContent='Order analytics are unavailable. Run seller-orders-schema.sql in Supabase and confirm that this account owns the shop.';
+      }
+    }
+
+    function renderSellerProductList() {
+      const list=document.getElementById('sellerProductList');
+      if(!sellerProducts.length){list.innerHTML='<div class="seller-empty">You have not added any items yet.</div>';return;}
+      list.innerHTML=sellerProducts.map(item=>`<div class="seller-product-row"><img src="${escapeHTML(item.image_urls?.[0]||'assets/alee-logo.png')}" alt="" onerror="this.src='assets/alee-logo.png'"><div><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.category_label||item.category)} · LKR ${Number(item.price).toLocaleString()}</small></div><div class="seller-product-actions"><a class="seller-item-action" href="${escapeHTML(productPublicUrl(item.id))}" target="_blank" rel="noopener">View</a><button class="seller-item-action edit" type="button" onclick="editSellerProduct(${Number(item.id)})">Edit</button><button class="seller-item-action delete" type="button" onclick="deleteSellerProduct(${Number(item.id)})">Delete</button></div></div>`).join('');
+    }
+
+    function toggleSellerProductForm() {
+      const form=document.getElementById('sellerProductForm');
+      form.hidden=!form.hidden;
+      document.getElementById('sellerAddItemToggle').hidden=!form.hidden;
+      document.getElementById('sellerProductCancel').hidden=form.hidden;
+      if(!form.hidden)form.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function editSellerProduct(id) {
+      const item=sellerProducts.find(product=>Number(product.id)===Number(id));
+      if(!item)return;
+      editingSellerProductId=Number(item.id);
+      const form=document.getElementById('sellerProductForm');
+      form.elements.name.value=item.name||'';form.elements.price.value=item.price||'';form.elements.category.value=item.category_label||item.category||'';
+      form.elements.sizes.value=Array.isArray(item.sizes)?item.sizes.join(', '):'';form.elements.description.value=item.description||'';form.elements.features.value=Array.isArray(item.features)?item.features.join('\n'):'';
+      form.elements.photos.value='';form.elements.photos.required=false;
+      document.getElementById('sellerProductFormTitle').textContent='Edit Item';document.getElementById('sellerProductSubmit').textContent='Save Item Changes';
+      document.getElementById('sellerProductPhotoHelp').textContent='Choose new photos only if you want to replace the current photos. Leave empty to keep them.';
+      document.getElementById('sellerProductCancel').hidden=false;form.hidden=false;document.getElementById('sellerAddItemToggle').hidden=true;
+      form.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function cancelEditSellerProduct() {
+      editingSellerProductId=null;
+      const form=document.getElementById('sellerProductForm');form.reset();form.elements.photos.required=true;
+      document.getElementById('sellerProductFormTitle').textContent='Add Item';document.getElementById('sellerProductSubmit').textContent='Add Item';
+      document.getElementById('sellerProductPhotoHelp').textContent='Choose up to 10 photos. Each image is uploaded to secure shop storage.';
+      document.getElementById('sellerProductCancel').hidden=true;document.getElementById('sellerProductStatus').textContent='';form.hidden=true;document.getElementById('sellerAddItemToggle').hidden=false;
+    }
+
+    async function deleteSellerProduct(id) {
+      const item=sellerProducts.find(product=>Number(product.id)===Number(id));
+      if(!item||!activeUser||!supabaseClient)return;
+      if(!confirm(`Delete “${item.name}” from your shop? This cannot be undone.`))return;
+      const status=document.getElementById('sellerDashboardStatus');status.textContent='Deleting item…';
+      try {
+        const {error}=await supabaseClient.from('seller_products').delete().eq('id',item.id).eq('owner_id',activeUser.id);
+        if(error)throw error;
+        try{await removeSellerImages(item.image_urls||[]);}catch(cleanupError){console.warn('Deleted item photos could not be removed.',cleanupError);}
+        await loadSellerCatalog();await loadSellerWorkspace();status.textContent='Item deleted.';
+      } catch(error) { console.error(error);status.textContent=`Could not delete the item. ${error.message||''}`; }
+    }
+
+    async function saveSellerProduct(event) {
+      event.preventDefault();
+      if(!activeUser||!supabaseClient||!currentSellerShop)return;
+      const form=event.currentTarget,status=document.getElementById('sellerProductStatus'),files=[...form.elements.photos.files];
+      const editingItem=editingSellerProductId?sellerProducts.find(item=>Number(item.id)===editingSellerProductId):null;
+      if(editingSellerProductId&&!editingItem){status.textContent='This item is no longer available. Reload your shop and try again.';return;}
+      if((!editingItem&&!files.length)||files.length>10){status.textContent='Choose between 1 and 10 photos.';return;}
+      if(files.some(file=>!file.type.startsWith('image/'))){status.textContent='Only image files are supported.';return;}
+      const name=form.elements.name.value.trim(),categoryLabel=form.elements.category.value.trim();
+      const category=categoryLabel.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'other';
+      const whatsappPopup=editingItem?null:reserveWhatsappWindow(),button=document.getElementById('sellerProductSubmit');button.disabled=true;status.textContent='Uploading photos and saving item…';
+      const uploaded=[];
+      try {
+        let imageUrls=editingItem?[...(editingItem.image_urls||[])]:[];
+        for(let index=0;index<files.length;index++){
+          const result=await uploadSellerImage(files[index],`${activeUser.id}/${currentSellerShop.id}`);uploaded.push(result);imageUrls.push(result.url);
+        }
+        if(files.length)imageUrls=uploaded.map(item=>item.url);
+        const payload={owner_id:activeUser.id,shop_id:currentSellerShop.id,name,price:Number(form.elements.price.value),category,category_label:categoryLabel,description:form.elements.description.value.trim(),features:splitSellerList(form.elements.features.value),sizes:splitSellerList(form.elements.sizes.value),image_urls:imageUrls};
+        const query=editingItem
+          ?supabaseClient.from('seller_products').update(payload).eq('id',editingItem.id).eq('owner_id',activeUser.id).select().single()
+          :supabaseClient.from('seller_products').insert(payload).select().single();
+        const {data,error}=await query;if(error)throw error;
+        if(editingItem&&files.length)try{await removeSellerImages(editingItem.image_urls||[]);}catch(cleanupError){console.warn('Old item photos could not be removed.',cleanupError);}
+        const publicUrl=productPublicUrl(data.id),isEdit=Boolean(editingItem);
+        await loadSellerCatalog();await loadSellerWorkspace();cancelEditSellerProduct();
+        if(isEdit){status.textContent='Item updated successfully.';}
+        else sendSellerWhatsappDraft(whatsappPopup,`ALEE SHOPPING — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: LKR ${Number(payload.price).toLocaleString()}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
+      } catch(error) { console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();if(uploaded.length)try{await supabaseClient.storage.from('seller-uploads').remove(uploaded.map(item=>item.path));}catch(cleanupError){}status.textContent=`Could not save the item. Check Supabase database/storage setup and try again. ${error.message||''}`; }
+      finally {button.disabled=false;}
+    }
+
+    function showAccountForm(mode) {
+      const signIn = mode === 'signin';
+      document.getElementById('signInForm').classList.toggle('active', signIn);
+      document.getElementById('signUpForm').classList.toggle('active', !signIn);
+      document.getElementById('signInTab').classList.toggle('active', signIn);
+      document.getElementById('signUpTab').classList.toggle('active', !signIn);
+      document.getElementById('accountStatus').textContent = '';
+    }
+
+    function openAccountModal() {
+      document.getElementById('profileDropdown').classList.remove('show');
+      document.getElementById('accountModal').classList.add('show');
+      document.getElementById('accountModal').setAttribute('aria-hidden', 'false');
+      showAccountForm('signin');
+      if (!supabaseClient) document.getElementById('accountStatus').textContent = 'Online sign-in is not configured yet. See SETUP.txt in the project folder.';
+    }
+
+    function closeAccountModal() {
+      document.getElementById('accountModal').classList.remove('show');
+      document.getElementById('accountModal').setAttribute('aria-hidden', 'true');
+    }
+
+    async function signInWithEmail(event) {
+      event.preventDefault();
+      const status = document.getElementById('accountStatus');
+      if (!supabaseClient) { status.textContent = 'Online sign-in is not configured yet. See SETUP.txt.'; return; }
+      const button = document.querySelector('#signInForm button[type="submit"]');
+      button.disabled = true;
+      status.textContent = 'Signing in...';
+      const email = document.getElementById('signInEmail').value.trim();
+      const password = document.getElementById('signInPassword').value;
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setLoggedInUser(data.user);
+        closeAccountModal();
+        await loadSellerCatalog();
+        showAccountRoleDialog();
+      } catch (err) {
+        status.textContent = 'Sign-in failed. Check your email and password, then try again.';
+      } finally { button.disabled = false; }
+    }
+
+    async function signUpWithEmail(event) {
+      event.preventDefault();
+      const status = document.getElementById('accountStatus');
+      if (!supabaseClient) { status.textContent = 'Online sign-in is not configured yet. See SETUP.txt.'; return; }
+      const button = document.querySelector('#signUpForm button[type="submit"]');
+      button.disabled = true;
+      status.textContent = 'Creating your account...';
+      const email = document.getElementById('signUpEmail').value.trim();
+      const password = document.getElementById('signUpPassword').value;
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) throw error;
+        if (data.session && data.user) {
+          setLoggedInUser(data.user);
+          closeAccountModal();
+          await loadSellerCatalog();
+          showAccountRoleDialog();
+        } else {
+          status.textContent = 'Account created. Check your email and confirm your account before signing in.';
+        }
+      } catch (err) {
+        status.textContent = 'Could not create the account. Check the email and password, then try again.';
+      } finally { button.disabled = false; }
+    }
+
+    function setLoggedInUser(user) {
+      activeUser = user || null;
+      const badge = document.querySelector('.profile-badge');
+      const label = user?.email || 'Guest';
+      document.getElementById('profileNameDisplay').innerText = user ? label : 'Guest';
+      document.getElementById('mobileAccountNavLabel').textContent = 'My Account';
+      document.getElementById('mobileAccountNavLabel').title = user ? label : 'My Account';
+      badge.classList.toggle('guest', !user);
+      if(user && window.aleeChat && !window.aleePendingChatOpening){
+        const params=new URLSearchParams(location.search),shopId=params.get('chatShop');
+        if(shopId){window.aleePendingChatOpening=true;const shopName=params.get('chatShopName')||'Shop';params.delete('chatShop');params.delete('chatShopName');history.replaceState({},'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);window.setTimeout(()=>window.aleeChat.openShop(shopId,shopName),0);}
+      }
+    }
+
+    function handleProfileClick(e) {
+      e.stopPropagation();
+      if (!activeUser) openAccountModal();
+      else document.getElementById('profileDropdown').classList.toggle('show');
+    }
+
+    async function logoutUser() {
+      if (supabaseClient) await supabaseClient.auth.signOut();
+      setLoggedInUser(null);
+      document.getElementById('profileDropdown').classList.remove('show');
+      closeSellerAccount();
+      closeBuyerAccount();closeAccountRoleDialog();
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const shop = document.getElementById('shopPageContent');
+      shop.style.display = 'block';
+      shop.style.opacity = 1;
+      if (supabaseClient) {
+        const { data } = await supabaseClient.auth.getSession();
+        setLoggedInUser(data.session?.user || null);
+        let loginPending=false;try{loginPending=sessionStorage.getItem('alee-login-pending')==='1';sessionStorage.removeItem('alee-login-pending');}catch(error){}
+        if(data.session?.user&&loginPending)showAccountRoleDialog();
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          setLoggedInUser(session?.user || null);
+          if (session?.user) {
+            closeAccountModal();
+            if(event==='SIGNED_IN')window.setTimeout(showAccountRoleDialog,0);
+          }
+          window.setTimeout(()=>loadSellerCatalog(),0);
+        });
+      } else setLoggedInUser(null);
+      if(new URLSearchParams(location.search).has('chatShop')&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to message this shop. After signing in, your chat will open here.';}
+      if (!supabaseClient) document.getElementById('reviewStatus').textContent = 'Customer comments will be available after the online database is configured.';
+      renderShopDirectory();
+      await loadSellerCatalog();
+      const requestedProduct = new URLSearchParams(location.search).get('product');
+      if (requestedProduct) openProductPopup(Number(requestedProduct));
+    });
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    }
+
+    function getShopForProduct(product) {
+      return shops.find(shop => String(shop.id) === String(product?.shopId)) || shops[0] || { id:'alee-shopping', name:'ALEE SHOPPING', logo:'assets/alee-logo.png' };
+    }
+
+    function renderShopDirectory() {
+      const strip = document.getElementById('shopsStrip');
+      const mobileList = document.getElementById('mobileShopList');
+      const visibleShops = shops.map((shop,index)=>({shop,index})).filter(({shop})=>shop&&shop.name&&shop.id).sort((a,b)=>{
+        const rankA=Number(a.shop.rank), rankB=Number(b.shop.rank);
+        const orderA=Number.isFinite(rankA)&&rankA>0?rankA:a.index+1;
+        const orderB=Number.isFinite(rankB)&&rankB>0?rankB:b.index+1;
+        return orderA-orderB||a.index-b.index;
+      }).map(entry=>entry.shop);
+      const markup = visibleShops.map(shop => {
+        const logo = escapeHTML(shop.logo || 'assets/alee-logo.png');
+        const name = escapeHTML(shop.name);
+        const url = `shop.html?shop=${encodeURIComponent(shop.id)}`;
+        const accent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
+        const ratingValue=Number(shop.rating), rating=Number.isFinite(ratingValue)?Math.min(5,Math.max(1,Math.round(ratingValue))):5;
+        const stars=Array.from({length:5},(_,index)=>`<span class="${index<rating?'filled':''}" aria-hidden="true">★</span>`).join('');
+        return `<a class="shop-tile" style="--shop-accent:${accent}" href="${url}" target="_blank" rel="noopener"><img loading="lazy" src="${logo}" alt="${name} logo" onerror="this.src='assets/alee-logo.png'"><strong>${name}</strong><span class="shop-rating" role="img" aria-label="${rating} out of 5 stars">${stars}</span></a>`;
+      }).join('');
+      strip.innerHTML = markup || '<p style="color:#888;font-size:12px">No shops have been added yet.</p>';
+      mobileList.innerHTML = markup;
+      const updateScrollControls = () => strip.parentElement.querySelectorAll('.shops-strip-control').forEach(button => { button.hidden = strip.scrollWidth <= strip.clientWidth + 1; });
+      updateScrollControls();
+      if (!window.aleeShopResizeBound) { window.aleeShopResizeBound = true; window.addEventListener('resize', updateScrollControls); }
+      if (visibleShops.length > 1 && !window.aleeShopStripTimer) {
+        window.aleeShopStripTimer = setInterval(() => {
+          if (strip.matches(':hover') || strip.contains(document.activeElement) || strip.dataset.userInteracting === 'true') return;
+          const firstTile = strip.querySelector('.shop-tile');
+          if (!firstTile || strip.scrollWidth <= strip.clientWidth + 1) return;
+          const gap = parseFloat(getComputedStyle(strip).gap) || 0;
+          const step = firstTile.getBoundingClientRect().width + gap;
+          const end = strip.scrollWidth - strip.clientWidth;
+          if (strip.scrollLeft + step > end - 3) strip.scrollTo({ left:0, behavior:'smooth' });
+          else strip.scrollBy({ left:step, behavior:'smooth' });
+        }, 5000);
+      }
+      if (!strip.dataset.manualScrollBound) {
+        strip.dataset.manualScrollBound = 'true';
+        let interactionTimer;
+        const pauseAutoScroll = () => {
+          strip.dataset.userInteracting = 'true';
+          clearTimeout(interactionTimer);
+          interactionTimer = setTimeout(() => { strip.dataset.userInteracting = 'false'; }, 7000);
+        };
+        strip.addEventListener('pointerdown', pauseAutoScroll, {passive:true});
+        strip.addEventListener('wheel', event => {
+          if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) { strip.scrollLeft += event.deltaY; pauseAutoScroll(); }
+        }, {passive:true});
+      }
+    }
+
+    function scrollShopStrip(direction) {
+      const strip = document.getElementById('shopsStrip');
+      const tile = strip.querySelector('.shop-tile');
+      const step = (tile?.getBoundingClientRect().width || 110) + (parseFloat(getComputedStyle(strip).gap) || 12);
+      strip.dataset.userInteracting = 'true';
+      strip.scrollBy({left:direction * step, behavior:'smooth'});
+      clearTimeout(window.aleeShopManualPauseTimer);
+      window.aleeShopManualPauseTimer = setTimeout(() => { strip.dataset.userInteracting = 'false'; }, 7000);
+    }
+
+    function openMobileShops() {
+      document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Shops')));
+      document.getElementById('mobileShopsSheet').classList.add('show');
+    }
+
+    function toggleProfileDropdown(e) {
+      e.stopPropagation();
+      document.getElementById('profileDropdown').classList.toggle('show');
+    }
+
+    function toggleSupportDropdown(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('supportDropdown');
+      const isOpen = menu.classList.toggle('show');
+      e.currentTarget.setAttribute('aria-expanded', String(isOpen));
+      document.getElementById('profileDropdown')?.classList.remove('show');
+    }
+
+    function contactSupport(topic) {
+      const message = `Hello ALEE SHOPPING, I need help with: ${topic}.\n\nMy message: `;
+      const url = `https://wa.me/${whatsappNumber}?${new URLSearchParams({ text: message }).toString()}`;
+      document.getElementById('supportDropdown')?.classList.remove('show');
+      document.querySelector('.support-button')?.setAttribute('aria-expanded', 'false');
+      window.open(url, '_blank', 'noopener');
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.header-actions')) {
+        document.getElementById('profileDropdown')?.classList.remove('show');
+        document.getElementById('supportDropdown')?.classList.remove('show');
+        document.querySelector('.support-button')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    async function submitProductReview(e) {
+      e.preventDefault();
+      const status = document.getElementById('reviewStatus');
+      const text = document.getElementById('reviewText').value.trim();
+      if (!supabaseClient) { status.textContent = 'Online comments are not configured yet. See SETUP.txt.'; return; }
+      if (!activeUser) { openAccountModal(); status.textContent = 'Sign in with your email to post a comment.'; return; }
+      if (!activeGalleryProduct || !text) return;
+      const button = document.getElementById('reviewSubmitBtn');
+      button.disabled = true;
+      const { error } = await supabaseClient.from('product_reviews').insert({
+        product_id: activeGalleryProduct.id,
+        user_id: activeUser.id,
+        body: text
+      });
+      button.disabled = false;
+      if (error) { status.textContent = 'Could not post this comment. Please try again.'; return; }
+      document.getElementById('reviewText').value = '';
+      status.textContent = 'Your comment has been posted.';
+      loadProductReviews(activeGalleryProduct.id);
+    }
+
+    async function loadProductReviews(productId) {
+      const list = document.getElementById('reviewList');
+      list.innerHTML = '';
+      if (!supabaseClient) return;
+      const { data, error } = await supabaseClient.from('product_reviews').select('body,created_at').eq('product_id', productId).order('created_at', { ascending: false }).limit(50);
+      if (error) { document.getElementById('reviewStatus').textContent = 'Could not load comments right now.'; return; }
+      if (!data?.length) { list.innerHTML = '<p style="color:#888;font-size:12px">No comments yet. Be the first to comment.</p>'; return; }
+      data.forEach(review => {
+        const card = document.createElement('article');
+        card.className = 'review-card';
+        const author = document.createElement('strong'); author.textContent = 'Customer';
+        const date = document.createElement('time'); date.textContent = new Date(review.created_at).toLocaleDateString();
+        const body = document.createElement('p'); body.textContent = review.body;
+        card.append(author, date, body); list.appendChild(card);
+      });
+    }
+
+    // --- DARK / LIGHT THEME TOGGLE ---
+    function toggleTheme() {
+      const html = document.documentElement;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeButton = document.getElementById('themeToggleBtn');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        themeIcon.className = 'fa-solid fa-moon';
+        themeButton.title = 'Switch to dark mode';
+        themeButton.setAttribute('aria-label', 'Switch to dark mode');
+        localStorage.setItem('alee-theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        themeIcon.className = 'fa-solid fa-sun';
+        themeButton.title = 'Switch to light mode';
+        themeButton.setAttribute('aria-label', 'Switch to light mode');
+        localStorage.setItem('alee-theme', 'dark');
+      }
+    }
+    if (localStorage.getItem('alee-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+      document.getElementById('themeToggleBtn').title = 'Switch to light mode';
+      document.getElementById('themeToggleBtn').setAttribute('aria-label', 'Switch to light mode');
+    }
+
+    // Advance the promotional banner every five seconds; users can also navigate it.
+    let activeBannerIndex = 0;
+    const bannerList = Array.isArray(window.aleeBanners) ? window.aleeBanners.slice(0, 2000) : [];
+    const heroTrack = document.getElementById('heroTrack');
+    const heroDots = document.getElementById('heroDots');
+    function bannerMediaMarkup(banner, index) {
+      const alt = String(banner.alt || `ALEE Shopping banner ${index + 1}`).replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+      const source = String(banner.video || banner.image || '').replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+      if (banner.video) return `<video src="${source}" aria-label="${alt}" autoplay muted loop playsinline preload="metadata"></video>`;
+      return `<img src="${source}" alt="${alt}">`;
+    }
+    function bannerSlideMarkup(banner, index) {
+      const media = bannerMediaMarkup(banner, index);
+      const link = String(banner.link || '').trim();
+      if (!link) return `<div class="hero-slide">${media}</div>`;
+      const safeLink = link.replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+      const external = /^https?:\/\//i.test(link);
+      return `<a class="hero-slide" href="${safeLink}" ${external ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="Open banner link">${media}</a>`;
+    }
+    function renderActiveBanner() {
+      if (!bannerList.length) return;
+      heroTrack.innerHTML = bannerSlideMarkup(bannerList[activeBannerIndex], activeBannerIndex);
+      heroDots.innerHTML = `<span class="hero-counter" aria-live="polite">${activeBannerIndex + 1} / ${bannerList.length}</span>`;
+      const video = heroTrack.querySelector('video');
+      if (video) video.play().catch(() => {});
+    }
+    renderActiveBanner();
+    if (bannerList.length < 2) {
+      document.querySelectorAll('.hero-nav').forEach(button => button.hidden = true);
+      heroDots.hidden = true;
+    }
+    function showBanner(index) {
+      if (!bannerList.length) return;
+      activeBannerIndex = (index + bannerList.length) % bannerList.length;
+      heroTrack.style.opacity = '.25';
+      window.setTimeout(() => { renderActiveBanner(); heroTrack.style.opacity = '1'; }, 120);
+    }
+    function changeBanner(direction) { showBanner(activeBannerIndex + direction); }
+    if (bannerList.length > 1) setInterval(() => showBanner(activeBannerIndex + 1), 5000);
+
+    // --- SHOP PRODUCTS & CATEGORY LOGIC ---
+    // Product catalog is loaded from products.js for easy editing.
+    let cart = [];
+    let checkoutItems = null;
+    const productSearchCounts = {};
+    const localSearchStatsKey = 'aleeProductSearchStats';
+    let activeProductArray = products.slice();
+    let preserveProductOrder = false;
+    let searchLogTimer = null;
+    const checkoutDetailsKey = 'aleeCheckoutDetails';
+    const checkoutDetailFields = ['customerName','customerAddress','customerPhone1','customerPhone2'];
+    const whatsappNumber = "94761389936";
+    function normalizeWhatsappNumber(value) {
+      let digits=String(value||'').replace(/\D/g,'');
+      if(digits.startsWith('00'))digits=digits.slice(2);
+      if(digits.startsWith('0'))digits=`94${digits.slice(1)}`;
+      return digits.length>=9&&digits.length<=15?digits:'';
+    }
+    function whatsappOrderUrl(phone,message) {
+      const recipient=normalizeWhatsappNumber(phone);
+      return recipient?`https://wa.me/${recipient}?${new URLSearchParams({text:message})}`:'';
+    }
+    function renderOrderWhatsappActions(orderGroups,customer) {
+      const container=document.getElementById('orderWhatsappActions');
+      if(!container)return;
+      container.replaceChildren();
+      const adminPhone=normalizeWhatsappNumber(whatsappNumber);
+      const itemLines=group=>group.items.map(item=>{
+        const variants=[item.color&&`Color: ${item.color}`,item.size&&`Size: ${item.size}`].filter(Boolean).join(', ');
+        return `• ${item.name} × ${item.quantity}${variants?` (${variants})`:''} — LKR ${(Number(item.price)*Number(item.quantity)).toLocaleString()}`;
+      }).join('\n');
+      const shopName=group=>shops.find(item=>String(item.id)===String(group.shop_id))?.name||'ALEE SHOPPING';
+      const buildMessage=(group,includeShop=true)=>[
+        `ALEE SHOPPING — New order${includeShop?` for ${shopName(group)}`:''}`,
+        `Customer: ${customer.name}`,
+        `Address: ${customer.address}`,
+        `Phone: ${customer.phone}`,
+        customer.phone2?`Second phone: ${customer.phone2}`:'',
+        `Items:\n${itemLines(group)}`,
+        `Total: LKR ${Number(group.total).toLocaleString()}`,
+        'Payment: Cash on Delivery',
+        customer.note?`Note: ${customer.note}`:''
+      ].filter(Boolean).join('\n');
+      const addLink=(phone,label,message)=>{
+        const url=whatsappOrderUrl(phone,message);
+        if(!url)return false;
+        const link=document.createElement('a');
+        link.className='order-whatsapp-link';link.href=url;link.target='_blank';link.rel='noopener noreferrer';
+        link.textContent=`WhatsApp — ${label}`;
+        container.append(link);return true;
+      };
+
+      let sellerLinkCount=0;
+      for(const group of orderGroups){
+        const shop=group.shop_id?shops.find(item=>String(item.id)===String(group.shop_id)):null;
+        const recipient=normalizeWhatsappNumber(shop?.phone)||(!group.shop_id?adminPhone:'');
+        const label=shop?.name||'ALEE SHOPPING';
+        if(recipient&&addLink(recipient,label,buildMessage(group)))sellerLinkCount++;
+      }
+      const missingSellerPhone=orderGroups.some(group=>group.shop_id&&!normalizeWhatsappNumber(shops.find(item=>String(item.id)===String(group.shop_id))?.phone));
+
+      if(missingSellerPhone){const hint=document.createElement('span');hint.textContent='A shop contact number is missing, so its WhatsApp button could not be created.';container.append(hint);}
+      container.hidden=!sellerLinkCount;
+      if(!sellerLinkCount&&orderGroups.some(group=>group.shop_id)){
+        const hint=document.createElement('span');hint.textContent='WhatsApp links are unavailable because a shop contact number is missing.';container.append(hint);container.hidden=false;
+      }
+      return sellerLinkCount;
+    }
+    const productList = document.getElementById("productList");
+
+    const searchBar = document.querySelector('.search-bar');
+    document.querySelector('.search-container').addEventListener('click', () => {
+      searchBar.classList.add('search-expanded');
+      document.body.classList.add('search-extras-open');
+    });
+    document.getElementById('searchInput').addEventListener('focus', () => {
+      searchBar.classList.add('search-expanded');
+      document.body.classList.add('search-extras-open');
+    });
+    document.addEventListener('pointerdown', event => {
+      if (!searchBar.contains(event.target)) {
+        searchBar.classList.remove('search-expanded');
+        document.body.classList.remove('search-extras-open');
+      }
+    });
+    document.getElementById('searchInput').addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.target.blur();
+        searchBar.classList.remove('search-expanded');
+        document.body.classList.remove('search-extras-open');
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        submitProductSearch();
+      }
+    });
+
+    let activeGalleryProduct = null;
+    let activeGalleryIndex = 0;
+
+    function productPriceMarkup(product) {
+      const price = Number(product.price);
+      const oldPrice = Number(product.oldPrice);
+      const configuredPercent = Number(product.discountPercent);
+      const hasOldPrice = Number.isFinite(oldPrice) && oldPrice > price;
+      const hasPercent = Number.isFinite(configuredPercent) && configuredPercent > 0 && configuredPercent < 100;
+      const hasOffer = hasOldPrice || hasPercent;
+      const percentOff = hasOldPrice ? Math.round((oldPrice - price) / oldPrice * 100) : (hasPercent ? Math.round(configuredPercent) : 0);
+      const crossedPrice = hasOldPrice ? oldPrice : (hasPercent ? Math.round(price / (1 - configuredPercent / 100)) : 0);
+      return `<div class="price">LKR ${price.toLocaleString()}</div>${hasOffer ? `
+        <div class="offer-row"><span class="old-price">LKR ${crossedPrice.toLocaleString()}</span><span class="discount-badge">-${percentOff}% OFF</span></div>` : ''}`;
+    }
+
+    function renderCategoryBar() {
+      const bar = document.getElementById('categoryBar');
+      const allButton = document.createElement('button');
+      allButton.className = 'cat-btn active';
+      allButton.textContent = 'All Products';
+      allButton.onclick = () => filterCategory('all', allButton);
+      bar.replaceChildren(allButton);
+      categories.forEach(category => {
+        const button = document.createElement('button');
+        button.className = 'cat-btn';
+        button.textContent = category.label;
+        button.onclick = () => filterCategory(category.id, button);
+        bar.appendChild(button);
+      });
+      renderMobileCategoryList();
+    }
+
+    function renderMobileCategoryList() {
+      const list = document.getElementById('mobileCategoryList');
+      const entries = [{ id:'all', label:'All Products' }, ...categories];
+      list.replaceChildren(...entries.map(category => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'mobile-category-option';
+        button.textContent = category.label;
+        button.onclick = () => {
+          const topButton = [...document.querySelectorAll('#categoryBar .cat-btn')].find(item => item.textContent === (category.id === 'all' ? 'All Products' : category.label));
+          if (topButton) filterCategory(category.id, topButton);
+          closeMobileSheet('mobileCategorySheet');
+          document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Categories')));
+          document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
+        };
+        return button;
+      }));
+    }
+
+    function openMobileCategories() {
+      document.getElementById('mobileCategorySheet').classList.add('show');
+    }
+
+    function closeMobileSheet(id) {
+      document.getElementById(id)?.classList.remove('show');
+    }
+
+    function mobileGoHome() {
+      document.getElementById('searchInput').value = '';
+      syncSearchClearButton();
+      const allButton = document.querySelector('#categoryBar .cat-btn');
+      if (allButton) filterCategory('all', allButton);
+      document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Home')));
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+
+    function openMobileAccount() {
+      openSellerAccount();
+    }
+
+    function sortProductsBySearchPopularity(productArray) {
+      return productArray.map((product,index)=>({product,index})).sort((a,b)=>(productSearchCounts[b.product.id]||0)-(productSearchCounts[a.product.id]||0)||a.index-b.index).map(entry=>entry.product);
+    }
+
+    function displayProducts(productArray, preserveOrder=false) {
+      activeProductArray = productArray.slice();
+      preserveProductOrder = preserveOrder;
+      const visibleProducts = preserveOrder ? productArray : sortProductsBySearchPopularity(productArray);
+      productList.innerHTML = "";
+      if(visibleProducts.length === 0) {
+        productList.innerHTML = "<p style='grid-column:1/-1;text-align:center;color:#888;padding:20px;'>No products found.</p>";
+        return;
+      }
+      visibleProducts.forEach(p => {
+        const imgUrl = (p.images && p.images[0]) ? p.images[0] : 'assets/alee-logo.png';
+        const shop = getShopForProduct(p);
+        const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
+        const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
+        productList.innerHTML += `
+          <div class="card" onclick="openProductPopup(${p.id})">
+            <div class="card-image-wrap"><img loading="lazy" src="${imgUrl}" onerror="this.src='assets/alee-logo.png'" alt="${p.name}">${p.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div>
+            <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>
+            <h3>${p.name}</h3>
+            <div class="price-block">${productPriceMarkup(p)}</div>
+          </div>`;
+      });
+    }
+
+    function renderTopSearches() {
+      const list=document.getElementById('topSearchList');
+      const popular=Object.entries(productSearchCounts)
+        .map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0}))
+        .filter(entry=>entry.product&&entry.count>0)
+        .sort((a,b)=>b.count-a.count)
+        .slice(0,6);
+      list.replaceChildren();
+      if(!popular.length){const empty=document.createElement('span');empty.className='top-search-empty';empty.textContent='Popular products appear here as people search';list.appendChild(empty);return;}
+      popular.forEach(({product})=>{
+        const chip=document.createElement('button');chip.type='button';chip.className='top-search-chip';chip.textContent=product.name;
+        chip.addEventListener('click',()=>{document.getElementById('searchInput').value=product.name;searchProducts();});
+        list.appendChild(chip);
+      });
+    }
+
+    async function loadProductSearchTrends() {
+      try {
+        const local=JSON.parse(localStorage.getItem(localSearchStatsKey)||'{}');
+        if(local&&typeof local==='object')Object.assign(productSearchCounts,local);
+      } catch (_) {}
+      renderTopSearches();
+      if(!supabaseClient)return;
+      try {
+        const {data,error}=await supabaseClient.rpc('get_product_search_trends');
+        if(error||!Array.isArray(data))return;
+        Object.keys(productSearchCounts).forEach(key=>delete productSearchCounts[key]);
+        data.forEach(row=>{productSearchCounts[row.product_id]=Number(row.search_count)||0;});
+        renderTopSearches();
+        displayProducts(activeProductArray,preserveProductOrder);
+      } catch (_) {}
+    }
+
+    async function recordProductSearch(searchTerm, matches) {
+      const ids=[...new Set(matches.map(product=>Number(product.id)).filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,12);
+      if(!ids.length)return;
+      ids.forEach(id=>productSearchCounts[id]=(productSearchCounts[id]||0)+1);
+      try { localStorage.setItem(localSearchStatsKey,JSON.stringify(productSearchCounts)); } catch (_) {}
+      renderTopSearches();
+      displayProducts(activeProductArray,preserveProductOrder);
+      if(!supabaseClient)return;
+      try {
+        const {error}=await supabaseClient.from('product_search_events').insert(ids.map(product_id=>({product_id})));
+        if(!error)await loadProductSearchTrends();
+      } catch (_) {}
+    }
+
+    renderCategoryBar();
+    displayProducts(products);
+    loadProductSearchTrends();
+    showNewProductNotice();
+
+    function showCartToast(message, duration = 2200) {
+      let toast = document.getElementById('cartToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'cartToast';
+        toast.className = 'cart-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.cartToastTimer);
+      window.cartToastTimer = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    function showNewProductNotice() {
+      const notice = window.aleeLatestProductNotice;
+      if (!notice?.name) return;
+      const version = String(notice.version || notice.id || notice.name);
+      try {
+        if (localStorage.getItem('alee-seen-product-notice') === version) return;
+        localStorage.setItem('alee-seen-product-notice', version);
+      } catch (_) {}
+      showCartToast(`🆕 New product: ${notice.name}`, 7000);
+    }
+
+    let photoSearchRunId = 0;
+    const productPhotoDescriptors = new Map();
+
+    function loadImageForMatching(source) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        const timeout = setTimeout(() => reject(new Error('Image loading timed out')), 10000);
+        image.onload = () => { clearTimeout(timeout); resolve(image); };
+        image.onerror = () => { clearTimeout(timeout); reject(new Error('Image could not be loaded')); };
+        image.src = source;
+      });
+    }
+
+    function describeImageForMatching(image) {
+      const size = 32;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const context = canvas.getContext('2d', { willReadFrequently:true });
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, size, size);
+      const scale = Math.min(size / image.naturalWidth, size / image.naturalHeight);
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      context.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+      const pixels = context.getImageData(0, 0, size, size).data;
+      const hist = new Array(24).fill(0);
+      const gray = new Array(size * size);
+      for (let i = 0, pixel = 0; i < pixels.length; i += 4, pixel++) {
+        const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+        hist[Math.min(7, r >> 5)]++;
+        hist[8 + Math.min(7, g >> 5)]++;
+        hist[16 + Math.min(7, b >> 5)]++;
+        gray[pixel] = .299 * r + .587 * g + .114 * b;
+      }
+      for (let channel = 0; channel < 3; channel++) {
+        const start = channel * 8;
+        const total = hist.slice(start, start + 8).reduce((sum, value) => sum + value, 0) || 1;
+        for (let i = start; i < start + 8; i++) hist[i] /= total;
+      }
+      const hash = [];
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) hash.push(gray[y * size + x] > gray[y * size + x + 1]);
+      return { hist, hash };
+    }
+
+    function photoSimilarity(left, right) {
+      let histogramDistance = 0;
+      for (let i = 0; i < left.hist.length; i++) histogramDistance += Math.abs(left.hist[i] - right.hist[i]);
+      const histogramMatch = 1 - histogramDistance / 6;
+      let hashMatches = 0;
+      for (let i = 0; i < left.hash.length; i++) if (left.hash[i] === right.hash[i]) hashMatches++;
+      return .55 * histogramMatch + .45 * (hashMatches / left.hash.length);
+    }
+
+    async function searchProductsByPhoto(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        document.getElementById('photoSearchNotice').classList.add('show');
+        document.getElementById('photoSearchMessage').textContent = 'Please choose an image.';
+        return;
+      }
+      const runId = ++photoSearchRunId;
+      const notice = document.getElementById('photoSearchNotice');
+      const message = document.getElementById('photoSearchMessage');
+      notice.classList.add('show');
+      message.textContent = 'Looking for similar products…';
+      document.getElementById('searchInput').value = '';
+      syncSearchClearButton();
+      document.querySelectorAll('#categoryBar .cat-btn').forEach(button => button.classList.remove('active'));
+      document.querySelector('#categoryBar .cat-btn')?.classList.add('active');
+      try {
+        const queryUrl = URL.createObjectURL(file);
+        let queryDescriptor;
+        try { queryDescriptor = describeImageForMatching(await loadImageForMatching(queryUrl)); }
+        finally { URL.revokeObjectURL(queryUrl); }
+        const ranked = await Promise.all(products.map(async product => {
+          const imageUrl = product.images?.[0];
+          if (!imageUrl) return null;
+          try {
+            let descriptor = productPhotoDescriptors.get(imageUrl);
+            if (!descriptor) {
+              descriptor = describeImageForMatching(await loadImageForMatching(imageUrl));
+              productPhotoDescriptors.set(imageUrl, descriptor);
+            }
+            return { product, score:photoSimilarity(queryDescriptor, descriptor) };
+          } catch (_) { return null; }
+        }));
+        if (runId !== photoSearchRunId) return;
+        const matches = ranked.filter(Boolean).sort((a,b) => b.score - a.score).slice(0, 8);
+        if (!matches.length) {
+          message.textContent = 'Could not compare this photo. Try another image.';
+          displayProducts([]);
+          return;
+        }
+        message.textContent = 'Products with the closest-looking photos (results may not be exact):';
+        displayProducts(matches.map(match => match.product), true);
+        document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
+      } catch (_) {
+        if (runId !== photoSearchRunId) return;
+        message.textContent = 'Could not read this photo. Try another image.';
+        displayProducts([]);
+      }
+    }
+
+    function clearPhotoSearch() {
+      photoSearchRunId++;
+      document.getElementById('photoSearchNotice').classList.remove('show');
+      document.getElementById('searchInput').value = '';
+      syncSearchClearButton();
+      const allButton = document.querySelector('#categoryBar .cat-btn');
+      if (allButton) filterCategory('all', allButton);
+    }
+
+    function searchProducts() {
+      photoSearchRunId++;
+      document.getElementById('photoSearchNotice').classList.remove('show');
+      const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
+      syncSearchClearButton();
+      const matches=products.filter(p => p.name.toLowerCase().includes(searchTerm));
+      displayProducts(matches);
+      clearTimeout(searchLogTimer);
+      if(searchTerm.length>=2)searchLogTimer=setTimeout(()=>recordProductSearch(searchTerm,matches),700);
+    }
+
+    function submitProductSearch() {
+      searchProducts();
+      document.getElementById('searchInput').blur();
+    }
+
+    // Catalog-based product helper: runs in the browser and needs no external AI key or paid API.
+    function openProductFinder() {
+      document.getElementById('productFinder').classList.add('show');
+      setTimeout(() => document.getElementById('finderQuery').focus(), 50);
+    }
+    function closeProductFinder() { document.getElementById('productFinder').classList.remove('show'); }
+    function findRecommendedProducts() {
+      const query = document.getElementById('finderQuery').value.trim().toLowerCase();
+      const status = document.getElementById('finderStatus');
+      const results = document.getElementById('finderResults');
+      results.replaceChildren();
+      if (!query) { status.textContent = 'Describe a product or need first.'; return; }
+      const budgetMatch = query.match(/(?:under|below|less than|budget|under\s*lkr|රු\.?\s*|lkr\s*)(\d[\d,]*)|([\d,]+)\s*(?:ට\s*අඩු|adu|below)/i);
+      const budget = budgetMatch ? Number((budgetMatch[1] || budgetMatch[2]).replace(/,/g,'')) : null;
+      const categoryTerms = {
+        gadgets:['earbud','earphone','headphone','speaker','audio','bluetooth','ගීත','සින්දු','කනට','ear'],
+        watches:['watch','wrist','smartwatch','clock','ඔරලෝසු','watch'],
+        beauty:['trimmer','hair','beauty','groom','dryer','සැලෝන්','කොණ්ඩ','රැවුල'],
+        power:['charger','cable','power bank','tool','vacuum','fan','torch','charge','චාජ්','කේබල්'],
+        phone:['phone','mobile','case','screen','cover','ෆෝන්','දුරකථන'],
+        health:['health','scale','weight','torch','සෞඛ්‍ය','බර']
+      };
+      const terms = query.split(/[^a-z0-9\u0D80-\u0DFF]+/i).filter(word => word.length > 1 && !/^\d+$/.test(word));
+      let ranked = products.map((product,index) => {
+        const corpus = `${product.name} ${product.category} ${product.desc || ''} ${(product.features || []).join(' ')}`.toLowerCase();
+        let score = 0;
+        terms.forEach(term => { if (corpus.includes(term)) score += product.name.toLowerCase().includes(term) ? 5 : 2; });
+        Object.entries(categoryTerms).forEach(([category,words]) => {
+          if (words.some(word => query.includes(word)) && String(product.category).trim().toLowerCase().includes(category)) score += 5;
+        });
+        if (budget !== null) score += Number(product.price) <= budget ? 4 : -8;
+        return {product,score,index};
+      }).filter(item => item.score > 0).sort((a,b) => b.score-a.score || a.index-b.index).slice(0,6);
+      if (!ranked.length && budget !== null) {
+        ranked = products.map((product,index)=>({product,index,score:Number(product.price)<=budget?1:0}))
+          .filter(item=>item.score>0).sort((a,b)=>Number(a.product.price)-Number(b.product.price)||a.index-b.index).slice(0,6);
+      }
+      if (!ranked.length) { status.textContent = 'No close match found. Try a product name, category, or a different budget.'; return; }
+      status.textContent = `Found ${ranked.length} matching product${ranked.length===1?'':'s'}${budget ? ` under LKR ${budget.toLocaleString()}` : ''}. Select one to view details.`;
+      ranked.forEach(({product}) => {
+        const button = document.createElement('button'); button.type='button'; button.className='finder-result';
+        const image = document.createElement('img'); image.src=product.images?.[0] || 'assets/alee-logo.png'; image.alt=''; image.onerror=()=>{image.src='assets/alee-logo.png';};
+        const text = document.createElement('span'); const name=document.createElement('strong'); name.textContent=product.name; const meta=document.createElement('small'); meta.textContent=product.category || 'Product'; text.append(name,meta);
+        const price=document.createElement('span'); price.className='finder-price'; price.textContent=`LKR ${Number(product.price).toLocaleString()}`;
+        button.append(image,text,price); button.onclick=()=>{closeProductFinder();openProductPopup(product.id);}; results.appendChild(button);
+      });
+    }
+
+    function filterCategory(category, btn) {
+      photoSearchRunId++;
+      document.getElementById('photoSearchNotice').classList.remove('show');
+      document.getElementById('searchInput').value = '';
+      syncSearchClearButton();
+      document.querySelectorAll('#categoryBar .cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      displayProducts(category === 'all' ? products : products.filter(p => p.category === category));
+    }
+
+    function syncSearchClearButton() {
+      const input=document.getElementById('searchInput');
+      document.getElementById('searchClearBtn')?.classList.toggle('show',Boolean(input?.value.trim()));
+    }
+
+    function clearProductSearch() {
+      const input=document.getElementById('searchInput');
+      input.value='';
+      searchProducts();
+      input.focus();
+    }
+
+    function makeImage(url, cls='') {
+      const safe = String(url).replace(/\"/g,'&quot;');
+      return `<img class="${cls}" src="${safe}" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`;
+    }
+
+    function openProductPopup(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      activeGalleryProduct = product;
+      activeGalleryIndex = 0;
+      document.getElementById("popupName").innerText = product.name;
+      const shop = getShopForProduct(product);
+      const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
+      document.getElementById('popupShopMeta').style.setProperty('--shop-accent', shopAccent);
+      const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
+      document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="${escapeHTML(shop.name)} shop එකට යන්න"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>`;
+      document.getElementById('popupShippingStatus').innerHTML = product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : 'Island-wide';
+      document.getElementById("popupPrice").innerHTML = productPriceMarkup(product);
+      document.getElementById("popupDesc").innerText = product.desc;
+      document.getElementById("popupFeatures").innerHTML = (product.features || []).map(f => `<div class="feature-item"><i class="fa-solid fa-circle-check"></i><span>${f}</span></div>`).join('');
+      renderProductVariants(product);
+      renderGallery();
+      renderRecommendations(product);
+      document.getElementById('reviewStatus').textContent = supabaseClient ? (activeUser ? '' : 'Sign in with your email to leave a comment.') : 'Customer comments will be available after the online database is configured.';
+      document.getElementById('reviewList').innerHTML = '';
+      loadProductReviews(product.id);
+      document.getElementById("popupQuantity").value = 1;
+      document.getElementById("popupAddBtn").onclick = () => { addToCart(id); };
+      document.getElementById("popupBuyBtn").onclick = () => { buyNow(id); };
+      document.getElementById("productPopup").style.display = "block";
+      document.body.style.overflow = 'hidden';
+    }
+
+    function renderProductVariants(product) {
+      const colors = Array.isArray(product.colors) ? product.colors.slice(0, 30) : [];
+      const sizes = Array.isArray(product.sizes) ? product.sizes.slice(0, 30) : [];
+      const section = document.getElementById('variantSection');
+      const controls = document.getElementById('variantControls');
+      controls.replaceChildren();
+      section.hidden = colors.length === 0 && sizes.length === 0;
+      const addSelect = (id, label, values, prompt) => {
+        if (!values.length) return;
+        const wrapper = document.createElement('label');
+        wrapper.textContent = label;
+        const select = document.createElement('select');
+        select.id = id;
+        select.required = true;
+        const first = document.createElement('option');
+        first.value = '';
+        first.textContent = prompt;
+        select.appendChild(first);
+        values.forEach(value => {
+          const option = document.createElement('option');
+          option.value = String(value);
+          option.textContent = String(value);
+          select.appendChild(option);
+        });
+        wrapper.appendChild(select);
+        controls.appendChild(wrapper);
+      };
+      addSelect('popupColor', 'Color', colors, 'Choose color');
+      addSelect('popupSize', 'Size', sizes, 'Choose size');
+    }
+
+    function selectedVariants() {
+      const colorSelect = document.getElementById('popupColor');
+      const sizeSelect = document.getElementById('popupSize');
+      const color = colorSelect ? colorSelect.value : '';
+      const size = sizeSelect ? sizeSelect.value : '';
+      if ((colorSelect && !color) || (sizeSelect && !size)) {
+        alert('Please choose the color and size first.');
+        if (colorSelect && !color) colorSelect.focus();
+        else if (sizeSelect) sizeSelect.focus();
+        return null;
+      }
+      return { color, size };
+    }
+
+    function renderRecommendations(product, selectedCategory = product.category) {
+      const recommendationCategories = [{ id: 'all', label: 'All Products' }, ...categories];
+      const categoryBar = document.getElementById('recommendationCategories');
+      categoryBar.replaceChildren(...recommendationCategories.map(category => {
+        const button = document.createElement('button');
+        button.className = `cat-btn ${category.id === selectedCategory ? 'active' : ''}`;
+        button.type = 'button';
+        button.textContent = category.label;
+        button.onclick = () => renderRecommendations(product, category.id);
+        return button;
+      }));
+      const related = [...new Map(products
+        .filter(item => item.id !== product.id && (selectedCategory === 'all' || item.category === selectedCategory))
+        .map(item => [item.id, item])).values()];
+      document.getElementById('recommendationList').innerHTML = related.map(item => `
+        <button class="recommendation-card" type="button" onclick="openProductPopup(${item.id})" aria-label="View ${item.name}">
+          <img loading="lazy" src="${item.images?.[0] || 'assets/alee-logo.png'}" alt="${item.name}" onerror="this.src='assets/alee-logo.png'">
+          <strong>${item.name}</strong><div class="price-block recommendation-price">${productPriceMarkup(item)}</div>
+        </button>`).join('');
+    }
+
+    function renderGallery() {
+      if (!activeGalleryProduct) return;
+      const images = (activeGalleryProduct.images || []).slice(0, 20);
+      const slider = document.getElementById('popupSlider');
+      const thumbs = document.getElementById('popupThumbs');
+      slider.innerHTML = images.map((img,i) => `<img src="${img}" loading="eager" alt="${activeGalleryProduct.name} photo ${i+1}" onclick="openImageZoom(${i},event)" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`).join('');
+      thumbs.innerHTML = images.map((img,i) => `<button class="thumb ${i===activeGalleryIndex?'active':''}" onclick="goToGallery(${i},event)">${makeImage(img)}</button>`).join('');
+      requestAnimationFrame(() => {
+        const slide = slider.children[activeGalleryIndex];
+        if (slide) slider.scrollLeft = slide.offsetLeft - slider.offsetLeft;
+      });
+      document.getElementById('galleryCount').innerText = `${activeGalleryIndex+1} / ${Math.max(images.length,1)}`;
+    }
+
+    function goToGallery(index, event) {
+      if(event) event.stopPropagation();
+      if(!activeGalleryProduct) return;
+      const images = (activeGalleryProduct.images || []).slice(0, 20);
+      if (!images.length) return;
+      activeGalleryIndex = (index + images.length) % images.length;
+      renderGallery();
+    }
+
+    function galleryPrev(event) { if(event) event.stopPropagation(); goToGallery(activeGalleryIndex-1); }
+    function galleryNext(event) { if(event) event.stopPropagation(); goToGallery(activeGalleryIndex+1); }
+    function openImageZoom(index, event) {
+      if (event) event.stopPropagation();
+      if (!activeGalleryProduct) return;
+      goToGallery(index);
+      const images = (activeGalleryProduct.images || []).slice(0, 20);
+      const photo = document.getElementById('imageZoomPhoto');
+      photo.src = images[activeGalleryIndex] || 'assets/alee-logo.png';
+      photo.alt = `${activeGalleryProduct.name} enlarged photo ${activeGalleryIndex + 1}`;
+      document.getElementById('imageZoom').classList.add('open');
+    }
+    function closeImageZoom() { document.getElementById('imageZoom').classList.remove('open'); }
+    function zoomGalleryStep(direction, event) {
+      if (event) event.stopPropagation();
+      goToGallery(activeGalleryIndex + direction);
+      const images = (activeGalleryProduct?.images || []).slice(0, 20);
+      const photo = document.getElementById('imageZoomPhoto');
+      photo.src = images[activeGalleryIndex] || 'assets/alee-logo.png';
+      photo.alt = `${activeGalleryProduct.name} enlarged photo ${activeGalleryIndex + 1}`;
+    }
+    function popupBackdropClose(e) { if (e.target && e.target.id === 'productPopup') closeProductPopup(); }
+
+    document.getElementById('popupSlider').addEventListener('scroll', () => {
+      if (!activeGalleryProduct) return;
+      const slider = document.getElementById('popupSlider');
+      const width = slider.clientWidth + 10;
+      if (!width) return;
+      const idx = Math.round(slider.scrollLeft / width);
+      if (idx !== activeGalleryIndex && idx >= 0 && idx < Math.min(activeGalleryProduct.images.length, 20)) {
+        activeGalleryIndex = idx;
+        document.getElementById('galleryCount').innerText = `${idx+1} / ${Math.min(activeGalleryProduct.images.length, 20)}`;
+        document.querySelectorAll('.thumb').forEach((t,i)=>t.classList.toggle('active',i===idx));
+      }
+    });
+
+    function closeProductPopup() { document.getElementById("productPopup").style.display = "none"; document.body.style.overflow = ''; }
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('productPopup').style.display === 'block') {
+        if (e.key === 'Escape') { if (document.getElementById('imageZoom').classList.contains('open')) closeImageZoom(); else closeProductPopup(); }
+        if (e.key === 'ArrowLeft') { if (document.getElementById('imageZoom').classList.contains('open')) zoomGalleryStep(-1); else galleryPrev(); }
+        if (e.key === 'ArrowRight') { if (document.getElementById('imageZoom').classList.contains('open')) zoomGalleryStep(1); else galleryNext(); }
+      }
+    });
+
+    function selectedQuantity() {
+      const input = document.getElementById('popupQuantity');
+      const value = Math.floor(Number(input.value));
+      if (!Number.isFinite(value) || value < 1 || value > 20) {
+        alert('Please choose a quantity from 1 to 20.');
+        input.focus();
+        return null;
+      }
+      return value;
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const quantity = selectedQuantity();
+      const variants = selectedVariants();
+      if (!product || quantity === null || !variants) return;
+      const existing = cart.find(item => item.product.id === id && item.color === variants.color && item.size === variants.size);
+      if (existing && existing.quantity + quantity > 20) return alert('You can add up to 20 of one product option.');
+      if (existing) existing.quantity += quantity;
+      else cart.push({ product, quantity, ...variants });
+      document.getElementById("cartCount").innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+      let toast = document.getElementById("cartToast");
+      if (!toast) { toast = document.createElement("div"); toast.id = "cartToast"; toast.className = "cart-toast"; toast.setAttribute("role", "status"); toast.setAttribute("aria-live", "polite"); document.body.appendChild(toast); }
+      toast.textContent = "✅ Added to Cart";
+      toast.classList.add("show");
+      clearTimeout(window.cartToastTimer);
+      window.cartToastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function restoreCheckoutDetails() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(checkoutDetailsKey) || '{}');
+        checkoutDetailFields.forEach(id => {
+          const field = document.getElementById(id);
+          if (field && typeof saved[id] === 'string') field.value = saved[id];
+        });
+      } catch (error) { console.warn('Saved checkout details could not be read.', error); }
+    }
+
+    function saveCheckoutDetails() {
+      try {
+        const details = Object.fromEntries(checkoutDetailFields.map(id => [id, document.getElementById(id).value.trim()]));
+        localStorage.setItem(checkoutDetailsKey, JSON.stringify(details));
+      } catch (error) { console.warn('Checkout details could not be saved on this device.', error); }
+    }
+
+    function clearCheckoutDetails() {
+      try { localStorage.removeItem(checkoutDetailsKey); } catch (error) { console.warn('Saved checkout details could not be cleared.', error); }
+      checkoutDetailFields.forEach(id => { const field = document.getElementById(id); if (field) field.value = ''; });
+    }
+
+    checkoutDetailFields.forEach(id => document.getElementById(id).addEventListener('input', saveCheckoutDetails));
+    restoreCheckoutDetails();
+
+    function buyNow(id) {
+      const product = products.find(p => p.id === id);
+      const quantity = selectedQuantity();
+      const variants = selectedVariants();
+      if (!product || quantity === null || !variants) return;
+      checkoutItems = [{ product, quantity, ...variants }];
+      closeProductPopup();
+      document.getElementById('cartOverlay').style.display = 'block';
+      updateCart(checkoutItems);
+      setTimeout(() => document.getElementById('customerName').focus(), 100);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      document.getElementById("cartCount").innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+      updateCart();
+    }
+
+    function openCart() { checkoutItems = null; document.getElementById("cartOverlay").style.display = "block"; updateCart(); }
+    function closeCart() { document.getElementById("cartOverlay").style.display = "none"; checkoutItems = null; }
+
+    function updateCart(items = cart) {
+      let html = ""; let total = 0;
+      items.forEach((item, index) => {
+        const i = item.product;
+        html += `
+          <div class="cart-item-row">
+            <div>
+              <div style="font-weight:600;">${i.name}</div>
+              ${item.color || item.size ? `<div style="color:var(--detail-copy);font-size:12px;">${item.color ? `Color: ${item.color}` : ''}${item.color && item.size ? ' · ' : ''}${item.size ? `Size: ${item.size}` : ''}</div>` : ''}
+              <div style="color:var(--light-leaf); font-size:12px;">LKR ${i.price.toLocaleString()} × ${item.quantity} = LKR ${(i.price * item.quantity).toLocaleString()}</div>
+            </div>
+            <button class="delete-item-btn" onclick="removeFromCart(${index})" title="Remove item" ${items !== cart ? 'disabled' : ''}>
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>`;
+        total += i.price * item.quantity;
+      });
+      document.getElementById("cartItems").innerHTML = html || "<p style='color:#777; text-align:center; padding:15px;'>Cart is empty</p>";
+      document.getElementById("total").innerText = total.toLocaleString();
+    }
+
+    async function submitOrder() {
+      const orderItems = checkoutItems || cart;
+      if(orderItems.length === 0) return alert("Cart is empty!");
+      saveCheckoutDetails();
+      const name = document.getElementById("customerName").value;
+      const address = document.getElementById("customerAddress").value;
+      const phone1 = document.getElementById("customerPhone1").value;
+      const phone2 = document.getElementById("customerPhone2").value.trim();
+      const note = document.getElementById("customerNote").value.trim();
+      if(name === "" || address === "" || phone1 === "") return alert("Please enter Name, Address and Phone Number 1 *");
+
+      const status = document.getElementById('orderStatus');
+      if (orderItems.length > 50) { if (status) status.textContent = 'Please place no more than 50 different cart items per order.'; return; }
+      if (supabaseClient) {
+        if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in before placing an order. Your order will appear in ALEE SHOPPING and the shop owner’s Messages.';if(status)status.textContent='Please sign in first. Your cart and checkout details will stay here.';return;}
+        const groups = new Map();
+        orderItems.forEach(item => {
+          const candidateShopId = String(item.product.shopId || '');
+          const shopId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(candidateShopId) ? candidateShopId : null;
+          const key = shopId || 'alee-main';
+          if (!groups.has(key)) groups.set(key, { shop_id: shopId, items: [], total: 0 });
+          const group = groups.get(key);
+          group.items.push({ product_id: item.product.sellerProductId || item.product.id, name: item.product.name, price: Number(item.product.price), quantity: Number(item.quantity), color: item.color || null, size: item.size || null });
+          group.total += Number(item.product.price) * Number(item.quantity);
+        });
+        const payloads = [...groups.values()].map(group => ({ shop_id: group.shop_id, user_id: activeUser?.id || null, customer_name: name.trim(), customer_address: address.trim(), customer_phone: phone1.trim(), customer_phone2: phone2 || null, customer_note: note || null, items: group.items, total: group.total, payment_method: 'Cash on Delivery', status: 'new' }));
+        if (status) status.textContent = 'Saving order to the website…';
+        const { error } = await supabaseClient.from('store_orders').insert(payloads);
+        if (error) { if (status) status.textContent = `Could not save the order to the website (${error.message}). Check the Supabase order setup.`; return; }
+        const linkCount=renderOrderWhatsappActions([...groups.values()],{name:name.trim(),address:address.trim(),phone:phone1.trim(),phone2:phone2||'',note});
+        if(status)status.textContent=linkCount
+          ? 'Order saved. Details are in ALEE SHOPPING and the shop owner’s Messages. Choose the WhatsApp button below and tap Send.'
+          : 'Order saved to the shop Orders inbox, but a WhatsApp contact number is missing.';
+      } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
+    }
+  </script>
+  <script src="chat.js?v=20261018-chat-webrtc"></script>
+</body>
+</html>

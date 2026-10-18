@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>භාණ්ඩ එකතු කිරීම — ALEE SHOPPING</title>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="products.js"></script>
+<script src="categories.js"></script>
+<script src="shops.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font:16px Arial,sans-serif}.wrap{max-width:760px;margin:28px auto;padding:24px;background:white;border:1px solid #fed7aa;border-radius:18px;box-shadow:0 12px 35px #0001}h1{color:#ff6900;margin-top:0}p{line-height:1.6}.help{background:#fff7ed;border-radius:10px;padding:12px 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:6px;font-weight:700;margin:12px 0}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}textarea{min-height:78px}button{background:#ff6900;color:white;border:0;border-radius:9px;padding:13px 18px;font-weight:800;font-size:16px;cursor:pointer}.status{margin-top:12px;color:#166534}.muted{color:#64748b;font-size:13px}@media(max-width:600px){.wrap{margin:10px;padding:16px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main class="wrap">
+<h1>ALEE SHOPPING — අලුත් භාණ්ඩයක් එක් කරන්න</h1>
+<p class="help">මෙහි විස්තර පුරවා පින්තූර තෝරන්න. “ZIP ගොනුව හදන්න” ඔබා ලැබෙන ZIP ගොනුව වෙබ් අඩවියේ ගොනු තිබෙන ෆෝල්ඩරයට උපුටා දමන්න. ඉන්පසු වෙබ් අඩවිය නැවත පළ කරන්න. කේතය ටයිප් කරන්න ඕනෑ නැහැ.</p>
+<p><a href="shop-manager.html">අලුත් shop එකක් එක් කිරීමට මෙතැන ඔබන්න</a></p>
+<p id="catalogCount" class="muted"></p>
+<form id="productForm">
+<div class="grid"><label>භාණ්ඩයේ නම<input name="name" required></label><label>මිල (රුපියල්)<input name="price" type="number" min="1" required></label></div>
+<div class="grid"><label>කාණ්ඩය<select name="category" id="categorySelect"></select></label><label>අලුත් කාණ්ඩයක් ඕනෑ නම් මෙහි නම ලියන්න<input name="newCategory" placeholder="උදා: ගෘහ උපකරණ"></label></div>
+<label>විකුණන shop එක<select name="shopId" id="shopSelect"></select><span class="muted">අලුත් shop එකක් එක් කරන්න නම් shop-manager.html භාවිත කරන්න.</span></label>
+<label>හංවඩු මිල තිබේ නම්<input name="oldPrice" type="number" min="0"></label>
+<label>භාණ්ඩය ගැන විස්තර<textarea name="desc"></textarea></label>
+<label>විශේෂාංග (කොමාවෙන් වෙන් කරන්න)<input name="features" placeholder="උදා: Cotton රෙදි, Machine wash"></label>
+<label style="display:flex;align-items:center;gap:10px"><input name="freeShipping" type="checkbox" style="width:auto;transform:scale(1.2)"> නොමිලේ බෙදාහැරීම (භාණ්ඩයේ කාඩ්පතේ කහ පැහැති “FREE SHIPPING” ලකුණ පෙන්වන්න)</label>
+<div class="grid"><label>පාට (කොමාවෙන් වෙන් කරන්න)<input name="colors" placeholder="උදා: කළු, සුදු, නිල්"></label><label>ප්‍රමාණ (කොමාවෙන් වෙන් කරන්න)<input name="sizes" placeholder="උදා: S, M, L, XL"></label></div>
+<label>භාණ්ඩයේ පින්තූර (20ක් දක්වා)<input name="photos" type="file" accept="image/*" multiple required><span class="muted">ඇඳුම් සඳහා පාට සහ ප්‍රමාණ දාන්න. එවිට මිලදී ගන්නා අයට ඒවා තෝරන්න පුළුවන්.</span></label>
+<button type="submit">ZIP ගොනුව හදන්න</button><div id="status" class="status" role="status"></div>
+</form>
+</main>
+<script>
+const catalog = Array.isArray(window.aleeProducts) ? window.aleeProducts : [];
+const categories = Array.isArray(window.aleeCategories) ? [...window.aleeCategories] : [];
+const shops = Array.isArray(window.aleeShops) ? [...window.aleeShops] : [];
+const categorySelect = document.getElementById('categorySelect');
+categories.forEach(category => { const option=document.createElement('option'); option.value=category.id; option.textContent=category.label; categorySelect.appendChild(option); });
+const shopSelect = document.getElementById('shopSelect');
+shops.forEach(shop => { const option=document.createElement('option'); option.value=shop.id; option.textContent=shop.name; shopSelect.appendChild(option); });
+document.getElementById('catalogCount').textContent = `දැනට ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
+const splitList = value => value.split(',').map(item => item.trim()).filter(Boolean);
+const slug = value => value.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase() || 'product';
+document.getElementById('productForm').addEventListener('submit', async event => {
+ event.preventDefault();
+ const status = document.getElementById('status');
+ const form = event.currentTarget;
+ const data = new FormData(form);
+ const photos = [...form.elements.photos.files];
+ if (photos.length > 20) { status.textContent = 'පින්තූර 20ක් දක්වා පමණක් තෝරන්න.'; return; }
+ if (!window.JSZip) { status.textContent = 'ZIP සකස් කිරීමේ සේවාව සම්බන්ධ වුණේ නැහැ. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.'; return; }
+ status.textContent = 'ZIP ගොනුව සකස් කරනවා…';
+ try {
+  const nextId = Math.max(0, ...catalog.map(item => Number(item.id) || 0)) + 1;
+  const newCategoryName = String(data.get('newCategory') || '').trim();
+  let categoryId = data.get('category');
+  let updatedCategories = [...categories];
+  if (newCategoryName) {
+   const existingCategory = categories.find(category => category.label.toLowerCase() === newCategoryName.toLowerCase());
+   if (existingCategory) categoryId = existingCategory.id;
+   else {
+    categoryId = slug(newCategoryName) || `category-${nextId}`;
+    if (categories.some(category => category.id === categoryId)) categoryId += `-${nextId}`;
+    updatedCategories.push({ id:categoryId, label:newCategoryName });
+   }
+  }
+  const imagePaths = [];
+  const zip = new JSZip();
+  for (let index=0; index<photos.length; index++) {
+   const file = photos[index];
+   const extension = (file.name.match(/\.([a-z0-9]+)$/i) || [,'jpg'])[1].toLowerCase();
+   const path = `images/${nextId}-${slug(data.get('name'))}-${index+1}.${extension}`;
+   zip.file(path, await file.arrayBuffer());
+   imagePaths.push(path);
+  }
+  const product = { id:nextId, name:String(data.get('name')).trim(), price:Number(data.get('price')), discountPercent:0, category:categoryId, shopId:String(data.get('shopId') || shops[0]?.id || 'alee-shopping'), desc:String(data.get('desc')||'').trim(), features:splitList(String(data.get('features')||'')), images:imagePaths };
+  if (form.elements.freeShipping.checked) product.freeShipping = true;
+  const oldPrice = Number(data.get('oldPrice'));
+  if (oldPrice > product.price) product.oldPrice = oldPrice;
+  const colors = splitList(String(data.get('colors')||''));
+  const sizes = splitList(String(data.get('sizes')||''));
+  if (colors.length) product.colors = colors;
+  if (sizes.length) product.sizes = sizes;
+  const updated = [...catalog, product];
+  const notice = { id:product.id, name:product.name, version:Date.now() };
+  zip.file('products.js', `window.aleeProducts = ${JSON.stringify(updated, null, 2)};\nwindow.aleeLatestProductNotice = ${JSON.stringify(notice)};\n`);
+  zip.file('categories.js', `window.aleeCategories = ${JSON.stringify(updatedCategories, null, 2)};\n`);
+  zip.file('shops.js', `window.aleeShops = ${JSON.stringify(shops, null, 2)};\n`);
+  const blob = await zip.generateAsync({type:'blob'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a'); link.href=url; link.download=`alee-product-${nextId}.zip`; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 30000);
+  catalog.push(product);
+  if (updatedCategories.length > categories.length) categories.push(updatedCategories[updatedCategories.length - 1]);
+  document.getElementById('catalogCount').textContent = `දැන් ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
+  form.reset();
+  status.textContent = 'ZIP ගොනුව බාගත වුණා. එය වෙබ් අඩවියේ මුල් ෆෝල්ඩරයට උපුටා දමා නැවත පළ කරන්න.';
+ } catch (error) { console.error(error); status.textContent = 'ZIP ගොනුව හදන්න බැරි වුණා. නැවත උත්සාහ කරන්න.'; }
+});
+</script></body></html>
+
