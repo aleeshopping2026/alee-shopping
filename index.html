@@ -765,11 +765,13 @@
         <div class="seller-form-grid">
           <label>Shop name<input name="shopName" minlength="2" maxlength="80" required placeholder="Your shop name"></label>
           <label>Shop category<select name="shopCategory" id="sellerShopCategory" required></select></label>
+          <label>Business bio<textarea name="bio" maxlength="600" placeholder="Tell customers about your business"></textarea></label>
           <label>Phone number<input name="phone" type="tel" maxlength="40" required placeholder="+94..."></label>
           <label>Second phone number (optional)<input name="phone2" type="tel" maxlength="40" placeholder="+94..."></label>
           <label>Shop address<textarea name="address" minlength="3" maxlength="400" required placeholder="Shop address"></textarea></label>
           <label>Facebook link<input name="facebook" type="url" maxlength="500" placeholder="https://www.facebook.com/..."></label>
           <label>Instagram link<input name="instagram" type="url" maxlength="500" placeholder="https://www.instagram.com/..."></label>
+          <label>TikTok link<input name="tiktok" type="url" maxlength="500" placeholder="https://www.tiktok.com/@..."></label>
           <label>YouTube link<input name="youtube" type="url" maxlength="500" placeholder="https://www.youtube.com/..."></label>
           <label>Website or other shop link (optional)<input name="externalLink" type="url" maxlength="500" placeholder="https://..."></label>
         </div>
@@ -887,7 +889,7 @@
     function closeSellerAccount() { document.getElementById('sellerDashboard').classList.remove('show'); }
 
     function mapSellerShop(row) {
-      return {id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',rank:9999,rating:5,_sellerManaged:true};
+      return {id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
     }
     function mapSellerProduct(row) {
       return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:Number(row.price),discountPercent:0,category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
@@ -958,7 +960,7 @@
           document.getElementById('sellerShopLogo').src=currentSellerShop.logo_url||'assets/alee-logo.png';
           document.getElementById('sellerShopDetails').textContent=[currentSellerShop.shop_category||'Other',currentSellerShop.phone,currentSellerShop.phone2,currentSellerShop.address].filter(Boolean).join(' · ');
           const socials=document.getElementById('sellerShopSocials');
-          socials.innerHTML=[['facebook_url','Facebook'],['instagram_url','Instagram'],['youtube_url','YouTube']].filter(([key])=>/^https?:\/\//i.test(String(currentSellerShop[key]||''))).map(([key,label])=>`<a href="${escapeHTML(currentSellerShop[key])}" target="_blank" rel="noopener">${label}</a>`).join('');
+          socials.innerHTML=[['facebook_url','Facebook'],['instagram_url','Instagram'],['tiktok_url','TikTok'],['youtube_url','YouTube']].filter(([key])=>/^https?:\/\//i.test(String(currentSellerShop[key]||''))).map(([key,label])=>`<a href="${escapeHTML(currentSellerShop[key])}" target="_blank" rel="noopener">${label}</a>`).join('');
           const link=shopPublicUrl(currentSellerShop.id);const linkEl=document.getElementById('sellerShopLink');linkEl.href=link;linkEl.textContent=link;
           document.getElementById('sellerShopFormTitle').textContent='Edit shop details';
           document.getElementById('sellerShopLogoFile').required=false;
@@ -989,9 +991,9 @@
     function editSellerShop() {
       if(!currentSellerShop)return;
       const form=document.getElementById('sellerShopForm');
-      form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.phone.value=currentSellerShop.phone||'';form.elements.phone2.value=currentSellerShop.phone2||'';
+      form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.bio.value=currentSellerShop.bio||'';form.elements.phone.value=currentSellerShop.phone||'';form.elements.phone2.value=currentSellerShop.phone2||'';
       form.elements.address.value=currentSellerShop.address||'';form.elements.externalLink.value=currentSellerShop.external_link||'';
-      form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
+      form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.tiktok.value=currentSellerShop.tiktok_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
       form.elements.shopCategory.value=currentSellerShop.shop_category||'Other';form.elements.logo.value='';form.elements.logo.required=false;
       document.getElementById('sellerShopProfile').hidden=true;document.getElementById('sellerShopFormPanel').hidden=false;
       document.getElementById('sellerShopFormTitle').textContent='Edit Shop Profile';document.getElementById('sellerShopSubmit').textContent='Save Shop Profile';document.getElementById('sellerShopCancel').hidden=false;
@@ -1010,7 +1012,7 @@
       if(!activeUser||!supabaseClient)return;
       const form=event.currentTarget,status=document.getElementById('sellerShopStatus');
       const name=form.elements.shopName.value.trim(),phone=form.elements.phone.value.trim(),address=form.elements.address.value.trim(),externalLink=form.elements.externalLink.value.trim();
-      const socialValues={facebook_url:form.elements.facebook.value.trim(),instagram_url:form.elements.instagram.value.trim(),youtube_url:form.elements.youtube.value.trim()};
+      const socialValues={facebook_url:form.elements.facebook.value.trim(),instagram_url:form.elements.instagram.value.trim(),tiktok_url:form.elements.tiktok.value.trim(),youtube_url:form.elements.youtube.value.trim()};
       const socialUrl=Object.values(socialValues).find(value=>value&&!/^https?:\/\//i.test(value));
       if(externalLink&&!/^https?:\/\//i.test(externalLink)){status.textContent='Shop link must start with https:// or http://';return;}
       if(socialUrl){status.textContent='Social links must start with https:// or http://';return;}
@@ -1020,7 +1022,7 @@
         const phone2=form.elements.phone2.value.trim();
         if(!currentSellerShop&&!logoFile)throw new Error('Add a shop profile picture before submitting.');
         if(logoFile)uploadedLogo=await uploadSellerImage(logoFile,`${activeUser.id}/shop-profile`);
-        const payload={owner_id:activeUser.id,shop_name:name,phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
+        const payload={owner_id:activeUser.id,shop_name:name,bio:form.elements.bio.value.trim(),phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
         payload.logo_url=uploadedLogo?.url||currentSellerShop?.logo_url||null;
         const query=currentSellerShop
           ? supabaseClient.from('seller_shops').update(payload).eq('id',currentSellerShop.id).select().single()
