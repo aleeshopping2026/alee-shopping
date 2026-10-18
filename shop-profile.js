@@ -166,10 +166,10 @@
 
   async function loadShop() {
     if (!shop && supabase && shopId && isUuid(shopId)) {
-      const {data:row,error} = await supabase.from('seller_shops_public').select('*').eq('id',shopId).maybeSingle();
+      const {data:row,error} = await supabase.from('seller_shops_profile_public').select('*').eq('id',shopId).maybeSingle();
       if (!error && row) {
         shop = {id:String(row.id), name:row.shop_name, logo:row.logo_url||'assets/alee-logo.png', phone:row.phone||'', phone2:row.phone2||'', address:row.address||'', externalLink:row.external_link||'', shopCategory:row.shop_category||'Other', bio:row.bio||'', facebook:row.facebook_url||'', instagram:row.instagram_url||'', youtube:row.youtube_url||'', tiktok:row.tiktok_url||'', rank:9999, rating:5};
-        const {data:items} = await supabase.from('seller_products_public').select('*').eq('shop_id',shopId);
+        const {data:items} = await supabase.from('seller_products_profile_public').select('*').eq('shop_id',shopId);
         (items||[]).forEach(item=>products.push({id:1000000000+Number(item.id),name:item.name,price:Number(item.price),category:item.category,shopId:String(item.shop_id),desc:item.description||'',features:item.features||[],sizes:item.sizes||[],images:item.image_urls||[]}));
         shops.push(shop);
       }

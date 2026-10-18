@@ -928,8 +928,8 @@
     async function loadSellerCatalog() {
       if(!supabaseClient)return;
       const [{data:shopRows,error:shopError},{data:productRows,error:productError}]=await Promise.all([
-        supabaseClient.from('seller_shops_public').select('*'),
-        supabaseClient.from('seller_products_public').select('*')
+        supabaseClient.from('seller_shops_profile_public').select('*'),
+        supabaseClient.from('seller_products_profile_public').select('*')
       ]);
       if(shopError||productError){console.warn('Seller catalog is not configured yet.',shopError||productError);return;}
       for(let i=shops.length-1;i>=0;i--) if(shops[i]?._sellerManaged) shops.splice(i,1);

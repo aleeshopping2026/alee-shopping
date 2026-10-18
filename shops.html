@@ -36,7 +36,7 @@
     async function renderShopDirectory(){
       if(window.aleeSupabase){
         const [{data:shopRows},{data:productRows}]=await Promise.all([
-          window.aleeSupabase.from('seller_shops_public').select('*'),
+          window.aleeSupabase.from('seller_shops_profile_public').select('*'),
           window.aleeSupabase.from('seller_products_public').select('id,shop_id')
         ]);
         (shopRows||[]).forEach(row=>shops.push({id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',facebook:row.facebook_url||'',instagram:row.instagram_url||'',youtube:row.youtube_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5}));

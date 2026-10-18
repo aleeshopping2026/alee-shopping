@@ -87,20 +87,20 @@ grant select, insert, update, delete on public.seller_products to authenticated;
 grant usage, select on sequence public.seller_products_id_seq to authenticated;
 
 -- Public storefront views expose shop and product information without owner IDs.
-create or replace view public.seller_shops_public
+create or replace view public.seller_shops_profile_public
 with (security_barrier = true)
 as select id, shop_name, phone, phone2, address, external_link, created_at,
           logo_url, shop_category, youtube_url, instagram_url, facebook_url, bio, tiktok_url
 from public.seller_shops;
 
-create or replace view public.seller_products_public
+create or replace view public.seller_products_profile_public
 with (security_barrier = true)
 as select id, shop_id, name, price, category, category_label, description,
           features, sizes, image_urls, created_at
 from public.seller_products;
 
-grant select on public.seller_shops_public to anon, authenticated;
-grant select on public.seller_products_public to anon, authenticated;
+grant select on public.seller_shops_profile_public to anon, authenticated;
+grant select on public.seller_products_profile_public to anon, authenticated;
 
 -- Public business-profile follows. Names are user-provided display labels; email addresses and user IDs are never exposed.
 create table if not exists public.shop_follows (
