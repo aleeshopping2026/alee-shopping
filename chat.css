@@ -14,3 +14,124 @@
 #aleeChatOverlay.alee-chat-dark .alee-chat-box,#aleeChatOverlay.alee-chat-dark .alee-chat-list-body,#aleeChatOverlay.alee-chat-dark .alee-chat-list{background:#111b21;color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-layout{background:#111b21}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-rail,#aleeChatOverlay.alee-chat-dark .alee-chat-thread-head,#aleeChatOverlay.alee-chat-dark .alee-chat-send{background:#202c33;border-color:#2a3942;color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-rail>button{color:#aebac1}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-rail>button:hover,#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-rail .alee-chat-profile-shortcut{background:#2a3942;color:#25d366}#aleeChatOverlay.alee-chat-dark .alee-chat-list-title,#aleeChatOverlay.alee-chat-dark .alee-chat-role-tabs button,#aleeChatOverlay.alee-chat-dark .alee-chat-conversation,#aleeChatOverlay.alee-chat-dark .alee-chat-filters button{color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-search,#aleeChatOverlay.alee-chat-dark .alee-chat-filters button{background:#202c33}#aleeChatOverlay.alee-chat-dark .alee-chat-filters button.active{background:#075e54;color:#fff}#aleeChatOverlay.alee-chat-dark .alee-chat-conversation-row{border-color:#202c33}#aleeChatOverlay.alee-chat-dark .alee-chat-conversation-row:hover{background:#202c33}#aleeChatOverlay.alee-chat-dark .alee-chat-conversation-copy small,#aleeChatOverlay.alee-chat-dark .alee-chat-status{color:#8696a0}#aleeChatOverlay.alee-chat-dark .alee-chat-main{background-color:#0b141a;background-image:radial-gradient(#1b252c .65px,transparent .65px)}#aleeChatOverlay.alee-chat-dark .alee-chat-message.theirs{background:#202c33;border-color:#202c33;color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-message.mine{background:#005c4b;border-color:#005c4b;color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-send textarea{background:#2a3942;border-color:#2a3942;color:#e9edef}#aleeChatOverlay.alee-chat-dark .alee-chat-send [type=submit]{background:#00a884;color:#fff}#aleeChatOverlay.alee-chat-dark .alee-chat-emoji{color:#aebac1}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-menu,#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-menu button,#aleeChatOverlay.alee-chat-dark .alee-emoji-picker{background:#202c33;color:#e9edef;border-color:#2a3942}#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-menu button:hover,#aleeChatOverlay.alee-chat-dark .alee-emoji-picker button:hover{background:#2a3942}
 @media(max-width:720px){.alee-chat-list{width:100%;flex:0 0 100%}.alee-chat-sidebar-layout{grid-template-columns:48px minmax(0,1fr)}.alee-chat-sidebar-rail{gap:8px;padding:9px 4px}.alee-chat-sidebar-rail>button{width:38px;height:38px}.alee-chat-list-title{padding:12px 14px 10px}.alee-chat-filters{gap:5px}.alee-chat-filters button{padding:6px 9px}.alee-chat-emoji{width:30px;flex-basis:30px}.alee-emoji-picker{grid-template-columns:repeat(5,36px);left:5px}.alee-emoji-picker button{width:34px;height:36px}}
 .alee-chat-sender-label{display:block;margin:0 0 4px;color:#00a884;font-size:11px;font-weight:700}
+/* WhatsApp Business inspired finish: calm light palette, cleaner inbox, and soft chat wallpaper. */
+.alee-chat-launcher{background:#0b141a99;backdrop-filter:blur(3px)}
+.alee-chat-box{width:min(1240px,96vw);height:min(90vh,900px);border:1px solid #d9e2df;border-radius:16px;box-shadow:0 28px 90px #0b141a55}
+.alee-chat-top{background:#f0f2f5;border-bottom-color:#dfe5e7}
+.alee-chat-top strong{color:#111b21}
+.alee-chat-top button{background:transparent;color:#54656f}
+.alee-chat-list{width:390px;flex-basis:390px;border-right-color:#e9edef}
+.alee-chat-list-title{color:#111b21;font-size:21px;font-weight:700}
+.alee-chat-role-tabs button,.alee-chat-filters button{color:#54656f}
+.alee-chat-role-tabs button.active{color:#008f72;border-color:#00a884}
+.alee-chat-search{border:0;border-radius:10px;background:#f0f2f5;color:#667781}
+.alee-chat-search input{color:#111b21}
+.alee-chat-filters button{background:#f0f2f5}
+.alee-chat-filters button.active{background:#d9fdd3;color:#075e54}
+.alee-chat-conversation-row{margin:0 6px;border-bottom:1px solid #f1f2f3;border-radius:8px}
+.alee-chat-conversation-row:hover{background:#f5f7f7}
+.alee-chat-conversation{border-radius:8px;color:#111b21}
+.alee-chat-conversation-copy strong{font-size:14px;font-weight:650}
+.alee-chat-conversation-copy small{color:#667781;font-size:12px}
+.alee-chat-conversation-meta{color:#667781}
+.alee-chat-unread-dot{background:#00a884}
+.alee-chat-favorite.on{color:#00a884}
+.alee-chat-avatar{background:#d9fdd3;color:#075e54}
+.alee-chat-thread-head{background:#f0f2f5;border-bottom-color:#dfe5e7;color:#111b21}
+.alee-chat-thread-head button{color:#54656f}
+.alee-chat-thread-calls button{background:#e3f1eb;color:#008f72}
+.alee-chat-main{background-color:#efeae2;background-image:radial-gradient(#c9c3b8 0.6px,transparent 0.7px);background-size:22px 22px}
+.alee-chat-messages{background:transparent}
+.alee-chat-message{border:0;border-radius:12px;background:#fff;color:#111b21;box-shadow:0 1px 1px #0b141a16;font-size:14px;line-height:1.5}
+.alee-chat-message.mine{background:#d9fdd3;border-color:transparent;border-bottom-right-radius:4px}
+.alee-chat-message.theirs{border-bottom-left-radius:4px}
+.alee-chat-message time{color:#667781}
+.alee-chat-file{border-color:#d8e5df;border-radius:10px;color:#087d60;background:#f8fbf9}
+.alee-chat-quick-actions{background:#efeae2}
+.alee-chat-quick-actions button{border:1px solid #d8e3de;border-radius:999px;background:#fff;color:#176b56}
+.alee-chat-send{gap:8px;padding:10px 13px;background:#f0f2f5;border-top:1px solid #dfe5e7}
+.alee-chat-send textarea{min-height:46px;border:0;border-radius:23px;background:#fff;color:#111b21;box-shadow:0 1px 2px #0b141a10}
+.alee-chat-send textarea:focus{border:0;background:#fff;box-shadow:0 0 0 2px #00a88433}
+.alee-chat-compose-actions{border:0;background:transparent}
+.alee-chat-compose-actions button{color:#54656f;border-radius:50%}
+.alee-chat-compose-actions button:hover{background:#e3e9e7}
+.alee-chat-compose-actions button[type=submit]{background:#00a884;color:#fff;box-shadow:none}
+.alee-chat-compose-actions button[type=submit]:hover{background:#008f72}
+.alee-chat-action-launch{background:transparent;color:#54656f}
+.alee-chat-attach-hint{background:#f0f2f5;color:#667781}
+.alee-chat-sidebar-rail{background:#f7f9f8;border-right-color:#e9edef}
+.alee-chat-sidebar-rail>button{color:#54656f}
+.alee-chat-sidebar-rail>button:hover{background:#e9edef}
+.alee-chat-sidebar-rail .alee-chat-profile-shortcut{background:#d9fdd3;color:#075e54}
+.alee-chat-sidebar-menu{border-color:#e0e6e8;border-radius:12px;box-shadow:0 10px 35px #0b141a22}
+.alee-chat-sidebar-menu button{font-family:inherit}
+.alee-chat-options-overlay{background:#0b141a88;backdrop-filter:blur(4px)}
+.alee-chat-options-card{background:#f7f9f8;color:#111b21;border:1px solid #e2e9e6;border-radius:22px;box-shadow:0 22px 70px #0b141a38}
+.alee-chat-options-grid{gap:10px}
+.alee-chat-options-grid button{min-height:96px;border:1px solid #e4eae8;border-radius:16px;background:#fff;color:#54656f;font-size:13px}
+.alee-chat-options-grid button:hover{background:#f2f8f5;border-color:#b8d9cc}
+.alee-chat-options-grid button i{width:48px;height:48px;display:grid;place-items:center;border:0;border-radius:15px;background:#e8f4ee;color:#087d60}
+.alee-chat-options-grid button:nth-child(1) i{background:#eee8ff;color:#7651c8}
+.alee-chat-options-grid button:nth-child(2) i{background:#e3f1ff;color:#1689d4}
+.alee-chat-options-grid button:nth-child(3) i{background:#e1f4ec;color:#13866b}
+.alee-chat-options-grid button:nth-child(4) i{background:#fff3d7;color:#c28809}
+.alee-chat-options-grid button:nth-child(5) i{background:#dcf7ef;color:#079978}
+.alee-chat-options-grid button:nth-child(6) i{background:#e1f3fb;color:#1689d4}
+.alee-chat-options-grid button:nth-child(7) i{background:#fff3d7;color:#c28809}
+.alee-chat-options-grid button:nth-child(8) i{background:#ffe7f0;color:#d83a83}
+.alee-chat-options-close{color:#607276}
+.alee-chat-sheet-handle{background:#c6d0d0}
+.alee-chat-business-tools-title{color:#667781;border-color:#e2e9e6}
+.alee-chat-business-tools button{border:1px solid #dce6e2;background:#fff;color:#176b56}
+.alee-chat-quick-replies{background:#fff;color:#111b21;border:1px solid #e0e6e8;border-radius:18px;box-shadow:0 20px 65px #0b141a33}
+.alee-chat-quick-replies>header{border-color:#e9edef}
+.alee-chat-quick-replies h2{color:#111b21}
+.alee-chat-quick-replies>header button,.alee-quick-reply-add{background:#f0f2f5;color:#54656f}
+.alee-quick-reply-list{background:#fff}
+.alee-quick-reply-item{border-color:#edf0ef}
+.alee-quick-reply-item strong{color:#111b21}
+.alee-quick-reply-item p,.alee-quick-reply-empty{color:#667781}
+.alee-quick-reply-item button{background:#f0f2f5;color:#54656f}
+.alee-quick-reply-form-wrap{background:#f7f9f8}
+.alee-quick-reply-form-wrap label{color:#405257}
+.alee-quick-reply-form input,.alee-quick-reply-form textarea{background:#fff;border-color:#dfe6e4;color:#111b21}
+.alee-quick-reply-form button{background:#00a884;color:#fff}
+.alee-chat-catalog-picker{background:#fff;color:#111b21;border:1px solid #e0e6e8;box-shadow:0 20px 65px #0b141a33}
+.alee-chat-catalog-picker header{border-color:#e9edef}
+.alee-chat-catalog-picker h2{color:#111b21}
+.alee-chat-catalog-picker input{background:#f0f2f5;color:#111b21}
+.alee-chat-catalog-list>button{border-color:#edf0ef;color:#111b21}
+.alee-chat-catalog-list small{color:#667781}
+.alee-chat-catalog-picker>.alee-chat-options-close{color:#607276}
+#aleeChatOverlay.alee-chat-dark .alee-chat-main{background-color:#0b141a;background-image:radial-gradient(#243039 .7px,transparent .8px)}
+#aleeChatOverlay.alee-chat-dark .alee-chat-options-card,#aleeChatOverlay.alee-chat-dark .alee-chat-quick-replies,#aleeChatOverlay.alee-chat-dark .alee-chat-catalog-picker{background:#1f2c34;color:#e9edef;border-color:#2a3942}
+#aleeChatOverlay.alee-chat-dark .alee-chat-options-grid button,#aleeChatOverlay.alee-chat-dark .alee-chat-business-tools button{background:#26363c;border-color:#39464d;color:#e9edef}
+#aleeChatOverlay.alee-chat-dark .alee-chat-options-close,#aleeChatOverlay.alee-chat-dark .alee-chat-business-tools-title{color:#aebac1}
+@media(max-width:720px){.alee-chat-box{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.alee-chat-list{width:100%;flex-basis:100%}.alee-chat-main{background-size:20px 20px}.alee-chat-top{min-height:54px}.alee-chat-message{max-width:88%}.alee-chat-options-overlay{padding:0}.alee-chat-options-card{width:100%;max-height:82dvh;padding:12px 12px max(16px,env(safe-area-inset-bottom));border-radius:22px 22px 0 0}.alee-chat-options-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.alee-chat-options-grid button{min-height:80px;padding:8px 2px;font-size:10px}.alee-chat-options-grid button i{width:38px;height:38px;border-radius:13px}.alee-chat-quick-actions{padding:7px 8px}.alee-chat-quick-actions button{font-size:11px}}
+.alee-chat-options-grid button:nth-child(9) i{background:#e1f4ec;color:#13866b}
+.alee-chat-messages.wallpaper-classic{background-color:#efeae2!important;background-image:radial-gradient(circle at 20% 20%,#d9d2c833 0 2px,transparent 3px),radial-gradient(circle at 75% 55%,#d9d2c833 0 2px,transparent 3px),radial-gradient(circle at 40% 85%,#d9d2c833 0 1px,transparent 2px)!important;background-size:78px 78px,112px 112px,64px 64px!important}
+.alee-chat-messages.wallpaper-mint{background-color:#e6f4ed!important;background-image:radial-gradient(#6bb99a18 .8px,transparent 1px)!important;background-size:19px 19px!important}
+.alee-chat-messages.wallpaper-sky{background-color:#eaf2f8!important;background-image:radial-gradient(#5796ba18 .8px,transparent 1px)!important;background-size:19px 19px!important}
+.alee-chat-messages.wallpaper-peach{background-color:#fff0e7!important;background-image:radial-gradient(#de986a19 .8px,transparent 1px)!important;background-size:19px 19px!important}
+.alee-chat-wallpaper-card{width:min(440px,calc(100% - 28px));padding:20px;border:1px solid #e0e6e8;border-radius:20px;background:#fff;color:#111b21;box-shadow:0 20px 65px #0b141a33}
+.alee-chat-wallpaper-card>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9edef}
+.alee-chat-wallpaper-card h2{margin:0;font-size:20px}
+.alee-chat-wallpaper-card>header button{width:36px;height:36px;border:0;border-radius:50%;background:#f0f2f5;color:#54656f;font-size:24px;cursor:pointer}
+.alee-chat-wallpaper-card>p{margin:14px 0;color:#667781;font-size:14px}
+.alee-chat-wallpaper-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.alee-chat-wallpaper-grid>button{position:relative;display:flex;align-items:center;gap:10px;min-height:66px;padding:8px;border:1px solid #e1e8e5;border-radius:13px;background:#fff;color:#233238;text-align:left;cursor:pointer}
+.alee-chat-wallpaper-grid>button.selected{border-color:#00a884;box-shadow:0 0 0 2px #00a88422}
+.alee-chat-wallpaper-grid>button>i{margin-left:auto;color:#00a884}
+.wallpaper-swatch{display:block;flex:0 0 46px;width:46px;height:46px;border:1px solid #dfe6e4;border-radius:10px}
+.wallpaper-swatch-classic{background-color:#efeae2;background-image:radial-gradient(#b9b1a477 .9px,transparent 1px);background-size:12px 12px}
+.wallpaper-swatch-mint{background-color:#e6f4ed;background-image:radial-gradient(#13866b33 .8px,transparent 1px);background-size:10px 10px}
+.wallpaper-swatch-sky{background-color:#eaf2f8;background-image:radial-gradient(#1689d433 .8px,transparent 1px);background-size:10px 10px}
+.wallpaper-swatch-peach{background-color:#fff0e7;background-image:radial-gradient(#de986a44 .8px,transparent 1px);background-size:10px 10px}
+.wallpaper-swatch-default{background-color:#f5f7f6;background-image:radial-gradient(#9aaca533 .8px,transparent 1px);background-size:10px 10px}
+.alee-chat-wallpaper-card>.alee-chat-options-close{width:100%;margin-top:14px;padding:11px;border:0;border-radius:12px;background:#f0f2f5;color:#54656f;font-weight:700;cursor:pointer}
+#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-card{background:#1f2c34;color:#e9edef;border-color:#2a3942}
+#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-card>header{border-color:#35434a}
+#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-card>p{color:#aebac1}
+#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-grid>button{background:#26363c;border-color:#39464d;color:#e9edef}
+#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-card>header button,#aleeChatOverlay.alee-chat-dark .alee-chat-wallpaper-card>.alee-chat-options-close{background:#26363c;color:#c8d2d7}
+@media(max-width:520px){.alee-chat-wallpaper-card{width:100%;padding:18px 16px max(18px,env(safe-area-inset-bottom));border-radius:22px 22px 0 0}.alee-chat-wallpaper-overlay{padding:0;align-items:flex-end}}
