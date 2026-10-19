@@ -9,6 +9,10 @@
   let followerCount = 0;
   let followingCount = 0;
   let isFollowing = false;
+  let shopRating = 5;
+  let currentUserEmail = '';
+  let shopBlocked = false;
+  let shopOnHold = false;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const isUuid = value => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ''));
   const profileOverlay = document.getElementById('profileOverlay');
@@ -18,13 +22,54 @@
 
   function setTheme(dark) {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    const button = document.getElementById('themeToggle');
-    button.innerHTML = `<i class="fa-solid ${dark ? 'fa-sun' : 'fa-moon'}"></i>`;
-    button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     try { localStorage.setItem('alee-shop-theme', dark ? 'dark' : 'light'); } catch (_) {}
   }
-  try { setTheme(localStorage.getItem('alee-shop-theme') === 'dark'); } catch (_) { setTheme(false); }
-  document.getElementById('themeToggle').addEventListener('click', () => setTheme(document.documentElement.dataset.theme !== 'dark'));
+  try { document.documentElement.dataset.theme = localStorage.getItem('alee-shop-theme') === 'dark' ? 'dark' : 'light'; } catch (_) {}
+
+  const shopMenuToggle = document.getElementById('shopMenuToggle');
+  const shopMenu = document.getElementById('shopMenu');
+  shopMenuToggle.addEventListener('click', () => {
+    const opened = shopMenu.hasAttribute('hidden');
+    shopMenu.toggleAttribute('hidden', !opened);
+    shopMenuToggle.setAttribute('aria-expanded', String(opened));
+  });
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.shop-menu-wrap')) { shopMenu.setAttribute('hidden',''); shopMenuToggle.setAttribute('aria-expanded','false'); }
+  });
+  function localShopFlag(name) { try { return localStorage.getItem(`alee-shop-${name}-${shop?.id}`) === '1'; } catch (_) { return false; } }
+  function setLocalShopFlag(name, value) { try { localStorage.setItem(`alee-shop-${name}-${shop.id}`, value ? '1' : '0'); } catch (_) {} }
+  function refreshShopVisibility() {
+    const productsEl = document.getElementById('products');
+    if (shopBlocked || shopOnHold) {
+      productsEl.innerHTML = `<div class="empty">${shopBlocked ? 'You blocked this shop on this device.' : 'This shop is on hold on this device.'}</div>`;
+      document.getElementById('profileStatus').textContent = shopBlocked ? 'This shop is blocked on this device. Open the menu to unblock it.' : 'This shop is on hold on this device. Open the menu to resume it.';
+    }
+    const blockButton = shopMenu.querySelector('[data-shop-action="block"]');
+    const holdButton = shopMenu.querySelector('[data-shop-action="hold"]');
+    if (blockButton) blockButton.textContent = shopBlocked ? 'Unblock' : 'Block';
+    if (holdButton) holdButton.textContent = shopOnHold ? 'Resume shop' : 'Hold';
+  }
+  async function sendShopReport() {
+    const form = document.getElementById('shopReportForm');
+    if (!form) return;
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const status = form.querySelector('[role="status"]');
+      if (!currentUser) { status.textContent = 'Sign in first to send a report.'; return; }
+      const {error} = await supabase.from('shop_profile_reports').insert({shop_key:String(shop.id),reporter_id:currentUser.id,reason:form.elements.reason.value.trim(),details:form.elements.details.value.trim()});
+      status.textContent = error ? 'Report could not be sent. Check the latest seller-marketplace-schema.sql in Supabase.' : 'Thank you. Your report has been sent.';
+      if (!error) form.querySelector('button[type="submit"]').disabled = true;
+    });
+  }
+  shopMenu.addEventListener('click', event => {
+    const button = event.target.closest('[data-shop-action]'); if (!button || !shop) return;
+    const action = button.dataset.shopAction;
+    shopMenu.setAttribute('hidden',''); shopMenuToggle.setAttribute('aria-expanded','false');
+    if (action === 'block') { shopBlocked = !shopBlocked; setLocalShopFlag('blocked',shopBlocked); refreshShopVisibility(); }
+    else if (action === 'hold') { shopOnHold = !shopOnHold; setLocalShopFlag('hold',shopOnHold); refreshShopVisibility(); }
+    else if (action === 'about') openProfileDialog('About this shop', `<p><strong>${esc(shop.name)}</strong></p><p>${esc(shop.bio||shop.shopCategory||'Business')}</p><p>${esc(shop.address||'')}</p>`);
+    else if (action === 'report') { openProfileDialog('Report this shop', '<form id="shopReportForm" class="shop-report-form"><label>Reason<select name="reason" required><option value="">Choose a reason</option><option>Scam or fraud</option><option>Impersonation</option><option>Inappropriate content</option><option>Other</option></select></label><label>Details<textarea name="details" maxlength="1000" placeholder="Tell us what happened"></textarea></label><button type="submit">Send report</button><p role="status" aria-live="polite"></p></form>'); sendShopReport(); }
+  });
 
   function openProfileDialog(title, content) {
     if (!profileOverlay.classList.contains('show')) { history.pushState({...history.state,aleeShopProfileDialog:true},'',location.href); profileDialogHistoryOpen = true; }
@@ -172,8 +217,10 @@
     document.title = `${shop.name} — ALEE SHOPPING`;
     document.getElementById('headerShopName').textContent = shop.name;
     document.getElementById('headerShopLogo').src = shop.logo || 'assets/alee-logo.png';
+    shopBlocked = localShopFlag('blocked'); shopOnHold = localShopFlag('hold');
+    document.getElementById('ratingToolLink').hidden = currentUserEmail.toLowerCase() !== 'aleeshopping2026@gmail.com';
     const items = products.filter(item => String(item.shopId || shops[0]?.id || 'alee-shopping') === String(shop.id));
-    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="profile-identity"><h2 class="profile-name">${esc(shop.name)}</h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${items.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
+    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><div class="profile-avatar-wrap"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-rating-stars profile-stars" aria-label="${shopRating} out of 5 stars">${[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('')}</div></div><div class="profile-identity"><h2 class="profile-name">${esc(shop.name)}</h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${items.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
     document.getElementById('followersStat').addEventListener('click', showFollowers);
     document.getElementById('followingStat').addEventListener('click', showFollowing);
     document.getElementById('adsStat').addEventListener('click', () => document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'}));
@@ -181,6 +228,7 @@
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
     document.getElementById('products').innerHTML = items.length ? items.map(item => `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">LKR ${Number(item.price||0).toLocaleString()}</div></a>`).join('') : '<div class="empty">This business has no ads yet.</div>';
+    refreshShopVisibility();
   }
 
   async function loadShop() {
@@ -194,8 +242,9 @@
       }
     }
     if (supabase) {
-      try { const {data}=await supabase.auth.getUser(); currentUser=data?.user||null; } catch (_) {}
+      try { const {data}=await supabase.auth.getUser(); currentUser=data?.user||null; currentUserEmail=currentUser?.email||''; } catch (_) {}
     }
+    if (shop && supabase) { const {data}=await supabase.from('shop_profile_ratings').select('stars').eq('shop_key',String(shop.id)).maybeSingle(); if(data) shopRating=Math.max(0,Math.min(5,Number(data.stars)||0)); else shopRating=Number(shop.rating||5); }
     renderProfile();
     if (shop && supabase) await getBusinessStats();
   }
