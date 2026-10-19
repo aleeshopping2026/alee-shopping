@@ -126,20 +126,6 @@ create policy "Users can update their own chat preferences" on public.seller_cha
   ));
 grant select, insert, update on public.seller_chat_preferences to authenticated;
 
--- Saved replies are private to the signed-in account and available on its devices.
-create table if not exists public.seller_chat_quick_replies (
-  user_id uuid not null references auth.users(id) on delete cascade,
-  shortcut text not null check (char_length(shortcut) between 1 and 40),
-  message text not null check (char_length(message) between 1 and 1500),
-  updated_at timestamptz not null default now(),
-  primary key (user_id, shortcut)
-);
-alter table public.seller_chat_quick_replies enable row level security;
-drop policy if exists "Users can manage their own quick replies" on public.seller_chat_quick_replies;
-create policy "Users can manage their own quick replies" on public.seller_chat_quick_replies
-  for all to authenticated using (user_id = (select auth.uid()))
-  with check (user_id = (select auth.uid()));
-grant select, insert, update, delete on public.seller_chat_quick_replies to authenticated;
 
 drop policy if exists "Users can read their chat blocks" on public.seller_chat_blocks;
 create policy "Users can read their chat blocks" on public.seller_chat_blocks
