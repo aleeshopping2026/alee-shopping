@@ -1,0 +1,58 @@
+[
+  {
+    "id": "shop-white",
+    "label": "White (default)",
+    "file": "shop-white.png",
+    "default": true
+  },
+  {
+    "id": "shop-pink",
+    "label": "Soft pink",
+    "file": "shop-pink.png"
+  },
+  {
+    "id": "alee-orange",
+    "label": "ALEE orange",
+    "file": "alee-orange.png"
+  },
+  {
+    "id": "shop-green",
+    "label": "Fresh green",
+    "file": "shop-green.png"
+  },
+  {
+    "id": "shop-blue",
+    "label": "Sky blue",
+    "file": "shop-blue.png"
+  },
+  {
+    "id": "shop-blue-soft",
+    "label": "Soft blue",
+    "file": "shop-blue-soft.png"
+  },
+  {
+    "id": "shop-yellow",
+    "label": "Sunny yellow",
+    "file": "shop-yellow.png"
+  },
+  {
+    "id": "shop-purple",
+    "label": "Purple",
+    "file": "shop-purple.png"
+  },
+  {
+    "id": "shop-teal-dark",
+    "label": "Deep teal",
+    "file": "shop-teal-dark.png"
+  },
+  {
+    "id": "shop-teal",
+    "label": "Ocean teal",
+    "file": "shop-teal.png"
+  },
+  {
+    "id": "shop-black",
+    "label": "Black",
+    "file": "shop-black.png"
+  }
+]
