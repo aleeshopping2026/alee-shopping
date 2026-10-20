@@ -1,0 +1,11 @@
+WALLPAPER ADD-ON SETUP
+
+Add as many built-in chat wallpapers as you need:
+1. Copy each original image into assets/chat-wallpapers/ (PNG, JPG, or WebP).
+2. Open assets/chat-wallpapers/wallpapers.json.
+3. Add one item to the JSON wallpapers array, using a unique id (letters/numbers/hyphens), a label, and the exact image filename. Example:
+   { "id": "shop-lavender", "label": "Lavender", "file": "shop-lavender.png" }
+4. For a new site default, set "default": true on exactly one item. Keep shop-white as default if new logins should see the white wallpaper.
+5. Upload the edited chat.js, chat.css, index.html, shop.html, and the complete assets/chat-wallpapers folder to the website. The picker reads wallpapers.json automatically.
+
+The supplied wallpaper art is kept as the original PNG. It scales to the chat width with its proportions preserved and repeats vertically on phone and computer screens. The “Choose from gallery” option can still be used for a one-chat personal wallpaper.

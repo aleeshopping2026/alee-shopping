@@ -172,3 +172,14 @@
 .wallpaper-swatch{background-position:center;background-size:cover;background-repeat:no-repeat}
 .wallpaper-swatch-shop-blue-soft{background-color:#b9e7fb}
 @media(max-width:720px){.alee-chat-box{height:var(--alee-chat-visual-height,100dvh);max-height:var(--alee-chat-visual-height,100dvh)}.alee-chat-send textarea{resize:none}.alee-chat-thread-head{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}}
+/* Keep the mobile chat header and composer fixed around a keyboard-resized viewport. */
+@media(max-width:720px){
+  #aleeChatOverlay .alee-chat-box{height:var(--alee-chat-visual-height,100dvh)!important;max-height:var(--alee-chat-visual-height,100dvh)!important;min-height:0}
+  #aleeChatOverlay .alee-chat-main{min-height:0;overflow:hidden}
+  #aleeChatOverlay .alee-chat-thread-head{position:relative;z-index:2;flex:0 0 60px;min-height:60px;box-sizing:border-box}
+  #aleeChatOverlay .alee-chat-quick-actions{flex:0 0 auto}
+  #aleeChatOverlay .alee-chat-messages{flex:1 1 auto;min-height:0;overscroll-behavior:contain}
+  #aleeChatOverlay .alee-chat-status:empty{display:none}
+  #aleeChatOverlay .alee-chat-send{position:relative;z-index:2;flex:0 0 auto;padding-bottom:max(8px,env(safe-area-inset-bottom));}
+  #aleeChatOverlay .alee-chat-send textarea{scroll-margin:0;resize:none}
+}
