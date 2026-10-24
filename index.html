@@ -493,6 +493,15 @@
     .seller-action-button,.seller-item-action { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:40px; padding:8px 12px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; }
     .seller-action-button.primary,.seller-item-action.edit { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
     .seller-item-action.delete { color:#ef4444; }
+    .seller-action-button.danger { color:#dc2626; border-color:#fecaca; }
+    .account-profile-setup { z-index:16000; align-items:center; }
+    .account-profile-setup-card { width:min(620px,100%); }
+    .account-profile-setup .seller-header { padding:8px 4px 14px; border-bottom:1px solid var(--glass-border); }
+    .account-private-details { display:grid; gap:8px; margin:14px 0; }
+    .account-private-details>div { display:grid; grid-template-columns:100px minmax(0,1fr); gap:12px; padding:11px 13px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); }
+    .account-private-details span { color:#888; font-size:12px; }
+    .account-private-details strong { font-size:13px; font-weight:600; overflow-wrap:anywhere; }
+    #accountDeleteShopMenu[hidden],#mobileDeleteShopMenu[hidden],#accountSignInMenu[hidden],#mobileAccountSignIn[hidden],#mobileAccountLogout[hidden],#accountProfileRetry[hidden] { display:none !important; }
     .seller-product-row { display:grid; grid-template-columns:64px minmax(0,1fr) auto; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--glass-border); }
     .seller-product-row:last-child { border-bottom:0; }
     .seller-product-row img { width:64px; height:58px; object-fit:contain; border-radius:8px; background:white; }
@@ -566,7 +575,7 @@
       
       <div class="header-actions">
         <a class="header-shop-button" href="shops.html" target="_blank" rel="noopener"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
-        <button class="header-account-button" type="button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i> My Account</button>
+        <button class="header-account-button" type="button" onclick="openBuyerAccount()"><i class="fa-regular fa-user"></i> My Account</button>
         <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
         <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
@@ -585,11 +594,14 @@
         
         <!-- Dropdown Menu for Logout / Switch Email -->
         <div class="profile-dropdown" id="profileDropdown">
+          <div class="dropdown-item" onclick="openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</div>
+          <div class="dropdown-item" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</div>
+          <div class="dropdown-item" onclick="switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</div>
+          <div class="dropdown-item" id="accountDeleteShopMenu" onclick="deleteSellerShop()" hidden style="color:#ef4444"><i class="fa-solid fa-trash"></i> Delete Shop</div>
           <div class="dropdown-item" onclick="editAccountDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</div>
-          <div class="dropdown-item" onclick="openAccountModal()">
+          <div class="dropdown-item" id="accountSignInMenu" onclick="openAccountModal()">
             <i class="fa-solid fa-right-to-bracket"></i> Sign In / Create Account
           </div>
-        <div class="dropdown-item" onclick="openSellerAccount()"><i class="fa-solid fa-store"></i> My Shop &amp; Items</div>
         <div class="dropdown-item" onclick="location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</div>
           <div class="dropdown-item" onclick="logoutUser()" style="color: #ef4444;">
             <i class="fa-solid fa-right-from-bracket"></i> Log Out
@@ -675,8 +687,11 @@
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileAccountTitle">
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openSellerAccount()"><i class="fa-solid fa-store"></i> Open Shop</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</button>
-        <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet');openSellerAccount()">My Shop &amp; Items</button>
+        <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet');switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
+        <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet');deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
         <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet');openAccountModal()">Sign In / Create Account</button>
         <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser();closeMobileSheet('mobileAccountSheet')">Log Out</button>
       </section>
@@ -692,7 +707,7 @@
       <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><i class="fa-solid fa-border-all"></i><span>Categories</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><i class="fa-solid fa-store"></i><span>Shops</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
-      <button type="button" class="mobile-nav-button" onclick="openSellerAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMobileAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
 
     <!-- Product Popup / Daraz-style details -->
@@ -801,24 +816,28 @@
     </div>
   </div>
 
-  <div class="role-overlay" id="accountRoleDialog" onclick="if(event.target===this)closeAccountRoleDialog()" role="dialog" aria-modal="true" aria-labelledby="accountRoleTitle">
-    <section class="role-card">
-      <h2 id="accountRoleTitle">Welcome to ALEE SHOPPING</h2>
-      <p id="accountRoleEmail"></p>
-      <p>Login successful. Choose Buyer for a personal profile or Seller to create and manage a shop.</p>
-      <p>Choose how you want to use your account.</p>
-      <button class="role-option" type="button" onclick="chooseAccountRole('buyer')"><i class="fa-solid fa-bag-shopping"></i><span><strong>Buyer</strong><small>Browse products, place orders, and message shops.</small></span></button>
-      <button class="role-option" type="button" onclick="chooseAccountRole('seller')"><i class="fa-solid fa-store"></i><span><strong>Seller</strong><small>Create and manage your shop and products.</small></span></button>
-      <div class="seller-notice" id="accountRoleStatus" role="status" aria-live="polite"></div>
-    </section>
+  <div class="seller-overlay account-profile-setup" id="accountProfileSetup" role="dialog" aria-modal="true" aria-labelledby="accountProfileSetupTitle">
+    <div class="seller-card account-profile-setup-card">
+      <div class="seller-header"><div><h2 id="accountProfileSetupTitle">Create your ALEE Profile</h2><div class="seller-subtitle" id="accountProfileSetupEmail"></div></div></div>
+      <section class="seller-panel"><p class="seller-muted">Add your personal details once to continue. These details are private to your account and are not shown on your public shop.</p>
+        <form id="accountProfileSetupForm" onsubmit="saveAccountProfile(event)">
+          <div class="seller-form-grid"><label>Full name<input name="fullName" autocomplete="name" minlength="2" maxlength="80" required placeholder="Your name"></label><label>Mobile number<input name="mobile" type="tel" inputmode="tel" autocomplete="tel" minlength="5" maxlength="32" required placeholder="+94 77 123 4567"></label></div>
+          <label>Home / delivery address<textarea name="address" autocomplete="street-address" minlength="3" maxlength="500" required placeholder="Your address"></textarea></label>
+          <div class="seller-notice" id="accountProfileSetupStatus" role="status" aria-live="polite"></div>
+          <button class="seller-action-button" id="accountProfileRetry" type="button" onclick="retryPrivateAccountProfile()" hidden><i class="fa-solid fa-rotate"></i> Check again</button>
+          <button class="seller-action-button primary" id="accountProfileSetupSubmit" type="submit"><i class="fa-solid fa-shield-halved"></i> Save private profile</button>
+        </form>
+      </section>
+    </div>
   </div>
 
   <div class="seller-overlay" id="buyerDashboard" onclick="if(event.target===this)closeBuyerAccount()" role="dialog" aria-modal="true" aria-labelledby="buyerDashboardTitle">
     <div class="seller-card">
-      <div class="seller-header"><div><h2 id="buyerDashboardTitle">Buyer Profile</h2><div class="seller-subtitle">Your ALEE SHOPPING account</div></div><button class="seller-close" type="button" onclick="closeBuyerAccount()" aria-label="Close">&times;</button></div>
-      <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Buyer profile picture"></div><h3 id="buyerProfileName">Buyer</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
-        <form id="buyerDetailsForm" onsubmit="saveBuyerDetails(event)" hidden><label>Display name<input id="buyerDisplayName" maxlength="80" required></label><button class="seller-action-button primary" type="submit">Save details</button><div class="seller-notice" id="buyerDetailsStatus" role="status"></div></form>
-        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
+      <div class="seller-header"><div><h2 id="buyerDashboardTitle">My ALEE Profile</h2><div class="seller-subtitle">Your personal account details are private</div></div><button class="seller-close" type="button" onclick="closeBuyerAccount()" aria-label="Close">&times;</button></div>
+      <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Your profile picture"></div><h3 id="buyerProfileName">Your profile</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
+        <div class="seller-muted"><i class="fa-solid fa-lock"></i> Only you can see these personal details.</div><div class="account-private-details" id="buyerPrivateDetails"><div><span>Mobile</span><strong id="buyerPrivateMobile">—</strong></div><div><span>Address</span><strong id="buyerPrivateAddress">—</strong></div></div>
+        <form id="buyerDetailsForm" onsubmit="saveBuyerDetails(event)" hidden><div class="seller-form-grid"><label>Full name<input id="buyerDisplayName" minlength="2" maxlength="80" autocomplete="name" required></label><label>Mobile number<input id="buyerMobile" type="tel" inputmode="tel" minlength="5" maxlength="32" autocomplete="tel" required></label></div><label>Home / delivery address<textarea id="buyerAddress" minlength="3" maxlength="500" autocomplete="street-address" required></textarea></label><button class="seller-action-button primary" type="submit">Save private details</button><div class="seller-notice" id="buyerDetailsStatus" role="status"></div></form>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-action-button primary" type="button" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</button></div>
       </section>
     </div>
   </div>
@@ -831,7 +850,7 @@
         <h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div>
         <div class="seller-social-links" id="sellerShopSocials"></div>
         <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
-        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Buyer Profile</button></div>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Switch profile</button><button class="seller-action-button danger" type="button" onclick="deleteSellerShop()"><i class="fa-solid fa-trash"></i> Delete Shop</button></div>
         <button class="seller-action-button primary" id="sendShopDetailsButton" type="button" onclick="sendShopDetailsToAlee()"><i class="fa-brands fa-whatsapp"></i> Send Details to ALEE SHOPPING</button>
       </section>
       <section class="seller-panel" id="sellerShopFormPanel"><h3 id="sellerShopFormTitle">Create Shop</h3><form id="sellerShopForm" onsubmit="saveSellerShop(event)">
@@ -907,6 +926,8 @@
     const supabaseClient = window.aleeSupabase || null;
     let activeUser = null;
     let currentSellerShop = null;
+    let privateAccountProfile = null;
+    let accountProfileCheckPromise = null;
     let phoneLoginInstance = null;
     let phoneLoginPendingNumber = '';
     let phoneInputLibraryPromise = null;
@@ -928,62 +949,78 @@
       const status=document.getElementById('accountStatus');
       if(!supabaseClient){status.textContent='Supabase login is not configured. See the setup guide.';return;}
       status.textContent='Opening Google sign-in…';
-      try{sessionStorage.setItem('alee-login-pending','1');}catch(error){}
       const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0],queryParams:{prompt:'select_account'}}});
-      if(error){try{sessionStorage.removeItem('alee-login-pending');}catch(storageError){}status.textContent=`Google sign-in failed: ${error.message}`;}
+      if(error)status.textContent=`Google sign-in failed: ${error.message}`;
     }
 
     function getAccountRole() {
-      if(!activeUser)return null;
-      try{return localStorage.getItem(`alee-account-role:${activeUser.id}`);}catch(error){return null;}
+      if(!activeUser)return 'buyer';
+      try{return localStorage.getItem(`alee-account-role:${activeUser.id}`)==='seller'?'seller':'buyer';}catch(error){return 'buyer';}
     }
 
-    function openMessagesForCurrentRole() {
-      if(!activeUser) {
-        openAccountModal();
-        document.getElementById('accountStatus').textContent='Sign in to open your messages.';
-        return;
-      }
-      const role=getAccountRole();
-      if(!role) {
-        window.aleePendingMessages=true;
-        showAccountRoleDialog();
-        return;
-      }
-      if(window.aleeChat) window.aleeChat.openInbox(role);
+    async function openMessagesForCurrentRole() {
+      if(!activeUser) { openAccountModal();document.getElementById('accountStatus').textContent='Sign in to open your messages.';return; }
+      if(!await ensurePrivateAccountProfile())return;
+      if(window.aleeChat)window.aleeChat.openInbox(getAccountRole());
     }
 
-    function showAccountRoleDialog() {
-      if(!activeUser)return;
-      if(getAccountRole())return;
-      if(document.getElementById('accountRoleDialog').classList.contains('show'))return;
-      closeAccountModal();
-      document.getElementById('accountRoleEmail').textContent=activeUser.email||'Signed in';
-      document.getElementById('accountRoleDialog').classList.add('show');
+    // The old Buyer/Seller chooser is now the required, owner-only ALEE Profile setup.
+    async function ensurePrivateAccountProfile() {
+      if(!activeUser||!supabaseClient)return false;
+      if(accountProfileCheckPromise)return accountProfileCheckPromise;
+      accountProfileCheckPromise=(async()=>{
+        const user=activeUser;
+        const status=document.getElementById('accountProfileSetupStatus'),submit=document.getElementById('accountProfileSetupSubmit'),form=document.getElementById('accountProfileSetupForm'),overlay=document.getElementById('accountProfileSetup');
+        document.getElementById('accountProfileSetupEmail').textContent=user.email||'Your details are private to your account';
+        const {data,error}=await supabaseClient.from('alee_profiles').select('full_name,address,mobile').eq('user_id',user.id).maybeSingle();
+        if(activeUser?.id!==user.id)return false;
+        if(error){overlay.classList.add('show');status.textContent=!navigator.onLine?'Could not connect to load your private profile. Reconnect, then check again.':'Private profile setup is not ready. Run account-profile-schema.sql in Supabase, then check again.';submit.disabled=true;document.getElementById('accountProfileRetry').hidden=false;return false;}
+        submit.disabled=false;document.getElementById('accountProfileRetry').hidden=true;
+        if(data){privateAccountProfile=data;overlay.classList.remove('show');
+          document.getElementById('buyerProfileName').textContent=data.full_name;
+          document.getElementById('buyerPrivateMobile').textContent=data.mobile;
+          document.getElementById('buyerPrivateAddress').textContent=data.address;
+          return true;
+        }
+        privateAccountProfile=null;closeAccountModal();form.elements.fullName.value=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'';form.elements.mobile.value='';form.elements.address.value='';status.textContent='';overlay.classList.add('show');return false;
+      })();
+      try{return await accountProfileCheckPromise;}catch(error){console.error(error);document.getElementById('accountProfileSetup').classList.add('show');document.getElementById('accountProfileSetupSubmit').disabled=true;document.getElementById('accountProfileRetry').hidden=false;document.getElementById('accountProfileSetupStatus').textContent='Could not load your private profile. Check your internet connection, then check again.';return false;}finally{accountProfileCheckPromise=null;}
     }
 
-    function closeAccountRoleDialog() { document.getElementById('accountRoleDialog').classList.remove('show'); }
+    function retryPrivateAccountProfile(){document.getElementById('accountProfileRetry').hidden=true;document.getElementById('accountProfileSetupStatus').textContent='Checking private profile…';ensurePrivateAccountProfile();}
 
-    function chooseAccountRole(role) {
-      if(!activeUser||!['buyer','seller'].includes(role))return;
-      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,role);}catch(error){}
-      closeAccountRoleDialog();
-      if(window.aleePendingMessages) { window.aleePendingMessages=false; if(window.aleeChat) window.aleeChat.openInbox(role); return; }
-      if(role==='buyer')openBuyerAccount();else openSellerAccount(true);
+    async function saveAccountProfile(event) {
+      event.preventDefault();if(!activeUser||!supabaseClient)return;
+      const form=event.currentTarget,status=document.getElementById('accountProfileSetupStatus'),button=document.getElementById('accountProfileSetupSubmit');
+      const user=activeUser,profile={user_id:activeUser.id,full_name:form.elements.fullName.value.trim(),mobile:form.elements.mobile.value.trim(),address:form.elements.address.value.trim()};
+      if(!profile.full_name||!profile.mobile||profile.address.length<3){status.textContent='Enter your name, mobile number, and full address.';return;}
+      button.disabled=true;status.textContent='Saving your private profile…';
+      const {data,error}=await supabaseClient.from('alee_profiles').upsert(profile,{onConflict:'user_id'}).select('full_name,address,mobile').single();
+      button.disabled=false;
+      if(activeUser?.id!==user.id)return;
+      if(error){status.textContent=`Could not save your profile. Run account-profile-schema.sql in Supabase and try again. ${error.message}`;return;}
+      privateAccountProfile=data;document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('accountProfileSetup').classList.remove('show');
     }
 
     function switchAccountRole(role) {
       if(!activeUser)return;
-      closeBuyerAccount();closeSellerAccount();
-      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,role);}catch(error){}
-      if(role==='buyer')openBuyerAccount();else openSellerAccount(true);
+      const next=role==='seller'?'seller':'buyer';try{localStorage.setItem(`alee-account-role:${activeUser.id}`,next);}catch(error){}
+      closeBuyerAccount();closeSellerAccount();document.getElementById('profileDropdown')?.classList.remove('show');
+      if(next==='buyer')openBuyerAccount();else openSellerAccount(true);
     }
 
-    function openBuyerAccount() {
-      if(!activeUser)return;
+    function switchAccountSurface(){switchAccountRole(getAccountRole()==='seller'?'buyer':'seller');}
+
+    async function openBuyerAccount() {
       document.getElementById('profileDropdown')?.classList.remove('show');
+      if(!activeUser){openAccountModal();return;}
+      if(!await ensurePrivateAccountProfile())return;
+      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'buyer');}catch(error){}
+      closeSellerAccount();
       document.getElementById('buyerProfileEmail').textContent=activeUser.email||'Signed in';
-      document.getElementById('buyerProfileName').textContent=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'Buyer';
+      document.getElementById('buyerProfileName').textContent=privateAccountProfile?.full_name||'Your profile';
+      document.getElementById('buyerPrivateMobile').textContent=privateAccountProfile?.mobile||'—';
+      document.getElementById('buyerPrivateAddress').textContent=privateAccountProfile?.address||'—';
       document.getElementById('buyerProfileImage').src=activeUser.user_metadata?.avatar_url||activeUser.user_metadata?.picture||'assets/alee-logo.png';
       document.getElementById('buyerDashboard').classList.add('show');
     }
@@ -993,43 +1030,83 @@
     async function editAccountDetails() {
       document.getElementById('profileDropdown')?.classList.remove('show');
       if(!activeUser){openAccountModal();return;}
-      if(getAccountRole()==='seller'){
-        await openSellerAccount(true);
-        if(currentSellerShop)editSellerShop();
-      } else { openBuyerAccount();editBuyerDetails(); }
+      await openBuyerAccount();if(privateAccountProfile)editBuyerDetails();
     }
 
     function editBuyerDetails() {
-      if(!activeUser)return;
-      const form=document.getElementById('buyerDetailsForm');
-      form.hidden=false;
-      document.getElementById('buyerDisplayName').value=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'';
+      if(!activeUser||!privateAccountProfile)return;
+      const form=document.getElementById('buyerDetailsForm');form.hidden=false;
+      document.getElementById('buyerDisplayName').value=privateAccountProfile.full_name||'';
+      document.getElementById('buyerMobile').value=privateAccountProfile.mobile||'';
+      document.getElementById('buyerAddress').value=privateAccountProfile.address||'';
     }
 
     async function saveBuyerDetails(event) {
-      event.preventDefault();
-      const name=document.getElementById('buyerDisplayName').value.trim();
-      const status=document.getElementById('buyerDetailsStatus');
-      if(!name||!supabaseClient){status.textContent='Could not update details. Please sign in again.';return;}
-      status.textContent='Saving…';
-      const {data,error}=await supabaseClient.auth.updateUser({data:{full_name:name,name}});
-      if(error){status.textContent=error.message;return;}
-      setLoggedInUser(data.user||activeUser);
-      document.getElementById('buyerProfileName').textContent=name;
-      status.textContent='Details saved.';
+      event.preventDefault();if(!activeUser||!supabaseClient)return;
+      const user=activeUser,status=document.getElementById('buyerDetailsStatus'),profile={user_id:activeUser.id,full_name:document.getElementById('buyerDisplayName').value.trim(),mobile:document.getElementById('buyerMobile').value.trim(),address:document.getElementById('buyerAddress').value.trim()};
+      status.textContent='Saving private details…';
+      const {data,error}=await supabaseClient.from('alee_profiles').upsert(profile,{onConflict:'user_id'}).select('full_name,address,mobile').single();
+      if(activeUser?.id!==user.id)return;
+      if(error){status.textContent=`Could not save your details. ${error.message}`;return;}
+      privateAccountProfile=data;document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerDetailsForm').hidden=true;status.textContent='Private details saved.';
     }
 
-    async function openSellerAccount(skipRolePrompt=false) {
+    async function openSellerAccount() {
       document.getElementById('profileDropdown')?.classList.remove('show');
-      if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in with Google first to create a shop and add items.';return;}
-      const role=getAccountRole();
-      if(!role&&!skipRolePrompt){showAccountRoleDialog();return;}
-      if(role==='buyer'&&!skipRolePrompt){openBuyerAccount();return;}
-      document.getElementById('sellerDashboard').classList.add('show');
+      if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to create and manage your shop.';return;}
+      if(!await ensurePrivateAccountProfile())return;
+      try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'seller');}catch(error){}
+      closeBuyerAccount();document.getElementById('sellerDashboard').classList.add('show');
       document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
       await loadSellerWorkspace();
     }
     function closeSellerAccount() { document.getElementById('sellerDashboard').classList.remove('show'); }
+
+    async function refreshAccountShopActions() {
+      const removeButton=document.getElementById('accountDeleteShopMenu');
+      const mobileRemoveButton=document.getElementById('mobileDeleteShopMenu');
+      if(!removeButton)return;
+      if(!activeUser||!supabaseClient){removeButton.hidden=true;if(mobileRemoveButton)mobileRemoveButton.hidden=true;return;}
+      const {data,error}=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();
+      removeButton.hidden=Boolean(error||!data);if(mobileRemoveButton)mobileRemoveButton.hidden=Boolean(error||!data);
+    }
+
+    async function deleteSellerShop() {
+      document.getElementById('profileDropdown')?.classList.remove('show');
+      if(!activeUser||!supabaseClient){openAccountModal();return;}
+      const result=await supabaseClient.from('seller_shops').select('*').eq('owner_id',activeUser.id).maybeSingle();
+      if(result.error){alert('Could not load your shop. Please try again.');return;}
+      const shop=result.data;currentSellerShop=shop||null;
+      if(!shop){document.getElementById('accountDeleteShopMenu').hidden=true;if(document.getElementById('mobileDeleteShopMenu'))document.getElementById('mobileDeleteShopMenu').hidden=true;alert('There is no shop to delete.');return;}
+      const confirmed=window.confirm(`Permanently delete “${shop.shop_name}” and all related shop data, including products, reels, chats, followers and order records? This cannot be undone.`);
+      if(!confirmed)return;
+      const sellerDashboardWasOpen=document.getElementById('sellerDashboard').classList.contains('show');
+      const status=document.getElementById('sellerDashboardStatus'),buttons=[...document.querySelectorAll('#sellerDashboard [onclick="deleteSellerShop()"],#accountDeleteShopMenu,#mobileDeleteShopMenu')];
+      buttons.forEach(button=>button.disabled=true);if(status)status.textContent='Removing your shop and its public content…';
+      try{
+        const products=await supabaseClient.from('seller_products').select('image_urls').eq('shop_id',shop.id).eq('owner_id',activeUser.id);
+        if(products.error)throw new Error(`Could not collect the shop's product photos: ${products.error.message}`);
+        let reels=[];
+        const reelResult=await supabaseClient.from('seller_reels').select('storage_path').eq('shop_id',shop.id).eq('owner_id',activeUser.id);
+        if(!reelResult.error)reels=reelResult.data||[];
+        else if(!['42P01','PGRST205'].includes(reelResult.error.code))throw new Error(`Could not collect the shop's reels: ${reelResult.error.message}`);
+        const {error}=await supabaseClient.rpc('delete_my_shop',{p_shop_id:shop.id});
+        if(error)throw new Error(`Could not delete the shop. Run the latest account-profile-schema.sql in Supabase, then try again. ${error.message}`);
+        currentSellerShop=null;sellerProducts=[];
+        let mediaWarning='';
+        try{await removeSellerImages([shop.logo_url,...(products.data||[]).flatMap(item=>item.image_urls||[])]);}
+        catch(error){mediaWarning=' Some uploaded product/shop images could not be cleaned up automatically.';console.warn('Shop images were not fully removed from storage.',error);}
+        const reelPaths=reels.map(row=>row.storage_path).filter(path=>path&&String(path).startsWith(`${activeUser.id}/`));
+        if(reelPaths.length){const {error:mediaError}=await supabaseClient.storage.from('seller-reels').remove(reelPaths);if(mediaError){mediaWarning+=' Some reel videos could not be cleaned up automatically.';console.warn('Shop reel videos were not fully removed from storage.',mediaError);}}
+        document.getElementById('accountDeleteShopMenu').hidden=true;if(document.getElementById('mobileDeleteShopMenu'))document.getElementById('mobileDeleteShopMenu').hidden=true;
+        await loadSellerCatalog();
+        if(document.getElementById('sellerDashboard').classList.contains('show'))await loadSellerWorkspace();
+        if(status)status.textContent=`Shop and all related records, including order history, were deleted.${mediaWarning}`;
+        if(!sellerDashboardWasOpen)showCartToast(mediaWarning?`Shop “${shop.shop_name}” was deleted; some media could not be cleaned up.`:`Shop “${shop.shop_name}” and its related data were deleted.`,4200);
+        try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'buyer');}catch(error){}
+      }catch(error){console.error(error);if(status)status.textContent=error.message||'Could not remove the shop. Please try again.';else alert(error.message||'Could not remove the shop. Please try again.');}
+      finally{buttons.forEach(button=>button.disabled=false);}
+    }
 
     function mapSellerShop(row) {
       return {id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
@@ -1094,7 +1171,7 @@
     }
 
     async function removeSellerImages(urls) {
-      const paths=(urls||[]).map(getSellerStoragePath).filter(Boolean);
+      const paths=[...new Set((urls||[]).map(getSellerStoragePath).filter(Boolean))];
       if(paths.length){const {error}=await supabaseClient.storage.from('seller-uploads').remove(paths);if(error)throw error;}
     }
 
@@ -1131,6 +1208,7 @@
         const {data:shop,error:shopError}=await supabaseClient.from('seller_shops').select('*').eq('owner_id',activeUser.id).maybeSingle();
         if(shopError) throw shopError;
         currentSellerShop=shop||null;
+        const deleteShopMenu=document.getElementById('accountDeleteShopMenu'),mobileDeleteShopMenu=document.getElementById('mobileDeleteShopMenu');if(deleteShopMenu)deleteShopMenu.hidden=!currentSellerShop;if(mobileDeleteShopMenu)mobileDeleteShopMenu.hidden=!currentSellerShop;
         const profile=document.getElementById('sellerShopProfile'), formPanel=document.getElementById('sellerShopFormPanel');
         const productPanel=document.getElementById('sellerProductPanel'),listPanel=document.getElementById('sellerProductListPanel');
         if(currentSellerShop){
@@ -1433,7 +1511,7 @@
         } else {
           const token=document.getElementById('phoneOtpInput').value.trim();if(!/^\d{6,8}$/.test(token)){status.textContent='Enter the SMS verification code.';return;}
           status.textContent='Verifying code…';const {data,error}=await supabaseClient.auth.verifyOtp({phone:phoneLoginPendingNumber,token,type:'sms'});if(error)throw error;
-          setLoggedInUser(data.user);closeAccountModal();await loadSellerCatalog();showAccountRoleDialog();
+          setLoggedInUser(data.user);closeAccountModal();await loadSellerCatalog();ensurePrivateAccountProfile();
         }
       } catch(error) {console.error(error);status.textContent=error.message||'Phone sign-in failed. Check the number and try again.';}
       finally {button.disabled=false;}
@@ -1467,7 +1545,7 @@
         setLoggedInUser(data.user);
         closeAccountModal();
         await loadSellerCatalog();
-        showAccountRoleDialog();
+        ensurePrivateAccountProfile();
       } catch (err) {
         status.textContent = 'Sign-in failed. Check your email and password, then try again.';
       } finally { button.disabled = false; }
@@ -1489,7 +1567,7 @@
           setLoggedInUser(data.user);
           closeAccountModal();
           await loadSellerCatalog();
-          showAccountRoleDialog();
+          ensurePrivateAccountProfile();
         } else {
           status.textContent = 'Account created. Check your email and confirm your account before signing in.';
         }
@@ -1499,6 +1577,7 @@
     }
 
     function setLoggedInUser(user) {
+      if(activeUser?.id!==user?.id){privateAccountProfile=null;currentSellerShop=null;sellerProducts=[];document.getElementById('accountProfileSetupForm').reset();document.getElementById('buyerDetailsForm').reset();document.getElementById('buyerDetailsForm').hidden=true;document.getElementById('buyerDetailsStatus').textContent='';document.getElementById('accountProfileSetupStatus').textContent='';document.getElementById('accountProfileRetry').hidden=true;}
       activeUser = user || null;
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
@@ -1506,6 +1585,10 @@
       document.getElementById('mobileAccountNavLabel').textContent = 'My Account';
       document.getElementById('mobileAccountNavLabel').title = user ? label : 'My Account';
       badge.classList.toggle('guest', !user);
+      document.getElementById('accountSignInMenu').hidden=Boolean(user);
+      document.getElementById('mobileAccountEmail').textContent=user?.email||'';
+      document.getElementById('mobileAccountSignIn').hidden=Boolean(user);document.getElementById('mobileAccountLogout').hidden=!user;
+      if(!user){document.getElementById('accountProfileSetup').classList.remove('show');document.getElementById('accountDeleteShopMenu').hidden=true;document.getElementById('mobileDeleteShopMenu').hidden=true;}
       if(user && window.aleeChat && !window.aleePendingChatOpening){
         const params=new URLSearchParams(location.search),shopId=params.get('chatShop');
         if(shopId){window.aleePendingChatOpening=true;const shopName=params.get('chatShopName')||'Shop';params.delete('chatShop');params.delete('chatShopName');history.replaceState({},'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);window.setTimeout(()=>window.aleeChat.openShop(shopId,shopName),0);}
@@ -1515,7 +1598,7 @@
     function handleProfileClick(e) {
       e.stopPropagation();
       if (!activeUser) openAccountModal();
-      else document.getElementById('profileDropdown').classList.toggle('show');
+      else {const menu=document.getElementById('profileDropdown');menu.classList.toggle('show');if(menu.classList.contains('show'))refreshAccountShopActions();}
     }
 
     async function logoutUser() {
@@ -1523,7 +1606,7 @@
       setLoggedInUser(null);
       document.getElementById('profileDropdown').classList.remove('show');
       closeSellerAccount();
-      closeBuyerAccount();closeAccountRoleDialog();
+      closeBuyerAccount();document.getElementById('accountProfileSetup').classList.remove('show');
     }
 
     const siteLoader=document.getElementById('siteLoader');
@@ -1536,14 +1619,13 @@
       if (supabaseClient) {
         const { data } = await supabaseClient.auth.getSession();
         setLoggedInUser(data.session?.user || null);
-        let loginPending=false;try{loginPending=sessionStorage.getItem('alee-login-pending')==='1';sessionStorage.removeItem('alee-login-pending');}catch(error){}
-        if(data.session?.user&&loginPending)showAccountRoleDialog();
+        if(data.session?.user)ensurePrivateAccountProfile();
         supabaseClient.auth.onAuthStateChange((event, session) => {
           setLoggedInUser(session?.user || null);
           if (session?.user) {
             closeAccountModal();
-            if(event==='SIGNED_IN')window.setTimeout(showAccountRoleDialog,0);
-          }
+            if(event==='SIGNED_IN')window.setTimeout(ensurePrivateAccountProfile,0);
+          } else {privateAccountProfile=null;document.getElementById('accountProfileSetup').classList.remove('show');}
           window.setTimeout(()=>loadSellerCatalog(),0);
         });
       } else setLoggedInUser(null);
@@ -2117,7 +2199,7 @@
     }
 
     function openMobileAccount() {
-      openSellerAccount();
+      openBuyerAccount();
     }
 
     function sortProductsBySearchPopularity(productArray) {
