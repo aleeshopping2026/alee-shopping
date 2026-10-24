@@ -18,7 +18,7 @@
 <p id="catalogCount" class="muted"></p>
 <form id="productForm">
 <div class="grid"><label>භාණ්ඩයේ නම<input name="name" required></label><label>මිල (රුපියල්)<input name="price" type="number" min="1" required></label></div>
-<div class="grid"><label>කාණ්ඩය<select name="category" id="categorySelect"></select></label><label>අලුත් කාණ්ඩයක් ඕනෑ නම් මෙහි නම ලියන්න<input name="newCategory" placeholder="උදා: ගෘහ උපකරණ"></label></div>
+<label>කාණ්ඩය<select name="category" id="categorySelect" required></select><span class="muted">ප්‍රධාන කාණ්ඩය විවෘත කර භාණ්ඩයට ගැළපෙන උපකාණ්ඩය තෝරන්න.</span></label>
 <label>විකුණන shop එක<select name="shopId" id="shopSelect"></select><span class="muted">අලුත් shop එකක් එක් කරන්න නම් shop-manager.html භාවිත කරන්න.</span></label>
 <label>හංවඩු මිල තිබේ නම්<input name="oldPrice" type="number" min="0"></label>
 <label>භාණ්ඩය ගැන විස්තර<textarea name="desc"></textarea></label>
@@ -32,9 +32,12 @@
 <script>
 const catalog = Array.isArray(window.aleeProducts) ? window.aleeProducts : [];
 const categories = Array.isArray(window.aleeCategories) ? [...window.aleeCategories] : [];
+const categoryGroups = Array.isArray(window.aleeCategoryGroups) ? window.aleeCategoryGroups : [];
+const catalogTabs = Array.isArray(window.aleeCatalogTabs) ? window.aleeCatalogTabs : [];
 const shops = Array.isArray(window.aleeShops) ? [...window.aleeShops] : [];
 const categorySelect = document.getElementById('categorySelect');
-categories.forEach(category => { const option=document.createElement('option'); option.value=category.id; option.textContent=category.label; categorySelect.appendChild(option); });
+categorySelect.appendChild(new Option('කාණ්ඩයක් තෝරන්න',''));
+categoryGroups.forEach(group => { const optionGroup=document.createElement('optgroup'); optionGroup.label=group.label; categories.filter(category=>category.parent===group.id).forEach(category=>optionGroup.appendChild(new Option(category.label,category.id))); categorySelect.appendChild(optionGroup); });
 const shopSelect = document.getElementById('shopSelect');
 shops.forEach(shop => { const option=document.createElement('option'); option.value=shop.id; option.textContent=shop.name; shopSelect.appendChild(option); });
 document.getElementById('catalogCount').textContent = `දැනට ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
@@ -51,18 +54,8 @@ document.getElementById('productForm').addEventListener('submit', async event =>
  status.textContent = 'ZIP ගොනුව සකස් කරනවා…';
  try {
   const nextId = Math.max(0, ...catalog.map(item => Number(item.id) || 0)) + 1;
-  const newCategoryName = String(data.get('newCategory') || '').trim();
-  let categoryId = data.get('category');
-  let updatedCategories = [...categories];
-  if (newCategoryName) {
-   const existingCategory = categories.find(category => category.label.toLowerCase() === newCategoryName.toLowerCase());
-   if (existingCategory) categoryId = existingCategory.id;
-   else {
-    categoryId = slug(newCategoryName) || `category-${nextId}`;
-    if (categories.some(category => category.id === categoryId)) categoryId += `-${nextId}`;
-    updatedCategories.push({ id:categoryId, label:newCategoryName });
-   }
-  }
+  const categoryId = String(data.get('category') || '');
+  if (!categories.some(category => category.id === categoryId)) { status.textContent='භාණ්ඩයට අදාළ උපකාණ්ඩයක් තෝරන්න.'; return; }
   const imagePaths = [];
   const zip = new JSZip();
   for (let index=0; index<photos.length; index++) {
@@ -72,7 +65,7 @@ document.getElementById('productForm').addEventListener('submit', async event =>
    zip.file(path, await file.arrayBuffer());
    imagePaths.push(path);
   }
-  const product = { id:nextId, name:String(data.get('name')).trim(), price:Number(data.get('price')), discountPercent:0, category:categoryId, shopId:String(data.get('shopId') || shops[0]?.id || 'alee-shopping'), desc:String(data.get('desc')||'').trim(), features:splitList(String(data.get('features')||'')), images:imagePaths };
+  const product = { id:nextId, name:String(data.get('name')).trim(), price:Number(data.get('price')), discountPercent:0, category:categoryId, categoryLabel:categories.find(category=>category.id===categoryId)?.label||'', shopId:String(data.get('shopId') || shops[0]?.id || 'alee-shopping'), desc:String(data.get('desc')||'').trim(), features:splitList(String(data.get('features')||'')), images:imagePaths };
   if (form.elements.freeShipping.checked) product.freeShipping = true;
   const oldPrice = Number(data.get('oldPrice'));
   if (oldPrice > product.price) product.oldPrice = oldPrice;
@@ -83,14 +76,13 @@ document.getElementById('productForm').addEventListener('submit', async event =>
   const updated = [...catalog, product];
   const notice = { id:product.id, name:product.name, version:Date.now() };
   zip.file('products.js', `window.aleeProducts = ${JSON.stringify(updated, null, 2)};\nwindow.aleeLatestProductNotice = ${JSON.stringify(notice)};\n`);
-  zip.file('categories.js', `window.aleeCategories = ${JSON.stringify(updatedCategories, null, 2)};\n`);
+  zip.file('categories.js', `window.aleeCategoryGroups = ${JSON.stringify(categoryGroups, null, 2)};\nwindow.aleeCatalogTabs = ${JSON.stringify(catalogTabs, null, 2)};\nwindow.aleeCategories = ${JSON.stringify(categories, null, 2)};\n`);
   zip.file('shops.js', `window.aleeShops = ${JSON.stringify(shops, null, 2)};\n`);
   const blob = await zip.generateAsync({type:'blob'});
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a'); link.href=url; link.download=`alee-product-${nextId}.zip`; link.click();
   setTimeout(()=>URL.revokeObjectURL(url), 30000);
   catalog.push(product);
-  if (updatedCategories.length > categories.length) categories.push(updatedCategories[updatedCategories.length - 1]);
   document.getElementById('catalogCount').textContent = `දැන් ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
   form.reset();
   status.textContent = 'ZIP ගොනුව බාගත වුණා. එය වෙබ් අඩවියේ මුල් ෆෝල්ඩරයට උපුටා දමා නැවත පළ කරන්න.';
