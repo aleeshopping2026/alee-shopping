@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "ALEE SHOPPING",
+  "name": "aleeshopping",
   "short_name": "ALEE",
-  "description": "Shop products from ALEE SHOPPING and local shops.",
+  "description": "Shop products from aleeshopping and local shops.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ff6900">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="ALEE SHOPPING">
+  <meta name="apple-mobile-web-app-title" content="aleeshopping">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/alee-app-icon-192.png">
   <link rel="apple-touch-icon" href="assets/alee-app-icon-180.png">
-  <title>ALEE SHOPPING — Fast & Safe Delivery</title>
+  <title>aleeshopping — Fast & Safe Delivery</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -530,13 +530,13 @@
   </style>
 </head>
 <body class="has-top-searches">
-  <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading ALEE SHOPPING…</span></div>
+  <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
 
   <!-- ================= ACCOUNT MODAL ================= -->
   <div id="accountModal" aria-hidden="true">
     <div class="account-card">
       <span class="account-close" onclick="closeAccountModal()">&times;</span>
-      <h2>ALEE SHOPPING</h2>
+      <h2>aleeshopping</h2>
       <div class="account-note">Sign in with Google, email, or a verified phone number.</div>
       <button class="btn" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
       <div class="account-tabs" role="tablist" aria-label="Account access">
@@ -570,7 +570,7 @@
     <div class="header">
       <div class="logo-area">
         <img src="assets/alee-logo.png" class="logo-img" alt="Logo" onerror="this.src='assets/alee-logo.png'">
-        <div class="logo-text">ALEE SHOPPING</div>
+        <div class="logo-text">aleeshopping</div>
       </div>
       
       <div class="header-actions">
@@ -794,7 +794,7 @@
         <input type="tel" id="customerPhone2" placeholder="Phone Number 2 - Optional" class="input-field" autocomplete="tel">
         <textarea id="customerNote" placeholder="Note - Optional" class="input-field" rows="3"></textarea>
         <small style="display:block;color:#777;margin:2px 0 8px;">Name, address and phone numbers are saved on this device for your next order. You can edit them anytime.</small>
-        <small style="display:block;color:#777;margin:0 0 8px;">Order details are saved securely in the ALEE SHOPPING order inbox so the shop can process your request.</small>
+        <small style="display:block;color:#777;margin:0 0 8px;">Order details are saved securely in the aleeshopping order inbox so the shop can process your request.</small>
         <button class="clear-checkout-details" type="button" onclick="clearCheckoutDetails()">Clear saved details</button>
         <button class="btn" onclick="submitOrder()">Place Order</button>
         <div id="orderStatus" role="status" aria-live="polite" style="margin-top:8px;font-size:12px;color:var(--text-white);"></div>
@@ -803,7 +803,7 @@
     </div>
 
     <div class="footer">
-      <p>ALEE SHOPPING  | Shop Everything</p>
+      <p>aleeshopping  | Shop Everything</p>
       <p>📍 Colombo, Sri Lanka | 📞 076 138 9936</p>
       <div class="social-icons">
         <a href="https://www.facebook.com/profile.php?id=61594937084284&mibextid=ZbWKwL" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
@@ -850,8 +850,8 @@
         <h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div>
         <div class="seller-social-links" id="sellerShopSocials"></div>
         <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
-        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Switch profile</button><button class="seller-action-button danger" type="button" onclick="deleteSellerShop()"><i class="fa-solid fa-trash"></i> Delete Shop</button></div>
-        <button class="seller-action-button primary" id="sendShopDetailsButton" type="button" onclick="sendShopDetailsToAlee()"><i class="fa-brands fa-whatsapp"></i> Send Details to ALEE SHOPPING</button>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="seller-action-button" type="button" onclick="openSellerShopShare()"><i class="fa-solid fa-share-nodes"></i> Share Shop</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Switch profile</button><button class="seller-action-button danger" type="button" onclick="deleteSellerShop()"><i class="fa-solid fa-trash"></i> Delete Shop</button></div>
+        <button class="seller-action-button primary" id="sendShopDetailsButton" type="button" onclick="sendShopDetailsToAlee()"><i class="fa-brands fa-whatsapp"></i> Send Details to aleeshopping</button>
       </section>
       <section class="seller-panel" id="sellerShopFormPanel"><h3 id="sellerShopFormTitle">Create Shop</h3><form id="sellerShopForm" onsubmit="saveSellerShop(event)">
         <div class="seller-form-grid">
@@ -892,7 +892,7 @@
   </div>
 
   <div class="seller-overlay" id="platformPostOverlay" onclick="if(event.target===this)closePlatformPostForm()" role="dialog" aria-modal="true" aria-labelledby="platformPostTitle">
-    <div class="seller-card"><div class="seller-header"><div><h2 id="platformPostTitle">Post on ALEE SHOPPING</h2><div class="seller-subtitle">Your post will appear in the matching section after publishing.</div></div><button class="seller-close" type="button" onclick="closePlatformPostForm()" aria-label="Close">&times;</button></div>
+    <div class="seller-card"><div class="seller-header"><div><h2 id="platformPostTitle">Post on aleeshopping</h2><div class="seller-subtitle">Your post will appear in the matching section after publishing.</div></div><button class="seller-close" type="button" onclick="closePlatformPostForm()" aria-label="Close">&times;</button></div>
       <section class="seller-panel"><form id="platformPostForm" onsubmit="savePlatformPost(event)">
         <label>Post type<select name="postType" id="platformPostType" required><option value="app">App</option><option value="ad">Advertisement</option><option value="job">Job</option><option value="game">Game</option></select></label>
         <label id="platformTitleLabel">App name<input name="title" maxlength="120" required></label>
@@ -907,6 +907,7 @@
     </div>
   </div>
 
+  <div class="seller-overlay" id="sellerShopShareOverlay" onclick="if(event.target===this)closeSellerShopShare()" role="dialog" aria-modal="true" aria-labelledby="sellerShopShareTitle" style="z-index:12000"><div class="seller-card" style="width:min(100%,440px);text-align:center"><button class="seller-close" type="button" onclick="closeSellerShopShare()" aria-label="Close">&times;</button><h2 id="sellerShopShareTitle">Share your shop</h2><p id="sellerShopShareName" class="seller-muted"></p><div id="sellerShopShareQr" style="display:flex;justify-content:center;margin:16px auto;padding:12px;background:#fff;width:fit-content;border:1px solid #eee;border-radius:12px"></div><a id="sellerShopShareLink" class="seller-shop-link" target="_blank" rel="noopener"></a><div class="seller-action-row" style="justify-content:center"><button class="seller-action-button primary" type="button" onclick="copySellerShopLink()"><i class="fa-regular fa-copy"></i> Copy link</button><button class="seller-action-button" type="button" onclick="nativeShareSellerShop()"><i class="fa-solid fa-share-nodes"></i> Share</button></div><div class="seller-notice" id="sellerShopShareStatus" role="status"></div></div></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="backend-config.js"></script>
   <script src="products.js"></script>
@@ -916,6 +917,7 @@
   <script src="games.js"></script>
   <script src="jobs.js"></script>
   <script src="shops.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const products = window.aleeProducts || [];
     const categories = Array.isArray(window.aleeCategories) ? window.aleeCategories : [];
@@ -937,6 +939,10 @@
     const newId = () => window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
     const shopPublicUrl = shopId => { const url=new URL('shop.html',location.href); url.searchParams.set('shop',shopId); return url.href; };
     const productPublicUrl = productId => { const url=new URL('index.html',location.href); url.searchParams.set('product',String(1000000000+Number(productId))); return url.href; };
+    function openSellerShopShare(){if(!currentSellerShop)return;const link=shopPublicUrl(currentSellerShop.id),overlay=document.getElementById('sellerShopShareOverlay'),qr=document.getElementById('sellerShopShareQr');document.getElementById('sellerShopShareName').textContent=currentSellerShop.shop_name;const anchor=document.getElementById('sellerShopShareLink');anchor.href=link;anchor.textContent=link;document.getElementById('sellerShopShareStatus').textContent='';qr.innerHTML='';if(window.QRCode)new QRCode(qr,{text:link,width:210,height:210,colorDark:'#172033',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});else qr.textContent='QR code could not load. Copy or share the link below.';overlay.classList.add('show');}
+    function closeSellerShopShare(){document.getElementById('sellerShopShareOverlay').classList.remove('show');}
+    async function copySellerShopLink(){const link=shopPublicUrl(currentSellerShop.id),status=document.getElementById('sellerShopShareStatus');try{await navigator.clipboard.writeText(link);status.textContent='Shop link copied.';}catch(_){status.textContent='Copy is unavailable here. Select the link above to copy it.';}}
+    async function nativeShareSellerShop(){const link=shopPublicUrl(currentSellerShop.id);if(navigator.share){try{await navigator.share({title:currentSellerShop.shop_name,text:`Visit ${currentSellerShop.shop_name} on aleeshopping`,url:link});}catch(error){if(error.name!=='AbortError')document.getElementById('sellerShopShareStatus').textContent='Could not open the share menu.';}}else await copySellerShopLink();}
     const splitSellerList = value => String(value||'').split(/[,\n]/).map(item=>item.trim()).filter(Boolean).slice(0,30);
     function reserveWhatsappWindow() { const popup=window.open('about:blank','_blank'); if(popup) popup.opener=null; return popup; }
     function sendSellerWhatsappDraft(popup,message,statusElement) {
@@ -1299,7 +1305,7 @@
     function sendShopDetailsToAlee() {
       if(!currentSellerShop)return;
       const message=[
-        'ALEE SHOPPING — Seller shop profile',
+        'aleeshopping — Seller shop profile',
         `Shop: ${currentSellerShop.shop_name}`,
         `Category: ${currentSellerShop.shop_category||'Other'}`,
         `Phone: ${currentSellerShop.phone||'Not provided'}`,
@@ -1444,7 +1450,7 @@
         const publicUrl=productPublicUrl(data.id),isEdit=Boolean(editingItem);
         await loadSellerCatalog();await loadSellerWorkspace();cancelEditSellerProduct();
         if(isEdit){status.textContent='Item updated successfully.';}
-        else sendSellerWhatsappDraft(whatsappPopup,`ALEE SHOPPING — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: LKR ${Number(payload.price).toLocaleString()}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
+        else sendSellerWhatsappDraft(whatsappPopup,`aleeshopping — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: LKR ${Number(payload.price).toLocaleString()}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
       } catch(error) { console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();if(uploaded.length)try{await supabaseClient.storage.from('seller-uploads').remove(uploaded.map(item=>item.path));}catch(cleanupError){}status.textContent=`Could not save the item. Check Supabase database/storage setup and try again. ${error.message||''}`; }
       finally {button.disabled=false;}
     }
@@ -1644,7 +1650,7 @@
     }
 
     function getShopForProduct(product) {
-      return shops.find(shop => String(shop.id) === String(product?.shopId)) || shops[0] || { id:'alee-shopping', name:'ALEE SHOPPING', logo:'assets/alee-logo.png' };
+      return shops.find(shop => String(shop.id) === String(product?.shopId)) || shops[0] || { id:'alee-shopping', name:'aleeshopping', logo:'assets/alee-logo.png' };
     }
 
     function renderShopDirectory() {
@@ -1849,7 +1855,7 @@
     async function toggleReelLike(id){if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const {data:existing}=await supabaseClient.from('seller_reel_likes').select('reel_id').eq('reel_id',id).eq('user_id',data.user.id).maybeSingle();const result=existing?await supabaseClient.from('seller_reel_likes').delete().eq('reel_id',id).eq('user_id',data.user.id):await supabaseClient.from('seller_reel_likes').insert({reel_id:id,user_id:data.user.id});if(result.error)alert(result.error.message);else openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));}
     async function toggleReelSave(id){if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const {data:existing}=await supabaseClient.from('seller_reel_saves').select('reel_id').eq('reel_id',id).eq('user_id',data.user.id).maybeSingle();const result=existing?await supabaseClient.from('seller_reel_saves').delete().eq('reel_id',id).eq('user_id',data.user.id):await supabaseClient.from('seller_reel_saves').insert({reel_id:id,user_id:data.user.id});if(result.error)alert(result.error.message);else openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));}
     async function postReelComment(event,id){event.preventDefault();if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const form=event.currentTarget,body=form.elements.comment.value.trim();if(!body)return;const {error}=await supabaseClient.from('seller_reel_comments').insert({reel_id:id,user_id:data.user.id,display_name:data.user.user_metadata?.full_name||data.user.user_metadata?.name||'Shopper',body});if(error)alert(error.message);else loadHubReels(document.getElementById('hubContentBody'));}
-    async function shareReel(id){const url=new URL(location.href);url.searchParams.set('reel',id);try{if(navigator.share)await navigator.share({title:'ALEE SHOPPING Reel',url:url.href});else{await navigator.clipboard.writeText(url.href);alert('Reel link copied.');}}catch(error){if(error.name!=='AbortError')alert('Could not share this reel.');}}
+    async function shareReel(id){const url=new URL(location.href);url.searchParams.set('reel',id);try{if(navigator.share)await navigator.share({title:'aleeshopping Reel',url:url.href});else{await navigator.clipboard.writeText(url.href);alert('Reel link copied.');}}catch(error){if(error.name!=='AbortError')alert('Could not share this reel.');}}
 
     function toggleProfileDropdown(e) {
       e.stopPropagation();
@@ -1865,7 +1871,7 @@
     }
 
     function contactSupport(topic) {
-      const message = `Hello ALEE SHOPPING, I need help with: ${topic}.\n\nMy message: `;
+      const message = `Hello aleeshopping, I need help with: ${topic}.\n\nMy message: `;
       const url = `https://wa.me/${whatsappNumber}?${new URLSearchParams({ text: message }).toString()}`;
       document.getElementById('supportDropdown')?.classList.remove('show');
       document.querySelector('.support-button')?.setAttribute('aria-expanded', 'false');
@@ -1950,7 +1956,7 @@
     const heroTrack = document.getElementById('heroTrack');
     const heroDots = document.getElementById('heroDots');
     function bannerMediaMarkup(banner, index) {
-      const alt = String(banner.alt || `ALEE Shopping banner ${index + 1}`).replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+      const alt = String(banner.alt || `aleeshopping banner ${index + 1}`).replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
       const source = String(banner.video || banner.image || '').replace(/[&<>\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
       if (banner.video) return `<video src="${source}" aria-label="${alt}" autoplay muted loop playsinline preload="none"></video>`;
       return `<img src="${source}" alt="${alt}" decoding="async" fetchpriority="high">`;
@@ -2024,9 +2030,9 @@
         const variants=[item.color&&`Color: ${item.color}`,item.size&&`Size: ${item.size}`].filter(Boolean).join(', ');
         return `• ${item.name} × ${item.quantity}${variants?` (${variants})`:''} — LKR ${(Number(item.price)*Number(item.quantity)).toLocaleString()}`;
       }).join('\n');
-      const shopName=group=>shops.find(item=>String(item.id)===String(group.shop_id))?.name||'ALEE SHOPPING';
+      const shopName=group=>shops.find(item=>String(item.id)===String(group.shop_id))?.name||'aleeshopping';
       const buildMessage=(group,includeShop=true)=>[
-        `ALEE SHOPPING — New order${includeShop?` for ${shopName(group)}`:''}`,
+        `aleeshopping — New order${includeShop?` for ${shopName(group)}`:''}`,
         `Customer: ${customer.name}`,
         `Address: ${customer.address}`,
         `Phone: ${customer.phone}`,
@@ -2049,7 +2055,7 @@
       for(const group of orderGroups){
         const shop=group.shop_id?shops.find(item=>String(item.id)===String(group.shop_id)):null;
         const recipient=normalizeWhatsappNumber(shop?.phone)||(!group.shop_id?adminPhone:'');
-        const label=shop?.name||'ALEE SHOPPING';
+        const label=shop?.name||'aleeshopping';
         if(recipient&&addLink(recipient,label,buildMessage(group)))sellerLinkCount++;
       }
       const missingSellerPhone=orderGroups.some(group=>group.shop_id&&!normalizeWhatsappNumber(shops.find(item=>String(item.id)===String(group.shop_id))?.phone));
@@ -2799,7 +2805,7 @@
       const status = document.getElementById('orderStatus');
       if (orderItems.length > 50) { if (status) status.textContent = 'Please place no more than 50 different cart items per order.'; return; }
       if (supabaseClient) {
-        if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in before placing an order. Your order will appear in ALEE SHOPPING and the shop owner’s Messages.';if(status)status.textContent='Please sign in first. Your cart and checkout details will stay here.';return;}
+        if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in before placing an order. Your order will appear in aleeshopping and the shop owner’s Messages.';if(status)status.textContent='Please sign in first. Your cart and checkout details will stay here.';return;}
         const groups = new Map();
         orderItems.forEach(item => {
           const candidateShopId = String(item.product.shopId || '');
@@ -2816,7 +2822,7 @@
         if (error) { if (status) status.textContent = `Could not save the order to the website (${error.message}). Check the Supabase order setup.`; return; }
         const linkCount=renderOrderWhatsappActions([...groups.values()],{name:name.trim(),address:address.trim(),phone:phone1.trim(),phone2:phone2||'',note});
         if(status)status.textContent=linkCount
-          ? 'Order saved. Details are in ALEE SHOPPING and the shop owner’s Messages. Choose the WhatsApp button below and tap Send.'
+          ? 'Order saved. Details are in aleeshopping and the shop owner’s Messages. Choose the WhatsApp button below and tap Send.'
           : 'Order saved to the shop Orders inbox, but a WhatsApp contact number is missing.';
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }

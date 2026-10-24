@@ -1,7 +1,7 @@
 window.aleeShops = [
   {
     "id": "alee-shopping",
-    "name": "ALEE SHOPPING",
+    "name": "aleeshopping",
     "logo": "assets/alee-logo.png",
     "rank": 1,
     "rating": 5,

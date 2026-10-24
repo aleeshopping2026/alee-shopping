@@ -210,11 +210,11 @@
 
   function renderProfile() {
     if (!shop) {
-      document.getElementById('shopProfile').innerHTML = '<div class="empty"><h2>Business profile not found</h2><p>Return to ALEE SHOPPING and choose a shop.</p></div>';
+      document.getElementById('shopProfile').innerHTML = '<div class="empty"><h2>Business profile not found</h2><p>Return to aleeshopping and choose a shop.</p></div>';
       document.getElementById('products').innerHTML = ''; return;
     }
     document.documentElement.style.setProperty('--shop-accent', /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#ff6900');
-    document.title = `${shop.name} — ALEE SHOPPING`;
+    document.title = `${shop.name} — aleeshopping`;
     document.getElementById('headerShopName').textContent = shop.name;
     document.getElementById('headerShopLogo').src = shop.logo || 'assets/alee-logo.png';
     shopBlocked = localShopFlag('blocked'); shopOnHold = localShopFlag('hold');
