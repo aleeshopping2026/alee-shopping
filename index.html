@@ -638,7 +638,7 @@
     </div>
 
     <section class="shops-section" id="shopsSection" aria-label="ALEE shortcuts">
-      <h2 class="shops-heading">Top Shops / Company <a href="content-manager.html" style="color:var(--light-leaf);font-size:11px;font-weight:800">Manage apps, games &amp; jobs →</a></h2>
+      <h2 class="shops-heading">Top Shops / Company</h2>
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('apps',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-mobile-screen-button"></i></span><span class="hub-shortcut-label">Apps</span></button>
@@ -818,14 +818,14 @@
       <div class="seller-header"><div><h2 id="buyerDashboardTitle">Buyer Profile</h2><div class="seller-subtitle">Your ALEE SHOPPING account</div></div><button class="seller-close" type="button" onclick="closeBuyerAccount()" aria-label="Close">&times;</button></div>
       <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Buyer profile picture"></div><h3 id="buyerProfileName">Buyer</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
         <form id="buyerDetailsForm" onsubmit="saveBuyerDetails(event)" hidden><label>Display name<input id="buyerDisplayName" maxlength="80" required></label><button class="seller-action-button primary" type="submit">Save details</button><div class="seller-notice" id="buyerDetailsStatus" role="status"></div></form>
-        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-action-button" type="button" onclick="switchAccountRole('seller')"><i class="fa-solid fa-store"></i> Switch to Seller</button></div>
       </section>
     </div>
   </div>
 
   <div class="seller-overlay" id="sellerDashboard" onclick="if(event.target===this)closeSellerAccount()" role="dialog" aria-modal="true" aria-labelledby="sellerDashboardTitle">
     <div class="seller-card">
-      <div class="seller-header"><div><h2 id="sellerDashboardTitle">Seller Dashboard</h2><div class="seller-subtitle" id="sellerAccountEmail"></div></div><button class="seller-close" type="button" onclick="closeSellerAccount()" aria-label="Close">&times;</button></div>
+      <div class="seller-header"><div><h2 id="sellerDashboardTitle">Seller Dashboard</h2><div class="seller-subtitle" id="sellerAccountEmail"></div></div><div><button class="seller-action-button primary" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-close" type="button" onclick="closeSellerAccount()" aria-label="Close">&times;</button></div></div>
       <section class="seller-panel" id="sellerShopProfile" hidden>
         <div class="seller-logo-wrap"><img class="seller-logo-preview" id="sellerShopLogo" src="assets/alee-logo.png" alt="Shop profile picture"><button class="seller-logo-edit" type="button" onclick="editSellerShop()" aria-label="Edit shop profile"><i class="fa-solid fa-pencil"></i></button></div>
         <h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div>
@@ -869,6 +869,22 @@
       <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
       <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsMonth">Month</label><input id="sellerAnalyticsMonth" type="month" onchange="loadSellerAnalytics()"></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Orders this month (excluding cancelled)</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Order value (excluding cancelled)</span><strong id="sellerAnalyticsValue">—</strong></div></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
       <div class="seller-notice" id="sellerDashboardStatus" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="seller-overlay" id="platformPostOverlay" onclick="if(event.target===this)closePlatformPostForm()" role="dialog" aria-modal="true" aria-labelledby="platformPostTitle">
+    <div class="seller-card"><div class="seller-header"><div><h2 id="platformPostTitle">Post on ALEE SHOPPING</h2><div class="seller-subtitle">Your post will appear in the matching section after publishing.</div></div><button class="seller-close" type="button" onclick="closePlatformPostForm()" aria-label="Close">&times;</button></div>
+      <section class="seller-panel"><form id="platformPostForm" onsubmit="savePlatformPost(event)">
+        <label>Post type<select name="postType" id="platformPostType" required><option value="app">App</option><option value="ad">Advertisement</option><option value="job">Job</option><option value="game">Game</option></select></label>
+        <label id="platformTitleLabel">App name<input name="title" maxlength="120" required></label>
+        <label>Category<select name="category" id="platformPostCategory" required></select></label>
+        <label>Description<textarea name="description" maxlength="2000" placeholder="Tell people about it"></textarea></label>
+        <label id="platformLinkLabel">Google Play link<input name="linkUrl" type="url" placeholder="https://play.google.com/store/apps/details?id=..."></label>
+        <div class="seller-form-grid" id="platformJobFields" hidden><label>Location<input name="location" maxlength="120" placeholder="Colombo / Remote"></label><label>Employment type<select name="employmentType"><option value="">Choose</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Remote</option></select></label><label>Salary<input name="salary" maxlength="100" placeholder="Optional"></label></div>
+        <label id="platformImageLabel">App icon / ad image<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><span class="seller-muted">Optional image, up to 10 MB.</span></label>
+        <button class="seller-action-button primary" id="platformPostSubmit" type="submit">Publish</button><div class="seller-notice" id="platformPostStatus" role="status" aria-live="polite"></div>
+      </form></section>
+      <section class="seller-panel"><h3>My Posts</h3><div id="myPlatformPosts"><p class="seller-muted">Loading…</p></div></section>
     </div>
   </div>
 
@@ -1650,18 +1666,81 @@
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.remove('active'));
     }
 
-    function renderHubApps(kind,body) {
-      const data=kind==='apps'?(window.aleeApps||[]):(window.aleeGames||[]);
-      const items=data.filter(item=>/^https?:\/\//i.test(String(item.url||'')));
-      if(!items.length){body.innerHTML=`<div class="hub-empty">${kind==='apps'?'No apps have been added yet.':'No games have been added yet.'} <a href="content-manager.html">Open content manager</a> to add one.</div>`;return;}
-      body.innerHTML=`<div class="hub-app-grid">${items.map(item=>`<a class="hub-app-card" href="${escapeHTML(item.url)}" target="_blank" rel="noopener"><img src="${escapeHTML(item.icon||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.category||'')}</small></a>`).join('')}</div>`;
+    const platformPostCategories={
+      app:['Business','Education','Entertainment','Finance','Lifestyle','Shopping','Utilities','Other'],
+      game:['Action','Adventure','Arcade','Casual','Puzzle','Sports','Other'],
+      ad:['Shop Promotion','Product Offer','Brand Awareness','Service','Other'],
+      job:['Retail & Sales','Technology','Delivery & Logistics','Marketing','Customer Service','Finance & Administration','Other']
+    };
+    function updatePlatformPostFields(){
+      const form=document.getElementById('platformPostForm');if(!form)return;
+      const type=form.elements.postType.value,job=type==='job',ad=type==='ad',app=type==='app'||type==='game';
+      const label={app:'App name',game:'Game name',ad:'Ad title',job:'Job title'}[type];
+      document.getElementById('platformTitleLabel').firstChild.textContent=label;
+      const category=document.getElementById('platformPostCategory');category.replaceChildren(new Option('Choose a category',''),...(platformPostCategories[type]||[]).map(value=>new Option(value,value)));
+      document.getElementById('platformJobFields').hidden=!job;
+      const link=form.elements.linkUrl;link.required=app;link.placeholder=app?'https://play.google.com/store/apps/details?id=...':job?'https://... (optional)':'https://your-shop-or-product-link (optional)';
+      document.getElementById('platformLinkLabel').firstChild.textContent=app?'Google Play link':job?'Apply link':'Ad link';
+      form.elements.image.required=ad;
+      form.elements.description.required=job||ad;
+    }
+    async function openPlatformPostForm(){
+      if(!supabaseClient){alert('Run platform-posts-schema.sql in Supabase first.');return;}
+      if(!activeUser){const {data}=await supabaseClient.auth.getUser();activeUser=data?.user||null;}
+      if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to post your own app, ad, or job.';return;}
+      updatePlatformPostFields();document.getElementById('platformPostStatus').textContent='';
+      document.getElementById('platformPostOverlay').classList.add('show');await loadMyPlatformPosts();
+    }
+    function closePlatformPostForm(){document.getElementById('platformPostOverlay').classList.remove('show');}
+    async function loadMyPlatformPosts(){
+      const root=document.getElementById('myPlatformPosts');root.innerHTML='<p class="seller-muted">Loading…</p>';
+      const {data,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,created_at,media_url').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);
+      if(error){root.innerHTML='<p class="seller-muted">Your post list is unavailable. Check platform-posts-schema.sql.</p>';return;}
+      if(!data?.length){root.innerHTML='<p class="seller-muted">You have not posted anything yet.</p>';return;}
+      root.innerHTML=data.map(item=>`<div class="seller-product-row"><div><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.post_type.toUpperCase())} · ${escapeHTML(item.category||'')}</small></div><button class="seller-item-action delete" type="button" onclick="deletePlatformPost('${escapeHTML(item.id)}','${escapeHTML(item.media_url||'')}')">Delete</button></div>`).join('');
+    }
+    async function savePlatformPost(event){
+      event.preventDefault();const form=event.currentTarget,status=document.getElementById('platformPostStatus'),button=document.getElementById('platformPostSubmit'),type=form.elements.postType.value,title=form.elements.title.value.trim(),link=form.elements.linkUrl.value.trim(),file=form.elements.image.files[0];
+      if(!activeUser||!supabaseClient){status.textContent='Sign in and try again.';return;}
+      if((type==='app'||type==='game')&&!/^https:\/\/play\.google\.com\/store\/apps/i.test(link)){status.textContent='Enter the Google Play Store link for this app or game.';return;}
+      if(file&&(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)||file.size>10*1024*1024)){status.textContent='Choose a JPG, PNG, WEBP, or GIF image up to 10 MB.';return;}
+      button.disabled=true;status.textContent='Publishing…';let mediaUrl='',path='';
+      try{
+        if(file){const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();path=`${activeUser.id}/${newId()}.${ext}`;const {error}=await supabaseClient.storage.from('platform-posts').upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;mediaUrl=supabaseClient.storage.from('platform-posts').getPublicUrl(path).data.publicUrl;}
+        const payload={owner_id:activeUser.id,post_type:type,title,category:form.elements.category.value,description:form.elements.description.value.trim(),link_url:link,media_url:mediaUrl,location:form.elements.location.value.trim(),employment_type:form.elements.employmentType.value,salary:form.elements.salary.value.trim()};
+        const {error}=await supabaseClient.from('platform_posts').insert(payload);if(error)throw error;
+        form.reset();updatePlatformPostFields();status.textContent='Published. Your post is now visible in its section.';await loadMyPlatformPosts();
+        const panel=document.getElementById('hubContentBody');if(!document.getElementById('hubContentPanel').hidden){const active=document.querySelector('.hub-shortcut.active');if(active?.textContent.includes('Apps'))renderHubApps('apps',panel);if(active?.textContent.includes('Games'))renderHubApps('games',panel);if(active?.textContent.includes('Jobs'))renderHubJobs(panel);}
+      }catch(error){console.error(error);if(path)try{await supabaseClient.storage.from('platform-posts').remove([path]);}catch(cleanupError){}status.textContent=`Could not publish. Run platform-posts-schema.sql in Supabase. ${error.message||''}`;}
+      finally{button.disabled=false;}
+    }
+    async function deletePlatformPost(id,mediaUrl){
+      if(!confirm('Delete this post?'))return;
+      const {error}=await supabaseClient.from('platform_posts').delete().eq('id',id).eq('owner_id',activeUser.id);
+      if(error){alert(error.message);return;}
+      const marker='/storage/v1/object/public/platform-posts/',index=String(mediaUrl||'').indexOf(marker);
+      if(index>=0){const path=decodeURIComponent(mediaUrl.slice(index+marker.length));await supabaseClient.storage.from('platform-posts').remove([path]);}
+      await loadMyPlatformPosts();
+    }
+    document.getElementById('platformPostType')?.addEventListener('change',updatePlatformPostFields);
+
+    async function renderHubApps(kind,body) {
+      const isApps=kind==='apps',data=isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isApps?'app':'game';
+      let items=data.map(item=>({title:item.name,url:item.url,image:item.icon,category:item.category,post_type:type}));
+      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url').in('post_type',isApps?['app','ad']:['game']).order('created_at',{ascending:false}).limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
+      items=items.filter(item=>item.post_type==='ad'||/^https?:\/\//i.test(String(item.link_url||item.url||'')));
+      if(!items.length){body.replaceChildren();return;}
+      body.innerHTML=`<div class="hub-app-grid">${items.map(item=>{const content=`<img src="${escapeHTML(item.media_url||item.image||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.title||item.name)}</strong><small>${item.post_type==='ad'?'Ad · ':''}${escapeHTML(item.category||'')}</small>`,url=item.link_url||item.url;return /^https?:\/\//i.test(String(url||''))?`<a class="hub-app-card" href="${escapeHTML(url)}" target="_blank" rel="noopener">${content}</a>`:`<div class="hub-app-card">${content}</div>`;}).join('')}</div>`;
     }
 
-    function renderHubJobs(body,category='all') {
-      const data=window.aleeJobs||[],items=data.filter(job=>category==='all'||job.category===category);
+    async function renderHubJobs(body,category='all') {
+      let data=(window.aleeJobs||[]).map(job=>({title:job.title,category:job.category,location:job.location,type:job.type,salary:job.salary,description:job.description,applyUrl:job.applyUrl}));
+      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,location,employment_type,salary').eq('post_type','job').order('created_at',{ascending:false}).limit(100);if(!error)data=[...(posts||[]).map(job=>({...job,applyUrl:job.link_url,type:job.employment_type})),...data];else console.warn('Job listings are not configured yet.',error);}
+      const items=data.filter(job=>category==='all'||job.category===category);
       const categories=[...new Set(data.map(job=>job.category).filter(Boolean))];
       const filters=[['all','All jobs'],...categories.map(value=>[value,value])];
-      body.innerHTML=`<div class="mobile-category-options" style="margin-bottom:10px">${filters.map(([id,label])=>`<button class="mobile-category-option ${id===category?'active':''}" type="button" onclick="renderHubJobs(document.getElementById('hubContentBody'),${JSON.stringify(id)})">${escapeHTML(label)}</button>`).join('')}</div>${items.length?`<div class="hub-jobs-list">${items.map(job=>`<article class="hub-job-card"><h3>${escapeHTML(job.title)}</h3><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p><p>${escapeHTML(job.description||'')}</p>${job.salary?`<p>Salary: ${escapeHTML(job.salary)}</p>`:''}${/^https?:\/\//i.test(job.applyUrl||'')?`<a href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>`:''}</article>`).join('')}</div>`:'<div class="hub-empty">No job listings yet. <a href="content-manager.html">Open content manager</a> to add job posts.</div>'}`;
+      body.innerHTML=`${categories.length?`<div class="mobile-category-options" style="margin-bottom:10px">${filters.map(([id,label])=>`<button class="mobile-category-option ${id===category?'active':''}" type="button" data-job-category="${escapeHTML(id)}">${escapeHTML(label)}</button>`).join('')}</div>`:''}${items.length?`<div class="hub-jobs-list">${items.map(job=>`<article class="hub-job-card"><h3>${escapeHTML(job.title)}</h3><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p><p>${escapeHTML(job.description||'')}</p>${job.salary?`<p>Salary: ${escapeHTML(job.salary)}</p>`:''}${/^https?:\/\//i.test(job.applyUrl||'')?`<a href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>`:''}</article>`).join('')}</div>`:''}`;
+      body.querySelectorAll('[data-job-category]').forEach(button=>button.addEventListener('click',()=>renderHubJobs(body,button.dataset.jobCategory)));
     }
 
     async function loadHubReels(body) {
