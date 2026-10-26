@@ -266,6 +266,19 @@
     .hub-job-card h3 { margin:0 0 6px; font-size:15px; }
     .hub-job-card p { margin:6px 0; color:#888; font-size:12px; line-height:1.45; }
     .hub-job-card a { display:inline-flex; margin-top:6px; padding:8px 11px; border-radius:9px; background:var(--light-leaf); color:#fff; font-size:12px; font-weight:800; text-decoration:none; }
+    .hub-content-panel .mobile-category-options { display:flex; gap:6px; overflow-x:auto; margin:0 0 10px!important; padding:0 0 5px; scrollbar-width:thin; }
+    .hub-content-panel .mobile-category-option { flex:0 0 auto; width:auto; max-width:180px; padding:7px 11px; border-radius:999px; white-space:nowrap; font-size:12px; }
+    .hub-job-card { position:relative; display:grid; grid-template-columns:minmax(0,1fr) 76px; align-items:center; gap:10px; cursor:pointer; }
+    .hub-job-copy { min-width:0; }
+    .hub-job-card .hub-job-image { width:76px; height:76px; object-fit:cover; border-radius:10px; background:#fff; }
+    .hub-job-card .hub-job-apply { grid-column:1/-1; width:max-content; }
+    .hub-job-dialog { width:min(92vw,520px); max-height:86dvh; margin:auto; padding:20px; border:1px solid var(--glass-border); border-radius:18px; background:var(--card-bg); color:var(--text-white); box-shadow:0 20px 70px #0006; }
+    .hub-job-dialog::backdrop { background:#0009; backdrop-filter:blur(3px); }
+    .hub-job-dialog img { display:block; width:100%; max-height:260px; object-fit:contain; margin:10px 0; border-radius:12px; background:#f3f4f6; }
+    .hub-job-dialog h2 { margin:0 44px 10px 0; font-size:20px; }
+    .hub-job-dialog p { margin:8px 0; line-height:1.5; overflow-wrap:anywhere; }
+    .hub-job-dialog .job-dialog-close { float:right; width:36px; height:36px; border:0; border-radius:50%; background:var(--bg-dark); color:var(--text-white); font-size:22px; cursor:pointer; }
+    .hub-job-dialog .hub-job-apply { display:inline-flex; margin-top:8px; padding:9px 14px; border-radius:9px; background:var(--light-leaf); color:#fff; text-decoration:none; font-weight:800; }
     .hub-empty { padding:18px; border:1px dashed var(--glass-border); border-radius:12px; color:#888; text-align:center; }
     .hub-reel-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; }
     .hub-reel-card { overflow:hidden; border:1px solid var(--glass-border); border-radius:15px; background:var(--bg-dark); color:var(--text-white); }
@@ -349,17 +362,17 @@
     .btn { background: var(--light-leaf); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: 800; font-size: 15px; transition: 0.3s; }
     .btn:hover { box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
 
-    .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-y: auto; padding: 12px 8px 30px; backdrop-filter: blur(7px); }
+    .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-x:hidden; overflow-y: auto; padding: 12px 8px 30px; backdrop-filter: blur(7px); }
     .popup-content {
-      background: var(--card-bg); max-width: 1040px; margin: 10px auto; border-radius: 16px;
-      padding: 14px; position: relative; width: 100%; border: 1px solid var(--glass-border); box-shadow: 0 25px 70px rgba(0,0,0,0.7);
+      background: var(--card-bg); width:min(100%,1040px); min-width:0; max-width:1040px; margin:10px auto; border-radius:16px;
+      padding:14px; position:relative; overflow:hidden; border:1px solid var(--glass-border); box-shadow:0 25px 70px rgba(0,0,0,0.7);
     }
     .close-popup { position: absolute; top: 8px; right: 12px; z-index: 20; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(0,0,0,.55); font-size:25px; cursor:pointer; color:#fff; transition:0.3s; }
     .close-popup:hover { transform:scale(1.08); background:var(--light-leaf); }
 
     .gallery-main-wrap { position:relative; }
-    .slider { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; border-radius:12px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; background:#fff; }
-    .slider img { width:100%; min-width:100%; height:360px; object-fit:contain; background:#fff; border-radius:12px; scroll-snap-align:center; border:1px solid rgba(255,105,0,.18); }
+    .slider { display:flex; width:100%; min-width:0; overflow-x:auto; scroll-snap-type:x mandatory; gap:0; border-radius:12px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; background:#fff; }
+    .slider img { flex:0 0 100%; width:100%; min-width:0; height:360px; object-fit:contain; background:#fff; border-radius:12px; scroll-snap-align:start; border:1px solid rgba(255,105,0,.18); }
     .slider img { cursor:zoom-in; }
     .slider::-webkit-scrollbar { height:7px; }
     .slider::-webkit-scrollbar-thumb { background:var(--light-leaf); border-radius:10px; }
@@ -425,10 +438,11 @@
     .popup-sticky-action .btn { margin-top:0; min-height:46px; padding:8px 5px; font-size:14px; }
     .popup-sticky-action .buy-now-btn { background:#16803c; }
     @media (max-width: 700px) {
-      .popup-content { margin:0 auto; border-radius:14px; padding:10px; }
-      .popup-main-grid { grid-template-columns:1fr; gap:6px; }
-      .popup-media { position:relative; }
-      .slider img { height:280px; }
+      .product-popup { padding:8px 5px calc(18px + env(safe-area-inset-bottom)); }
+      .popup-content { width:100%; min-width:0; margin:0 auto; border-radius:14px; padding:10px; }
+      .popup-main-grid { grid-template-columns:minmax(0,1fr); min-width:0; gap:6px; }
+      .popup-media,.gallery-main-wrap { position:relative; width:100%; min-width:0; overflow:hidden; }
+      .slider img { height:min(68vw,320px); min-height:220px; }
       .card img { height:115px; padding:5px; }
       .popup-details h2 { font-size:18px; }
       .order-info { grid-template-columns:repeat(3,1fr); }
@@ -575,7 +589,7 @@
       
       <div class="header-actions">
         <a class="header-shop-button" href="shops.html" target="_blank" rel="noopener"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
-        <button class="header-account-button" type="button" onclick="openBuyerAccount()"><i class="fa-regular fa-user"></i> My Account</button>
+        <button class="header-account-button" type="button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i> My Account</button>
         <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
         <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
@@ -669,6 +683,7 @@
     <div class="categories-bar" id="categoryBar" aria-label="Product categories"></div>
 
     <section class="hub-content-panel" id="hubContentPanel" hidden aria-live="polite"><h2 class="hub-content-heading"><span id="hubContentTitle"></span><button type="button" onclick="closeHubSection()" aria-label="Close section">✕</button></h2><div id="hubContentBody"></div></section>
+    <dialog class="hub-job-dialog" id="hubJobDialog"><button class="job-dialog-close" type="button" onclick="closeHubJobDetails()" aria-label="Close">×</button><div id="hubJobDialogBody"></div></dialog>
 
     <div class="mobile-sheet-backdrop" id="mobileCategorySheet" onclick="if(event.target===this)closeMobileSheet('mobileCategorySheet')">
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileCategoryTitle">
@@ -707,7 +722,7 @@
       <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><i class="fa-solid fa-border-all"></i><span>Categories</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><i class="fa-solid fa-store"></i><span>Shops</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
-      <button type="button" class="mobile-nav-button" onclick="openMobileAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
 
     <!-- Product Popup / Daraz-style details -->
@@ -837,7 +852,7 @@
       <section class="seller-panel"><h3>Account</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Your profile picture"></div><h3 id="buyerProfileName">Your profile</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
         <div class="seller-muted"><i class="fa-solid fa-lock"></i> Only you can see these personal details.</div><div class="account-private-details" id="buyerPrivateDetails"><div><span>Mobile</span><strong id="buyerPrivateMobile">—</strong></div><div><span>Address</span><strong id="buyerPrivateAddress">—</strong></div></div>
         <form id="buyerDetailsForm" onsubmit="saveBuyerDetails(event)" hidden><div class="seller-form-grid"><label>Full name<input id="buyerDisplayName" minlength="2" maxlength="80" autocomplete="name" required></label><label>Mobile number<input id="buyerMobile" type="tel" inputmode="tel" minlength="5" maxlength="32" autocomplete="tel" required></label></div><label>Home / delivery address<textarea id="buyerAddress" minlength="3" maxlength="500" autocomplete="street-address" required></textarea></label><button class="seller-action-button primary" type="submit">Save private details</button><div class="seller-notice" id="buyerDetailsStatus" role="status"></div></form>
-        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-action-button primary" type="button" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</button></div>
+        <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editBuyerDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</button><a class="seller-action-button" href="orders.html"><i class="fa-solid fa-box-open"></i> My Orders</a><button class="seller-action-button" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button><button class="seller-action-button primary" id="buyerOpenShopButton" type="button" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</button><button class="seller-action-button" id="buyerSwitchShopButton" type="button" onclick="switchAccountRole('seller')" hidden><i class="fa-solid fa-right-left"></i> Switch to Shop profile</button></div>
       </section>
     </div>
   </div>
@@ -964,6 +979,8 @@
       try{return localStorage.getItem(`alee-account-role:${activeUser.id}`)==='seller'?'seller':'buyer';}catch(error){return 'buyer';}
     }
 
+    async function openCurrentAccount(){if(getAccountRole()==='seller')await openSellerAccount();else await openBuyerAccount();}
+
     async function openMessagesForCurrentRole() {
       if(!activeUser) { openAccountModal();document.getElementById('accountStatus').textContent='Sign in to open your messages.';return; }
       if(!await ensurePrivateAccountProfile())return;
@@ -1029,6 +1046,7 @@
       document.getElementById('buyerPrivateAddress').textContent=privateAccountProfile?.address||'—';
       document.getElementById('buyerProfileImage').src=activeUser.user_metadata?.avatar_url||activeUser.user_metadata?.picture||'assets/alee-logo.png';
       document.getElementById('buyerDashboard').classList.add('show');
+      refreshAccountShopActions();
     }
 
     function closeBuyerAccount() { document.getElementById('buyerDashboard').classList.remove('show'); }
@@ -1071,10 +1089,12 @@
     async function refreshAccountShopActions() {
       const removeButton=document.getElementById('accountDeleteShopMenu');
       const mobileRemoveButton=document.getElementById('mobileDeleteShopMenu');
+      const switchShopButton=document.getElementById('buyerSwitchShopButton'),openShopButton=document.getElementById('buyerOpenShopButton');
       if(!removeButton)return;
-      if(!activeUser||!supabaseClient){removeButton.hidden=true;if(mobileRemoveButton)mobileRemoveButton.hidden=true;return;}
+      if(!activeUser||!supabaseClient){removeButton.hidden=true;if(mobileRemoveButton)mobileRemoveButton.hidden=true;if(switchShopButton)switchShopButton.hidden=true;if(openShopButton)openShopButton.hidden=false;return;}
       const {data,error}=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();
       removeButton.hidden=Boolean(error||!data);if(mobileRemoveButton)mobileRemoveButton.hidden=Boolean(error||!data);
+      if(switchShopButton)switchShopButton.hidden=Boolean(error||!data);if(openShopButton)openShopButton.hidden=!Boolean(error||!data);
     }
 
     async function deleteSellerShop() {
@@ -1296,8 +1316,7 @@
         currentSellerShop=data;
         await loadSellerCatalog();
         await loadSellerWorkspace();
-        document.getElementById('sellerDashboardStatus').textContent=isNewShop?'Shop profile saved. Opening your public profile…':'Shop profile updated.';
-        if(isNewShop)window.setTimeout(()=>{location.href=shopPublicUrl(currentSellerShop.id);},900);
+        document.getElementById('sellerDashboardStatus').textContent=isNewShop?'Shop profile saved. You are still in your Shop profile.':'Shop profile updated.';
       } catch(error) { console.error(error);if(uploadedLogo)try{await supabaseClient.storage.from('seller-uploads').remove([uploadedLogo.path]);}catch(cleanupError){}status.textContent=`Could not save your shop profile. Check Supabase setup and try again. ${error.message||''}`; }
       finally {button.disabled=false;}
     }
@@ -1730,6 +1749,7 @@
     });
 
     function openHubSection(section,button) {
+      if(!hubHistoryOpen){history.pushState({...history.state,aleeHubSection:true},'',location.href);hubHistoryOpen=true;}
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
       const panel=document.getElementById('hubContentPanel'),body=document.getElementById('hubContentBody'),title=document.getElementById('hubContentTitle');
       const shopsPanel=document.getElementById('hubShopsPanel');
@@ -1748,10 +1768,11 @@
       document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
     }
 
-    function closeHubSection() {
+    function closeHubSection(fromHistory=false) {
       document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;
       document.querySelector('.container')?.classList.remove('hub-content-open');
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.remove('active'));
+      if(hubHistoryOpen){hubHistoryOpen=false;if(!fromHistory)history.back();}
     }
 
     const platformPostCategories={
@@ -1797,7 +1818,7 @@
         if(file){const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();path=`${activeUser.id}/${newId()}.${ext}`;const {error}=await supabaseClient.storage.from('platform-posts').upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;mediaUrl=supabaseClient.storage.from('platform-posts').getPublicUrl(path).data.publicUrl;}
         const payload={owner_id:activeUser.id,post_type:type,title,category:form.elements.category.value,description:form.elements.description.value.trim(),link_url:link,media_url:mediaUrl,location:form.elements.location.value.trim(),employment_type:form.elements.employmentType.value,salary:form.elements.salary.value.trim()};
         const {error}=await supabaseClient.from('platform_posts').insert(payload);if(error)throw error;
-        form.reset();updatePlatformPostFields();status.textContent='Published. Your post is now visible in its section.';await loadMyPlatformPosts();
+        form.reset();updatePlatformPostFields();if(type==='job')hubJobsCache=null;status.textContent='Published. Your post is now visible in its section.';await loadMyPlatformPosts();
         const panel=document.getElementById('hubContentBody');if(!document.getElementById('hubContentPanel').hidden){const active=document.querySelector('.hub-shortcut.active');if(active?.textContent.includes('Apps'))renderHubApps('apps',panel);if(active?.textContent.includes('Games'))renderHubApps('games',panel);if(active?.textContent.includes('Jobs'))renderHubJobs(panel);}
       }catch(error){console.error(error);if(path)try{await supabaseClient.storage.from('platform-posts').remove([path]);}catch(cleanupError){}status.textContent=`Could not publish. Run platform-posts-schema.sql in Supabase. ${error.message||''}`;}
       finally{button.disabled=false;}
@@ -1821,15 +1842,26 @@
       body.innerHTML=`<div class="hub-app-grid">${items.map(item=>{const content=`<img src="${escapeHTML(item.media_url||item.image||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.title||item.name)}</strong><small>${item.post_type==='ad'?'Ad · ':''}${escapeHTML(item.category||'')}</small>`,url=item.link_url||item.url;return /^https?:\/\//i.test(String(url||''))?`<a class="hub-app-card" href="${escapeHTML(url)}" target="_blank" rel="noopener">${content}</a>`:`<div class="hub-app-card">${content}</div>`;}).join('')}</div>`;
     }
 
-    async function renderHubJobs(body,category='all') {
-      let data=(window.aleeJobs||[]).map(job=>({title:job.title,category:job.category,location:job.location,type:job.type,salary:job.salary,description:job.description,applyUrl:job.applyUrl}));
-      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,location,employment_type,salary').eq('post_type','job').order('created_at',{ascending:false}).limit(100);if(!error)data=[...(posts||[]).map(job=>({...job,applyUrl:job.link_url,type:job.employment_type})),...data];else console.warn('Job listings are not configured yet.',error);}
-      const items=data.filter(job=>category==='all'||job.category===category);
-      const categories=[...new Set(data.map(job=>job.category).filter(Boolean))];
-      const filters=[['all','All jobs'],...categories.map(value=>[value,value])];
-      body.innerHTML=`${categories.length?`<div class="mobile-category-options" style="margin-bottom:10px">${filters.map(([id,label])=>`<button class="mobile-category-option ${id===category?'active':''}" type="button" data-job-category="${escapeHTML(id)}">${escapeHTML(label)}</button>`).join('')}</div>`:''}${items.length?`<div class="hub-jobs-list">${items.map(job=>`<article class="hub-job-card"><h3>${escapeHTML(job.title)}</h3><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p><p>${escapeHTML(job.description||'')}</p>${job.salary?`<p>Salary: ${escapeHTML(job.salary)}</p>`:''}${/^https?:\/\//i.test(job.applyUrl||'')?`<a href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>`:''}</article>`).join('')}</div>`:''}`;
-      body.querySelectorAll('[data-job-category]').forEach(button=>button.addEventListener('click',()=>renderHubJobs(body,button.dataset.jobCategory)));
+    async function getHubJobs(){
+      if(hubJobsCache)return hubJobsCache;
+      if(hubJobsLoadPromise)return hubJobsLoadPromise;
+      hubJobsLoadPromise=(async()=>{
+        let jobs=(window.aleeJobs||[]).map(job=>({...job,type:job.type||job.employment_type,applyUrl:job.applyUrl||job.link_url,image:job.image||job.media_url}));
+        if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,location,employment_type,salary,media_url').eq('post_type','job').order('created_at',{ascending:false}).limit(100);if(error)console.warn('Job listings are not configured yet.',error);else jobs=[...(posts||[]).map(job=>({...job,title:job.title,type:job.employment_type,applyUrl:job.link_url,image:job.media_url})),...jobs];}
+        hubJobsCache=jobs;return jobs;
+      })();
+      try{return await hubJobsLoadPromise;}finally{hubJobsLoadPromise=null;}
     }
+    async function renderHubJobs(body,category='all') {
+      body.innerHTML='<div class="hub-empty">Loading jobs…</div>';
+      const data=await getHubJobs(),items=data.filter(job=>category==='all'||job.category===category),categories=[...new Set(data.map(job=>job.category).filter(Boolean))],filters=[['all','All jobs'],...categories.map(value=>[value,value])];
+      body.innerHTML=`${categories.length?`<div class="mobile-category-options">${filters.map(([id,label])=>`<button class="mobile-category-option ${id===category?'active':''}" type="button" data-job-category="${escapeHTML(id)}">${escapeHTML(label)}</button>`).join('')}</div>`:''}${items.length?`<div class="hub-jobs-list">${items.map((job,index)=>`<article class="hub-job-card" data-job-index="${data.indexOf(job)}" tabindex="0" role="button" aria-label="View ${escapeHTML(job.title||'job')} details"><div class="hub-job-copy"><h3>${escapeHTML(job.title)}</h3><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p></div>${/^https?:\/\//i.test(job.image||'')?`<img class="hub-job-image" src="${escapeHTML(job.image)}" alt="${escapeHTML(job.title||'Job')}" loading="lazy" onerror="this.remove()">`:`<span class="hub-job-image" aria-hidden="true" style="display:grid;place-items:center;color:#ff6900"><i class="fa-solid fa-briefcase"></i></span>`}${/^https?:\/\//i.test(job.applyUrl||'')?`<a class="hub-job-apply" href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>`:''}</article>`).join('')}</div>`:'<div class="hub-empty">No jobs in this category yet.</div>'}`;
+      body.querySelectorAll('[data-job-category]').forEach(button=>button.addEventListener('click',()=>renderHubJobs(body,button.dataset.jobCategory)));
+      body.querySelectorAll('[data-job-index]').forEach(card=>{card.addEventListener('click',event=>{if(!event.target.closest('a'))showHubJobDetails(data[Number(card.dataset.jobIndex)]);});card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();showHubJobDetails(data[Number(card.dataset.jobIndex)]);}});});
+    }
+    function showHubJobDetails(job){if(!job)return;const dialog=document.getElementById('hubJobDialog'),body=document.getElementById('hubJobDialogBody'),image=/^https?:\/\//i.test(job.image||'')?`<img src="${escapeHTML(job.image)}" alt="${escapeHTML(job.title||'Job')}" onerror="this.remove()">`:'';body.innerHTML=`${image}<h2>${escapeHTML(job.title||'Job')}</h2><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p>${job.salary?`<p><b>Salary:</b> ${escapeHTML(job.salary)}</p>`:''}<p>${escapeHTML(job.description||'No further description provided.')}</p>${/^https?:\/\//i.test(job.applyUrl||'')?`<a class="hub-job-apply" href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener">Apply for this job</a>`:''}`;history.pushState({...history.state,aleeJobDetails:true},'',location.href);hubJobDetailsHistoryOpen=true;dialog.showModal();}
+    function closeHubJobDetails(fromHistory=false){const dialog=document.getElementById('hubJobDialog');if(dialog.open)dialog.close();if(hubJobDetailsHistoryOpen){hubJobDetailsHistoryOpen=false;if(!fromHistory)history.back();}}
+    document.getElementById('hubJobDialog')?.addEventListener('click',event=>{if(event.target===event.currentTarget)closeHubJobDetails();});
 
     async function loadHubReels(body) {
       body.innerHTML='<div class="hub-empty">Loading reels…</div>';
@@ -2098,6 +2130,11 @@
     let activeGalleryProduct = null;
     let activeGalleryIndex = 0;
     let productPopupHistoryOpen = false;
+    let imageZoomHistoryOpen = false;
+    let hubHistoryOpen = false;
+    let hubJobDetailsHistoryOpen = false;
+    let hubJobsCache = null;
+    let hubJobsLoadPromise = null;
 
     function productPriceMarkup(product) {
       const price = Number(product.price);
@@ -2204,9 +2241,7 @@
       window.scrollTo({ top:0, behavior:'smooth' });
     }
 
-    function openMobileAccount() {
-      openBuyerAccount();
-    }
+    function openMobileAccount() { openCurrentAccount(); }
 
     function sortProductsBySearchPopularity(productArray) {
       return productArray.map((product,index)=>({product,index})).sort((a,b)=>(productSearchCounts[b.product.id]||0)-(productSearchCounts[a.product.id]||0)||a.index-b.index).map(entry=>entry.product);
@@ -2631,11 +2666,12 @@
       const images = (activeGalleryProduct.images || []).slice(0, 20);
       const slider = document.getElementById('popupSlider');
       const thumbs = document.getElementById('popupThumbs');
-      slider.innerHTML = images.map((img,i) => `<img src="${img}" loading="eager" alt="${activeGalleryProduct.name} photo ${i+1}" onclick="openImageZoom(${i},event)" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`).join('');
+      slider.innerHTML = images.map((img,i) => `<img src="${img}" loading="${i===activeGalleryIndex?'eager':'lazy'}" decoding="async" alt="${activeGalleryProduct.name} photo ${i+1}" onclick="openImageZoom(${i},event)" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`).join('');
       thumbs.innerHTML = images.map((img,i) => `<button class="thumb ${i===activeGalleryIndex?'active':''}" onclick="goToGallery(${i},event)">${makeImage(img)}</button>`).join('');
       requestAnimationFrame(() => {
         const slide = slider.children[activeGalleryIndex];
-        if (slide) slider.scrollLeft = slide.offsetLeft - slider.offsetLeft;
+        if (slide) slider.scrollLeft = activeGalleryIndex * slider.clientWidth;
+        const activeThumb=thumbs.children[activeGalleryIndex];if(activeThumb)activeThumb.scrollIntoView({block:'nearest',inline:'nearest'});
       });
       document.getElementById('galleryCount').innerText = `${activeGalleryIndex+1} / ${Math.max(images.length,1)}`;
     }
@@ -2659,9 +2695,9 @@
       const photo = document.getElementById('imageZoomPhoto');
       photo.src = images[activeGalleryIndex] || 'assets/alee-logo.png';
       photo.alt = `${activeGalleryProduct.name} enlarged photo ${activeGalleryIndex + 1}`;
-      document.getElementById('imageZoom').classList.add('open');
+      const zoom=document.getElementById('imageZoom');if(!zoom.classList.contains('open')){history.pushState({...history.state,aleeImageZoom:true},'',location.href);imageZoomHistoryOpen=true;}zoom.classList.add('open');
     }
-    function closeImageZoom() { document.getElementById('imageZoom').classList.remove('open'); }
+    function closeImageZoom(fromHistory=false) { document.getElementById('imageZoom').classList.remove('open');if(imageZoomHistoryOpen){imageZoomHistoryOpen=false;if(!fromHistory)history.back();} }
     function zoomGalleryStep(direction, event) {
       if (event) event.stopPropagation();
       goToGallery(activeGalleryIndex + direction);
@@ -2675,7 +2711,7 @@
     document.getElementById('popupSlider').addEventListener('scroll', () => {
       if (!activeGalleryProduct) return;
       const slider = document.getElementById('popupSlider');
-      const width = slider.clientWidth + 10;
+      const width = slider.clientWidth;
       if (!width) return;
       const idx = Math.round(slider.scrollLeft / width);
       if (idx !== activeGalleryIndex && idx >= 0 && idx < Math.min(activeGalleryProduct.images.length, 20)) {
@@ -2686,7 +2722,7 @@
     });
 
     function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
-    window.addEventListener('popstate',event=>{if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);});
+    window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
         if (e.key === 'Escape') { if (document.getElementById('imageZoom').classList.contains('open')) closeImageZoom(); else closeProductPopup(); }
