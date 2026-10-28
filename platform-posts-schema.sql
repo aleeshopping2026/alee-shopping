@@ -4,6 +4,7 @@
 create table if not exists public.platform_posts (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null references auth.users(id) on delete cascade,
+  shop_id uuid references public.seller_shops(id) on delete set null,
   post_type text not null check (post_type in ('app','game','ad','job')),
   title text not null check (char_length(title) between 2 and 120),
   category text not null default 'Other' check (char_length(category) <= 100),
@@ -15,17 +16,22 @@ create table if not exists public.platform_posts (
   salary text not null default '' check (char_length(salary) <= 100),
   created_at timestamptz not null default now()
 );
+alter table public.platform_posts add column if not exists shop_id uuid references public.seller_shops(id) on delete set null;
+update public.platform_posts p set shop_id = s.id
+from public.seller_shops s
+where p.post_type = 'job' and p.owner_id = s.owner_id and p.shop_id is null;
 create index if not exists platform_posts_type_created_idx on public.platform_posts(post_type, created_at desc);
 create index if not exists platform_posts_owner_created_idx on public.platform_posts(owner_id, created_at desc);
+create index if not exists platform_posts_shop_idx on public.platform_posts(shop_id) where shop_id is not null;
 alter table public.platform_posts enable row level security;
 drop policy if exists "Anyone can read platform posts" on public.platform_posts;
 create policy "Anyone can read platform posts" on public.platform_posts for select using (true);
 drop policy if exists "Signed-in users can publish their own platform posts" on public.platform_posts;
 create policy "Signed-in users can publish their own platform posts" on public.platform_posts for insert to authenticated
-  with check (owner_id = (select auth.uid()));
+  with check (owner_id = (select auth.uid()) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can edit their own platform posts" on public.platform_posts;
 create policy "Users can edit their own platform posts" on public.platform_posts for update to authenticated
-  using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()));
+  using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can delete their own platform posts" on public.platform_posts;
 create policy "Users can delete their own platform posts" on public.platform_posts for delete to authenticated
   using (owner_id = (select auth.uid()));
