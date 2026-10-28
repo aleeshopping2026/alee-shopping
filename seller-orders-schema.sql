@@ -57,6 +57,11 @@ grant insert on public.store_orders to anon, authenticated;
 grant select on public.store_orders to authenticated;
 grant update (status) on public.store_orders to authenticated;
 
+-- Keep order-created ALEE inbox conversations compatible with group-chat's
+-- partial unique index, which excludes group conversations.
+alter table public.seller_conversations
+  add column if not exists is_group boolean not null default false;
+
 -- When a signed-in buyer orders from a seller-managed shop, post the order
 -- details to both the shop owner's chat and the ALEE owner's chat. Guest orders
 -- still appear in both relevant Orders inboxes, but cannot create a buyer chat.
@@ -113,7 +118,7 @@ begin
     if new.shop_id is null then
       insert into public.seller_conversations (shop_id, buyer_id, seller_id, buyer_label)
       values (null, new.user_id, v_seller_id, v_buyer_label)
-      on conflict (buyer_id) where shop_id is null do update set updated_at = now()
+      on conflict (buyer_id) where shop_id is null and is_group = false do update set updated_at = now()
       returning id into v_conversation_id;
     else
       insert into public.seller_conversations (shop_id, buyer_id, seller_id, buyer_label)
@@ -132,7 +137,7 @@ begin
      and v_alee_owner_id is distinct from v_seller_id then
     insert into public.seller_conversations (shop_id, buyer_id, seller_id, buyer_label)
     values (null, new.user_id, v_alee_owner_id, v_buyer_label)
-    on conflict (buyer_id) where shop_id is null do update set updated_at = now()
+    on conflict (buyer_id) where shop_id is null and is_group = false do update set updated_at = now()
     returning id into v_conversation_id;
 
     insert into public.seller_messages (conversation_id, sender_id, body)
