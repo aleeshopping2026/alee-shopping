@@ -34,6 +34,10 @@ create table if not exists public.seller_products (
   shop_id uuid not null references public.seller_shops(id) on delete cascade,
   name text not null check (char_length(name) between 2 and 120),
   price numeric(12,2) not null check (price > 0),
+  wholesale_price numeric(12,2) check (wholesale_price is null or wholesale_price >= 0),
+  offer_price numeric(12,2) check (offer_price is null or offer_price >= 0),
+  stock integer not null default 1 check (stock >= 0),
+  condition text not null default 'New' check (condition in ('New','Used - Like New','Used - Good','Used - Fair')),
   category text not null,
   category_label text not null,
   description text not null check (char_length(description) between 1 and 2000),
@@ -45,6 +49,10 @@ create table if not exists public.seller_products (
     references public.seller_shops(id, owner_id) on delete cascade
 );
 
+alter table public.seller_products add column if not exists wholesale_price numeric(12,2);
+alter table public.seller_products add column if not exists offer_price numeric(12,2);
+alter table public.seller_products add column if not exists stock integer not null default 1;
+alter table public.seller_products add column if not exists condition text not null default 'New';
 create index if not exists seller_products_shop_created_idx
   on public.seller_products(shop_id, created_at desc);
 create index if not exists seller_products_owner_created_idx

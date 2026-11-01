@@ -23,8 +23,11 @@ create policy "Shop owners can create their reels" on public.seller_reels for in
 drop policy if exists "Shop owners can delete their reels" on public.seller_reels;
 create policy "Shop owners can delete their reels" on public.seller_reels for delete to authenticated
   using (owner_id = (select auth.uid()));
+drop policy if exists "Shop owners can edit their reels" on public.seller_reels;
+create policy "Shop owners can edit their reels" on public.seller_reels for update to authenticated
+  using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()));
 grant select on public.seller_reels to anon, authenticated;
-grant insert, delete on public.seller_reels to authenticated;
+grant insert, update, delete on public.seller_reels to authenticated;
 
 create table if not exists public.seller_reel_likes (
   reel_id uuid not null references public.seller_reels(id) on delete cascade,

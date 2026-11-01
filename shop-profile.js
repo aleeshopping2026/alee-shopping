@@ -154,7 +154,8 @@
     for (const [key, label, icon] of [['facebook','Facebook','fa-facebook'],['instagram','Instagram','fa-instagram'],['youtube','YouTube','fa-youtube'],['tiktok','TikTok','fa-tiktok']]) {
       if (/^https?:\/\//i.test(String(shop[key] || ''))) parts.push(`<a href="${esc(shop[key])}" target="_blank" rel="noopener noreferrer"><i class="fa-brands ${icon}"></i><span>${label}</span></a>`);
     }
-    openProfileDialog('Contact', `<div class="contact-details">${parts.length ? parts.join('') : '<p>Contact details have not been added yet.</p>'}</div>`);
+    openProfileDialog('Contact', `<div class="contact-details">${parts.length ? parts.join('') : '<p>Contact details have not been added yet.</p>'}</div><button class="contact-message-button" id="contactMessageShop" type="button"><i class="fa-regular fa-comments"></i> Message this shop</button>`);
+    document.getElementById('contactMessageShop').addEventListener('click',()=>{closeProfileDialog(true);history.replaceState({...history.state,aleeShopProfileDialog:false},'',location.href);if(window.aleeChat?.openShop)window.aleeChat.openShop(shop.id,shop.name,{initialMessage:`Hello, I found your shop on aleeshopping and would like to ask you something.`});});
   }
 
   async function getBusinessStats() {

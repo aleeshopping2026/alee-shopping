@@ -444,7 +444,11 @@
     .popup-sticky-action { position:sticky; bottom:0; z-index:10; background:linear-gradient(180deg, transparent 0%, var(--card-bg) 20%); padding-top:12px; display:grid; grid-template-columns:72px 1fr 1fr; gap:8px; align-items:center; }
     .popup-quantity { width:100%; height:46px; padding:0 6px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); font:inherit; text-align:center; }
     .popup-sticky-action .btn { margin-top:0; min-height:46px; padding:8px 5px; font-size:14px; }
-    .popup-sticky-action .buy-now-btn { background:#16803c; }
+    .popup-sticky-action .buy-now-btn { background:#f4c430; color:#172033; border-color:#d9a900; }
+    .seller-dashboard-title h2,.seller-dashboard .seller-shop-name { color:#f36b00; }
+    #sellerDashboard .seller-header h2,#sellerDashboard .seller-panel h3,#sellerDashboard .seller-action-button.primary { color:#172033; }
+    #sellerDashboard .seller-action-button.primary { background:#f3f4f6;border-color:#d1d5db; }
+    #sellerDashboard .seller-shop-link { display:none; }
     @media (max-width: 700px) {
       .product-popup { padding:8px 5px calc(18px + env(safe-area-inset-bottom)); }
       .popup-content { width:100%; min-width:0; margin:0 auto; border-radius:14px; padding:10px; }
@@ -509,6 +513,14 @@
     .seller-panel textarea { min-height:75px; resize:vertical; }
     .seller-panel input[type=file] { font-size:12px; }
     .seller-notice { min-height:20px; margin-top:8px; color:#fbbf24; font-size:13px; overflow-wrap:anywhere; }
+    .seller-reel-manager-list { display:grid; gap:12px; margin-top:14px; }
+    .seller-reel-manager-card { display:grid; grid-template-columns:minmax(0,180px) minmax(0,1fr); gap:12px; padding:12px; border:1px solid var(--glass-border); border-radius:14px; background:var(--card-bg); }
+    .seller-reel-manager-card video { width:100%; max-height:250px; aspect-ratio:9/16; object-fit:cover; border-radius:10px; background:#111; }
+    .seller-reel-manager-card label { display:grid; gap:7px; margin:0; color:var(--text-white); font-size:12px; font-weight:800; }
+    .seller-reel-manager-card textarea { min-height:95px; padding:10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; resize:vertical; }
+    .seller-reel-manager-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .seller-reel-manager-actions .delete { color:#dc2626; border-color:#fecaca; }
+    @media(max-width:560px){.seller-reel-manager-card{grid-template-columns:1fr 1.2fr;gap:9px;padding:9px}.seller-reel-manager-card video{max-height:210px}.seller-reel-manager-actions .seller-action-button{min-height:36px;padding:7px 9px;font-size:11px}}
     .seller-shop-link { display:block; margin:8px 0; color:#93c5fd; overflow-wrap:anywhere; }
     .seller-logo-wrap { position:relative; width:88px; margin:4px 0 12px; }
     .seller-logo-preview { display:block; width:88px; height:88px; object-fit:cover; border:3px solid var(--light-leaf); border-radius:22px; background:#fff; }
@@ -775,7 +787,6 @@
             <div class="order-info">
               <div class="info-chip"><strong>🚚 Delivery</strong><span id="popupShippingStatus">Island-wide</span></div>
               <div class="info-chip"><strong>💵 Payment</strong>Cash on Delivery</div>
-              <div class="info-chip"><strong>💬 Order</strong>WhatsApp</div>
             </div>
           </section>
         </div>
@@ -905,6 +916,12 @@
         <div class="seller-form-grid">
           <label>Item name<input name="name" minlength="2" maxlength="120" required></label>
           <label>Price (LKR)<input name="price" type="number" min="1" step="1" required></label>
+          <label>Wholesale price (LKR)<input name="wholesalePrice" type="number" min="0" step="1" placeholder="Optional"></label>
+          <label>Offer price (LKR)<input name="offerPrice" type="number" min="0" step="1" placeholder="Optional"></label>
+          <label>Stock quantity<input name="stock" type="number" min="0" step="1" value="1" required></label>
+          <label>Condition<select name="condition" required><option value="New">New</option><option value="Used - Like New">Used - Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
+          <label>Stock quantity<input name="stock" type="number" min="0" step="1" value="1" required></label>
+          <label>Condition<select name="condition" required><option value="New">New</option><option value="Used - Like New">Used - Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
           <label>Category<select name="category" id="sellerProductCategory" required><option value="">Choose a category</option></select></label>
           <label>Size options<input name="sizes" maxlength="250" placeholder="e.g. S, M, L, XL"></label>
         </div>
@@ -913,7 +930,7 @@
         <label>Product photos (up to 10)<input name="photos" id="sellerProductPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple required><span class="seller-muted" id="sellerProductPhotoHelp">Choose up to 10 photos. Each image is uploaded to secure shop storage.</span></label>
         <div class="seller-action-row"><button class="seller-action-button primary" id="sellerProductSubmit" type="submit">Add Item</button><button class="seller-action-button" id="sellerProductCancel" type="button" onclick="cancelEditSellerProduct()" hidden>Cancel</button></div>
         <div class="seller-notice" id="sellerProductStatus" role="status" aria-live="polite"></div>
-      </form><div class="seller-panel" style="margin-top:14px"><h3>Add a shop Reel</h3><form id="sellerReelForm" onsubmit="saveSellerReel(event)"><label>Video<input name="video" type="file" accept="video/mp4,video/webm,video/quicktime" required><span class="seller-muted">Upload a short MP4, WebM, or MOV video (up to 50 MB).</span></label><label>Caption<textarea name="caption" maxlength="500" placeholder="Show your products or shop"></textarea></label><div class="seller-action-row"><button class="seller-action-button primary" type="submit">Post Reel</button></div><div class="seller-notice" id="sellerReelStatus" role="status" aria-live="polite"></div></form></div></section>
+      </form><div class="seller-panel" style="margin-top:14px"><h3>Add a shop Reel</h3><form id="sellerReelForm" onsubmit="saveSellerReel(event)"><label>Video<input name="video" type="file" accept="video/mp4,video/webm,video/quicktime" required><span class="seller-muted">Upload a short MP4, WebM, or MOV video (up to 50 MB).</span></label><label>Caption<textarea name="caption" maxlength="500" placeholder="Show your products or shop"></textarea></label><div class="seller-action-row"><button class="seller-action-button primary" type="submit">Post Reel</button></div><div class="seller-notice" id="sellerReelStatus" role="status" aria-live="polite"></div></form><div class="seller-reel-manager-list" id="sellerReelList"><p class="seller-muted">Your reels will appear here.</p></div></div></section>
       <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
       <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsMonth">Month</label><input id="sellerAnalyticsMonth" type="month" onchange="loadSellerAnalytics()"></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Orders this month (excluding cancelled)</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Order value (excluding cancelled)</span><strong id="sellerAnalyticsValue">—</strong></div></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
       <div class="seller-notice" id="sellerDashboardStatus" role="status" aria-live="polite"></div>
@@ -1164,7 +1181,7 @@
       return {id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
     }
     function mapSellerProduct(row) {
-      return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:Number(row.price),discountPercent:0,category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
+      const offer=Number(row.offer_price)||0,base=Number(row.price)||0;return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:offer>0?offer:base,originalPrice:offer>0?base:null,discountPercent:offer>0&&base>offer?Math.round((base-offer)*100/base):0,stock:Number(row.stock??1),condition:row.condition||'New',wholesalePrice:Number(row.wholesale_price)||null,category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
     }
 
     function normalizeShopPhone(value,countryCode) {
@@ -1282,8 +1299,9 @@
           const {data:items,error:itemError}=await supabaseClient.from('seller_products').select('*').eq('owner_id',activeUser.id).order('created_at',{ascending:false});
           if(itemError) throw itemError;
           sellerProducts=items||[];renderSellerProductList();
+          await loadSellerReels();
         } else {
-          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;
+          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';
           document.getElementById('sellerShopFormTitle').textContent='Create Shop';
           document.getElementById('sellerShopForm').reset();
           document.getElementById('sellerShopLogoFile').required=true;
@@ -1486,7 +1504,7 @@
         const videoUrl=supabaseClient.storage.from('seller-reels').getPublicUrl(path).data.publicUrl;
         const {error}=await supabaseClient.from('seller_reels').insert({owner_id:activeUser.id,shop_id:currentSellerShop.id,video_url:videoUrl,storage_path:path,caption:form.elements.caption.value.trim()});
         if(error)throw error;
-        form.reset();status.textContent='Your reel is posted. Open the Reels circle to view it.';
+        form.reset();status.textContent='Your reel is posted. You can edit its caption or delete it below.';await loadSellerReels();
       }catch(error){
         console.error('Reel '+stage+' failed:',error);
         const message=String(error?.message||error||'Unknown error');
@@ -1494,6 +1512,18 @@
         status.textContent=message.includes('413')||message.toLowerCase().includes('too large')?'Upload limit reached. Keep the video under 50 MB and check Supabase Storage → Settings → Global file size limit.':message==='Failed to fetch'?'The video upload connection was interrupted. Try again on a stable Wi‑Fi connection; resumable upload will retry interrupted chunks.':'Could not finish '+stage+'. '+message;
       }finally{button.disabled=false;}
     }
+
+    async function loadSellerReels(){
+      const root=document.getElementById('sellerReelList');if(!root)return;if(!activeUser||!supabaseClient||!currentSellerShop){root.innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';return;}
+      root.innerHTML='<p class="seller-muted">Loading your reels…</p>';
+      const {data,error}=await supabaseClient.from('seller_reels').select('id,video_url,storage_path,caption,created_at').eq('owner_id',activeUser.id).eq('shop_id',currentSellerShop.id).order('created_at',{ascending:false}).limit(50);
+      if(error){root.innerHTML=`<p class="seller-muted">Could not load reels. Run the updated seller-community-schema.sql. ${escapeHTML(error.message||'')}</p>`;return;}
+      if(!data?.length){root.innerHTML='<p class="seller-muted">You have not posted any reels yet.</p>';return;}
+      root.innerHTML=data.map(reel=>`<article class="seller-reel-manager-card" data-seller-reel="${escapeHTML(reel.id)}"><video src="${escapeHTML(reel.video_url)}" controls playsinline preload="metadata"></video><div><label>Caption<textarea maxlength="500" data-reel-caption>${escapeHTML(reel.caption||'')}</textarea></label><div class="seller-reel-manager-actions"><button class="seller-action-button primary" type="button" data-save-reel><i class="fa-solid fa-check"></i> Save</button><button class="seller-action-button delete" type="button" data-delete-reel><i class="fa-solid fa-trash"></i> Delete</button></div><div class="seller-notice" data-reel-status role="status" aria-live="polite"></div></div></article>`).join('');
+      root.querySelectorAll('[data-seller-reel]').forEach(card=>{card.querySelector('[data-save-reel]').addEventListener('click',()=>saveSellerReelCaption(card));card.querySelector('[data-delete-reel]').addEventListener('click',()=>deleteSellerReel(card));});
+    }
+    async function saveSellerReelCaption(card){const id=card.dataset.sellerReel,status=card.querySelector('[data-reel-status]'),caption=card.querySelector('[data-reel-caption]').value.trim(),button=card.querySelector('[data-save-reel]');button.disabled=true;status.textContent='Saving…';const {data,error}=await supabaseClient.from('seller_reels').update({caption}).eq('id',id).eq('owner_id',activeUser.id).select('id').maybeSingle();button.disabled=false;if(error||!data){status.textContent=`Could not save the caption. Run the updated seller-community-schema.sql. ${error?.message||''}`;return;}status.textContent='Caption saved.';}
+    async function deleteSellerReel(card){if(!confirm('Delete this reel permanently?'))return;const id=card.dataset.sellerReel,status=card.querySelector('[data-reel-status]'),path=card.querySelector('video').getAttribute('src'),button=card.querySelector('[data-delete-reel]');button.disabled=true;status.textContent='Deleting reel…';const {data,error}=await supabaseClient.from('seller_reels').delete().eq('id',id).eq('owner_id',activeUser.id).select('storage_path').maybeSingle();if(error||!data){button.disabled=false;status.textContent=`Could not delete the reel. ${error?.message||''}`;return;}try{const storagePath=data.storage_path||path.split('/seller-reels/')[1];if(storagePath)await supabaseClient.storage.from('seller-reels').remove([storagePath]);}catch(cleanupError){console.warn('Deleted reel video file could not be cleaned up.',cleanupError);}card.remove();if(!document.querySelector('#sellerReelList [data-seller-reel]'))document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">You have not posted any reels yet.</p>';}
 
     async function saveSellerProduct(event) {
       event.preventDefault();
@@ -1513,7 +1543,7 @@
           const result=await uploadSellerImage(files[index],`${activeUser.id}/${currentSellerShop.id}`);uploaded.push(result);imageUrls.push(result.url);
         }
         if(files.length)imageUrls=uploaded.map(item=>item.url);
-        const payload={owner_id:activeUser.id,shop_id:currentSellerShop.id,name,price:Number(form.elements.price.value),category,category_label:categoryLabel,description:form.elements.description.value.trim(),features:splitSellerList(form.elements.features.value),sizes:splitSellerList(form.elements.sizes.value),image_urls:imageUrls};
+        const payload={owner_id:activeUser.id,shop_id:currentSellerShop.id,name,price:Number(form.elements.price.value),wholesale_price:Number(form.elements.wholesalePrice.value)||null,offer_price:Number(form.elements.offerPrice.value)||null,stock:Number(form.elements.stock.value),condition:form.elements.condition.value,category,category_label:categoryLabel,description:form.elements.description.value.trim(),features:splitSellerList(form.elements.features.value),sizes:splitSellerList(form.elements.sizes.value),image_urls:imageUrls};
         const query=editingItem
           ?supabaseClient.from('seller_products').update(payload).eq('id',editingItem.id).eq('owner_id',activeUser.id).select().single()
           :supabaseClient.from('seller_products').insert(payload).select().single();
@@ -1669,7 +1699,7 @@
       if(!user){document.getElementById('accountProfileSetup').classList.remove('show');document.getElementById('accountDeleteShopMenu').hidden=true;document.getElementById('mobileDeleteShopMenu').hidden=true;}
       if(user && window.aleeChat && !window.aleePendingChatOpening){
         const params=new URLSearchParams(location.search),shopId=params.get('chatShop');
-        if(shopId){window.aleePendingChatOpening=true;const shopName=params.get('chatShopName')||'Shop';params.delete('chatShop');params.delete('chatShopName');history.replaceState({},'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);window.setTimeout(()=>window.aleeChat.openShop(shopId,shopName),0);}
+        if(shopId){window.aleePendingChatOpening=true;const shopName=params.get('chatShopName')||'Shop';let initialMessage='';try{initialMessage=sessionStorage.getItem('alee-pending-shop-chat-message')||'';sessionStorage.removeItem('alee-pending-shop-chat-message');}catch(_){}params.delete('chatShop');params.delete('chatShopName');history.replaceState({},'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);window.setTimeout(()=>window.aleeChat.openShop(shopId,shopName,{initialMessage}),0);}
       }
     }
 
@@ -1917,7 +1947,7 @@
       body.querySelectorAll('[data-job-index]').forEach(card=>{card.addEventListener('click',event=>{if(!event.target.closest('a'))showHubJobDetails(data[Number(card.dataset.jobIndex)]);});card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();showHubJobDetails(data[Number(card.dataset.jobIndex)]);}});});
     }
     function showHubJobDetails(job){if(!job)return;const dialog=document.getElementById('hubJobDialog'),body=document.getElementById('hubJobDialogBody'),image=/^https?:\/\//i.test(job.image||'')?`<img src="${escapeHTML(job.image)}" alt="${escapeHTML(job.title||'Job')}" onerror="this.remove()">`:'';body.innerHTML=`${image}<h2>${escapeHTML(job.title||'Job')}</h2><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p>${job.salary?`<p><b>Salary:</b> ${escapeHTML(job.salary)}</p>`:''}<p>${escapeHTML(job.description||'No further description provided.')}</p><div class="job-dialog-actions">${/^https?:\/\//i.test(job.applyUrl||'')?`<a class="job-dialog-action primary" href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener"><i class="fa-solid fa-paper-plane"></i> Apply for this job</a>`:''}${job.shop_id?'<button class="job-dialog-action primary" type="button" data-job-contact><i class="fa-regular fa-comments"></i> Message the shop</button>':''}<button class="job-dialog-action share" type="button" data-job-share><i class="fa-solid fa-share-nodes"></i> Share job</button><p class="job-dialog-status" data-job-dialog-status role="status" aria-live="polite"></p></div>`;body.querySelector('[data-job-contact]')?.addEventListener('click',()=>messageHubJobShop(job));body.querySelector('[data-job-share]')?.addEventListener('click',()=>shareHubJob(job));history.pushState({...history.state,aleeJobDetails:true},'',location.href);hubJobDetailsHistoryOpen=true;dialog.showModal();}
-    async function messageHubJobShop(job){const status=document.querySelector('[data-job-dialog-status]');if(!job?.shop_id){if(status)status.textContent='This job post is not linked to a shop yet.';return;}if(!window.aleeChat?.openShop){if(status)status.textContent='Shop messaging is unavailable. Please reload the page.';return;}await window.aleeChat.openShop(job.shop_id,job.shop_name||'Hiring shop');}
+    async function messageHubJobShop(job){const status=document.querySelector('[data-job-dialog-status]');if(!job?.shop_id){if(status)status.textContent='This job post is not linked to a shop yet.';return;}if(!window.aleeChat?.openShop){if(status)status.textContent='Shop messaging is unavailable. Please reload the page.';return;}const context=`Hello, I am interested in the job “${job.title||'Job'}” on aleeshopping.\nCategory: ${job.category||'—'}${job.location?`\nLocation: ${job.location}`:''}${job.type?`\nType: ${job.type}`:''}${job.salary?`\nSalary: ${job.salary}`:''}\nJob details: ${job.description||'Please share more information.'}`;closeHubJobDetails(true);history.replaceState({...history.state,aleeJobDetails:false},'',location.href);await window.aleeChat.openShop(job.shop_id,job.shop_name||'Hiring shop',{initialMessage:context});}
     async function shareHubJob(job){const status=document.querySelector('[data-job-dialog-status]'),url=new URL('index.html',location.href);if(job.id)url.searchParams.set('job',job.id);const title=job.title||'Job opening',text=[title,job.category,job.location,job.type,job.salary,job.description].filter(Boolean).join(' · ');try{if(navigator.share)await navigator.share({title:`${title} | aleeshopping`,text,url:url.href});else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(`${text}\n${url.href}`);if(status)status.textContent='Job details and link copied.';}else{const input=document.createElement('textarea');input.value=`${text}\n${url.href}`;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();const copied=document.execCommand('copy');input.remove();if(!copied)throw new Error('copy failed');if(status)status.textContent='Job details and link copied.';}}catch(error){if(error.name!=='AbortError'&&status)status.textContent='Could not open sharing. Try copying the job link from the browser.';}}
     function closeHubJobDetails(fromHistory=false){const dialog=document.getElementById('hubJobDialog');if(dialog.open)dialog.close();if(hubJobDetailsHistoryOpen){hubJobDetailsHistoryOpen=false;if(!fromHistory)history.back();}}
     document.getElementById('hubJobDialog')?.addEventListener('click',event=>{if(event.target===event.currentTarget)closeHubJobDetails();});
