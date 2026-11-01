@@ -443,7 +443,7 @@
     .info-chip { text-align:center; background:#fff4bf; border:1px solid #eab308; border-radius:10px; padding:9px 5px; font-size:10px; color:#493b10; }
     .info-chip strong { display:block; color:#a16207; font-size:12px; margin-bottom:2px; }
     .popup-sticky-action { position:sticky; bottom:0; z-index:10; background:linear-gradient(180deg, transparent 0%, var(--card-bg) 20%); padding-top:12px; display:grid; grid-template-columns:72px 1fr 1fr; gap:8px; align-items:center; }
-    .popup-sticky-action { position:fixed; left:50%; bottom:0; transform:translateX(-50%); width:min(100%,700px); padding:12px 12px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,#fff0,#fff 20%); }
+    .popup-sticky-action { position:fixed!important; left:50%; bottom:0; transform:translateX(-50%); width:min(100vw,700px); z-index:10002; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,#fff0,#fff 20%); box-sizing:border-box; display:none; }
     .popup-quantity { width:100%; height:46px; padding:0 6px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); font:inherit; text-align:center; }
     .popup-sticky-action .btn { margin-top:0; min-height:46px; padding:8px 5px; font-size:14px; }
     .popup-sticky-action .buy-now-btn { background:#f4c430; color:#172033; border-color:#d9a900; }
@@ -2706,6 +2706,7 @@
       document.getElementById("popupBuyBtn").onclick = () => { buyNow(id); };
       const popup=document.getElementById("productPopup");
       if(popup.style.display!=='block'){history.pushState({...history.state,aleeProductPopup:true},'',location.href);productPopupHistoryOpen=true;}
+      const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions){if(stickyActions.parentElement!==document.body)document.body.appendChild(stickyActions);stickyActions.style.display='grid';}
       popup.style.display = "block";
       document.body.style.overflow = 'hidden';
     }
@@ -2836,7 +2837,7 @@
       }
     });
 
-    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
+    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
     window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
