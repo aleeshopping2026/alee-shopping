@@ -35,6 +35,8 @@ alter table public.seller_messages alter column body drop not null;
 alter table public.seller_messages add column if not exists attachment_path text;
 alter table public.seller_messages add column if not exists attachment_name text;
 alter table public.seller_messages add column if not exists attachment_mime text;
+alter table public.seller_messages add column if not exists deleted_for uuid[] not null default '{}';
+alter table public.seller_messages add column if not exists deleted_for_everyone boolean not null default false;
 alter table public.seller_messages drop constraint if exists seller_messages_body_check;
 alter table public.seller_messages drop constraint if exists seller_messages_body_or_attachment_check;
 alter table public.seller_messages add constraint seller_messages_body_or_attachment_check
@@ -87,6 +89,17 @@ create policy "Chat participants can read messages" on public.seller_messages
     where c.id = conversation_id and (select auth.uid()) in (c.buyer_id, c.seller_id)
   ));
 
+drop policy if exists "Participants can update message visibility" on public.seller_messages;
+create policy "Participants can update message visibility" on public.seller_messages
+  for update to authenticated using (exists (
+    select 1 from public.seller_conversations c
+    where c.id = conversation_id and (select auth.uid()) in (c.buyer_id,c.seller_id)
+  ))
+  with check (exists (
+    select 1 from public.seller_conversations c
+    where c.id = conversation_id and (select auth.uid()) in (c.buyer_id,c.seller_id)
+  ) and (sender_id = (select auth.uid()) or (select auth.uid()) = any(deleted_for)));
+
 drop policy if exists "Participants can send their own messages" on public.seller_messages;
 create policy "Participants can send their own messages" on public.seller_messages
   for insert to authenticated
@@ -104,6 +117,7 @@ create policy "Participants can send their own messages" on public.seller_messag
 
 grant select on public.seller_conversations, public.seller_messages to authenticated;
 grant insert on public.seller_messages to authenticated;
+grant update on public.seller_messages to authenticated;
 grant usage, select on sequence public.seller_messages_id_seq to authenticated;
 
 drop policy if exists "Users can read their own chat preferences" on public.seller_chat_preferences;
@@ -125,6 +139,18 @@ create policy "Users can update their own chat preferences" on public.seller_cha
     where c.id = conversation_id and (select auth.uid()) in (c.buyer_id, c.seller_id)
   ));
 grant select, insert, update on public.seller_chat_preferences to authenticated;
+
+create or replace function public.get_seller_chat_peer_read_at(p_conversation_id uuid)
+returns timestamptz language sql stable security definer set search_path=public
+as $$
+  select p.last_read_at from public.seller_conversations c
+  join public.seller_chat_preferences p on p.conversation_id=c.id
+  where c.id=p_conversation_id and (select auth.uid()) in (c.buyer_id,c.seller_id)
+    and p.user_id=case when (select auth.uid())=c.buyer_id then c.seller_id else c.buyer_id end
+  limit 1;
+$$;
+revoke all on function public.get_seller_chat_peer_read_at(uuid) from public;
+grant execute on function public.get_seller_chat_peer_read_at(uuid) to authenticated;
 
 
 drop policy if exists "Users can read their chat blocks" on public.seller_chat_blocks;

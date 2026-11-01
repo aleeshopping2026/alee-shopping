@@ -183,3 +183,8 @@
   #aleeChatOverlay .alee-chat-send{position:relative;z-index:2;flex:0 0 auto;padding-bottom:max(8px,env(safe-area-inset-bottom));}
   #aleeChatOverlay .alee-chat-send textarea{scroll-margin:0;resize:none}
 }
+.alee-chat-ticks{color:#9ca3af;font-size:12px;font-weight:900;letter-spacing:-3px;margin-left:3px}
+.alee-chat-ticks.read{color:#28a8e0}
+.alee-chat-message{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.alee-chat-thread-dialog [data-msg-action],.alee-chat-thread-dialog [data-delete-mode],.alee-chat-thread-dialog [data-dialog-close]{display:flex;width:100%;min-height:46px;align-items:center;gap:10px;padding:10px 14px;border:0;border-bottom:1px solid #e5e7eb;background:#fff;color:#172033;text-align:left;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.alee-chat-thread-dialog [data-delete-mode="everyone"]{color:#dc2626}

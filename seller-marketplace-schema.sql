@@ -38,6 +38,7 @@ create table if not exists public.seller_products (
   offer_price numeric(12,2) check (offer_price is null or offer_price >= 0),
   stock integer not null default 1 check (stock >= 0),
   condition text not null default 'New' check (condition in ('New','Used - Like New','Used - Good','Used - Fair')),
+  colors text[] not null default '{}',
   category text not null,
   category_label text not null,
   description text not null check (char_length(description) between 1 and 2000),
@@ -53,6 +54,7 @@ alter table public.seller_products add column if not exists wholesale_price nume
 alter table public.seller_products add column if not exists offer_price numeric(12,2);
 alter table public.seller_products add column if not exists stock integer not null default 1;
 alter table public.seller_products add column if not exists condition text not null default 'New';
+alter table public.seller_products add column if not exists colors text[] not null default '{}';
 create index if not exists seller_products_shop_created_idx
   on public.seller_products(shop_id, created_at desc);
 create index if not exists seller_products_owner_created_idx
@@ -104,7 +106,7 @@ from public.seller_shops;
 create or replace view public.seller_products_profile_public
 with (security_barrier = true)
 as select id, shop_id, name, price, category, category_label, description,
-          features, sizes, image_urls, created_at
+          features, sizes, image_urls, created_at, wholesale_price, offer_price, stock, condition, colors
 from public.seller_products;
 
 grant select on public.seller_shops_profile_public to anon, authenticated;
