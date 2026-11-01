@@ -228,6 +228,7 @@
     .hero-dots { position:absolute; bottom:10px; left:0; right:0; z-index:2; display:flex; justify-content:center; gap:7px; }
     .hero-dot { width:9px; height:9px; border:0; border-radius:50%; background:rgba(255,255,255,.55); cursor:pointer; }
     .hero-dot.active { background:#fff; transform:scale(1.2); }
+    .hero-counter { display:none !important; }
     .hero-counter { color:#fff; background:rgba(0,0,0,.45); border-radius:12px; padding:3px 9px; font-size:11px; font-weight:700; }
     .hero-banner .banner-caption { display:none; }
     .shops-section { padding:12px 3%; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
@@ -1707,8 +1708,10 @@
     }
 
     function setLoggedInUser(user) {
-      if(activeUser?.id!==user?.id){privateAccountProfile=null;currentSellerShop=null;sellerProducts=[];document.getElementById('accountProfileSetupForm').reset();document.getElementById('buyerDetailsForm').reset();document.getElementById('buyerDetailsForm').hidden=true;document.getElementById('buyerDetailsStatus').textContent='';document.getElementById('accountProfileSetupStatus').textContent='';document.getElementById('accountProfileRetry').hidden=true;}
+      const identityChanged = activeUser?.id !== user?.id;
+      if(identityChanged){privateAccountProfile=null;currentSellerShop=null;sellerProducts=[];document.getElementById('accountProfileSetupForm').reset();document.getElementById('buyerDetailsForm').reset();document.getElementById('buyerDetailsForm').hidden=true;document.getElementById('buyerDetailsStatus').textContent='';document.getElementById('accountProfileSetupStatus').textContent='';document.getElementById('accountProfileRetry').hidden=true;}
       activeUser = user || null;
+      if (identityChanged && typeof chooseUnseenBannerFor === 'function') chooseUnseenBannerFor(activeUser);
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
       document.getElementById('profileNameDisplay').innerText = user ? label : 'Guest';
@@ -2122,7 +2125,26 @@
       const video = heroTrack.querySelector('video');
       if (video) video.play().catch(() => {});
     }
+    function chooseUnseenBannerFor(user) {
+      if (!bannerList.length) return;
+      const viewer = user?.id ? `user:${user.id}` : 'guest';
+      const seenKey = `alee-banner-seen:${viewer}`;
+      let seen = [];
+      try {
+        const saved = JSON.parse(localStorage.getItem(seenKey) || '[]');
+        if (Array.isArray(saved)) seen = saved.map(String);
+      } catch (_) {}
+      const bannerId = banner => String(banner.video || banner.image || banner.alt || '');
+      let unseenIndex = bannerList.findIndex(banner => !seen.includes(bannerId(banner)));
+      if (unseenIndex < 0) { seen = []; unseenIndex = 0; }
+      activeBannerIndex = unseenIndex;
+      const selectedId = bannerId(bannerList[unseenIndex]);
+      if (selectedId && !seen.includes(selectedId)) seen.push(selectedId);
+      try { localStorage.setItem(seenKey, JSON.stringify(seen)); } catch (_) {}
+      renderActiveBanner();
+    }
     renderActiveBanner();
+    chooseUnseenBannerFor(activeUser);
     if (bannerList.length < 2) {
       document.querySelectorAll('.hero-nav').forEach(button => button.hidden = true);
       heroDots.hidden = true;
