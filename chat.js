@@ -48,8 +48,8 @@
     ui.role='buyer';await showThread(id,titleEl.textContent);
     if(initialMessage){const message={conversation_id:id,sender_id:user.id,body:String(initialMessage).slice(0,3900)};const expiry=Number(ui.preferences[id]?.disappearing_seconds||0);if(expiry)message.expires_at=new Date(Date.now()+expiry*1000).toISOString();const {error:messageError}=await db.from('seller_messages').insert(message);if(messageError){const status=mainEl.querySelector('#aleeChatStatus');if(status)status.textContent=`Chat opened, but the message was not sent: ${messageError.message}`;}else await loadMessages();}
   }
-  async function openSellerInbox(){
-    const preserveView=ui.mode==='inbox'&&Boolean(listEl.querySelector('.alee-chat-sidebar-layout'));const user=await requireUser();if(!user)return;if(preserveView){ui.mode='inbox';ui.conversationId=null;stopLive();}else setMode('inbox');ui.role='seller';titleEl.textContent='Seller inbox';
+  async function openSellerInbox(knownUser=null){
+    const preserveView=ui.mode==='inbox'&&Boolean(listEl.querySelector('.alee-chat-sidebar-layout'));const user=knownUser||await requireUser();if(!user)return;ui.user=user;setupNotificationListener(user);if(preserveView){ui.mode='inbox';ui.conversationId=null;stopLive();}else setMode('inbox');ui.role='seller';titleEl.textContent='Seller inbox';
     if(!preserveView)listEl.innerHTML='<div class="alee-chat-empty"><span class="alee-chat-empty-icon">💬</span><strong>Your chats</strong><p>Select a conversation to start messaging.</p></div>';
     const {data:shop,error:shopError}=await db.from('seller_shops').select('id,shop_name').eq('owner_id',user.id).maybeSingle();
     const isAleeOwner=String(user.email||'').toLowerCase()==='aleeshopping2026@gmail.com'; if(shopError||(!shop&&!isAleeOwner)){listEl.innerHTML='<div class="alee-chat-list-title">Seller inbox</div><div class="alee-chat-status">Create your shop in My Account first. Then buyers can message you here.</div>';return;}
@@ -57,8 +57,8 @@
     if(error){showError('Could not load inbox. Please run seller-chat-schema.sql in Supabase and reload.');return;}
     await renderConversationList(rows||[],'seller');startInboxPolling('seller');
   }
-  async function openBuyerInbox(){
-    const preserveView=ui.mode==='inbox'&&Boolean(listEl.querySelector('.alee-chat-sidebar-layout'));const user=await requireUser();if(!user)return;if(preserveView){ui.mode='inbox';ui.conversationId=null;stopLive();}else setMode('inbox');ui.role='buyer';titleEl.textContent='My messages';
+  async function openBuyerInbox(knownUser=null){
+    const preserveView=ui.mode==='inbox'&&Boolean(listEl.querySelector('.alee-chat-sidebar-layout'));const user=knownUser||await requireUser();if(!user)return;ui.user=user;setupNotificationListener(user);if(preserveView){ui.mode='inbox';ui.conversationId=null;stopLive();}else setMode('inbox');ui.role='buyer';titleEl.textContent='My messages';
     if(!preserveView)listEl.innerHTML='<div class="alee-chat-empty"><span class="alee-chat-empty-icon">💬</span><strong>Your chats</strong><p>Select a conversation to start messaging.</p></div>';
     const {data:rows,error}=await db.from('seller_conversations').select('id,shop_id,buyer_id,seller_id,buyer_label,last_message_at').eq('buyer_id',user.id).order('last_message_at',{ascending:false});
     if(error){showError('Could not load messages. Please run seller-chat-schema.sql in Supabase and reload.');return;}
@@ -272,7 +272,7 @@
   function stopLive(){if(ui.callId)sendCallSignal('end');cleanupCall();ui.callReady=false;if(ui.callChannel&&db){db.removeChannel(ui.callChannel);ui.callChannel=null;}if(ui.channel&&db){db.removeChannel(ui.channel);ui.channel=null;}if(ui.inboxChannel&&db){db.removeChannel(ui.inboxChannel);ui.inboxChannel=null;}if(ui.poll){clearInterval(ui.poll);ui.poll=null;}if(ui.inboxPoll){clearInterval(ui.inboxPoll);ui.inboxPoll=null;}}
   async function openHome(){const user=await requireUser();if(!user)return;let role='buyer';try{role=localStorage.getItem(`alee-account-role:${user.id}`)||'buyer';}catch(_){}open();if(role==='seller')await openSellerInbox();else await openBuyerInbox();}
   async function openShop(shopId,shopName,options={}){if(!db){showError('Online messages need the Supabase chat setup.');return;}const {data}=await db.auth.getUser(),initialMessage=String(options?.initialMessage||'').slice(0,3900);if(!data.user){if(initialMessage)try{sessionStorage.setItem('alee-pending-shop-chat-message',initialMessage);}catch(_){}const url=new URL('index.html',location.href);url.searchParams.set('chatShop',shopId);url.searchParams.set('chatShopName',shopName||'Shop');location.href=url.href;return;}ui.user=data.user;setupNotificationListener(data.user);open();await startShopChat(shopId,shopName,initialMessage);}
-  async function openInbox(role='buyer'){const user=await requireUser();if(!user)return;open();if(role==='seller')await openSellerInbox();else await openBuyerInbox();}
+  async function openInbox(role='buyer',knownUser=null){const user=knownUser||await requireUser();if(!user)return;ui.user=user;setupNotificationListener(user);open();if(role==='seller')await openSellerInbox(user);else await openBuyerInbox(user);}
   window.aleeChat={openHome,openShop,openInbox};
   if(db?.auth){db.auth.getSession().then(({data})=>{if(data?.session?.user)setupNotificationListener(data.session.user);}).catch(()=>{});db.auth.onAuthStateChange((_event,session)=>{if(session?.user)setupNotificationListener(session.user);else if(ui.notificationChannel){db.removeChannel(ui.notificationChannel);ui.notificationChannel=null;ui.notifiedMessageIds.clear();}});}
   async function restoreChatAfterReload(){

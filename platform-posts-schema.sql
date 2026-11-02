@@ -30,13 +30,14 @@ drop policy if exists "Anyone can read platform posts" on public.platform_posts;
 create policy "Anyone can read platform posts" on public.platform_posts for select using (true);
 drop policy if exists "Signed-in users can publish their own platform posts" on public.platform_posts;
 create policy "Signed-in users can publish their own platform posts" on public.platform_posts for insert to authenticated
-  with check (owner_id = (select auth.uid()) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
+  with check (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) = 'aleeshopping2026@gmail.com') and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can edit their own platform posts" on public.platform_posts;
 create policy "Users can edit their own platform posts" on public.platform_posts for update to authenticated
-  using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
+  using (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) = 'aleeshopping2026@gmail.com'))
+  with check (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) = 'aleeshopping2026@gmail.com') and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can delete their own platform posts" on public.platform_posts;
 create policy "Users can delete their own platform posts" on public.platform_posts for delete to authenticated
-  using (owner_id = (select auth.uid()));
+  using (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) = 'aleeshopping2026@gmail.com'));
 grant select on public.platform_posts to anon, authenticated;
 grant insert, update, delete on public.platform_posts to authenticated;
 
