@@ -2348,6 +2348,18 @@
     }
     const productList = document.getElementById("productList");
 
+    document.addEventListener('wheel',event=>{
+      if(event.ctrlKey)return;
+      const path=typeof event.composedPath==='function'?event.composedPath():[event.target];
+      const strip=path.find(node=>node instanceof HTMLElement&&node.scrollWidth>node.clientWidth+1&&['auto','scroll'].includes(getComputedStyle(node).overflowX));
+      if(!strip||strip.dataset.wheelBound==='true')return;
+      const delta=Math.abs(event.deltaY)>Math.abs(event.deltaX)?event.deltaY:event.deltaX;
+      if(!delta)return;
+      const max=strip.scrollWidth-strip.clientWidth,next=Math.max(0,Math.min(max,strip.scrollLeft+delta));
+      if(next===strip.scrollLeft)return;
+      event.preventDefault();strip.scrollLeft=next;
+    },{passive:false});
+
     const searchBar = document.querySelector('.search-bar');
     const searchContainer = document.querySelector('.search-container');
     const searchInput = document.getElementById('searchInput');
