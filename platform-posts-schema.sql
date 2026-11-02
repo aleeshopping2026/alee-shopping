@@ -14,9 +14,11 @@ create table if not exists public.platform_posts (
   location text not null default '' check (char_length(location) <= 120),
   employment_type text not null default '' check (char_length(employment_type) <= 80),
   salary text not null default '' check (char_length(salary) <= 100),
+  country_code text not null default 'LK' check (country_code ~ '^[A-Z]{2}$'),
   created_at timestamptz not null default now()
 );
 alter table public.platform_posts add column if not exists shop_id uuid references public.seller_shops(id) on delete set null;
+alter table public.platform_posts add column if not exists country_code text not null default 'LK' check (country_code ~ '^[A-Z]{2}$');
 update public.platform_posts p set shop_id = s.id
 from public.seller_shops s
 where p.post_type = 'job' and p.owner_id = s.owner_id and p.shop_id is null;
