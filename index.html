@@ -202,6 +202,38 @@
     .search-clear-btn { position:absolute; right:112px; width:36px; height:36px; display:none; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--detail-copy,#777); cursor:pointer; font-size:14px; }
     .search-clear-btn.show { display:flex; }
     .search-clear-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
+    .search-discovery-overlay { display:none; position:fixed; inset:0; z-index:20000; height:100dvh; overflow-y:auto; overscroll-behavior:contain; background:var(--card-bg); color:var(--text-white); }
+    .search-discovery-overlay.show { display:block; }
+    body.search-discovery-open { overflow:hidden; }
+    .search-discovery-header { position:sticky; top:0; z-index:3; display:grid; grid-template-columns:42px 1fr; align-items:center; min-height:54px; padding:4px 14px; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
+    .search-discovery-back { width:38px; height:38px; border:0; border-radius:50%; background:transparent; color:var(--text-white); font-size:20px; cursor:pointer; }
+    .search-discovery-tabs { display:flex; justify-content:center; gap:22px; height:48px; }
+    .search-discovery-tab { position:relative; border:0; border-bottom:3px solid transparent; background:transparent; color:#858b95; font-size:15px; font-weight:700; cursor:pointer; }
+    .search-discovery-tab.active { color:var(--text-white); border-bottom-color:var(--text-white); }
+    .search-discovery-search { position:sticky; top:54px; z-index:2; padding:10px 3%; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
+    .search-discovery-search .search-container { max-width:900px; margin:auto; }
+    .search-discovery-search .search-container input { min-height:50px; border-radius:14px; }
+    .search-discovery-body { max-width:900px; margin:0 auto; padding:12px 4% 48px; }
+    .discovery-section { margin:14px 0 24px; }
+    .discovery-section[hidden] { display:none !important; }
+    .discovery-section-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
+    .discovery-section-heading h2 { margin:0; font-size:16px; color:var(--text-white); }
+    .discovery-section-heading button,.discovery-more { border:0; background:transparent; color:#838894; font:inherit; cursor:pointer; }
+    .discovery-list { display:grid; gap:0; }
+    .discovery-list-button { width:100%; min-height:42px; padding:8px 2px; border:0; border-bottom:1px solid color-mix(in srgb,var(--glass-border),transparent 45%); background:transparent; color:var(--text-white); text-align:left; font:inherit; cursor:pointer; }
+    .discovery-list-button:hover { color:var(--light-leaf); }
+    .discovery-more { margin-top:8px; padding:5px 2px; }
+    .discovery-products-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .discovery-history-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+    .discovery-history-grid .card { min-width:0; padding:4px; }
+    .discovery-history-grid .card-image-wrap > img { height:auto; aspect-ratio:1; padding:4px; }
+    .discovery-history-grid .card .product-shop-meta { gap:3px; font-size:8px; }
+    .discovery-history-grid .card .product-shop-meta img { width:18px;height:18px;min-width:18px;min-height:18px;max-width:18px;max-height:18px;flex:0 0 18px; }
+    .discovery-history-grid .card h3 { height:30px; font-size:9px; }
+    .discovery-history-grid .card .price { font-size:10px; }
+    .discovery-search-hint { margin:4px 0 10px; color:#858b95; font-size:13px; }
+    .discovery-ai-note { padding:12px; margin-bottom:12px; border:1px solid var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; line-height:1.5; }
+    @media (min-width:600px) { .discovery-products-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
     .photo-search-input { display:none !important; }
     .photo-search-notice { display:none; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font-size:13px; }
     .photo-search-notice.show { display:flex; }
@@ -703,6 +735,42 @@
         <button type="button" class="finder-trigger" onclick="openProductFinder()"><i class="fa-solid fa-wand-magic-sparkles"></i> Smart product finder</button>
       </div>
     </div>
+
+    <section class="search-discovery-overlay" id="searchDiscoveryOverlay" aria-label="Product search" aria-modal="true" role="dialog">
+      <header class="search-discovery-header">
+        <button class="search-discovery-back" type="button" onclick="closeSearchDiscovery(false)" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="search-discovery-tabs" role="tablist" aria-label="Search mode">
+          <button class="search-discovery-tab active" id="productsSearchTab" type="button" role="tab" aria-selected="true" onclick="setSearchDiscoveryMode('products')">Products</button>
+          <button class="search-discovery-tab" id="aiSearchTab" type="button" role="tab" aria-selected="false" onclick="setSearchDiscoveryMode('ai')">AI Mode ✨</button>
+        </div>
+      </header>
+      <div class="search-discovery-search" id="searchDiscoveryMount"></div>
+      <div class="search-discovery-body">
+        <div class="discovery-ai-note" id="discoveryAiNote" hidden>Shop AI checks product names, categories and descriptions to correct likely typing mistakes and suggest close matches from the catalog.</div>
+        <div id="searchDiscoveryHome">
+          <section class="discovery-section" aria-labelledby="recentSearchTitle">
+            <div class="discovery-section-heading"><h2 id="recentSearchTitle">Recent searches</h2><button type="button" onclick="clearRecentSearches()" aria-label="Clear recent searches" title="Clear recent searches"><i class="fa-regular fa-trash-can"></i></button></div>
+            <div class="discovery-list" id="recentSearchList"></div>
+            <button class="discovery-more" id="recentSearchMore" type="button" onclick="toggleRecentSearches()" hidden>Show more</button>
+          </section>
+          <section class="discovery-section" aria-labelledby="searchRecommendedTitle">
+            <div class="discovery-section-heading"><h2 id="searchRecommendedTitle">Recommended for you</h2><button type="button" onclick="refreshSearchRecommendations()" aria-label="Refresh recommendations"><i class="fa-solid fa-rotate"></i></button></div>
+            <div class="discovery-list" id="searchRecommendedList"></div>
+            <button class="discovery-more" id="searchRecommendedMore" type="button" onclick="toggleSearchRecommendations()" hidden>Show more</button>
+          </section>
+          <section class="discovery-section" aria-labelledby="searchHistoryTitle">
+            <div class="discovery-section-heading"><h2 id="searchHistoryTitle">History</h2></div>
+            <div class="discovery-history-grid" id="searchHistoryGrid"></div>
+            <button class="discovery-more" id="searchHistoryMore" type="button" onclick="toggleProductHistory()" hidden>Show more</button>
+          </section>
+        </div>
+        <section class="discovery-section" id="discoverySearchSection" hidden>
+          <div class="discovery-section-heading"><h2 id="discoverySearchTitle">Search results</h2></div>
+          <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
+          <div class="discovery-products-grid" id="discoverySearchResults"></div>
+        </section>
+      </div>
+    </section>
 
     <div class="finder-overlay" id="productFinder" onclick="if(event.target===this)closeProductFinder()" role="dialog" aria-modal="true" aria-labelledby="finderTitle">
       <div class="finder-dialog">
@@ -1733,6 +1801,7 @@
       if (identityChanged && typeof loadForYouRecommendations === 'function') {
         document.getElementById('forYouSection').hidden = !activeUser;
         if (activeUser) loadForYouRecommendations(activeUser.id);
+        if (typeof renderSearchDiscovery === 'function') renderSearchDiscovery();
       }
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
@@ -2272,25 +2341,53 @@
     const productList = document.getElementById("productList");
 
     const searchBar = document.querySelector('.search-bar');
-    document.querySelector('.search-container').addEventListener('click', () => {
-      searchBar.classList.add('search-expanded');
-      document.body.classList.add('search-extras-open');
-    });
-    document.getElementById('searchInput').addEventListener('focus', () => {
-      searchBar.classList.add('search-expanded');
-      document.body.classList.add('search-extras-open');
-    });
-    document.addEventListener('pointerdown', event => {
-      if (!searchBar.contains(event.target)) {
-        searchBar.classList.remove('search-expanded');
-        document.body.classList.remove('search-extras-open');
+    const searchContainer = document.querySelector('.search-container');
+    const searchInput = document.getElementById('searchInput');
+    const searchDiscoveryOverlay = document.getElementById('searchDiscoveryOverlay');
+    const searchDiscoveryMount = document.getElementById('searchDiscoveryMount');
+    let searchContainerHomeParent = null;
+    let searchContainerHomeNext = null;
+    let searchDiscoveryMode = 'products';
+    let recentSearchesExpanded = false;
+    let searchRecommendationsExpanded = false;
+    let productHistoryExpanded = false;
+    function openSearchDiscovery(focusInput=true) {
+      if (!searchDiscoveryOverlay.classList.contains('show')) {
+        searchContainerHomeParent = searchContainer.parentNode;
+        searchContainerHomeNext = searchContainer.nextSibling;
+        searchDiscoveryMount.appendChild(searchContainer);
+        searchDiscoveryOverlay.classList.add('show');
+        document.body.classList.add('search-discovery-open');
+        renderSearchDiscovery();
       }
+      if (focusInput) window.setTimeout(()=>searchInput.focus({preventScroll:true}),0);
+    }
+    function closeSearchDiscovery() {
+      if (!searchDiscoveryOverlay.classList.contains('show')) return;
+      if (searchContainerHomeParent) searchContainerHomeParent.insertBefore(searchContainer,searchContainerHomeNext?.parentNode===searchContainerHomeParent?searchContainerHomeNext:null);
+      searchContainerHomeParent=null;searchContainerHomeNext=null;
+      searchDiscoveryOverlay.classList.remove('show');
+      document.body.classList.remove('search-discovery-open');
+      searchInput.blur();
+    }
+    searchContainer.addEventListener('click',event=>{
+      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn'))openSearchDiscovery(false);
     });
+    function setSearchDiscoveryMode(mode) {
+      searchDiscoveryMode=mode==='ai'?'ai':'products';
+      const ai=searchDiscoveryMode==='ai';
+      document.getElementById('productsSearchTab').classList.toggle('active',!ai);
+      document.getElementById('productsSearchTab').setAttribute('aria-selected',String(!ai));
+      document.getElementById('aiSearchTab').classList.toggle('active',ai);
+      document.getElementById('aiSearchTab').setAttribute('aria-selected',String(ai));
+      document.getElementById('discoveryAiNote').hidden=!ai;
+      searchInput.placeholder=ai?'Describe a product or type its name…':'Search products…';
+      if(searchInput.value.trim())searchProducts();
+    }
+    searchInput.addEventListener('focus',()=>openSearchDiscovery(false));
     document.getElementById('searchInput').addEventListener('keydown', event => {
       if (event.key === 'Escape') {
-        event.target.blur();
-        searchBar.classList.remove('search-expanded');
-        document.body.classList.remove('search-extras-open');
+        event.preventDefault();closeSearchDiscovery();
       } else if (event.key === 'Enter') {
         event.preventDefault();
         submitProductSearch();
@@ -2454,7 +2551,7 @@
       if(!popular.length){const empty=document.createElement('span');empty.className='top-search-empty';empty.textContent='Popular products appear here as people search';list.appendChild(empty);return;}
       popular.forEach(({product})=>{
         const chip=document.createElement('button');chip.type='button';chip.className='top-search-chip';chip.textContent=product.name;
-        chip.addEventListener('click',()=>{document.getElementById('searchInput').value=product.name;searchProducts();});
+        chip.addEventListener('click',()=>{openSearchDiscovery(false);searchInput.value=product.name;submitProductSearch();});
         list.appendChild(chip);
       });
       renderRecommendationShelf('trendingProducts',popular.map(({product})=>product),'Trending products will appear as shoppers search.');
@@ -2464,11 +2561,13 @@
     function renderForYouFromCounts(counts) {
       const recommendations=Object.entries(counts||{}).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).slice(0,8).map(row=>row.product);
       renderRecommendationShelf('forYouProducts',recommendations,'Search for products you like and your recommendations will appear here.');
+      if(typeof renderSearchRecommendations==='function')renderSearchRecommendations();
     }
     async function loadForYouRecommendations(userId) {
       if (!userId) return;
       const section=document.getElementById('forYouSection');
       if(section)section.hidden=false;
+      loadProductViewHistory(userId);
       let localCounts={};
       try { localCounts=JSON.parse(localStorage.getItem(forYouLocalKey(userId))||'{}')||{}; } catch (_) {}
       renderForYouFromCounts(localCounts);
@@ -2481,10 +2580,83 @@
         if(activeUser?.id===userId)renderForYouFromCounts(counts);
       } catch (_) {}
     }
+    function searchUserStorageKey(kind,userId=activeUser?.id||'guest') { return `alee-${kind}:${userId}`; }
+    function readSearchUserList(kind,limit=60) {
+      try { const value=JSON.parse(localStorage.getItem(searchUserStorageKey(kind))||'[]');return Array.isArray(value)?value.slice(0,limit):[]; } catch (_) { return []; }
+    }
+    function renderRecentSearches() {
+      const list=document.getElementById('recentSearchList'),items=readSearchUserList('recent-searches',40);
+      list.replaceChildren();
+      items.slice(0,recentSearchesExpanded?items.length:3).forEach(term=>{
+        const button=document.createElement('button');button.type='button';button.className='discovery-list-button';button.textContent=String(term);
+        button.addEventListener('click',()=>{searchInput.value=String(term);submitProductSearch();});list.appendChild(button);
+      });
+      if(!items.length){const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='Your recent searches will appear here.';list.appendChild(empty);}
+      const more=document.getElementById('recentSearchMore');more.hidden=items.length<=3;more.textContent=recentSearchesExpanded?'Show less':'Show more';
+    }
+    function saveRecentSearch(term) {
+      const query=String(term||'').trim().replace(/\s+/g,' ');if(query.length<2)return;
+      const items=readSearchUserList('recent-searches',40).filter(item=>String(item).toLowerCase()!==query.toLowerCase());
+      items.unshift(query);
+      try{localStorage.setItem(searchUserStorageKey('recent-searches'),JSON.stringify(items.slice(0,40)));}catch(_){}
+      renderRecentSearches();
+    }
+    function clearRecentSearches() {
+      try{localStorage.removeItem(searchUserStorageKey('recent-searches'));}catch(_){}
+      recentSearchesExpanded=false;renderRecentSearches();
+    }
+    function toggleRecentSearches() { recentSearchesExpanded=!recentSearchesExpanded;renderRecentSearches(); }
+    function getPersonalizedProductList() {
+      let counts={};try{counts=JSON.parse(localStorage.getItem(forYouLocalKey(activeUser?.id))||'{}')||{};}catch(_){}
+      return Object.entries(counts).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).map(row=>row.product);
+    }
+    let searchRecommendationShuffle=0;
+    function renderSearchRecommendations() {
+      const list=document.getElementById('searchRecommendedList');list.replaceChildren();
+      if(!activeUser){const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='Sign in to get recommendations based on your product searches and views.';list.appendChild(empty);document.getElementById('searchRecommendedMore').hidden=true;return;}
+      const items=getPersonalizedProductList();
+      const rotated=items.length?items.slice(searchRecommendationShuffle%items.length).concat(items.slice(0,searchRecommendationShuffle%items.length)):[];
+      rotated.slice(0,searchRecommendationsExpanded?rotated.length:3).forEach(product=>{
+        const button=document.createElement('button');button.type='button';button.className='discovery-list-button';button.textContent=product.name;
+        button.addEventListener('click',()=>{closeSearchDiscovery();openProductPopup(product.id);});list.appendChild(button);
+      });
+      if(!items.length){const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='Search for products and view their details to build your recommendations.';list.appendChild(empty);}
+      const more=document.getElementById('searchRecommendedMore');more.hidden=items.length<=3;more.textContent=searchRecommendationsExpanded?'Show less':'Show more';
+    }
+    function toggleSearchRecommendations() { searchRecommendationsExpanded=!searchRecommendationsExpanded;renderSearchRecommendations(); }
+    function refreshSearchRecommendations() { searchRecommendationShuffle++;renderSearchRecommendations(); }
+    function renderProductHistory() {
+      const grid=document.getElementById('searchHistoryGrid');if(!grid)return;
+      const ids=readSearchUserList('product-history',60).map(String),items=ids.map(id=>products.find(product=>String(product.id)===id)).filter(Boolean);
+      grid.innerHTML=items.slice(0,productHistoryExpanded?items.length:12).map((product,index)=>recommendationCardMarkup(product,index)).join('');
+      if(!items.length){grid.innerHTML='<p class="recommendation-empty">Products you view will appear here.</p>';}
+      const more=document.getElementById('searchHistoryMore');more.hidden=items.length<=12;more.textContent=productHistoryExpanded?'Show less':'Show more';
+    }
+    function toggleProductHistory() { productHistoryExpanded=!productHistoryExpanded;renderProductHistory(); }
+    function recordProductHistory(productId) {
+      const key=searchUserStorageKey('product-history'),ids=readSearchUserList('product-history',60).filter(id=>String(id)!==String(productId));
+      ids.unshift(Number(productId));try{localStorage.setItem(key,JSON.stringify(ids.slice(0,60)));}catch(_){}
+      renderProductHistory();
+    }
+    async function loadProductViewHistory(userId) {
+      if(!supabaseClient||!userId)return;
+      try {
+        const {data,error}=await supabaseClient.rpc('get_my_recent_product_views');
+        if(error||!Array.isArray(data)||activeUser?.id!==userId)return;
+        const ids=data.map(row=>Number(row.product_id)).filter(id=>Number.isSafeInteger(id)&&id>0);
+        if(ids.length){try{localStorage.setItem(searchUserStorageKey('product-history',userId),JSON.stringify([...new Set(ids)]));}catch(_){}renderProductHistory();}
+      } catch (_) {}
+    }
+    function renderSearchDiscovery() {
+      renderRecentSearches();renderSearchRecommendations();renderProductHistory();
+      if(searchInput.value.trim())renderDiscoverySearchResults(searchInput.value.trim());
+    }
     async function recordPersonalProductView(productId) {
       const id=Number(productId),userId=activeUser?.id;
-      if(!userId||!Number.isSafeInteger(id)||id<=0||productsViewedThisSession.has(id))return;
-      productsViewedThisSession.add(id);
+      if(!Number.isSafeInteger(id)||id<=0)return;
+      recordProductHistory(id);
+      if(!userId||productsViewedThisSession.has(`${userId}:${id}`))return;
+      productsViewedThisSession.add(`${userId}:${id}`);
       let personal={};try{personal=JSON.parse(localStorage.getItem(forYouLocalKey(userId))||'{}')||{};}catch(_){}
       personal[id]=(Number(personal[id])||0)+1;
       try{localStorage.setItem(forYouLocalKey(userId),JSON.stringify(personal));}catch(_){}
@@ -2684,18 +2856,72 @@
       if (allButton) filterCategory('all', allButton);
     }
 
+    function normalizedSearchWords(value) {
+      return String(value||'').toLowerCase().replace(/[^a-z0-9\u0D80-\u0DFF]+/gi,' ').trim().split(/\s+/).filter(Boolean);
+    }
+    function productSearchCorpus(product) {
+      return `${product.name||''} ${product.category||''} ${product.categoryLabel||product.category_label||''} ${product.desc||product.description||''} ${(product.features||[]).join(' ')}`.toLowerCase();
+    }
+    function editDistance(left,right) {
+      if(left===right)return 0;
+      if(Math.abs(left.length-right.length)>2)return 3;
+      let previous=Array.from({length:right.length+1},(_,index)=>index),beforePrevious=null;
+      for(let i=1;i<=left.length;i++){
+        const current=[i];
+        for(let j=1;j<=right.length;j++){
+          current[j]=Math.min(current[j-1]+1,previous[j]+1,previous[j-1]+(left[i-1]===right[j-1]?0:1));
+          if(i>1&&j>1&&beforePrevious&&left[i-1]===right[j-2]&&left[i-2]===right[j-1])current[j]=Math.min(current[j],beforePrevious[j-2]+1);
+        }
+        beforePrevious=previous;previous=current;
+      }
+      return previous[right.length];
+    }
+    function getProductSearchMatches(term) {
+      const queryWords=normalizedSearchWords(term);
+      if(!queryWords.length)return {items:products,corrected:false};
+      const exact=products.filter(product=>{
+        const corpus=productSearchCorpus(product);
+        return corpus.includes(term.toLowerCase())||queryWords.every(word=>corpus.includes(word));
+      });
+      if(exact.length)return {items:exact,corrected:false};
+      if(queryWords.some(word=>word.length<3))return {items:[],corrected:false};
+      const ranked=products.map((product,index)=>{
+        const words=normalizedSearchWords(productSearchCorpus(product));let score=0;
+        for(const queryWord of queryWords){
+          let best=3;
+          for(const word of words){if(word.includes(queryWord)||queryWord.includes(word)){best=0;break;}best=Math.min(best,editDistance(queryWord,word));}
+          const maxDistance=queryWord.length<=5?1:2;if(best>maxDistance)return null;
+          score+=1-best/Math.max(queryWord.length,1);
+        }
+        return {product,index,score:score/queryWords.length};
+      }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,8);
+      return {items:ranked.map(row=>row.product),corrected:ranked.length>0};
+    }
+    function renderDiscoverySearchResults(term,matchedResult=null) {
+      const query=String(term||'').trim(),section=document.getElementById('discoverySearchSection');
+      if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;return;}
+      const result=matchedResult||getProductSearchMatches(query);
+      section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=false;
+      document.getElementById('discoverySearchTitle').textContent=result.corrected?'Discover similar products':'Search results';
+      const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=!result.corrected;
+      if(result.corrected){hint.append(document.createTextNode('Showing the closest matches. Did you mean '));const correction=document.createElement('button');correction.type='button';correction.className='discovery-more';correction.textContent=result.items[0].name;correction.onclick=()=>{searchInput.value=result.items[0].name;submitProductSearch();};hint.append(correction,document.createTextNode('?'));}
+      else if(searchDiscoveryMode==='ai'&&result.items.length){hint.hidden=false;hint.textContent='Shop AI found these catalog matches using product names, categories and descriptions.';}
+      document.getElementById('discoverySearchResults').innerHTML=result.items.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No exact match found. Check the spelling or try a shorter product name.</p>';
+    }
     function searchProducts() {
       photoSearchRunId++;
       document.getElementById('photoSearchNotice').classList.remove('show');
       const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
       syncSearchClearButton();
-      const matches=products.filter(p => p.name.toLowerCase().includes(searchTerm));
+      const searchResult=getProductSearchMatches(searchTerm),matches=searchResult.items;
       displayProducts(matches);
+      renderDiscoverySearchResults(searchTerm,searchResult);
       clearTimeout(searchLogTimer);
       if(searchTerm.length>=2)searchLogTimer=setTimeout(()=>recordProductSearch(searchTerm,matches),700);
     }
 
     function submitProductSearch() {
+      saveRecentSearch(searchInput.value);
       searchProducts();
       document.getElementById('searchInput').blur();
     }
@@ -2787,6 +3013,7 @@
     function openProductPopup(id) {
       const product = products.find(p => p.id === id);
       if (!product) return;
+      closeSearchDiscovery();
       recordPersonalProductView(product.id);
       activeGalleryProduct = product;
       activeGalleryIndex = 0;

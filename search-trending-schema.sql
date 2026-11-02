@@ -79,3 +79,26 @@ $$;
 revoke all on function public.get_my_product_recommendations() from public, anon;
 grant execute on function public.get_my_product_recommendations() to authenticated;
 grant insert on public.product_user_search_events to authenticated;
+
+create or replace function public.get_my_recent_product_views()
+returns table(product_id integer, viewed_at timestamptz)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select recent.product_id, recent.viewed_at
+  from (
+    select distinct on (event.product_id)
+      event.product_id, event.searched_at as viewed_at
+    from public.product_user_search_events as event
+    where event.user_id = auth.uid()
+      and event.event_type = 'view'
+    order by event.product_id, event.searched_at desc
+  ) as recent
+  order by recent.viewed_at desc
+  limit 60;
+$$;
+
+revoke all on function public.get_my_recent_product_views() from public, anon;
+grant execute on function public.get_my_recent_product_views() to authenticated;
