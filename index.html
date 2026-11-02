@@ -415,6 +415,11 @@
     .btn:hover { box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
 
     .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-x:hidden; overflow-y: auto; padding: 12px 8px 30px; backdrop-filter: blur(7px); }
+    .product-popup-ad-slot { display:none; position:sticky; top:0; z-index:21; width:min(100%,1040px); height:clamp(46px,7vh,68px); margin:0 auto 6px; overflow:hidden; border:1px solid rgba(255,255,255,.45); border-radius:10px; background:#fff; box-shadow:0 4px 14px #0003; }
+    .product-popup-ad-slot.show { display:block; }
+    .product-popup-ad-link { position:relative; display:flex; width:100%; height:100%; align-items:center; justify-content:center; overflow:hidden; color:#172033; text-decoration:none; background:#f1f5f9; }
+    .product-popup-ad-link img,.product-popup-ad-link video { display:block; width:100%; height:100%; object-fit:cover; }
+    .product-popup-ad-caption { position:absolute; left:8px; bottom:6px; max-width:calc(100% - 16px); padding:4px 8px; overflow:hidden; border-radius:7px; background:#111b; color:#fff; font-size:11px; font-weight:800; text-overflow:ellipsis; white-space:nowrap; }
     .popup-content {
       background: var(--card-bg); width:min(100%,1040px); min-width:0; max-width:1040px; margin:10px auto; border-radius:16px;
       padding:14px; position:relative; overflow:hidden; border:1px solid var(--glass-border); box-shadow:0 25px 70px rgba(0,0,0,0.7);
@@ -861,6 +866,7 @@
 
     <!-- Product Popup / Daraz-style details -->
     <div class="product-popup" id="productPopup" onclick="popupBackdropClose(event)">
+      <aside class="product-popup-ad-slot" id="productPopupAdSlot" aria-label="Sponsored advertisement"></aside>
       <div class="popup-content">
         <span class="close-popup" onclick="closeProductPopup()">&times;</span>
         <div class="popup-main-grid">
@@ -1066,6 +1072,7 @@
   <script src="backend-config.js"></script>
   <script src="products.js"></script>
   <script src="banners.js"></script>
+  <script src="product-detail-ads.js"></script>
   <script src="categories.js"></script>
   <script src="apps.js"></script>
   <script src="games.js"></script>
@@ -1075,6 +1082,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
   <script>
     const products = window.aleeProducts || [];
+    const productPopupAds = Array.isArray(window.aleeProductDetailAds) ? window.aleeProductDetailAds.slice(0,2000) : [];
     const categories = Array.isArray(window.aleeCategories) ? window.aleeCategories : [];
     const categoryGroups = Array.isArray(window.aleeCategoryGroups) ? window.aleeCategoryGroups : [];
     const catalogTabs = Array.isArray(window.aleeCatalogTabs) ? window.aleeCatalogTabs : [];
@@ -3010,6 +3018,48 @@
       return `<img class="${cls}" src="${safe}" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`;
     }
 
+    let activeProductPopupAdIndex=0;
+    let productPopupAdTimer=null;
+    function renderProductPopupAd(index) {
+      const slot=document.getElementById('productPopupAdSlot');
+      if(!slot||!productPopupAds.length){if(slot){slot.classList.remove('show');slot.replaceChildren();}return;}
+      const ad=productPopupAds[index];
+      if(!ad){slot.classList.remove('show');slot.replaceChildren();return;}
+      const href=String(ad.link||'').trim();let safeHref='';
+      try{const parsed=new URL(href,location.href);if(['http:','https:'].includes(parsed.protocol))safeHref=parsed.href;}catch(_){}
+      const wrapper=safeHref?document.createElement('a'):document.createElement('div');
+      wrapper.className='product-popup-ad-link';
+      if(safeHref){wrapper.href=safeHref;wrapper.target='_blank';wrapper.rel='noopener noreferrer';}
+      const mediaUrl=String(ad.video||ad.image||'').trim();
+      if(mediaUrl){
+        const media=document.createElement(ad.video?'video':'img');media.src=mediaUrl;
+        if(ad.video){media.autoplay=true;media.muted=true;media.loop=true;media.playsInline=true;media.preload='metadata';}
+        else{media.alt=String(ad.alt||ad.title||'Advertisement');media.loading='lazy';}
+        wrapper.appendChild(media);
+      }
+      if(ad.title||ad.alt){const caption=document.createElement('span');caption.className='product-popup-ad-caption';caption.textContent=String(ad.title||ad.alt);wrapper.appendChild(caption);}
+      slot.replaceChildren(wrapper);slot.classList.add('show');
+    }
+    function advanceProductPopupAd() {
+      if(!productPopupAds.length)return;
+      activeProductPopupAdIndex=(activeProductPopupAdIndex+1)%productPopupAds.length;
+      try{localStorage.setItem('alee-product-popup-ad-next',String((activeProductPopupAdIndex+1)%productPopupAds.length));}catch(_){}
+      renderProductPopupAd(activeProductPopupAdIndex);
+    }
+    function startProductPopupAds() {
+      stopProductPopupAds();
+      if(!productPopupAds.length)return;
+      let next=0;try{next=Number(localStorage.getItem('alee-product-popup-ad-next'))||0;}catch(_){}
+      activeProductPopupAdIndex=((next%productPopupAds.length)+productPopupAds.length)%productPopupAds.length;
+      renderProductPopupAd(activeProductPopupAdIndex);
+      try{localStorage.setItem('alee-product-popup-ad-next',String((activeProductPopupAdIndex+1)%productPopupAds.length));}catch(_){}
+      if(productPopupAds.length>1)productPopupAdTimer=window.setInterval(advanceProductPopupAd,6000);
+    }
+    function stopProductPopupAds() {
+      if(productPopupAdTimer){clearInterval(productPopupAdTimer);productPopupAdTimer=null;}
+      const slot=document.getElementById('productPopupAdSlot');if(slot){slot.classList.remove('show');slot.replaceChildren();}
+    }
+
     function openProductPopup(id) {
       const product = products.find(p => p.id === id);
       if (!product) return;
@@ -3039,6 +3089,7 @@
       document.getElementById("popupBuyBtn").onclick = () => { buyNow(id); };
       const popup=document.getElementById("productPopup");
       if(popup.style.display!=='block'){history.pushState({...history.state,aleeProductPopup:true},'',location.href);productPopupHistoryOpen=true;}
+      startProductPopupAds();
       const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions){if(stickyActions.parentElement!==document.body)document.body.appendChild(stickyActions);stickyActions.style.display='grid';}
       popup.style.display = "block";
       document.body.style.overflow = 'hidden';
@@ -3170,7 +3221,7 @@
       }
     });
 
-    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
+    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
     window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {

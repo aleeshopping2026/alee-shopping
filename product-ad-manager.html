@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="si">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Product popup ad manager — aleeshopping</title>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="product-detail-ads.js"></script>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font:15px/1.55 Arial,sans-serif}
+    .wrap{max-width:760px;margin:24px auto;padding:22px;background:#fff;border:1px solid #fed7aa;border-radius:18px;box-shadow:0 12px 35px #0001}
+    h1{margin:0 0 8px;color:#f36b00;font-size:25px}.intro{padding:12px 14px;border-radius:12px;background:#fff7ed;color:#544638}
+    .count{margin:14px 0;padding:12px;border:1px solid #fed7aa;border-radius:10px;font-weight:800}
+    label{display:grid;gap:6px;margin:14px 0;font-weight:700}input{width:100%;padding:11px;border:1px solid #d5dbe4;border-radius:9px;font:inherit}
+    button,.nav-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:0;border-radius:10px;background:#ff6900;color:#fff;text-decoration:none;font:inherit;font-weight:800;cursor:pointer}
+    .nav-link{margin:12px 8px 0 0;background:#fff7ed;color:#b94d00;border:1px solid #fed7aa}
+    .status{min-height:24px;margin-top:12px;color:#166534}.muted{color:#64748b;font-size:13px}.preview{display:none;max-width:100%;max-height:220px;margin:10px auto;border-radius:12px;object-fit:contain;background:#f1f5f9}.preview.show{display:block}
+    @media(max-width:600px){.wrap{margin:0;padding:18px 15px;border:0;border-radius:0;min-height:100vh}h1{font-size:22px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Product popup ads</h1>
+    <p class="intro">Product එකක් විවෘත කළ විට ඉහළින් පෙන්වන ad strip එකට image/video එකක් සහ එය ඔබන විට යා යුතු link එකක් එක් කරන්න. ZIP එක site එකේ ප්‍රධාන folder එකට extract කර site එක නැවත publish කරන්න. උපරිම ads ගණන 2,000යි.</p>
+    <a class="nav-link" href="banner-manager.html">Homepage banner manager</a>
+    <p class="count" id="adCount"></p>
+    <form id="adForm">
+      <label>Ad image හෝ video file එක
+        <input name="media" type="file" accept="image/*,video/mp4,video/webm,video/quicktime" required>
+        <span class="muted">Images: උපරිම 10 MB. Videos: උපරිම 50 MB.</span>
+      </label>
+      <img id="preview" class="preview" alt="Ad preview">
+      <label>Ad නම / කෙටි විස්තරය
+        <input name="title" maxlength="120" placeholder="උදා: අලුත් fashion collection">
+      </label>
+      <label>Ad එක ඔබන විට විවෘත විය යුතු link එක
+        <input name="link" type="url" placeholder="https://example.com/product" required>
+      </label>
+      <button type="submit">Add ad & download ZIP</button>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </form>
+  </main>
+  <script>
+    const ads=Array.isArray(window.aleeProductDetailAds)?[...window.aleeProductDetailAds]:[];
+    const pendingFiles=new Map();
+    const form=document.getElementById('adForm'),status=document.getElementById('status'),count=document.getElementById('adCount'),preview=document.getElementById('preview');
+    const updateCount=()=>count.textContent=`දැනට ads ${ads.length}ක් ඇත. උපරිමය 2,000යි.`;
+    updateCount();
+    const slug=value=>value.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'ad';
+    form.elements.media.addEventListener('change',()=>{const file=form.elements.media.files[0];if(!file)return;preview.src=URL.createObjectURL(file);preview.classList.add('show');});
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(ads.length>=2000){status.textContent='Ads 2,000ක් දැනටමත් තිබෙනවා.';return;}
+      if(!window.JSZip){status.textContent='ZIP සකස් කිරීමේ සේවාව සම්බන්ධ වුණේ නැහැ. Internet connection එක බලලා නැවත උත්සාහ කරන්න.';return;}
+      const file=form.elements.media.files[0],link=form.elements.link.value.trim(),title=form.elements.title.value.trim();
+      if(!file){status.textContent='Ad image/video file එක තෝරන්න.';return;}
+      const isVideo=file.type.startsWith('video/');
+      if(!isVideo&&!file.type.startsWith('image/')){status.textContent='Image එකක් හෝ MP4, WebM, MOV video එකක් තෝරන්න.';return;}
+      if(isVideo&&file.size>50*1024*1024){status.textContent='Video එක 50 MB ට වඩා කුඩා විය යුතුයි.';return;}
+      if(!isVideo&&file.size>10*1024*1024){status.textContent='Image එක 10 MB ට වඩා කුඩා විය යුතුයි.';return;}
+      let parsed;try{parsed=new URL(link);}catch(_){status.textContent='නිවැරදි link එකක් ඇතුළත් කරන්න.';return;}
+      if(!['http:','https:'].includes(parsed.protocol)){status.textContent='Link එක http:// හෝ https:// වලින් ආරම්භ විය යුතුයි.';return;}
+      status.textContent='Ad ZIP එක සකස් කරනවා…';
+      try{
+        const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();
+        const path=`assets/product-popup-ad-${ads.length+1}-${Date.now()}-${slug(file.name.replace(/\.[^.]+$/,''))}.${ext}`;
+        const nextFiles=new Map(pendingFiles);nextFiles.set(path,await file.arrayBuffer());
+        const ad={ [isVideo?'video':'image']:path, title:title||file.name, alt:title||file.name, link:parsed.href };
+        const updated=[...ads,ad],zip=new JSZip();
+        for(const [assetPath,content] of nextFiles)zip.file(assetPath,content);
+        zip.file('product-detail-ads.js',`// Product popup advertisements. Add or manage entries with product-ad-manager.html.\nwindow.aleeProductDetailAds = ${JSON.stringify(updated,null,2)};\n`);
+        const blob=await zip.generateAsync({type:'blob'}),url=URL.createObjectURL(blob),anchor=document.createElement('a');
+        anchor.href=url;anchor.download=`aleeshopping-product-ad-${updated.length}.zip`;anchor.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+        pendingFiles.clear();for(const [assetPath,content] of nextFiles)pendingFiles.set(assetPath,content);
+        ads.push(ad);updateCount();form.reset();preview.removeAttribute('src');preview.classList.remove('show');
+        status.textContent='ZIP එක බාගත වුණා. එය site එකේ ප්‍රධාන folder එකට extract කර නැවත publish කරන්න.';
+      }catch(error){console.error(error);status.textContent='ZIP එක සකස් කරන්න බැරි වුණා. නැවත උත්සාහ කරන්න.';}
+    });
+  </script>
+</body>
+</html>
