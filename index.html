@@ -319,6 +319,9 @@
     .hub-job-dialog .job-dialog-action:hover { transform:translateY(-1px); box-shadow:0 7px 18px #ff690022; }
     .hub-job-dialog .job-dialog-action.primary { border-color:#ff6900; background:linear-gradient(135deg,#ff7b00,#f05a00); color:#fff; }
     .hub-job-dialog .job-dialog-action.share { border-color:#fed7aa; color:#e85d00; }
+    .hub-job-dialog .favorite-job-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 15px; border:1px solid #e7bf37; border-radius:12px; background:linear-gradient(135deg,#fff4bf,#ffe37a); color:#705000; font:inherit; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 3px 10px #d2a52a20; transition:transform .18s ease,box-shadow .18s ease,background .18s ease; }
+    .hub-job-dialog .favorite-job-button:hover { transform:translateY(-1px); box-shadow:0 7px 18px #d2a52a40; }
+    .hub-job-dialog .favorite-job-button.is-saved { border-color:#d6a900; background:linear-gradient(135deg,#f9d94a,#f0bd19); color:#503b00; }
     .hub-job-dialog .job-dialog-status { flex-basis:100%; min-height:18px; margin:0!important; color:#888; font-size:12px; }
     .hub-empty { padding:18px; border:1px dashed var(--glass-border); border-radius:12px; color:#888; text-align:center; }
     .hub-reel-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; }
@@ -865,15 +868,15 @@
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileAccountTitle">
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openSellerAccount()"><i class="fa-solid fa-store"></i> Open Shop</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</button>
-        <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet');switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
-        <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet');deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
-        <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet');openAccountModal()">Sign In / Create Account</button>
-        <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser();closeMobileSheet('mobileAccountSheet')">Log Out</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openSellerAccount()"><i class="fa-solid fa-store"></i> Open Shop</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</button>
+        <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet',false,true);switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
+        <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet',false,true);deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountModal()">Sign In / Create Account</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser();closeMobileSheet('mobileAccountSheet',false,true)">Log Out</button>
       </section>
     </div>
 
@@ -989,7 +992,7 @@
         <div id="orderWhatsappActions" class="order-whatsapp-actions" hidden></div>
       </div>
     </div>
-    <dialog class="order-confirm-dialog" id="orderConfirmDialog"><div class="order-confirm-icon">✓</div><h2>Confirm your order</h2><p>Check your delivery details and confirm that you want to place this order.</p><div class="order-confirm-actions"><button type="button" onclick="document.getElementById('orderConfirmDialog').close()">Go back</button><button class="confirm" type="button" onclick="document.getElementById('orderConfirmDialog').close();submitOrder()">Confirm order</button></div></dialog>
+    <dialog class="order-confirm-dialog" id="orderConfirmDialog"><div class="order-confirm-icon">✓</div><h2>Confirm your order</h2><p>Check your delivery details and confirm that you want to place this order.</p><div class="order-confirm-actions"><button type="button" onclick="closeOrderConfirmation()">Go back</button><button class="confirm" type="button" onclick="closeOrderConfirmation();submitOrder()">Confirm order</button></div></dialog>
 
     <div class="footer">
       <p>aleeshopping  | Shop Everything</p>
@@ -1028,7 +1031,7 @@
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
         <button type="button" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>My membership / My Shop</span><small>Manage your shop account</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
-        <button type="button" onclick="closeBuyerAccount();openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
+        <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
         <button type="button" onclick="editAccountDetails();setTimeout(()=>document.getElementById('buyerMobile')?.focus(),100)"><i class="fa-solid fa-phone"></i><span>Phone Numbers</span><small>Private contact details</small></button>
         <button type="button" onclick="editAccountDetails()"><i class="fa-solid fa-user"></i><span>My Profile</span><small>View or edit your private details</small></button>
         <button type="button" onclick="logoutUser()" style="color:#c62828"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span><small>Sign out of aleeshopping</small></button>
@@ -1166,9 +1169,9 @@
       const context=branded.getContext('2d');context.drawImage(source,0,0);
       const logo=new Image();logo.onload=()=>{const size=Math.round(branded.width*.19),x=(branded.width-size)/2,y=(branded.height-size)/2,pad=Math.max(8,Math.round(size*.12));context.fillStyle='#fff';context.fillRect(x-pad,y-pad,size+pad*2,size+pad*2);context.drawImage(logo,x,y,size,size);root.replaceChildren(branded);download.disabled=false;};logo.onerror=()=>{root.replaceChildren(source);download.disabled=false;};logo.src=new URL('assets/alee-logo.png',location.href).href;
     }
-    function openSellerShopShare(){if(!currentSellerShop)return;const link=shopPublicUrl(currentSellerShop.id),overlay=document.getElementById('sellerShopShareOverlay'),qr=document.getElementById('sellerShopShareQr');document.getElementById('sellerShopShareName').textContent=currentSellerShop.shop_name;const anchor=document.getElementById('sellerShopShareLink');anchor.href=link;anchor.textContent=link;document.getElementById('sellerShopShareStatus').textContent='';renderBrandedShopQr(link,qr);overlay.classList.add('show');}
+    function openSellerShopShare(){if(!currentSellerShop)return;const link=shopPublicUrl(currentSellerShop.id),overlay=document.getElementById('sellerShopShareOverlay'),qr=document.getElementById('sellerShopShareQr');document.getElementById('sellerShopShareName').textContent=currentSellerShop.shop_name;const anchor=document.getElementById('sellerShopShareLink');anchor.href=link;anchor.textContent=link;document.getElementById('sellerShopShareStatus').textContent='';renderBrandedShopQr(link,qr);overlay.classList.add('show');pushAppUiLayer('sellerShopShare',fromHistory=>closeSellerShopShare(fromHistory),()=>overlay.classList.add('show'));}
     function downloadSellerShopQr(){const canvas=document.querySelector('#sellerShopShareQr canvas');if(!canvas||!currentSellerShop)return;try{const link=document.createElement('a'),slug=String(currentSellerShop.shop_name||'shop').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'shop';link.href=canvas.toDataURL('image/png');link.download=`${slug}-shop-qr.png`;link.click();document.getElementById('sellerShopShareStatus').textContent='QR code downloaded as a PNG image.';}catch(error){document.getElementById('sellerShopShareStatus').textContent='Could not create the QR download. Try a screenshot instead.';}}
-    function closeSellerShopShare(){document.getElementById('sellerShopShareOverlay').classList.remove('show');}
+    function closeSellerShopShare(fromHistory=false,preserveHistory=false){document.getElementById('sellerShopShareOverlay').classList.remove('show');closeAppUiLayer('sellerShopShare',fromHistory,preserveHistory);}
     async function copySellerShopLink(){const link=shopPublicUrl(currentSellerShop.id),status=document.getElementById('sellerShopShareStatus');try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(link);else{const input=document.createElement('textarea');input.value=link;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();const copied=document.execCommand('copy');input.remove();if(!copied)throw new Error('copy failed');}status.textContent='Shop link copied.';}catch(_){status.textContent='Copy is unavailable here. Select the link above to copy it.';}}
     async function nativeShareSellerShop(){const link=shopPublicUrl(currentSellerShop.id);if(navigator.share){try{await navigator.share({title:currentSellerShop.shop_name,text:`Visit ${currentSellerShop.shop_name} on aleeshopping`,url:link});}catch(error){if(error.name!=='AbortError')document.getElementById('sellerShopShareStatus').textContent='Could not open the share menu.';}}else await copySellerShopLink();}
     const splitSellerList = value => String(value||'').split(/[,\n]/).map(item=>item.trim()).filter(Boolean).slice(0,30);
@@ -1192,13 +1195,20 @@
       try{return localStorage.getItem(`alee-account-role:${activeUser.id}`)==='seller'?'seller':'buyer';}catch(error){return 'buyer';}
     }
 
+    const appUiHistoryLayers=[];
+    function pushAppUiLayer(key,close,restore){if(appUiHistoryLayers.at(-1)?.key===key&&history.state?.aleeUiLayer===key)return;history.pushState({...history.state,aleeUiLayer:key},'',location.href);appUiHistoryLayers.push({key,close,restore});}
+    function closeAppUiLayer(key,fromHistory=false,preserveHistory=false){if(fromHistory||preserveHistory)return;const top=appUiHistoryLayers.at(-1);if(top?.key===key&&history.state?.aleeUiLayer===key)history.back();}
+    window.addEventListener('popstate',event=>{const destination=event.state?.aleeUiLayer||null;while(appUiHistoryLayers.length&&appUiHistoryLayers.at(-1).key!==destination){const layer=appUiHistoryLayers.pop();try{layer.close?.(true);}catch(error){console.warn('Could not close previous view',layer.key,error);}}const current=appUiHistoryLayers.at(-1);if(current?.key===destination)try{current.restore?.();}catch(error){console.warn('Could not restore previous view',current.key,error);}});
+    function showAccountProfileSetup(){const overlay=document.getElementById('accountProfileSetup');overlay.classList.add('show');pushAppUiLayer('accountProfileSetup',fromHistory=>closeAccountProfileSetup(fromHistory),()=>overlay.classList.add('show'));}
+    function closeAccountProfileSetup(fromHistory=false,preserveHistory=false){document.getElementById('accountProfileSetup').classList.remove('show');closeAppUiLayer('accountProfileSetup',fromHistory,preserveHistory);}
+
     // The Account button always opens the account home. Shop mode changes only
     // when the owner explicitly chooses My Shop / Switch profile.
     async function openCurrentAccount(){await openBuyerAccount();}
 
     function openMessagesForCurrentRole() {
       if(!activeUser) { openAccountModal();document.getElementById('accountStatus').textContent='Sign in to open your messages.';return; }
-      if(window.aleeChat)window.aleeChat.openInbox(getAccountRole(),activeUser);
+      if(window.aleeChat)window.aleeChat.openInbox('buyer',activeUser);
     }
 
     function isAleeHost(){return String(activeUser?.email||'').trim().toLowerCase()==='aleeshopping2026@gmail.com';}
@@ -1213,17 +1223,17 @@
         document.getElementById('accountProfileSetupEmail').textContent=user.email||'Your details are private to your account';
         const {data,error}=await supabaseClient.from('alee_profiles').select('full_name,address,mobile,country_code').eq('user_id',user.id).maybeSingle();
         if(activeUser?.id!==user.id)return false;
-        if(error){overlay.classList.add('show');status.textContent=!navigator.onLine?'Could not connect to load your private profile. Reconnect, then check again.':'Private profile setup is not ready. Run account-profile-schema.sql in Supabase, then check again.';submit.disabled=true;document.getElementById('accountProfileRetry').hidden=false;return false;}
+        if(error){showAccountProfileSetup();status.textContent=!navigator.onLine?'Could not connect to load your private profile. Reconnect, then check again.':'Private profile setup is not ready. Run account-profile-schema.sql in Supabase, then check again.';submit.disabled=true;document.getElementById('accountProfileRetry').hidden=false;return false;}
         submit.disabled=false;document.getElementById('accountProfileRetry').hidden=true;
-        if(data){privateAccountProfile=data;if(data.country_code&&countryCatalog.some(country=>country.code===data.country_code)){shopperCountryCode=data.country_code;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(activeProductArray,preserveProductOrder);}overlay.classList.remove('show');
+        if(data){privateAccountProfile=data;closeAccountProfileSetup();if(data.country_code&&countryCatalog.some(country=>country.code===data.country_code)){shopperCountryCode=data.country_code;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(activeProductArray,preserveProductOrder);}overlay.classList.remove('show');
           document.getElementById('buyerProfileName').textContent=data.full_name;
           document.getElementById('buyerPrivateMobile').textContent=data.mobile;
           document.getElementById('buyerPrivateAddress').textContent=data.address;
           return true;
         }
-        privateAccountProfile=null;closeAccountModal();form.elements.fullName.value=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'';form.elements.mobile.value='';form.elements.countryCode.value=shopperCountryCode;form.elements.address.value='';status.textContent='';overlay.classList.add('show');return false;
+        privateAccountProfile=null;closeAccountModal();form.elements.fullName.value=activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'';form.elements.mobile.value='';form.elements.countryCode.value=shopperCountryCode;form.elements.address.value='';status.textContent='';showAccountProfileSetup();return false;
       })();
-      try{return await accountProfileCheckPromise;}catch(error){console.error(error);document.getElementById('accountProfileSetup').classList.add('show');document.getElementById('accountProfileSetupSubmit').disabled=true;document.getElementById('accountProfileRetry').hidden=false;document.getElementById('accountProfileSetupStatus').textContent='Could not load your private profile. Check your internet connection, then check again.';return false;}finally{accountProfileCheckPromise=null;}
+      try{return await accountProfileCheckPromise;}catch(error){console.error(error);showAccountProfileSetup();document.getElementById('accountProfileSetupSubmit').disabled=true;document.getElementById('accountProfileRetry').hidden=false;document.getElementById('accountProfileSetupStatus').textContent='Could not load your private profile. Check your internet connection, then check again.';return false;}finally{accountProfileCheckPromise=null;}
     }
 
     function retryPrivateAccountProfile(){document.getElementById('accountProfileRetry').hidden=true;document.getElementById('accountProfileSetupStatus').textContent='Checking private profile…';ensurePrivateAccountProfile();}
@@ -1238,13 +1248,13 @@
       button.disabled=false;
       if(activeUser?.id!==user.id)return;
       if(error){status.textContent=`Could not save your profile. Run account-profile-schema.sql in Supabase and try again. ${error.message}`;return;}
-      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;document.getElementById('accountProfileSetup').classList.remove('show');
+      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;closeAccountProfileSetup();
     }
 
     function switchAccountRole(role) {
       if(!activeUser)return;
       const next=role==='seller'?'seller':'buyer';try{localStorage.setItem(`alee-account-role:${activeUser.id}`,next);}catch(error){}
-      closeBuyerAccount();closeSellerAccount();document.getElementById('profileDropdown')?.classList.remove('show');
+      closeBuyerAccount(false,true);closeSellerAccount(false,true);document.getElementById('profileDropdown')?.classList.remove('show');
       if(next==='buyer')openBuyerAccount();else openSellerAccount(true);
     }
 
@@ -1253,12 +1263,13 @@
     async function openBuyerAccount() {
       document.getElementById('profileDropdown')?.classList.remove('show');
       if(!activeUser){openAccountModal();return;}
-      closeSellerAccount();
+      closeSellerAccount(false,true);
       const user=activeUser;
       document.getElementById('buyerProfileEmail').textContent=user.email||'Signed in';
       document.getElementById('accountHubEmail').textContent=user.email||'Signed in';
       const adManager=document.getElementById('accountCountryAdManagerButton');if(adManager)adManager.hidden=!isAleeHost();
       document.getElementById('buyerDashboard').classList.add('show');
+      pushAppUiLayer('buyerAccount',fromHistory=>closeBuyerAccount(fromHistory),()=>document.getElementById('buyerDashboard').classList.add('show'));
       if(!privateAccountProfile){const ready=await ensurePrivateAccountProfile();if(!ready)return;if(activeUser?.id!==user.id)return;}
       document.getElementById('buyerProfileName').textContent=privateAccountProfile?.full_name||'Your profile';
       document.getElementById('buyerPrivateMobile').textContent=privateAccountProfile?.mobile||'—';
@@ -1268,7 +1279,7 @@
       loadAccountCountryAds();syncFavorites();refreshAccountShopActions();
     }
 
-    function closeBuyerAccount() { document.getElementById('buyerDashboard').classList.remove('show'); }
+    function closeBuyerAccount(fromHistory=false,preserveHistory=false) { document.getElementById('buyerDashboard').classList.remove('show');closeAppUiLayer('buyerAccount',fromHistory,preserveHistory); }
 
     async function editAccountDetails() {
       document.getElementById('profileDropdown')?.classList.remove('show');
@@ -1299,11 +1310,12 @@
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to create and manage your shop.';return;}
       if(!await ensurePrivateAccountProfile())return;
       try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'seller');}catch(error){}
-      closeBuyerAccount();document.getElementById('sellerDashboard').classList.add('show');
+      closeBuyerAccount(false,true);document.getElementById('sellerDashboard').classList.add('show');
+      pushAppUiLayer('sellerDashboard',fromHistory=>closeSellerAccount(fromHistory),()=>document.getElementById('sellerDashboard').classList.add('show'));
       document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
       await loadSellerWorkspace();
     }
-    function closeSellerAccount() { document.getElementById('sellerDashboard').classList.remove('show'); }
+    function closeSellerAccount(fromHistory=false,preserveHistory=false) { document.getElementById('sellerDashboard').classList.remove('show');closeAppUiLayer('sellerDashboard',fromHistory,preserveHistory); }
 
     async function refreshAccountShopActions() {
       const removeButton=document.getElementById('accountDeleteShopMenu');
@@ -1812,14 +1824,16 @@
     function openAccountModal() {
       document.getElementById('profileDropdown').classList.remove('show');
       document.getElementById('accountModal').classList.add('show');
+      pushAppUiLayer('accountModal',fromHistory=>closeAccountModal(fromHistory),()=>document.getElementById('accountModal').classList.add('show'));
       document.getElementById('accountModal').setAttribute('aria-hidden', 'false');
       showAccountForm('signin');
       if (!supabaseClient) document.getElementById('accountStatus').textContent = 'Online sign-in is not configured yet. See SETUP.txt in the project folder.';
     }
 
-    function closeAccountModal() {
+    function closeAccountModal(fromHistory=false,preserveHistory=false) {
       document.getElementById('accountModal').classList.remove('show');
       document.getElementById('accountModal').setAttribute('aria-hidden', 'true');
+      closeAppUiLayer('accountModal',fromHistory,preserveHistory);
     }
 
     async function signInWithEmail(event) {
@@ -1904,8 +1918,8 @@
       if (supabaseClient) await supabaseClient.auth.signOut();
       setLoggedInUser(null);
       document.getElementById('profileDropdown').classList.remove('show');
-      closeSellerAccount();
-      closeBuyerAccount();document.getElementById('accountProfileSetup').classList.remove('show');
+      closeSellerAccount(true,true);
+      closeBuyerAccount(true,true);appUiHistoryLayers.length=0;history.replaceState({...history.state,aleeUiLayer:null},'',location.href);document.getElementById('accountProfileSetup').classList.remove('show');
     }
 
     const siteLoader=document.getElementById('siteLoader');
@@ -2012,7 +2026,7 @@
     function openMobileShops() {
       document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Shops')));
       const search=document.getElementById('mobileShopSearch');if(search)search.value='';filterMobileShops();
-      document.getElementById('mobileShopsSheet').classList.add('show');
+      document.getElementById('mobileShopsSheet').classList.add('show');pushAppUiLayer('mobileShopsSheet',fromHistory=>closeMobileSheet('mobileShopsSheet',fromHistory),()=>document.getElementById('mobileShopsSheet').classList.add('show'));
     }
 
     function filterMobileShops() {
@@ -2078,9 +2092,9 @@
       if(defaultType==='ad'&&!isAleeHost()){alert('Only the aleeshopping host account can publish country ads.');return;}
       const adOption=document.querySelector('#platformPostType option[value="ad"]');if(adOption)adOption.hidden=!isAleeHost();
       editingPlatformPostId=null;const form=document.getElementById('platformPostForm');form.reset();form.elements.postType.value=defaultType;document.getElementById('platformPostTitle').textContent=defaultType==='ad'?'Add a country company ad':'Post on aleeshopping';populateCountrySelect(document.getElementById('platformAdCountry'),shopperCountryCode);document.getElementById('platformPostSubmit').textContent='Publish';updatePlatformPostFields();document.getElementById('platformPostStatus').textContent='';
-      document.getElementById('platformPostOverlay').classList.add('show');await loadMyPlatformPosts();
+      document.getElementById('platformPostOverlay').classList.add('show');pushAppUiLayer('platformPost',fromHistory=>closePlatformPostForm(fromHistory),()=>document.getElementById('platformPostOverlay').classList.add('show'));await loadMyPlatformPosts();
     }
-    function closePlatformPostForm(){editingPlatformPostId=null;document.getElementById('platformPostOverlay').classList.remove('show');}
+    function closePlatformPostForm(fromHistory=false,preserveHistory=false){editingPlatformPostId=null;document.getElementById('platformPostOverlay').classList.remove('show');closeAppUiLayer('platformPost',fromHistory,preserveHistory);}
     async function loadMyPlatformPosts(){
       const root=document.getElementById('myPlatformPosts');root.innerHTML='<p class="seller-muted">Loading…</p>';
       const {data,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,location,employment_type,salary,created_at').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);
@@ -2089,7 +2103,7 @@
       root.innerHTML=data.map(item=>`<div class="seller-product-row"><div><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.post_type.toUpperCase())} · ${escapeHTML(item.category||'')}</small></div><button class="seller-item-action edit" type="button" onclick="editPlatformPost('${escapeHTML(item.id)}')">Edit</button><button class="seller-item-action delete" type="button" onclick="deletePlatformPost('${escapeHTML(item.id)}','${escapeHTML(item.media_url||'')}')">Delete</button></div>`).join('');
     }
     let reopenMyAdsAfterPostEdit=false;
-    async function editPlatformPost(id){reopenMyAdsAfterPostEdit=document.getElementById('accountLibraryOverlay').classList.contains('show');if(reopenMyAdsAfterPostEdit)closeAccountLibrary();const {data,error}=await supabaseClient.from('platform_posts').select('*').eq('id',id).eq('owner_id',activeUser.id).maybeSingle();if(error||!data){alert('Could not load this post for editing.');return;}const form=document.getElementById('platformPostForm');editingPlatformPostId=String(id);form.elements.postType.value=data.post_type;form.elements.title.value=data.title||'';form.elements.category.value=data.category||'';form.elements.description.value=data.description||'';form.elements.linkUrl.value=data.link_url||'';form.elements.location.value=data.location||'';form.elements.employmentType.value=data.employment_type||'';form.elements.salary.value=data.salary||'';if(form.elements.countryCode){populateCountrySelect(document.getElementById('platformAdCountry'),data.country_code||shopperCountryCode);form.elements.countryCode.value=data.country_code||shopperCountryCode;}form.elements.image.value='';document.getElementById('platformPostTitle').textContent='Edit '+data.post_type.toUpperCase();document.getElementById('platformPostSubmit').textContent='Save Changes';document.getElementById('platformPostStatus').textContent=data.media_url?'Current image will stay unless you choose a replacement.':'';updatePlatformPostFields();document.getElementById('platformPostOverlay').classList.add('show');document.getElementById('platformPostOverlay').scrollTo({top:0,behavior:'smooth'});}
+    async function editPlatformPost(id){reopenMyAdsAfterPostEdit=document.getElementById('accountLibraryOverlay').classList.contains('show');if(reopenMyAdsAfterPostEdit)closeAccountLibrary(false,true);const {data,error}=await supabaseClient.from('platform_posts').select('*').eq('id',id).eq('owner_id',activeUser.id).maybeSingle();if(error||!data){alert('Could not load this post for editing.');return;}const form=document.getElementById('platformPostForm');editingPlatformPostId=String(id);form.elements.postType.value=data.post_type;form.elements.title.value=data.title||'';form.elements.category.value=data.category||'';form.elements.description.value=data.description||'';form.elements.linkUrl.value=data.link_url||'';form.elements.location.value=data.location||'';form.elements.employmentType.value=data.employment_type||'';form.elements.salary.value=data.salary||'';if(form.elements.countryCode){populateCountrySelect(document.getElementById('platformAdCountry'),data.country_code||shopperCountryCode);form.elements.countryCode.value=data.country_code||shopperCountryCode;}form.elements.image.value='';document.getElementById('platformPostTitle').textContent='Edit '+data.post_type.toUpperCase();document.getElementById('platformPostSubmit').textContent='Save Changes';document.getElementById('platformPostStatus').textContent=data.media_url?'Current image will stay unless you choose a replacement.':'';updatePlatformPostFields();document.getElementById('platformPostOverlay').classList.add('show');pushAppUiLayer('platformPost',fromHistory=>closePlatformPostForm(fromHistory),()=>document.getElementById('platformPostOverlay').classList.add('show'));document.getElementById('platformPostOverlay').scrollTo({top:0,behavior:'smooth'});}
     async function savePlatformPost(event){
       event.preventDefault();const form=event.currentTarget,status=document.getElementById('platformPostStatus'),button=document.getElementById('platformPostSubmit'),type=form.elements.postType.value,title=form.elements.title.value.trim(),link=form.elements.linkUrl.value.trim(),file=form.elements.image.files[0];
       if(!activeUser||!supabaseClient){status.textContent='Sign in and try again.';return;}
@@ -2147,7 +2161,7 @@
       body.querySelectorAll('[data-job-category]').forEach(button=>button.addEventListener('click',()=>renderHubJobs(body,button.dataset.jobCategory)));
       body.querySelectorAll('[data-job-index]').forEach(card=>{card.addEventListener('click',event=>{if(!event.target.closest('a'))showHubJobDetails(data[Number(card.dataset.jobIndex)]);});card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();showHubJobDetails(data[Number(card.dataset.jobIndex)]);}});});
     }
-    function showHubJobDetails(job){if(!job)return;const dialog=document.getElementById('hubJobDialog'),body=document.getElementById('hubJobDialogBody'),image=/^https?:\/\//i.test(job.image||'')?`<img src="${escapeHTML(job.image)}" alt="${escapeHTML(job.title||'Job')}" onerror="this.remove()">`:'';body.innerHTML=`${image}<h2>${escapeHTML(job.title||'Job')}</h2><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p>${job.salary?`<p><b>Salary:</b> ${escapeHTML(job.salary)}</p>`:''}<p>${escapeHTML(job.description||'No further description provided.')}</p><div class="job-dialog-actions">${/^https?:\/\//i.test(job.applyUrl||'')?`<a class="job-dialog-action primary" href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener"><i class="fa-solid fa-paper-plane"></i> Apply for this job</a>`:''}${job.shop_id?'<button class="job-dialog-action primary" type="button" data-job-contact><i class="fa-regular fa-comments"></i> Message the shop</button>':''}<button class="favorite-job-button" type="button" data-job-favorite><i class="fa-regular fa-star"></i> Add to Favorites</button><button class="job-dialog-action share" type="button" data-job-share><i class="fa-solid fa-share-nodes"></i> Share job</button><p class="job-dialog-status" data-job-dialog-status role="status" aria-live="polite"></p></div>`;body.querySelector('[data-job-contact]')?.addEventListener('click',()=>messageHubJobShop(job));body.querySelector('[data-job-share]')?.addEventListener('click',()=>shareHubJob(job));body.querySelector('[data-job-favorite]')?.addEventListener('click',event=>toggleFavorite('job',job.id||job.title,job,event.currentTarget));history.pushState({...history.state,aleeJobDetails:true},'',location.href);hubJobDetailsHistoryOpen=true;dialog.showModal();}
+    function showHubJobDetails(job){if(!job)return;const dialog=document.getElementById('hubJobDialog'),body=document.getElementById('hubJobDialogBody'),image=/^https?:\/\//i.test(job.image||'')?`<img src="${escapeHTML(job.image)}" alt="${escapeHTML(job.title||'Job')}" onerror="this.remove()">`:'';body.innerHTML=`${image}<h2>${escapeHTML(job.title||'Job')}</h2><p><b>${escapeHTML(job.category||'')}</b>${job.location?` · ${escapeHTML(job.location)}`:''}${job.type?` · ${escapeHTML(job.type)}`:''}</p>${job.salary?`<p><b>Salary:</b> ${escapeHTML(job.salary)}</p>`:''}<p>${escapeHTML(job.description||'No further description provided.')}</p><div class="job-dialog-actions">${/^https?:\/\//i.test(job.applyUrl||'')?`<a class="job-dialog-action primary" href="${escapeHTML(job.applyUrl)}" target="_blank" rel="noopener"><i class="fa-solid fa-paper-plane"></i> Apply for this job</a>`:''}${job.shop_id?'<button class="job-dialog-action primary" type="button" data-job-contact><i class="fa-regular fa-comments"></i> Message the shop</button>':''}<button class="favorite-job-button" type="button" data-job-favorite><i class="fa-regular fa-star"></i> Add to Favorites</button><button class="job-dialog-action share" type="button" data-job-share><i class="fa-solid fa-share-nodes"></i> Share job</button><p class="job-dialog-status" data-job-dialog-status role="status" aria-live="polite"></p></div>`;const favoriteButton=body.querySelector('[data-job-favorite]');if(readFavorites().some(row=>row.type==='job'&&String(row.id)===String(job.id||job.title))){favoriteButton.classList.add('is-saved');favoriteButton.innerHTML='<i class="fa-solid fa-star"></i> Added to Favorites';}body.querySelector('[data-job-contact]')?.addEventListener('click',()=>messageHubJobShop(job));body.querySelector('[data-job-share]')?.addEventListener('click',()=>shareHubJob(job));favoriteButton?.addEventListener('click',event=>toggleFavorite('job',job.id||job.title,job,event.currentTarget));history.pushState({...history.state,aleeJobDetails:true},'',location.href);hubJobDetailsHistoryOpen=true;dialog.showModal();}
     async function messageHubJobShop(job){const status=document.querySelector('[data-job-dialog-status]');if(!job?.shop_id){if(status)status.textContent='This job post is not linked to a shop yet.';return;}if(!window.aleeChat?.openShop){if(status)status.textContent='Shop messaging is unavailable. Please reload the page.';return;}const context=`Hello, I am interested in the job “${job.title||'Job'}” on aleeshopping.\nCategory: ${job.category||'—'}${job.location?`\nLocation: ${job.location}`:''}${job.type?`\nType: ${job.type}`:''}${job.salary?`\nSalary: ${job.salary}`:''}\nJob details: ${job.description||'Please share more information.'}`;closeHubJobDetails(true);history.replaceState({...history.state,aleeJobDetails:false},'',location.href);await window.aleeChat.openShop(job.shop_id,job.shop_name||'Hiring shop',{initialMessage:context});}
     async function shareHubJob(job){const status=document.querySelector('[data-job-dialog-status]'),url=new URL('index.html',location.href);if(job.id)url.searchParams.set('job',job.id);const title=job.title||'Job opening',text=[title,job.category,job.location,job.type,job.salary,job.description].filter(Boolean).join(' · ');try{if(navigator.share)await navigator.share({title:`${title} | aleeshopping`,text,url:url.href});else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(`${text}\n${url.href}`);if(status)status.textContent='Job details and link copied.';}else{const input=document.createElement('textarea');input.value=`${text}\n${url.href}`;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();const copied=document.execCommand('copy');input.remove();if(!copied)throw new Error('copy failed');if(status)status.textContent='Job details and link copied.';}}catch(error){if(error.name!=='AbortError'&&status)status.textContent='Could not open sharing. Try copying the job link from the browser.';}}
     function closeHubJobDetails(fromHistory=false){const dialog=document.getElementById('hubJobDialog');if(dialog.open)dialog.close();if(hubJobDetailsHistoryOpen){hubJobDetailsHistoryOpen=false;if(!fromHistory)history.back();}}
@@ -2451,18 +2465,20 @@
         searchContainerHomeNext = searchContainer.nextSibling;
         searchDiscoveryMount.appendChild(searchContainer);
         searchDiscoveryOverlay.classList.add('show');
+        pushAppUiLayer('searchDiscovery',fromHistory=>closeSearchDiscovery(fromHistory),()=>searchDiscoveryOverlay.classList.add('show'));
         document.body.classList.add('search-discovery-open');
         renderSearchDiscovery();
       }
       if (focusInput) window.setTimeout(()=>searchInput.focus({preventScroll:true}),0);
     }
-    function closeSearchDiscovery() {
+    function closeSearchDiscovery(fromHistory=false,preserveHistory=false) {
       if (!searchDiscoveryOverlay.classList.contains('show')) return;
       if (searchContainerHomeParent) searchContainerHomeParent.insertBefore(searchContainer,searchContainerHomeNext?.parentNode===searchContainerHomeParent?searchContainerHomeNext:null);
       searchContainerHomeParent=null;searchContainerHomeNext=null;
       searchDiscoveryOverlay.classList.remove('show');
       document.body.classList.remove('search-discovery-open');
       searchInput.blur();
+      closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
       if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn'))openSearchDiscovery(false);
@@ -2586,10 +2602,12 @@
 
     function openMobileCategories() {
       document.getElementById('mobileCategorySheet').classList.add('show');
+      pushAppUiLayer('mobileCategorySheet',fromHistory=>closeMobileSheet('mobileCategorySheet',fromHistory),()=>document.getElementById('mobileCategorySheet').classList.add('show'));
     }
 
-    function closeMobileSheet(id) {
+    function closeMobileSheet(id,fromHistory=false,preserveHistory=false) {
       document.getElementById(id)?.classList.remove('show');
+      closeAppUiLayer(id,fromHistory,preserveHistory);
     }
 
     function mobileGoHome() {
@@ -2615,13 +2633,13 @@
     async function toggleFavorite(type,id,item,button){if(!id||!item)return;const key=String(id),rows=readFavorites(),index=rows.findIndex(row=>row.type===type&&String(row.id)===key);if(index>=0){rows.splice(index,1);if(button){button.classList.remove('is-saved');button.innerHTML='<i class="fa-regular fa-star"></i> Add to Favorites';}}else{const image=type==='product'?item.images?.[0]||'assets/alee-logo.png':type==='shop'?item.logo||'assets/alee-logo.png':item.image||'assets/alee-logo.png';const title=type==='product'?item.name:type==='shop'?item.name:item.title||item.name;const summary=type==='product'?'LKR '+Number(item.price||0).toLocaleString():type==='job'?[item.category,item.location,item.type].filter(Boolean).join(' · '):'Shop profile';const payload={type,id:key,title,image,summary,url:type==='shop'?'shop.html?shop='+encodeURIComponent(item.id):type==='product'?'index.html?product='+encodeURIComponent(item.id):'index.html?job='+encodeURIComponent(item.id||''),data:item};rows.unshift(payload);if(button){button.classList.add('is-saved');button.innerHTML='<i class="fa-solid fa-star"></i> Added to Favorites';}}try{localStorage.setItem(favoritesStorageKey(),JSON.stringify(rows.slice(0,300)));}catch(_){}if(supabaseClient&&activeUser){try{if(index>=0)await supabaseClient.from('user_favorites').delete().eq('user_id',activeUser.id).eq('item_type',type).eq('item_id',key);else await supabaseClient.from('user_favorites').upsert({user_id:activeUser.id,item_type:type,item_id:key,item_data:rows[0]},{onConflict:'user_id,item_type,item_id'});}catch(error){console.warn('Favorites are saved on this device; run account-favorites-schema.sql to sync them.',error);}}}
     async function syncFavorites(){if(!supabaseClient||!activeUser)return;try{const {data,error}=await supabaseClient.from('user_favorites').select('item_type,item_id,item_data').eq('user_id',activeUser.id).order('created_at',{ascending:false}).limit(300);if(error)return;const merged=new Map(readFavorites().map(row=>[row.type+':'+row.id,row]));(data||[]).forEach(row=>{const item=row.item_data||{};merged.set(row.item_type+':'+row.item_id,{...item,type:row.item_type,id:row.item_id});});localStorage.setItem(favoritesStorageKey(),JSON.stringify([...merged.values()].slice(0,300)));}catch(_){}}
     function toggleFavoriteProduct(){if(!activeGalleryProduct)return;const button=document.getElementById('popupFavoriteBtn');toggleFavorite('product',activeGalleryProduct.id,activeGalleryProduct,button);}
-    function renderFavorites(){const root=document.getElementById('accountLibraryBody'),rows=readFavorites();if(!rows.length){root.innerHTML='<div class="seller-empty">No favorites saved yet. Save a product, job, or shop with the star button.</div>';return;}root.innerHTML='<div class="account-favorites-grid"></div>';const grid=root.firstElementChild;rows.forEach((row,index)=>{const card=document.createElement('article');card.className='account-favorite-card';const img=document.createElement('img');img.src=row.image||'assets/alee-logo.png';img.alt='';const title=document.createElement('strong');title.textContent=row.title||'Saved item';const info=document.createElement('small');info.textContent=row.type.toUpperCase()+(row.summary?' · '+row.summary:'');const actions=document.createElement('div');actions.className='account-library-actions';const open=document.createElement('button');open.type='button';open.textContent='Open';open.onclick=()=>{closeAccountLibrary();if(row.type==='product')openProductPopup(Number(row.id));else if(row.type==='job')showHubJobDetails({...row.data,title:row.data?.title||row.title,id:row.data?.id||row.id});else location.href=row.url;};const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.onclick=async()=>{await toggleFavorite(row.type,row.id,row);renderFavorites();};actions.append(open,remove);card.append(img,title,info,actions);grid.append(card);});}
-    let accountLibraryMode='favorites';function showAccountLibrary(mode){accountLibraryMode=mode;document.querySelectorAll('[data-library-tab]').forEach(button=>button.classList.toggle('active',button.dataset.libraryTab===mode));const root=document.getElementById('accountLibraryBody');document.getElementById('accountLibrarySubtitle').textContent=mode==='favorites'?'Saved products, jobs and shops':mode==='ads'?'Your ads, apps, games, jobs and product listings':'Manage your shop items and reels';document.getElementById('accountAdsFilterWrap').hidden=mode!=='ads';if(mode==='favorites'){renderFavorites();return;}if(mode==='shop'){root.innerHTML='<div class="seller-empty">Manage your shop products, profile and reels in your Shop dashboard.</div><button class="seller-action-button primary" type="button" onclick="closeAccountLibrary();openAccountMyShop()"><i class="fa-solid fa-store"></i> Open My Shop</button>';return;}loadAccountMyAdsWithReels();}
-    let accountLibraryReturnToHub=false;async function openMyAds(){if(!activeUser){openAccountModal();return;}accountLibraryReturnToHub=document.getElementById('buyerDashboard').classList.contains('show');document.getElementById('buyerDashboard').classList.remove('show');document.getElementById('accountLibraryOverlay').classList.add('show');showAccountLibrary('ads');}
-    function openAccountFavorites(){if(!activeUser){openAccountModal();return;}document.getElementById('accountLibraryOverlay').classList.add('show');showAccountLibrary('favorites');syncFavorites().then(renderFavorites);}
-    function closeAccountLibrary(){document.getElementById('accountLibraryOverlay').classList.remove('show');if(accountLibraryReturnToHub){document.getElementById('buyerDashboard').classList.add('show');accountLibraryReturnToHub=false;}}
-    async function openAccountMyShop(){if(!activeUser){openAccountModal();return;}accountLibraryReturnToHub=false;document.getElementById('buyerDashboard').classList.remove('show');document.getElementById('accountLibraryOverlay').classList.remove('show');await openSellerAccount(true);}
-    async function loadAccountMyAds(filter='all'){const root=document.getElementById('accountLibraryBody');root.innerHTML='<p class="seller-muted">Loading your posts…</p>';if(!supabaseClient){root.innerHTML='<div class="seller-empty">Connect Supabase to manage your posts.</div>';return;}const result=await supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);if(result.error){root.innerHTML='<div class="seller-empty">Could not load your posts. Check platform-posts-schema.sql in Supabase.</div>';return;}const productsResult=await supabaseClient.from('seller_products').select('id,name,category_label,price,image_urls').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);const posts=(result.data||[]).filter(row=>filter==='all'||row.post_type===filter),items=filter==='all'||filter==='product'?(productsResult.data||[]):[];root.innerHTML='';posts.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.media_url||'assets/alee-app-icon-192.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.title;copy.querySelector('small').textContent=row.post_type.toUpperCase()+' · '+(row.category||'');const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editPlatformPost(row.id);const del=document.createElement('button');del.textContent='Delete';del.onclick=()=>deletePlatformPost(row.id,row.media_url||'');actions.append(edit,del);line.append(img,copy,actions);root.append(line);});items.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.image_urls?.[0]||'assets/alee-logo.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.name;copy.querySelector('small').textContent='PRODUCT · '+(row.category_label||'')+' · LKR '+Number(row.price||0).toLocaleString();const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit in My Shop';edit.onclick=()=>{closeAccountLibrary();openAccountMyShop();};actions.append(edit);line.append(img,copy,actions);root.append(line);});if(!posts.length&&!items.length)root.innerHTML='<div class="seller-empty">You have not posted ads, apps, games, jobs, or products yet.</div>';const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='16px';const post=document.createElement('button');post.textContent='Post App / Ad / Job';post.onclick=()=>{closeAccountLibrary();openPlatformPostForm();};const shop=document.createElement('button');shop.textContent='Manage products and reels in My Shop';shop.onclick=()=>{closeAccountLibrary();openAccountMyShop();};manage.append(post,shop);root.append(manage);}
+    function renderFavorites(){const root=document.getElementById('accountLibraryBody'),rows=readFavorites();if(!rows.length){root.innerHTML='<div class="seller-empty">No favorites saved yet. Save a product, job, or shop with the star button.</div>';return;}root.innerHTML='<div class="account-favorites-grid"></div>';const grid=root.firstElementChild;rows.forEach((row,index)=>{const card=document.createElement('article');card.className='account-favorite-card';const img=document.createElement('img');img.src=row.image||'assets/alee-logo.png';img.alt='';const title=document.createElement('strong');title.textContent=row.title||'Saved item';const info=document.createElement('small');info.textContent=row.type.toUpperCase()+(row.summary?' · '+row.summary:'');const actions=document.createElement('div');actions.className='account-library-actions';const open=document.createElement('button');open.type='button';open.textContent='Open';open.onclick=()=>{closeAccountLibrary(false,true);if(row.type==='product')openProductPopup(Number(row.id));else if(row.type==='job')showHubJobDetails({...row.data,title:row.data?.title||row.title,id:row.data?.id||row.id});else location.href=row.url;};const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.onclick=async()=>{await toggleFavorite(row.type,row.id,row);renderFavorites();};actions.append(open,remove);card.append(img,title,info,actions);grid.append(card);});}
+    let accountLibraryMode='favorites';function showAccountLibrary(mode){accountLibraryMode=mode;document.querySelectorAll('[data-library-tab]').forEach(button=>button.classList.toggle('active',button.dataset.libraryTab===mode));const root=document.getElementById('accountLibraryBody');document.getElementById('accountLibrarySubtitle').textContent=mode==='favorites'?'Saved products, jobs and shops':mode==='ads'?'Your ads, apps, games, jobs and product listings':'Manage your shop items and reels';document.getElementById('accountAdsFilterWrap').hidden=mode!=='ads';if(mode==='favorites'){renderFavorites();return;}if(mode==='shop'){root.innerHTML='<div class="seller-empty">Manage your shop products, profile and reels in your Shop dashboard.</div><button class="seller-action-button primary" type="button" onclick="closeAccountLibrary(false,true);openAccountMyShop()"><i class="fa-solid fa-store"></i> Open My Shop</button>';return;}loadAccountMyAdsWithReels();}
+    let accountLibraryReturnToHub=false;function openAccountLibraryLayer(){pushAppUiLayer('accountLibrary',fromHistory=>closeAccountLibrary(fromHistory),()=>document.getElementById('accountLibraryOverlay').classList.add('show'));document.getElementById('accountLibraryOverlay').classList.add('show');}async function openMyAds(){if(!activeUser){openAccountModal();return;}accountLibraryReturnToHub=document.getElementById('buyerDashboard').classList.contains('show');document.getElementById('buyerDashboard').classList.remove('show');openAccountLibraryLayer();showAccountLibrary('ads');}
+    function openAccountFavorites(){if(!activeUser){openAccountModal();return;}openAccountLibraryLayer();showAccountLibrary('favorites');syncFavorites().then(renderFavorites);}
+    function closeAccountLibrary(fromHistory=false,preserveHistory=false){document.getElementById('accountLibraryOverlay').classList.remove('show');if(accountLibraryReturnToHub){document.getElementById('buyerDashboard').classList.add('show');accountLibraryReturnToHub=false;}closeAppUiLayer('accountLibrary',fromHistory,preserveHistory);}
+    async function openAccountMyShop(){if(!activeUser){openAccountModal();return;}if(document.getElementById('accountLibraryOverlay').classList.contains('show'))closeAccountLibrary(false,true);accountLibraryReturnToHub=false;closeBuyerAccount(false,true);await openSellerAccount(true);}
+    async function loadAccountMyAds(filter='all'){const root=document.getElementById('accountLibraryBody');root.innerHTML='<p class="seller-muted">Loading your posts…</p>';if(!supabaseClient){root.innerHTML='<div class="seller-empty">Connect Supabase to manage your posts.</div>';return;}const result=await supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);if(result.error){root.innerHTML='<div class="seller-empty">Could not load your posts. Check platform-posts-schema.sql in Supabase.</div>';return;}const productsResult=await supabaseClient.from('seller_products').select('id,name,category_label,price,image_urls').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);const posts=(result.data||[]).filter(row=>filter==='all'||row.post_type===filter),items=filter==='all'||filter==='product'?(productsResult.data||[]):[];root.innerHTML='';posts.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.media_url||'assets/alee-app-icon-192.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.title;copy.querySelector('small').textContent=row.post_type.toUpperCase()+' · '+(row.category||'');const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editPlatformPost(row.id);const del=document.createElement('button');del.textContent='Delete';del.onclick=()=>deletePlatformPost(row.id,row.media_url||'');actions.append(edit,del);line.append(img,copy,actions);root.append(line);});items.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.image_urls?.[0]||'assets/alee-logo.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.name;copy.querySelector('small').textContent='PRODUCT · '+(row.category_label||'')+' · LKR '+Number(row.price||0).toLocaleString();const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit in My Shop';edit.onclick=()=>{closeAccountLibrary(false,true);openAccountMyShop();};actions.append(edit);line.append(img,copy,actions);root.append(line);});if(!posts.length&&!items.length)root.innerHTML='<div class="seller-empty">You have not posted ads, apps, games, jobs, or products yet.</div>';const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='16px';const post=document.createElement('button');post.textContent='Post App / Ad / Job';post.onclick=()=>{closeAccountLibrary(false,true);openPlatformPostForm();};const shop=document.createElement('button');shop.textContent='Manage products and reels in My Shop';shop.onclick=()=>{closeAccountLibrary();openAccountMyShop();};manage.append(post,shop);root.append(manage);}
     let accountCountryFilter='';let accountCountryAds=[];
     function accountShopCountry(shop){if(shop?.countryCode&&countryCatalog.some(c=>c.code===String(shop.countryCode).toUpperCase()))return String(shop.countryCode).toUpperCase();const raw=String(shop?.phone||'').replace(/[^+\d]/g,'');const matches=countryCatalog.filter(c=>raw.startsWith(String(c.dialCode||'').replace(/[^+\d]/g,''))||raw.startsWith(String(c.dialCode||'').replace(/\D/g,''))).sort((a,b)=>String(b.dialCode).length-String(a.dialCode).length);return matches[0]?.code||'LK';}
     async function loadAccountCountryAds(){if(supabaseClient){try{const {data,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,media_url,country_code,shop_id').eq('post_type','ad').order('created_at',{ascending:false}).limit(100);if(!error)accountCountryAds=data||[];}catch(_){}}renderAccountCountryRail();}
@@ -2744,7 +2762,7 @@
       const rotated=items.length?items.slice(searchRecommendationShuffle%items.length).concat(items.slice(0,searchRecommendationShuffle%items.length)):[];
       rotated.slice(0,searchRecommendationsExpanded?rotated.length:3).forEach(product=>{
         const button=document.createElement('button');button.type='button';button.className='discovery-list-button';button.textContent=product.name;
-        button.addEventListener('click',()=>{closeSearchDiscovery();openProductPopup(product.id);});list.appendChild(button);
+        button.addEventListener('click',()=>openProductPopup(product.id));list.appendChild(button);
       });
       if(!items.length){const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='Search for products and view their details to build your recommendations.';list.appendChild(empty);}
       const more=document.getElementById('searchRecommendedMore');more.hidden=items.length<=3;more.textContent=searchRecommendationsExpanded?'Show less':'Show more';
@@ -3054,10 +3072,10 @@
 
     // Catalog-based product helper: runs in the browser and needs no external AI key or paid API.
     function openProductFinder() {
-      document.getElementById('productFinder').classList.add('show');
+      document.getElementById('productFinder').classList.add('show');pushAppUiLayer('productFinder',fromHistory=>closeProductFinder(fromHistory),()=>document.getElementById('productFinder').classList.add('show'));
       setTimeout(() => document.getElementById('finderQuery').focus(), 50);
     }
-    function closeProductFinder() { document.getElementById('productFinder').classList.remove('show'); }
+    function closeProductFinder(fromHistory=false,preserveHistory=false) { document.getElementById('productFinder').classList.remove('show');closeAppUiLayer('productFinder',fromHistory,preserveHistory); }
     function findRecommendedProducts() {
       const query = document.getElementById('finderQuery').value.trim().toLowerCase();
       const status = document.getElementById('finderStatus');
@@ -3096,7 +3114,7 @@
         const image = document.createElement('img'); image.src=product.images?.[0] || 'assets/alee-logo.png'; image.alt=''; image.onerror=()=>{image.src='assets/alee-logo.png';};
         const text = document.createElement('span'); const name=document.createElement('strong'); name.textContent=product.name; const meta=document.createElement('small'); meta.textContent=product.category || 'Product'; text.append(name,meta);
         const price=document.createElement('span'); price.className='finder-price'; price.textContent=`LKR ${Number(product.price).toLocaleString()}`;
-        button.append(image,text,price); button.onclick=()=>{closeProductFinder();openProductPopup(product.id);}; results.appendChild(button);
+        button.append(image,text,price); button.onclick=()=>{closeProductFinder(false,true);openProductPopup(product.id);}; results.appendChild(button);
       });
     }
 
@@ -3181,7 +3199,7 @@
     function openProductPopup(id) {
       const product = products.find(p => p.id === id);
       if (!product) return;
-      closeSearchDiscovery();
+      closeSearchDiscovery(false,true);
       recordPersonalProductView(product.id);
       activeGalleryProduct = product;
       activeGalleryIndex = 0;
@@ -3424,9 +3442,11 @@
       updateCart();
     }
 
-    function openOrderConfirmation(){const order=checkoutItems||cart;if(!order.length){alert('Your cart is empty.');return;}for(const [id,label] of [['customerName','Enter your name first.'],['customerAddress','Enter your delivery address first.'],['customerPhone1','Enter your phone number first.']]){const field=document.getElementById(id);if(!field.value.trim()){alert(label);field.focus();return;}}const total=order.reduce((sum,item)=>sum+Number(item.product.price)*Number(item.quantity),0);document.querySelector('#orderConfirmDialog p').textContent=`Place this order for LKR ${total.toLocaleString()}? Your delivery details will be sent to the shop.`;const dialog=document.getElementById('orderConfirmDialog');if(dialog?.showModal)dialog.showModal();else if(confirm('Confirm your order?'))submitOrder();}
-    function openCart() { checkoutItems = null; document.getElementById("cartOverlay").style.display = "block"; updateCart(); }
-    function closeCart() { document.getElementById("cartOverlay").style.display = "none"; checkoutItems = null; }
+    function openOrderConfirmation(){const order=checkoutItems||cart;if(!order.length){alert('Your cart is empty.');return;}for(const [id,label] of [['customerName','Enter your name first.'],['customerAddress','Enter your delivery address first.'],['customerPhone1','Enter your phone number first.']]){const field=document.getElementById(id);if(!field.value.trim()){alert(label);field.focus();return;}}const total=order.reduce((sum,item)=>sum+Number(item.product.price)*Number(item.quantity),0);document.querySelector('#orderConfirmDialog p').textContent=`Place this order for LKR ${total.toLocaleString()}? Your delivery details will be sent to the shop.`;const dialog=document.getElementById('orderConfirmDialog');if(dialog?.showModal){dialog.showModal();pushAppUiLayer('orderConfirm',fromHistory=>closeOrderConfirmation(fromHistory),()=>dialog.showModal());}else if(confirm('Confirm your order?'))submitOrder();}
+    function closeOrderConfirmation(fromHistory=false,preserveHistory=false){const dialog=document.getElementById('orderConfirmDialog');if(dialog?.open)dialog.close();closeAppUiLayer('orderConfirm',fromHistory,preserveHistory);}
+    document.getElementById('orderConfirmDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeOrderConfirmation();});
+    function openCart() { checkoutItems = null; document.getElementById("cartOverlay").style.display = "block";pushAppUiLayer('cartOverlay',fromHistory=>closeCart(fromHistory),()=>document.getElementById("cartOverlay").style.display="block"); updateCart(); }
+    function closeCart(fromHistory=false,preserveHistory=false) { document.getElementById("cartOverlay").style.display = "none"; checkoutItems = null;closeAppUiLayer('cartOverlay',fromHistory,preserveHistory); }
 
     function updateCart(items = cart) {
       let html = ""; let total = 0;
