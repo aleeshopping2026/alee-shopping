@@ -34,3 +34,48 @@ $$;
 
 revoke all on function public.get_product_search_trends() from public;
 grant execute on function public.get_product_search_trends() to anon, authenticated;
+
+-- Store per-account product IDs only (never the words people type).
+create table if not exists public.product_user_search_events (
+  event_id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  product_id integer not null check (product_id > 0),
+  event_type text not null default 'search' check (event_type in ('search','view')),
+  searched_at timestamptz not null default now()
+);
+
+alter table public.product_user_search_events
+  add column if not exists event_type text not null default 'search';
+alter table public.product_user_search_events
+  drop constraint if exists product_user_search_events_event_type_check;
+alter table public.product_user_search_events
+  add constraint product_user_search_events_event_type_check check (event_type in ('search','view'));
+
+alter table public.product_user_search_events enable row level security;
+drop policy if exists "Users can record their own product searches" on public.product_user_search_events;
+create policy "Users can record their own product searches"
+  on public.product_user_search_events for insert to authenticated
+  with check (user_id = auth.uid());
+
+create index if not exists product_user_search_events_recent_idx
+  on public.product_user_search_events(user_id, searched_at desc, product_id);
+
+create or replace function public.get_my_product_recommendations()
+returns table(product_id integer, search_count bigint)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select event.product_id, count(*)::bigint as search_count
+  from public.product_user_search_events as event
+  where event.user_id = auth.uid()
+    and event.searched_at >= now() - interval '90 days'
+  group by event.product_id
+  order by count(*) desc, max(event.searched_at) desc, event.product_id
+  limit 50;
+$$;
+
+revoke all on function public.get_my_product_recommendations() from public, anon;
+grant execute on function public.get_my_product_recommendations() to authenticated;
+grant insert on public.product_user_search_events to authenticated;

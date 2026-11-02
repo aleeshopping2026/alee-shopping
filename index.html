@@ -360,6 +360,16 @@
     @media (min-width: 768px) { .price { font-size: 18px; } }
     .price-block { display:flex; flex-direction:column; gap:4px; }
     .card .price-block { min-height:34px; }
+    .recommendation-section { margin:18px 0 22px; }
+    .recommendation-section[hidden] { display:none !important; }
+    .recommendation-title-row { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 2px 10px; }
+    .recommendation-title-row h2 { margin:0; color:var(--text-white); font-size:18px; }
+    .recommendation-title-row p { margin:0; color:#858b95; font-size:12px; }
+    .recommendation-shelf { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); gap:10px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:2px 2px 8px; scrollbar-width:thin; }
+    .recommendation-shelf .card { min-width:0; scroll-snap-align:start; }
+    .recommendation-shelf .card img { height:130px; }
+    @media (min-width:768px) { .recommendation-shelf { grid-auto-columns:200px; gap:14px; } .recommendation-shelf .card img { height:155px; } }
+    .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
     .discount-badge { display:inline-flex; align-items:center; padding:3px 6px; border-radius:5px; background:#15803d; border:1px solid #166534; color:#fff; font-size:10px; line-height:1.2; font-weight:900; letter-spacing:.2px; }
@@ -761,6 +771,14 @@
 
     <div class="container">
       <div class="photo-search-notice" id="photoSearchNotice" role="status" aria-live="polite"><span id="photoSearchMessage"></span><button type="button" class="photo-search-clear" onclick="clearPhotoSearch()">Clear</button></div>
+      <section class="recommendation-section" id="forYouSection" aria-labelledby="forYouTitle" hidden>
+        <div class="recommendation-title-row"><h2 id="forYouTitle"><i class="fa-solid fa-wand-magic-sparkles"></i> For You</h2><p>Based on products you search for</p></div>
+        <div class="recommendation-shelf" id="forYouProducts" aria-live="polite"></div>
+      </section>
+      <section class="recommendation-section" id="trendingSection" aria-labelledby="trendingTitle">
+        <div class="recommendation-title-row"><h2 id="trendingTitle"><i class="fa-solid fa-fire"></i> Trending Items</h2><p>Popular searches across aleeshopping</p></div>
+        <div class="recommendation-shelf" id="trendingProducts" aria-live="polite"><p class="recommendation-empty">Trending products will appear as shoppers search.</p></div>
+      </section>
       <div class="products" id="productList"></div>
     </div>
 
@@ -1711,6 +1729,10 @@
       if(identityChanged){privateAccountProfile=null;currentSellerShop=null;sellerProducts=[];document.getElementById('accountProfileSetupForm').reset();document.getElementById('buyerDetailsForm').reset();document.getElementById('buyerDetailsForm').hidden=true;document.getElementById('buyerDetailsStatus').textContent='';document.getElementById('accountProfileSetupStatus').textContent='';document.getElementById('accountProfileRetry').hidden=true;}
       activeUser = user || null;
       if (identityChanged && typeof chooseUnseenBannerFor === 'function') chooseUnseenBannerFor(activeUser);
+      if (identityChanged && typeof loadForYouRecommendations === 'function') {
+        document.getElementById('forYouSection').hidden = !activeUser;
+        if (activeUser) loadForYouRecommendations(activeUser.id);
+      }
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
       document.getElementById('profileNameDisplay').innerText = user ? label : 'Guest';
@@ -2172,8 +2194,20 @@
     let checkoutItems = null;
     const productSearchCounts = {};
     const localSearchStatsKey = 'aleeProductSearchStats';
+    const productsViewedThisSession = new Set();
     let activeProductArray = products.slice();
     let preserveProductOrder = false;
+    function recommendationCardMarkup(product, index=0) {
+      const image = product.images?.[0] || 'assets/alee-logo.png';
+      const shop = getShopForProduct(product);
+      const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
+      return `<div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div>`;
+    }
+    function renderRecommendationShelf(elementId, items, emptyText) {
+      const shelf = document.getElementById(elementId);
+      if (!shelf) return;
+      shelf.innerHTML = items.length ? items.map((item,index)=>recommendationCardMarkup(item,index)).join('') : `<p class="recommendation-empty">${escapeHTML(emptyText)}</p>`;
+    }
     let searchLogTimer = null;
     const checkoutDetailsKey = 'aleeCheckoutDetails';
     const checkoutDetailFields = ['customerName','customerAddress','customerPhone1','customerPhone2'];
@@ -2422,6 +2456,43 @@
         chip.addEventListener('click',()=>{document.getElementById('searchInput').value=product.name;searchProducts();});
         list.appendChild(chip);
       });
+      renderRecommendationShelf('trendingProducts',popular.map(({product})=>product),'Trending products will appear as shoppers search.');
+    }
+
+    function forYouLocalKey(userId) { return `alee-for-you-searches:${userId}`; }
+    function renderForYouFromCounts(counts) {
+      const recommendations=Object.entries(counts||{}).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).slice(0,8).map(row=>row.product);
+      renderRecommendationShelf('forYouProducts',recommendations,'Search for products you like and your recommendations will appear here.');
+    }
+    async function loadForYouRecommendations(userId) {
+      if (!userId) return;
+      const section=document.getElementById('forYouSection');
+      if(section)section.hidden=false;
+      let localCounts={};
+      try { localCounts=JSON.parse(localStorage.getItem(forYouLocalKey(userId))||'{}')||{}; } catch (_) {}
+      renderForYouFromCounts(localCounts);
+      if (!supabaseClient) return;
+      try {
+        const {data,error}=await supabaseClient.rpc('get_my_product_recommendations');
+        if(error||!Array.isArray(data))return;
+        const counts={};data.forEach(row=>counts[row.product_id]=Number(row.search_count)||0);
+        try { localStorage.setItem(forYouLocalKey(userId),JSON.stringify(counts)); } catch (_) {}
+        if(activeUser?.id===userId)renderForYouFromCounts(counts);
+      } catch (_) {}
+    }
+    async function recordPersonalProductView(productId) {
+      const id=Number(productId),userId=activeUser?.id;
+      if(!userId||!Number.isSafeInteger(id)||id<=0||productsViewedThisSession.has(id))return;
+      productsViewedThisSession.add(id);
+      let personal={};try{personal=JSON.parse(localStorage.getItem(forYouLocalKey(userId))||'{}')||{};}catch(_){}
+      personal[id]=(Number(personal[id])||0)+1;
+      try{localStorage.setItem(forYouLocalKey(userId),JSON.stringify(personal));}catch(_){}
+      renderForYouFromCounts(personal);
+      if(!supabaseClient)return;
+      try {
+        const {error}=await supabaseClient.from('product_user_search_events').insert({product_id:id,event_type:'view'});
+        if(error)console.warn('Personalized product views are not configured yet. Run search-trending-schema.sql.',error);
+      } catch (_) {}
     }
 
     async function loadProductSearchTrends() {
@@ -2430,6 +2501,7 @@
         if(local&&typeof local==='object')Object.assign(productSearchCounts,local);
       } catch (_) {}
       renderTopSearches();
+      renderRecommendationShelf('trendingProducts',Object.entries(productSearchCounts).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).slice(0,8).map(row=>row.product),'Trending products will appear as shoppers search.');
       if(!supabaseClient)return;
       try {
         const {data,error}=await supabaseClient.rpc('get_product_search_trends');
@@ -2437,6 +2509,7 @@
         Object.keys(productSearchCounts).forEach(key=>delete productSearchCounts[key]);
         data.forEach(row=>{productSearchCounts[row.product_id]=Number(row.search_count)||0;});
         renderTopSearches();
+        renderRecommendationShelf('trendingProducts',data.map(row=>products.find(item=>String(item.id)===String(row.product_id))).filter(Boolean).slice(0,8),'Trending products will appear as shoppers search.');
         displayProducts(activeProductArray,preserveProductOrder);
       } catch (_) {}
     }
@@ -2446,11 +2519,21 @@
       if(!ids.length)return;
       ids.forEach(id=>productSearchCounts[id]=(productSearchCounts[id]||0)+1);
       try { localStorage.setItem(localSearchStatsKey,JSON.stringify(productSearchCounts)); } catch (_) {}
+      if(activeUser?.id){
+        let personal={};try{personal=JSON.parse(localStorage.getItem(forYouLocalKey(activeUser.id))||'{}')||{};}catch(_){}
+        ids.forEach(id=>personal[id]=(Number(personal[id])||0)+1);
+        try{localStorage.setItem(forYouLocalKey(activeUser.id),JSON.stringify(personal));}catch(_){}
+        renderForYouFromCounts(personal);
+      }
       renderTopSearches();
       displayProducts(activeProductArray,preserveProductOrder);
       if(!supabaseClient)return;
       try {
         const {error}=await supabaseClient.from('product_search_events').insert(ids.map(product_id=>({product_id})));
+        if(activeUser?.id){
+          const {error:personalError}=await supabaseClient.from('product_user_search_events').insert(ids.map(product_id=>({product_id})));
+          if(personalError)console.warn('Personalized search history is not configured yet. Run search-trending-schema.sql.',personalError);
+        }
         if(!error)await loadProductSearchTrends();
       } catch (_) {}
     }
@@ -2703,6 +2786,7 @@
     function openProductPopup(id) {
       const product = products.find(p => p.id === id);
       if (!product) return;
+      recordPersonalProductView(product.id);
       activeGalleryProduct = product;
       activeGalleryIndex = 0;
       document.getElementById("popupName").innerText = product.name;
