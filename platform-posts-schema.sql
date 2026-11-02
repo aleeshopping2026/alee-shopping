@@ -41,9 +41,9 @@ grant select on public.platform_posts to anon, authenticated;
 grant insert, update, delete on public.platform_posts to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('platform-posts', 'platform-posts', true, 10485760, array['image/jpeg','image/png','image/webp','image/gif'])
-on conflict (id) do update set public = true, file_size_limit = 10485760,
-  allowed_mime_types = array['image/jpeg','image/png','image/webp','image/gif'];
+values ('platform-posts', 'platform-posts', true, 52428800, array['image/jpeg','image/png','image/webp','image/gif','video/mp4','video/webm','video/quicktime'])
+on conflict (id) do update set public = true, file_size_limit = 52428800,
+  allowed_mime_types = array['image/jpeg','image/png','image/webp','image/gif','video/mp4','video/webm','video/quicktime'];
 drop policy if exists "Anyone can read platform post images" on storage.objects;
 create policy "Anyone can read platform post images" on storage.objects for select
   using (bucket_id = 'platform-posts');
