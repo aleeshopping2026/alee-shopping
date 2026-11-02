@@ -368,6 +368,7 @@
     .recommendation-shelf { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); gap:10px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:2px 2px 8px; scrollbar-width:thin; }
     .recommendation-shelf .card { min-width:0; scroll-snap-align:start; }
     .recommendation-shelf .card img { height:130px; }
+    .recommendation-shelf .card .product-shop-meta img { width:22px; height:22px; min-width:22px; min-height:22px; max-width:22px; max-height:22px; flex:0 0 22px; aspect-ratio:1; padding:0; object-fit:cover; border-radius:50%; }
     @media (min-width:768px) { .recommendation-shelf { grid-auto-columns:200px; gap:14px; } .recommendation-shelf .card img { height:155px; } }
     .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
