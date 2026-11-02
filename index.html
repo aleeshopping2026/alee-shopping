@@ -376,17 +376,19 @@
     @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } }
 
     .card {
-      background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid var(--glass-border);
-      cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid #e3e5e8;
+      box-shadow: 0 1px 3px rgba(16,24,40,.045); cursor: pointer; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; display: flex; flex-direction: column; justify-content: space-between;
     }
-    .card:hover { border-color: var(--light-leaf); transform: translateY(-2px); }
-    .card-image-wrap { position:relative; }
+    .card:hover { border-color: #20242b; transform: translateY(-3px); box-shadow: 0 8px 18px rgba(16,24,40,.16); }
+    .card-image-wrap { position:relative; aspect-ratio:1; overflow:hidden; border-radius:9px; background:#fff; }
     .card-image-wrap > img { display:block; }
     .card .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; padding:0; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
     .free-shipping-badge { display:inline-flex; align-items:center; gap:4px; padding:5px 8px; border-radius:6px; background:#facc15; border:1px solid #eab308; color:#422006; font-size:10px; line-height:1.15; font-weight:900; box-shadow:0 2px 7px #0002; }
     .card-image-wrap .free-shipping-badge { position:absolute; top:7px; left:7px; }
     .card img { width: 100%; height: 145px; object-fit: contain; border-radius: 9px; background: #fff; padding: 8px; border: 1px solid rgba(255,105,0,.10); }
     @media (min-width: 768px) { .card img { height: 190px; } }
+    .card-image-wrap > img { width:100%; height:100%; object-fit:cover; padding:0; border:0; border-radius:inherit; }
+    .recommendation-shelf .card .card-image-wrap > img { height:100%; }
     
     .card h3 { font-size: 11px; margin: 5px 0; height: 28px; overflow: hidden; color: var(--text-white); line-height: 1.2; }
     @media (min-width: 768px) { .card h3 { font-size: 14px; height: 40px; } }
@@ -402,9 +404,9 @@
     .recommendation-title-row p { margin:0; color:#858b95; font-size:12px; }
     .recommendation-shelf { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); gap:10px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; padding:2px 2px 8px; scrollbar-width:thin; }
     .recommendation-shelf .card { min-width:0; scroll-snap-align:start; }
-    .recommendation-shelf .card img { height:130px; }
+    .recommendation-shelf .card img { height:100%; }
     .recommendation-shelf .card .product-shop-meta img { width:22px; height:22px; min-width:22px; min-height:22px; max-width:22px; max-height:22px; flex:0 0 22px; aspect-ratio:1; padding:0; object-fit:cover; border-radius:50%; }
-    @media (min-width:768px) { .recommendation-shelf { grid-auto-columns:200px; gap:14px; } .recommendation-shelf .card img { height:155px; } }
+    @media (min-width:768px) { .recommendation-shelf { grid-auto-columns:200px; gap:14px; } .recommendation-shelf .card img { height:100%; } }
     .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
@@ -2360,7 +2362,7 @@
     let checkoutItems = null;
     const productSearchCounts = {};
     const localSearchStatsKey = 'aleeProductSearchStats';
-    const productsViewedThisSession = new Set();
+    const productViewCooldownMs = 5 * 60 * 1000;
     let activeProductArray = products.slice();
     let preserveProductOrder = false;
     function recommendationCardMarkup(product, index=0) {
@@ -2703,7 +2705,7 @@
 
     function forYouLocalKey(userId) { return `alee-for-you-searches:${userId}`; }
     function renderForYouFromCounts(counts) {
-      const recommendations=Object.entries(counts||{}).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).slice(0,8).map(row=>row.product);
+      const viewedOrder=new Map(readSearchUserList('product-history',60).map((id,index)=>[String(id),index]));const recommendations=Object.entries(counts||{}).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0,id:String(id)})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count||(viewedOrder.get(a.id)??999)-(viewedOrder.get(b.id)??999)).slice(0,8).map(row=>row.product);
       renderRecommendationShelf('forYouProducts',recommendations,'Search for products you like and your recommendations will appear here.');
       if(typeof renderSearchRecommendations==='function')renderSearchRecommendations();
     }
@@ -2719,7 +2721,7 @@
       try {
         const {data,error}=await supabaseClient.rpc('get_my_product_recommendations');
         if(error||!Array.isArray(data))return;
-        const counts={};data.forEach(row=>counts[row.product_id]=Number(row.search_count)||0);
+        const remoteCounts={};data.forEach(row=>remoteCounts[row.product_id]=Number(row.search_count)||0);const counts={...localCounts};Object.entries(remoteCounts).forEach(([id,score])=>counts[id]=Math.max(Number(counts[id])||0,score));
         try { localStorage.setItem(forYouLocalKey(userId),JSON.stringify(counts)); } catch (_) {}
         if(activeUser?.id===userId)renderForYouFromCounts(counts);
       } catch (_) {}
@@ -2752,7 +2754,7 @@
     function toggleRecentSearches() { recentSearchesExpanded=!recentSearchesExpanded;renderRecentSearches(); }
     function getPersonalizedProductList() {
       let counts={};try{counts=JSON.parse(localStorage.getItem(forYouLocalKey(activeUser?.id))||'{}')||{};}catch(_){}
-      return Object.entries(counts).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count).map(row=>row.product);
+      const viewedOrder=new Map(readSearchUserList('product-history',60).map((id,index)=>[String(id),index]));return Object.entries(counts).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0,id:String(id)})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count||(viewedOrder.get(a.id)??999)-(viewedOrder.get(b.id)??999)).map(row=>row.product);
     }
     let searchRecommendationShuffle=0;
     function renderSearchRecommendations() {
@@ -2799,10 +2801,9 @@
       const id=Number(productId),userId=activeUser?.id;
       if(!Number.isSafeInteger(id)||id<=0)return;
       recordProductHistory(id);
-      if(!userId||productsViewedThisSession.has(`${userId}:${id}`))return;
-      productsViewedThisSession.add(`${userId}:${id}`);
+      if(!userId)return;const viewKey=`alee-product-view-at:${userId}:${id}`;let lastViewAt=0;try{lastViewAt=Number(sessionStorage.getItem(viewKey))||0;}catch(_){}if(Date.now()-lastViewAt<productViewCooldownMs)return;try{sessionStorage.setItem(viewKey,String(Date.now()));}catch(_){}
       let personal={};try{personal=JSON.parse(localStorage.getItem(forYouLocalKey(userId))||'{}')||{};}catch(_){}
-      personal[id]=(Number(personal[id])||0)+1;
+      personal[id]=(Number(personal[id])||0)+5;
       try{localStorage.setItem(forYouLocalKey(userId),JSON.stringify(personal));}catch(_){}
       renderForYouFromCounts(personal);
       if(!supabaseClient)return;

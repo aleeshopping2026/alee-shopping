@@ -67,12 +67,16 @@ stable
 security definer
 set search_path = public
 as $$
-  select event.product_id, count(*)::bigint as search_count
+  select event.product_id,
+         sum(case when event.event_type = 'view' then 5 else 1 end)::bigint as search_count
   from public.product_user_search_events as event
   where event.user_id = auth.uid()
     and event.searched_at >= now() - interval '90 days'
   group by event.product_id
-  order by count(*) desc, max(event.searched_at) desc, event.product_id
+  order by sum(case when event.event_type = 'view' then 5 else 1 end) desc,
+           max(case when event.event_type = 'view' then event.searched_at end) desc nulls last,
+           max(event.searched_at) desc,
+           event.product_id
   limit 50;
 $$;
 
