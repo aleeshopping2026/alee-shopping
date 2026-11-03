@@ -847,7 +847,7 @@
       <h2 class="shops-heading">Top Shops / Company</h2>
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('apps',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-mobile-screen-button"></i></span><span class="hub-shortcut-label">Apps</span></button>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label">Offers</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('reels',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-video"></i></span><span class="hub-shortcut-label">Reels</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('games',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-gamepad"></i></span><span class="hub-shortcut-label">Games</span></button>
@@ -1227,7 +1227,7 @@
       if(window.aleeChat)window.aleeChat.openInbox('buyer',activeUser);
     }
 
-    function isAleeHost(){return String(activeUser?.email||'').trim().toLowerCase()==='aleeshopping2026@gmail.com';}
+    function isAleeHost(){return ['aleeshopping2026@gmail.com','aleeshopping@gmail.com'].includes(String(activeUser?.email||'').trim().toLowerCase());}
 
     // The old Buyer/Seller chooser is now the required, owner-only ALEE Profile setup.
     async function ensurePrivateAccountProfile() {
@@ -2045,14 +2045,15 @@
       document.getElementById('mobileShopsSheet').classList.add('show');pushAppUiLayer('mobileShopsSheet',fromHistory=>closeMobileSheet('mobileShopsSheet',fromHistory),()=>document.getElementById('mobileShopsSheet').classList.add('show'));
     }
 
+    function shopNameMatches(name,query){if(!query)return true;const value=String(name||'').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' '),needle=String(query).toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();if(!needle)return true;if(value.includes(needle))return true;const a=value.replace(/\s/g,''),b=needle.replace(/\s/g,'');if(a.includes(b))return true;let previous=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const row=[i];for(let j=1;j<=b.length;j++)row[j]=Math.min(row[j-1]+1,previous[j]+1,previous[j-1]+(a[i-1]===b[j-1]?0:1));if(Math.min(...row)>2)return false;previous=row;}return previous[b.length]<=Math.max(1,Math.floor(b.length*.25));}
     function filterMobileShops() {
       const query=(document.getElementById('mobileShopSearch')?.value||'').trim().toLocaleLowerCase();
-      document.querySelectorAll('#mobileShopList .shop-tile').forEach(tile=>{tile.hidden=!tile.textContent.toLocaleLowerCase().includes(query);});
+      document.querySelectorAll('#mobileShopList .shop-tile').forEach(tile=>{tile.hidden=!shopNameMatches(tile.textContent,query);});
     }
     document.getElementById('mobileShopSearch')?.addEventListener('input',filterMobileShops);
     document.getElementById('hubShopSearch')?.addEventListener('input',event=>{
       const query=event.target.value.trim().toLocaleLowerCase();
-      document.querySelectorAll('#shopsStrip .shop-tile').forEach(tile=>{tile.hidden=!tile.textContent.toLocaleLowerCase().includes(query);});
+      document.querySelectorAll('#shopsStrip .shop-tile').forEach(tile=>{tile.hidden=!shopNameMatches(tile.textContent,query);});
     });
 
     function openHubSection(section,button) {
@@ -2068,8 +2069,8 @@
         document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
       }
       shopsPanel.hidden=true;panel.hidden=false;
-      const titles={apps:'Apps',games:'Games',jobs:'Jobs',reels:'Reels'};title.textContent=titles[section]||'';
-      if(section==='apps'||section==='games')renderHubApps(section,body);
+      const titles={apps:'Apps',offers:'Offers',games:'Games',jobs:'Jobs',reels:'Reels'};title.textContent=titles[section]||'';
+      if(section==='apps'||section==='games'||section==='offers')renderHubApps(section,body);
       else if(section==='jobs')renderHubJobs(body);
       else if(section==='reels')loadHubReels(body);
       document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
@@ -2149,14 +2150,14 @@
     document.getElementById('platformPostType')?.addEventListener('change',updatePlatformPostFields);
 
     async function renderHubApps(kind,body) {
-      const isApps=kind==='apps',data=isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isApps?'app':'game';
+      const isOffers=kind==='offers',isApps=kind==='apps',data=isOffers?[]:isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isOffers?'ad':isApps?'app':'game';
       let items=data.map(item=>({title:item.name,url:item.url,image:item.icon,category:item.category,post_type:type,localGame:Boolean(item.localGame)}));
-      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url').in('post_type',isApps?['app','ad']:['game']).order('created_at',{ascending:false}).limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
-      if(isApps){const ads=items.filter(item=>item.post_type==='ad');if(ads.length){let seen=[];try{seen=JSON.parse(localStorage.getItem(`alee-seen-ads:${activeUser?.id||'guest'}`)||'[]');}catch(_){}const unseen=ads.filter(ad=>!seen.includes(String(ad.id)));const next=unseen.length?unseen:ads;items=[...items.filter(item=>item.post_type!=='ad'),next[Math.floor(Math.random()*next.length)]];}}
+      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url').in('post_type',isOffers?['ad']:isApps?['app']:['game']).order('created_at',{ascending:false}).limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
+      if(isApps){const ads=[];if(ads.length){let seen=[];try{seen=JSON.parse(localStorage.getItem(`alee-seen-ads:${activeUser?.id||'guest'}`)||'[]');}catch(_){}const unseen=ads.filter(ad=>!seen.includes(String(ad.id)));const next=unseen.length?unseen:ads;items=[...items.filter(item=>item.post_type!=='ad'),next[Math.floor(Math.random()*next.length)]];}}
       const localGamePath=/^(?:\.\/)?games\/[a-z0-9-]+\.html(?:#[\w-]+)?$/i;
       items=items.filter(item=>item.post_type==='ad'||/^https:\/\//i.test(String(item.link_url||item.url||''))||(!isApps&&localGamePath.test(String(item.url||''))));
       if(!items.length){body.innerHTML=`<div class="hub-empty">No ${isApps?'apps':'games'} have been added yet.</div>`;return;}
-      body.innerHTML=`<div class="hub-app-grid">${items.map(item=>{const url=item.link_url||item.url||'',isLocalGame=!isApps&&localGamePath.test(String(url)),content=`<img src="${escapeHTML(item.media_url||item.image||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.title||item.name)}</strong><small>${item.post_type==='ad'?'Ad · ':''}${escapeHTML(item.category||'')}</small>${isLocalGame?'<span class="game-play-label"><i class="fa-solid fa-play"></i> Tap to play</span>':''}`,validExternal=/^https:\/\//i.test(String(url||''));return url&& (validExternal||isLocalGame)?`<a class="hub-app-card ${!isApps?'hub-game-card':''}" href="${escapeHTML(url)}" ${item.post_type==='ad'?`data-ad-id="${escapeHTML(item.id)}"`:''} ${validExternal?'target="_blank" rel="noopener"':''}>${content}</a>`:`<div class="hub-app-card ${!isApps?'hub-game-card':''}">${content}</div>`;}).join('')}</div>`;
+      body.innerHTML=`<div class="hub-app-grid">${items.map(item=>{const url=item.link_url||item.url||'',isLocalGame=!isApps&&localGamePath.test(String(url)),content=`<img src="${escapeHTML(item.media_url||item.image||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.title||item.name)}</strong><small>${item.post_type==='ad'?'Offer · ':''}${escapeHTML(item.category||'')}</small>${isLocalGame?'<span class="game-play-label"><i class="fa-solid fa-play"></i> Tap to play</span>':''}`,validExternal=/^https:\/\//i.test(String(url||''));return url&& (validExternal||isLocalGame)?`<a class="hub-app-card ${!isApps&&!isOffers?'hub-game-card':''}" href="${escapeHTML(url)}" ${item.post_type==='ad'?`data-ad-id="${escapeHTML(item.id)}"`:''} ${validExternal?'target="_blank" rel="noopener"':''}>${content}</a>`:`<div class="hub-app-card ${!isApps?'hub-game-card':''}">${content}</div>`;}).join('')}</div>`;
       body.querySelectorAll('[data-ad-id]').forEach(card=>card.addEventListener('click',()=>{try{const key=`alee-seen-ads:${activeUser?.id||'guest'}`,seen=JSON.parse(localStorage.getItem(key)||'[]');if(!seen.includes(card.dataset.adId))seen.push(card.dataset.adId);localStorage.setItem(key,JSON.stringify(seen));}catch(_){}}));
     }
 
