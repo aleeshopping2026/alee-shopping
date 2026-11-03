@@ -647,7 +647,7 @@
     .account-private-details>div { display:grid; grid-template-columns:100px minmax(0,1fr); gap:12px; padding:11px 13px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); }
     .account-private-details span { color:#888; font-size:12px; }
     .account-private-details strong { font-size:13px; font-weight:600; overflow-wrap:anywhere; }
-    #accountDeleteShopMenu[hidden],#mobileDeleteShopMenu[hidden],#accountSignInMenu[hidden],#mobileAccountSignIn[hidden],#mobileAccountLogout[hidden],#accountProfileRetry[hidden],#accountOfferManagerButton[hidden] { display:none !important; }
+    #accountDeleteShopMenu[hidden],#mobileDeleteShopMenu[hidden],#accountSignInMenu[hidden],#mobileAccountSignIn[hidden],#mobileAccountLogout[hidden],#accountProfileRetry[hidden],#accountOfferManagerButton[hidden],#accountContentManagersButton[hidden] { display:none !important; }
     .seller-product-row { display:grid; grid-template-columns:64px minmax(0,1fr) auto; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--glass-border); }
     .seller-product-row:last-child { border-bottom:0; }
     .seller-product-row img { width:64px; height:58px; object-fit:contain; border-radius:8px; background:white; }
@@ -671,8 +671,10 @@
     .role-option small { margin-top:4px; color:#aaa; }
     .buyer-profile-email { padding:12px; border-radius:10px; background:var(--bg-dark); overflow-wrap:anywhere; }
     .seller-empty { padding:12px 0; color:#aaa; font-size:13px; }
+    #sellerDashboard .seller-panel{background:#f7f8fa;border-color:#e5e7eb;color:#172033}#sellerDashboard .seller-header h2,#sellerDashboard .seller-panel h3{color:#172033}#sellerDashboard .seller-dashboard-title h2,#sellerDashboard #sellerShopName{color:#f36b00}#sellerDashboard .seller-muted,#sellerDashboard .seller-subtitle{color:#667085}#sellerDashboard .seller-panel input,#sellerDashboard .seller-panel textarea,#sellerDashboard .seller-panel select{background:#fff;color:#172033;border-color:#d0d5dd}#sellerDashboard .seller-action-button.primary,#sellerDashboard .seller-dashboard-post{background:#f3f4f6;color:#172033;border-color:#d1d5db}#sellerDashboard .seller-shop-link,#sellerDashboard .seller-social-links a{color:#475467}#sellerDashboard .seller-product-row small{color:#667085}
     @media(max-width:700px) { .header-account-button { display:none; } .seller-overlay { padding:0; } .seller-card { min-height:100vh; margin:0; padding:18px 14px calc(24px + env(safe-area-inset-bottom)); border-radius:0; } .seller-dashboard-header { grid-template-columns:38px minmax(0,1fr); } .seller-dashboard-header .seller-dashboard-post { grid-column:2; grid-row:2; justify-self:start; white-space:normal; } .seller-form-grid { grid-template-columns:1fr; } .seller-product-row { grid-template-columns:54px minmax(0,1fr); } .seller-product-row img { width:54px; height:54px; } .seller-product-actions { grid-column:1/-1; justify-content:flex-end; } .seller-item-action { min-height:42px; padding:8px 12px; } .seller-analytics-grid { grid-template-columns:1fr 1fr; } }
     @media(min-width:1024px) {
+      #sellerDashboard{align-items:flex-start;overflow-y:auto;padding:2vh 2vw}#sellerDashboard .seller-card{display:grid;grid-template-columns:minmax(280px,350px) minmax(0,1fr);align-items:start;gap:0 18px;width:min(1280px,100%);max-height:96vh;overflow:auto;margin:0 auto;padding:24px;background:#f7f8fa;color:#172033;border:1px solid #e5e7eb;border-radius:22px;box-shadow:0 20px 65px #17203325}#sellerDashboard .seller-dashboard-header,#sellerDashboard #sellerDashboardStatus{grid-column:1/-1}#sellerDashboard #sellerShopProfile{grid-column:1;grid-row:2;position:sticky;top:8px;background:#fff;border-color:#e5e7eb}#sellerDashboard #sellerShopFormPanel:not([hidden]){grid-column:1/-1}#sellerDashboard #sellerProductPanel{grid-column:2;grid-row:2/span 2;background:#fff;border-color:#e5e7eb}#sellerDashboard #sellerProductListPanel{grid-column:1;grid-row:3;background:#fff;border-color:#e5e7eb}#sellerDashboard #sellerAnalyticsPanel{grid-column:2;background:#fff;border-color:#e5e7eb}#sellerDashboard .seller-panel h3{color:#172033}#sellerDashboard .seller-muted,#sellerDashboard .seller-subtitle{color:#667085}#sellerDashboard .seller-panel input,#sellerDashboard .seller-panel textarea,#sellerDashboard .seller-panel select{background:#fff;color:#172033;border-color:#d0d5dd}#sellerDashboard .seller-shop-link,#sellerDashboard .seller-social-links a{color:#475467}#sellerDashboard .seller-product-row small{color:#667085}#sellerDashboard .seller-dashboard-post{background:#f3f4f6;color:#172033;border-color:#d1d5db}
       .search-discovery-body { max-width:1420px; padding:22px 40px 60px; }
       .search-discovery-search .search-container { max-width:1420px; }
       #searchDiscoveryHome { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 32px; }
@@ -681,6 +683,7 @@
       .popup-content { width:min(94vw,1500px); max-width:1500px; margin:12px auto; }
       .popup-main-grid { grid-template-columns:minmax(0,1.1fr) minmax(400px,.9fr); gap:28px; }
     }
+    @media(min-width:701px) and (max-width:1023px){#sellerDashboard .seller-card{width:min(900px,calc(100vw - 32px));max-height:94vh;overflow-y:auto}}
 
   </style>
 </head>
@@ -1011,6 +1014,7 @@
     <div class="footer">
       <p>aleeshopping  | Shop Everything</p>
       <p>📍 Colombo, Sri Lanka | 📞 076 138 9936</p>
+      <p style="font-size:11px">Prices for international shoppers are approximate currency conversions. Rates by <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a>.</p>
       <div class="social-icons">
         <a href="https://www.facebook.com/profile.php?id=61594937084284&mibextid=ZbWKwL" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
         <a href="https://instagram.com/alee_shoppingnew?exln=MWdmdzJzYmduYXltbg%3D%3D" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zm4.5-7.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z
@@ -1044,6 +1048,7 @@
       <section class="seller-panel"><div class="account-menu-grid">
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
         <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
+        <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, country banners, offers and product popups</small></button>
         <button type="button" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>My Shop</span><small>Open and manage your shop</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
         <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
@@ -1078,6 +1083,7 @@
           <label>Shop category<select name="shopCategory" id="sellerShopCategory" required></select></label>
           <label>Business bio<textarea name="bio" maxlength="600" placeholder="Tell customers about your business"></textarea></label>
           <label>Shop country<input class="country-search-input" type="search" data-country-search="sellerShopCountry" placeholder="Search country…" aria-label="Search shop countries"><select name="countryCode" id="sellerShopCountry" required aria-label="Select shop country"></select><small class="seller-muted">Choose the country where your shop and products are located.</small></label>
+          <label>Shop currency<select name="currencyCode" id="sellerShopCurrency" required aria-label="Choose shop currency"></select><small class="seller-muted">Product prices are entered in this currency. It is suggested from your shop country.</small></label>
           <label>Phone number<input class="country-search-input" type="search" data-country-search="phoneCountry" placeholder="Search country or code…" aria-label="Search phone country codes"><span class="phone-entry"><select name="phoneCountry" id="phoneCountry" data-phone-country aria-label="Phone country code"></select><input name="phone" data-phone-local type="tel" inputmode="tel" maxlength="24" required placeholder="76 123 4567"></span><small class="phone-preview" data-phone-preview>Full number: +94</small></label>
           <label>Second phone number (optional)<input class="country-search-input" type="search" data-country-search="phone2Country" placeholder="Search country or code…" aria-label="Search second phone country codes"><span class="phone-entry"><select name="phone2Country" id="phone2Country" data-phone-country aria-label="Second phone country code"></select><input name="phone2" data-phone-local type="tel" inputmode="tel" maxlength="24" placeholder="76 123 4567"></span><small class="phone-preview" data-phone-preview>Optional</small></label>
           <label>Shop address<textarea name="address" minlength="3" maxlength="400" required placeholder="Shop address"></textarea></label>
@@ -1095,9 +1101,9 @@
         <h3 id="sellerProductFormTitle">Add Item</h3>
         <div class="seller-form-grid">
           <label>Item name<input name="name" minlength="2" maxlength="120" required></label>
-          <label>Price (LKR)<input name="price" type="number" min="1" step="1" required></label>
-          <label>Wholesale price (LKR)<input name="wholesalePrice" type="number" min="0" step="1" placeholder="Optional"></label>
-          <label>Offer price (LKR)<input name="offerPrice" type="number" min="0" step="1" placeholder="Optional"></label>
+          <label>Price (<span data-currency-label>LKR</span>)<input name="price" type="number" min="1" step="0.01" required></label>
+          <label>Wholesale price (<span data-currency-label>LKR</span>)<input name="wholesalePrice" type="number" min="0" step="0.01" placeholder="Optional"></label>
+          <label>Offer price (<span data-currency-label>LKR</span>)<input name="offerPrice" type="number" min="0" step="0.01" placeholder="Optional"></label>
           <label>Stock quantity<input name="stock" type="number" min="0" step="1" value="1" required></label>
           <label>Condition<select name="condition" required><option value="New">New</option><option value="Used - Like New">Used - Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
           <label>Available colors<input name="colors" maxlength="250" placeholder="e.g. Black, Blue, Rose Gold"></label>
@@ -1157,10 +1163,23 @@
     const catalogTabs = Array.isArray(window.aleeCatalogTabs) ? window.aleeCatalogTabs : [];
     const shops = Array.isArray(window.aleeShops) ? window.aleeShops : [];
     const countryCatalog = Array.isArray(window.aleeCountries) ? window.aleeCountries : [];
-    let shopperCountryCode = 'LK';
+    let shopperCountryCode = 'LK';let shopperCurrencyCode='LKR';let exchangeRatesUSD=null;let exchangeRatesLoaded=false;
     function flagForCountry(code){return String.fromCodePoint(...String(code||'LK').toUpperCase().split('').map(char=>127397+char.charCodeAt(0)));}
     function populateCountrySelect(select,selectedCode='LK',phoneCodes=false,query=''){if(!select)return;const q=String(query||'').trim().toLocaleLowerCase();const rows=countryCatalog.filter(country=>!q||country.name.toLocaleLowerCase().includes(q)||country.code.toLowerCase().includes(q)||(phoneCodes&&country.dialCode.includes(q))).sort((a,b)=>a.name.localeCompare(b.name));select.replaceChildren(...rows.map(country=>{const option=new Option(phoneCodes?(flagForCountry(country.code)+' '+country.dialCode+' · '+country.name):(flagForCountry(country.code)+' '+country.name),country.code);if(phoneCodes)option.dataset.dialCode=country.dialCode;return option;}));if(!rows.length){select.add(new Option('No countries found',''));return;}select.value=rows.some(country=>country.code===selectedCode)?selectedCode:rows[0].code;if(!q)select.dataset.lastCountryCode=select.value;}
     document.querySelectorAll('[data-country-search]').forEach(search=>{const select=document.getElementById(search.dataset.countrySearch),phoneCodes=Boolean(select?.hasAttribute('data-phone-country'));search.addEventListener('input',()=>populateCountrySelect(select,select.value||select.dataset.lastCountryCode||'LK',phoneCodes,search.value));search.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();select?.focus();}});select?.addEventListener('change',()=>{search.value='';select.dataset.lastCountryCode=select.value;populateCountrySelect(select,select.value,phoneCodes);});});
+    const countryCurrencyCodes={LK:'LKR',US:'USD',CA:'CAD',AU:'AUD',NZ:'NZD',GB:'GBP',IE:'EUR',DE:'EUR',FR:'EUR',IT:'EUR',ES:'EUR',PT:'EUR',NL:'EUR',BE:'EUR',AT:'EUR',FI:'EUR',GR:'EUR',CY:'EUR',EE:'EUR',LV:'EUR',LT:'EUR',LU:'EUR',MT:'EUR',SK:'EUR',SI:'EUR',HR:'EUR',IN:'INR',PK:'PKR',BD:'BDT',NP:'NPR',JP:'JPY',CN:'CNY',HK:'HKD',TW:'TWD',SG:'SGD',MY:'MYR',ID:'IDR',TH:'THB',PH:'PHP',VN:'VND',KR:'KRW',AE:'AED',SA:'SAR',QA:'QAR',KW:'KWD',BH:'BHD',OM:'OMR',TR:'TRY',IL:'ILS',ZA:'ZAR',NG:'NGN',KE:'KES',EG:'EGP',GH:'GHS',BR:'BRL',MX:'MXN',AR:'ARS',CL:'CLP',CO:'COP',PE:'PEN',CH:'CHF',SE:'SEK',NO:'NOK',DK:'DKK',PL:'PLN',CZ:'CZK',HU:'HUF',RO:'RON',BG:'BGN',UA:'UAH',RU:'RUB'};
+    function currencyForCountry(code){return countryCurrencyCodes[String(code||'LK').toUpperCase()]||'USD';}
+    let exchangeRatesPromise=null;
+    async function loadExchangeRates(){if(exchangeRatesUSD)return exchangeRatesUSD;if(exchangeRatesPromise)return exchangeRatesPromise;exchangeRatesPromise=(async()=>{try{const cached=JSON.parse(localStorage.getItem('alee-fx-rates')||'null');if(cached?.savedAt>Date.now()-6*60*60*1000&&cached.rates){exchangeRatesUSD=cached.rates;return exchangeRatesUSD;}const response=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(4500)});if(!response.ok)throw new Error('Exchange rates unavailable');const data=await response.json();if(data.result!=='success'||!data.rates)throw new Error('Invalid exchange rate response');exchangeRatesUSD=data.rates;try{localStorage.setItem('alee-fx-rates',JSON.stringify({savedAt:Date.now(),rates:exchangeRatesUSD}));}catch(_){}return exchangeRatesUSD;}catch(error){console.info('Showing product prices in their listed currency until exchange rates are available.',error);return null;}finally{exchangeRatesPromise=null;}})();return exchangeRatesPromise;}
+    function setShopperCurrency(countryCode){shopperCurrencyCode=currencyForCountry(countryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);});}
+    function convertPrice(amount,fromCurrency){const from=String(fromCurrency||'LKR').toUpperCase(),to=shopperCurrencyCode||'LKR';if(from===to)return {amount:Number(amount),currency:from,converted:false};const rates=exchangeRatesUSD;if(!rates||!rates[from]||!rates[to])return {amount:Number(amount),currency:from,converted:false};return {amount:Number(amount)/Number(rates[from])*Number(rates[to]),currency:to,converted:true};}
+    function formatCurrencyAmount(amount,currencyCode='LKR'){try{return new Intl.NumberFormat(undefined,{style:'currency',currency:currencyCode,maximumFractionDigits:2}).format(Number(amount)||0);}catch(_){return `${currencyCode} ${(Number(amount)||0).toLocaleString()}`;}}
+    function productMoney(amount,product){const result=convertPrice(amount,product?.currencyCode||'LKR');return `${result.converted?'≈ ':''}${formatCurrencyAmount(result.amount,result.currency)}`;}
+    try{shopperCountryCode=localStorage.getItem('alee-shopper-country')||'LK';}catch(_){}shopperCurrencyCode=currencyForCountry(shopperCountryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);return fetch('https://country.io/currency.json',{signal:AbortSignal.timeout(3500)}).then(response=>response.ok?response.json():null);}).then(mapping=>{if(mapping){for(const [country,currency] of Object.entries(mapping))if(!countryCurrencyCodes[country]&&exchangeRatesUSD?.[currency])countryCurrencyCodes[country]=currency;setShopperCurrency(shopperCountryCode);}}).catch(()=>{});
+    function populateSellerCurrencies(selected='LKR'){const select=document.getElementById('sellerShopCurrency');if(!select)return;const codes=typeof Intl.supportedValuesOf==='function'?Intl.supportedValuesOf('currency'):['LKR','USD','EUR','GBP','INR','AUD','CAD','JPY','CNY','SGD','AED'];if(!codes.includes(selected))codes.push(selected);let names;try{names=new Intl.DisplayNames(['en'],{type:'currency'});}catch(_){}select.replaceChildren(...codes.sort().map(code=>new Option(`${code} · ${names?.of(code)||code}`,code)));select.value=selected;updateSellerCurrencyLabels();}
+    function updateSellerCurrencyLabels(){const code=document.getElementById('sellerShopCurrency')?.value||'LKR';document.querySelectorAll('[data-currency-label]').forEach(node=>node.textContent=code);}
+    document.getElementById('sellerShopCountry')?.addEventListener('change',event=>{if(!currentSellerShop)populateSellerCurrencies(currencyForCountry(event.target.value));});
+    document.getElementById('sellerShopCurrency')?.addEventListener('change',updateSellerCurrencyLabels);
     // Email and password sign-in uses Supabase Auth.
     const supabaseClient = window.aleeSupabase || null;
     let activeUser = null;
@@ -1242,7 +1261,7 @@
         if(activeUser?.id!==user.id)return false;
         if(error){showAccountProfileSetup();status.textContent=!navigator.onLine?'Could not connect to load your private profile. Reconnect, then check again.':'Private profile setup is not ready. Run account-profile-schema.sql in Supabase, then check again.';submit.disabled=true;document.getElementById('accountProfileRetry').hidden=false;return false;}
         submit.disabled=false;document.getElementById('accountProfileRetry').hidden=true;
-        if(data){privateAccountProfile=data;closeAccountProfileSetup();if(data.country_code&&countryCatalog.some(country=>country.code===data.country_code)){shopperCountryCode=data.country_code;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(activeProductArray,preserveProductOrder);}overlay.classList.remove('show');
+        if(data){privateAccountProfile=data;closeAccountProfileSetup();if(data.country_code&&countryCatalog.some(country=>country.code===data.country_code)){shopperCountryCode=data.country_code;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}setShopperCurrency(shopperCountryCode);displayProducts(activeProductArray,preserveProductOrder);}overlay.classList.remove('show');
           document.getElementById('buyerProfileName').textContent=data.full_name;
           document.getElementById('buyerPrivateMobile').textContent=data.mobile;
           document.getElementById('buyerPrivateAddress').textContent=data.address;
@@ -1265,7 +1284,7 @@
       button.disabled=false;
       if(activeUser?.id!==user.id)return;
       if(error){status.textContent=`Could not save your profile. Run account-profile-schema.sql in Supabase and try again. ${error.message}`;return;}
-      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;closeAccountProfileSetup();
+      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}setShopperCurrency(shopperCountryCode);displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;closeAccountProfileSetup();
     }
 
     function switchAccountRole(role) {
@@ -1286,6 +1305,7 @@
       document.getElementById('accountHubEmail').textContent=user.email||'Signed in';
       const adManager=document.getElementById('accountCountryAdManagerButton');if(adManager)adManager.hidden=!isAleeHost();
       const offerManager=document.getElementById('accountOfferManagerButton');if(offerManager)offerManager.hidden=!isAleeHost();
+      const contentManagers=document.getElementById('accountContentManagersButton');if(contentManagers)contentManagers.hidden=!isAleeHost();
       document.getElementById('buyerDashboard').classList.add('show');
       pushAppUiLayer('buyerAccount',fromHistory=>closeBuyerAccount(fromHistory),()=>document.getElementById('buyerDashboard').classList.add('show'));
       if(!privateAccountProfile){const ready=await ensurePrivateAccountProfile();if(!ready)return;if(activeUser?.id!==user.id)return;}
@@ -1320,7 +1340,7 @@
       const {data,error}=await supabaseClient.from('alee_profiles').upsert(profile,{onConflict:'user_id'}).select('full_name,address,mobile,country_code').single();
       if(activeUser?.id!==user.id)return;
       if(error){status.textContent=`Could not save your details. ${error.message}`;return;}
-      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;document.getElementById('buyerDetailsForm').hidden=true;status.textContent='Private details saved.';
+      privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}setShopperCurrency(shopperCountryCode);displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;document.getElementById('buyerDetailsForm').hidden=true;status.textContent='Private details saved.';
     }
 
     async function openSellerAccount() {
@@ -1384,10 +1404,10 @@
     }
 
     function mapSellerShop(row) {
-      return {id:String(row.id),countryCode:row.country_code||'LK',name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
+      return {id:String(row.id),countryCode:row.country_code||'LK',currencyCode:row.currency_code||'LKR',name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
     }
     function mapSellerProduct(row) {
-      const offer=Number(row.offer_price)||0,base=Number(row.price)||0;return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:offer>0?offer:base,originalPrice:offer>0?base:null,discountPercent:offer>0&&base>offer?Math.round((base-offer)*100/base):0,stock:Number(row.stock??1),condition:row.condition||'New',wholesalePrice:Number(row.wholesale_price)||null,colors:Array.isArray(row.colors)?row.colors:[],category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
+      const offer=Number(row.offer_price)||0,base=Number(row.price)||0;return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:offer>0?offer:base,originalPrice:offer>0?base:null,discountPercent:offer>0&&base>offer?Math.round((base-offer)*100/base):0,currencyCode:row.currency_code||'LKR',stock:Number(row.stock??1),condition:row.condition||'New',wholesalePrice:Number(row.wholesale_price)||null,colors:Array.isArray(row.colors)?row.colors:[],category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
     }
 
     function normalizeShopPhone(value,countryCode) {
@@ -1416,6 +1436,7 @@
 
     document.querySelectorAll('[data-phone-country]').forEach(select=>populateCountrySelect(select,'LK',true));
     populateCountrySelect(document.getElementById('sellerShopCountry'),'LK');
+    populateSellerCurrencies(currencyForCountry(shopperCountryCode));
     populateCountrySelect(document.getElementById('profileCountryCode'),'LK');
     populateCountrySelect(document.getElementById('buyerCountryCode'),'LK');
     populateCountrySelect(document.getElementById('platformAdCountry'),shopperCountryCode);
@@ -1508,6 +1529,7 @@
           document.getElementById('sellerShopSubmit').textContent='Submit Shop Details';
           const sendDetails=document.getElementById('sendShopDetailsButton');sendDetails.hidden=!currentSellerShop;
           fillSellerShopCategories(currentSellerShop.shop_category||'Other');
+          populateCountrySelect(document.getElementById('sellerShopCountry'),currentSellerShop.country_code||'LK');document.getElementById('sellerShopCountry').value=currentSellerShop.country_code||'LK';populateSellerCurrencies(currentSellerShop.currency_code||currencyForCountry(currentSellerShop.country_code));
           populateSellerProductCategories();
           const {data:items,error:itemError}=await supabaseClient.from('seller_products').select('*').eq('owner_id',activeUser.id).order('created_at',{ascending:false});
           if(itemError) throw itemError;
@@ -1523,6 +1545,7 @@
           document.getElementById('sendShopDetailsButton').hidden=true;
           document.getElementById('sellerShopSubmit').textContent='Submit Shop Details';
           fillSellerShopCategories('Other');
+          populateCountrySelect(document.getElementById('sellerShopCountry'),shopperCountryCode||'LK');document.getElementById('sellerShopCountry').value=shopperCountryCode||'LK';populateSellerCurrencies(currencyForCountry(shopperCountryCode));
         }
         status.textContent='';
       } catch(error) { console.error(error);status.textContent='Could not load your shop. Run seller-marketplace-schema.sql in Supabase, then reload.'; }
@@ -1534,7 +1557,7 @@
       form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.bio.value=currentSellerShop.bio||'';fillPhoneField('phone',currentSellerShop.phone||'');fillPhoneField('phone2',currentSellerShop.phone2||'');
       form.elements.address.value=currentSellerShop.address||'';form.elements.externalLink.value=currentSellerShop.external_link||'';
       form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.tiktok.value=currentSellerShop.tiktok_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
-      form.elements.shopCategory.value=currentSellerShop.shop_category||'Other';if(form.elements.countryCode)form.elements.countryCode.value=currentSellerShop.country_code||'LK';form.elements.logo.value='';form.elements.logo.required=false;
+      form.elements.shopCategory.value=currentSellerShop.shop_category||'Other';if(form.elements.countryCode)form.elements.countryCode.value=currentSellerShop.country_code||'LK';populateSellerCurrencies(currentSellerShop.currency_code||currencyForCountry(currentSellerShop.country_code));form.elements.logo.value='';form.elements.logo.required=false;
       document.getElementById('sellerShopProfile').hidden=true;document.getElementById('sellerShopFormPanel').hidden=false;
       document.getElementById('sellerShopFormTitle').textContent='Edit Shop Profile';document.getElementById('sellerShopSubmit').textContent='Save Shop Profile';document.getElementById('sellerShopCancel').hidden=false;
       document.getElementById('sellerShopLogoFile').scrollIntoView({behavior:'smooth',block:'center'});
@@ -1562,7 +1585,7 @@
         const phone2=normalizeShopPhone(form.elements.phone2.value,form.elements.phone2Country.value);
         if(!currentSellerShop&&!logoFile)throw new Error('Add a shop profile picture before submitting.');
         if(logoFile)uploadedLogo=await uploadSellerImage(logoFile,`${activeUser.id}/shop-profile`);
-        const payload={owner_id:activeUser.id,shop_name:name,country_code:form.elements.countryCode.value||'LK',bio:form.elements.bio.value.trim(),phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
+        const payload={owner_id:activeUser.id,shop_name:name,country_code:form.elements.countryCode.value||'LK',currency_code:form.elements.currencyCode.value||currencyForCountry(form.elements.countryCode.value),bio:form.elements.bio.value.trim(),phone,phone2:phone2||null,address,external_link:externalLink||null,shop_category:form.elements.shopCategory.value||'Other',...socialValues};
         payload.logo_url=uploadedLogo?.url||currentSellerShop?.logo_url||null;
         const query=currentSellerShop
           ? supabaseClient.from('seller_shops').update(payload).eq('id',currentSellerShop.id).select().single()
@@ -1622,7 +1645,7 @@
         const orders=(data||[]).filter(order=>order.status!=='cancelled');
         const total=orders.reduce((sum,order)=>sum+Number(order.total||0),0);
         document.getElementById('sellerAnalyticsOrders').textContent=orders.length.toLocaleString('en');
-        document.getElementById('sellerAnalyticsValue').textContent=`LKR ${total.toLocaleString('en-LK',{maximumFractionDigits:2})}`;
+        document.getElementById('sellerAnalyticsValue').textContent=formatCurrencyAmount(total,currentSellerShop?.currency_code||'LKR');
         status.textContent=`Showing ${new Date(year,monthIndex-1).toLocaleString('en',{month:'long',year:'numeric'})}. Cancelled orders are excluded from the order count and value.`;
       } catch(error) {
         console.error(error);
@@ -1634,7 +1657,7 @@
     function renderSellerProductList() {
       const list=document.getElementById('sellerProductList');
       if(!sellerProducts.length){list.innerHTML='<div class="seller-empty">You have not added any items yet.</div>';return;}
-      list.innerHTML=sellerProducts.map(item=>`<div class="seller-product-row"><img src="${escapeHTML(item.image_urls?.[0]||'assets/alee-logo.png')}" alt=""><div><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.category_label||item.category)} · LKR ${Number(item.price).toLocaleString()}</small></div><div class="seller-product-actions"><a class="seller-item-action" href="${escapeHTML(productPublicUrl(item.id))}" target="_blank" rel="noopener">View</a><button class="seller-item-action edit" type="button" onclick="editSellerProduct(${Number(item.id)})">Edit</button><button class="seller-item-action delete" type="button" onclick="deleteSellerProduct(${Number(item.id)})">Delete</button></div></div>`).join('');
+      list.innerHTML=sellerProducts.map(item=>`<div class="seller-product-row"><img src="${escapeHTML(item.image_urls?.[0]||'assets/alee-logo.png')}" alt=""><div><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.category_label||item.category)} · ${formatCurrencyAmount(item.price,currentSellerShop?.currency_code||'LKR')}</small></div><div class="seller-product-actions"><a class="seller-item-action" href="${escapeHTML(productPublicUrl(item.id))}" target="_blank" rel="noopener">View</a><button class="seller-item-action edit" type="button" onclick="editSellerProduct(${Number(item.id)})">Edit</button><button class="seller-item-action delete" type="button" onclick="deleteSellerProduct(${Number(item.id)})">Delete</button></div></div>`).join('');
     }
 
     function toggleSellerProductForm() {
@@ -1766,7 +1789,7 @@
         const publicUrl=productPublicUrl(data.id),isEdit=Boolean(editingItem);
         await loadSellerCatalog();await loadSellerWorkspace();cancelEditSellerProduct();
         if(isEdit){status.textContent='Item updated successfully.';}
-        else sendSellerWhatsappDraft(whatsappPopup,`aleeshopping — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: LKR ${Number(payload.price).toLocaleString()}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
+        else sendSellerWhatsappDraft(whatsappPopup,`aleeshopping — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: ${formatCurrencyAmount(payload.price,currentSellerShop.currency_code||'LKR')}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
       } catch(error) { console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();if(uploaded.length)try{await supabaseClient.storage.from('seller-uploads').remove(uploaded.map(item=>item.path));}catch(cleanupError){}status.textContent=`Could not save the item. Check Supabase database/storage setup and try again. ${error.message||''}`; }
       finally {button.disabled=false;}
     }
@@ -2134,7 +2157,7 @@
         let oldMediaUrl='';if(editingPlatformPostId){const old=await supabaseClient.from('platform_posts').select('media_url').eq('id',editingPlatformPostId).eq('owner_id',activeUser.id).maybeSingle();oldMediaUrl=old.data?.media_url||'';mediaUrl=oldMediaUrl;}
         if(file){const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'jpg'])[1].toLowerCase();path=`${activeUser.id}/${newId()}.${ext}`;const {error}=await supabaseClient.storage.from('platform-posts').upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;mediaUrl=supabaseClient.storage.from('platform-posts').getPublicUrl(path).data.publicUrl;}
         let shopId=null;if(type==='job'){const {data:ownedShop}=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();shopId=ownedShop?.id||null;}
-        const payload={owner_id:activeUser.id,shop_id:shopId,post_type:type,title,category:form.elements.category.value,description:form.elements.description.value.trim(),link_url:link,media_url:mediaUrl,location:form.elements.location.value.trim(),employment_type:form.elements.employmentType.value,salary:form.elements.salary.value.trim(),country_code:type==='ad'?(form.elements.countryCode.value||shopperCountryCode):'LK'};
+        const payload={owner_id:activeUser.id,shop_id:shopId,post_type:type,title,category:form.elements.category.value,description:form.elements.description.value.trim(),link_url:link,media_url:mediaUrl,location:form.elements.location.value.trim(),employment_type:form.elements.employmentType.value,salary:form.elements.salary.value.trim(),country_code:type==='ad'?(form.elements.countryCode.value||shopperCountryCode):'LK',ad_type:'country'};
         const query=editingPlatformPostId?supabaseClient.from('platform_posts').update(payload).eq('id',editingPlatformPostId).eq('owner_id',activeUser.id):supabaseClient.from('platform_posts').insert(payload);const {error}=await query;if(error)throw error;if(file&&oldMediaUrl){const marker='/storage/v1/object/public/platform-posts/',at=oldMediaUrl.indexOf(marker);if(at>=0)try{await supabaseClient.storage.from('platform-posts').remove([decodeURIComponent(oldMediaUrl.slice(at+marker.length))]);}catch(_){}}
         editingPlatformPostId=null;form.reset();updatePlatformPostFields();document.getElementById('platformPostTitle').textContent='Post on aleeshopping';document.getElementById('platformPostSubmit').textContent='Publish';if(type==='job')hubJobsCache=null;if(type==='ad')loadAccountCountryAds();status.textContent='Saved. Your post is updated.';await loadMyPlatformPosts();if(reopenMyAdsAfterPostEdit){reopenMyAdsAfterPostEdit=false;accountLibraryReturnToHub=true;document.getElementById('accountLibraryOverlay').classList.add('show');showAccountLibrary('ads');}
         const panel=document.getElementById('hubContentBody');if(!document.getElementById('hubContentPanel').hidden){const active=document.querySelector('.hub-shortcut.active');if(active?.textContent.includes('Apps'))renderHubApps('apps',panel);if(active?.textContent.includes('Games'))renderHubApps('games',panel);if(active?.textContent.includes('Jobs'))renderHubJobs(panel);}
@@ -2154,7 +2177,7 @@
     async function renderHubApps(kind,body) {
       const isOffers=kind==='offers',isApps=kind==='apps',data=isOffers?[]:isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isOffers?'ad':isApps?'app':'game';
       let items=data.map(item=>({title:item.name,url:item.url,image:item.icon,category:item.category,post_type:type,localGame:Boolean(item.localGame)}));
-      if(supabaseClient){let query=supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,sort_order').in('post_type',isOffers?['ad']:isApps?['app']:['game']);query=isOffers?query.order('sort_order',{ascending:true}).order('created_at',{ascending:false}):query.order('created_at',{ascending:false});const {data:posts,error}=await query.limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
+      if(supabaseClient){let query=supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,sort_order,ad_type').in('post_type',isOffers?['ad']:isApps?['app']:['game']);if(isOffers)query=query.eq('ad_type','offer').order('sort_order',{ascending:true}).order('created_at',{ascending:false});else query=query.order('created_at',{ascending:false});const {data:posts,error}=await query.limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
       if(isApps){const ads=[];if(ads.length){let seen=[];try{seen=JSON.parse(localStorage.getItem(`alee-seen-ads:${activeUser?.id||'guest'}`)||'[]');}catch(_){}const unseen=ads.filter(ad=>!seen.includes(String(ad.id)));const next=unseen.length?unseen:ads;items=[...items.filter(item=>item.post_type!=='ad'),next[Math.floor(Math.random()*next.length)]];}}
       const localGamePath=/^(?:\.\/)?games\/[a-z0-9-]+\.html(?:#[\w-]+)?$/i;
       items=items.filter(item=>item.post_type==='ad'||/^https:\/\//i.test(String(item.link_url||item.url||''))||(!isApps&&localGamePath.test(String(item.url||''))));
@@ -2414,7 +2437,7 @@
       const adminPhone=normalizeWhatsappNumber(whatsappNumber);
       const itemLines=group=>group.items.map(item=>{
         const variants=[item.color&&`Color: ${item.color}`,item.size&&`Size: ${item.size}`].filter(Boolean).join(', ');
-        return `• ${item.name} × ${item.quantity}${variants?` (${variants})`:''} — LKR ${(Number(item.price)*Number(item.quantity)).toLocaleString()}`;
+        return `• ${item.name} × ${item.quantity}${variants?` (${variants})`:''} — ${formatCurrencyAmount(Number(item.price)*Number(item.quantity),item.currency_code||group.currency_code||'LKR')}`;
       }).join('\n');
       const shopName=group=>shops.find(item=>String(item.id)===String(group.shop_id))?.name||'aleeshopping';
       const buildMessage=(group,includeShop=true)=>[
@@ -2424,7 +2447,7 @@
         `Phone: ${customer.phone}`,
         customer.phone2?`Second phone: ${customer.phone2}`:'',
         `Items:\n${itemLines(group)}`,
-        `Total: LKR ${Number(group.total).toLocaleString()}`,
+        `Total: ${formatCurrencyAmount(group.total,group.currency_code||'LKR')}`,
         'Payment: Cash on Delivery',
         customer.note?`Note: ${customer.note}`:''
       ].filter(Boolean).join('\n');
@@ -2542,8 +2565,8 @@
       const hasOffer = hasOldPrice || hasPercent;
       const percentOff = hasOldPrice ? Math.round((oldPrice - price) / oldPrice * 100) : (hasPercent ? Math.round(configuredPercent) : 0);
       const crossedPrice = hasOldPrice ? oldPrice : (hasPercent ? Math.round(price / (1 - configuredPercent / 100)) : 0);
-      return `<div class="price">LKR ${price.toLocaleString()}</div>${hasOffer ? `
-        <div class="offer-row"><span class="old-price">LKR ${crossedPrice.toLocaleString()}</span><span class="discount-badge">-${percentOff}% OFF</span></div>` : ''}`;
+      return `<div class="price">${productMoney(price,product)}</div>${hasOffer ? `
+        <div class="offer-row"><span class="old-price">${productMoney(crossedPrice,product)}</span><span class="discount-badge">-${percentOff}% OFF</span></div>` : ''}`;
     }
 
     function renderCategoryBar() {
@@ -2666,7 +2689,7 @@
     async function loadAccountMyAds(filter='all'){const root=document.getElementById('accountLibraryBody');root.innerHTML='<p class="seller-muted">Loading your posts…</p>';if(!supabaseClient){root.innerHTML='<div class="seller-empty">Connect Supabase to manage your posts.</div>';return;}const result=await supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);if(result.error){root.innerHTML='<div class="seller-empty">Could not load your posts. Check platform-posts-schema.sql in Supabase.</div>';return;}const productsResult=await supabaseClient.from('seller_products').select('id,name,category_label,price,image_urls').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);const posts=(result.data||[]).filter(row=>filter==='all'||row.post_type===filter),items=filter==='all'||filter==='product'?(productsResult.data||[]):[];root.innerHTML='';posts.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.media_url||'assets/alee-app-icon-192.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.title;copy.querySelector('small').textContent=row.post_type.toUpperCase()+' · '+(row.category||'');const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editPlatformPost(row.id);const del=document.createElement('button');del.textContent='Delete';del.onclick=()=>deletePlatformPost(row.id,row.media_url||'');actions.append(edit,del);line.append(img,copy,actions);root.append(line);});items.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.image_urls?.[0]||'assets/alee-logo.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.name;copy.querySelector('small').textContent='PRODUCT · '+(row.category_label||'')+' · LKR '+Number(row.price||0).toLocaleString();const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit in My Shop';edit.onclick=()=>{closeAccountLibrary(false,true);openAccountMyShop();};actions.append(edit);line.append(img,copy,actions);root.append(line);});if(!posts.length&&!items.length)root.innerHTML='<div class="seller-empty">You have not posted ads, apps, games, jobs, or products yet.</div>';const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='16px';const post=document.createElement('button');post.textContent='Post App / Ad / Job';post.onclick=()=>{closeAccountLibrary(false,true);openPlatformPostForm();};const shop=document.createElement('button');shop.textContent='Manage products and reels in My Shop';shop.onclick=()=>{closeAccountLibrary();openAccountMyShop();};manage.append(post,shop);root.append(manage);}
     let accountCountryFilter='';let accountCountryAds=[];
     function accountShopCountry(shop){if(shop?.countryCode&&countryCatalog.some(c=>c.code===String(shop.countryCode).toUpperCase()))return String(shop.countryCode).toUpperCase();const raw=String(shop?.phone||'').replace(/[^+\d]/g,'');const matches=countryCatalog.filter(c=>raw.startsWith(String(c.dialCode||'').replace(/[^+\d]/g,''))||raw.startsWith(String(c.dialCode||'').replace(/\D/g,''))).sort((a,b)=>String(b.dialCode).length-String(a.dialCode).length);return matches[0]?.code||'LK';}
-    async function loadAccountCountryAds(){if(supabaseClient){try{const {data,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,media_url,country_code,shop_id').eq('post_type','ad').order('created_at',{ascending:false}).limit(100);if(!error)accountCountryAds=data||[];}catch(_){}}renderAccountCountryRail();}
+    async function loadAccountCountryAds(){if(supabaseClient){try{const {data,error}=await supabaseClient.from('platform_posts').select('id,title,category,description,link_url,media_url,country_code,shop_id,sort_order,ad_type').eq('post_type','ad').eq('ad_type','country').order('sort_order',{ascending:true}).order('created_at',{ascending:false}).limit(100);if(!error)accountCountryAds=data||[];}catch(_){}}renderAccountCountryRail();}
     function renderAccountCountryRail(){
       const root=document.getElementById('accountCountryRail'),filters=document.getElementById('accountCountryFilters');if(!root||!filters)return;
       const countryOf=shop=>accountShopCountry(shop),available=[...new Set(accountCountryAds.map(ad=>ad.country_code||'LK'))];
@@ -2680,7 +2703,7 @@
     }
     function productCountryCode(product){const shop=shops.find(item=>String(item.id)===String(product?.shopId));if(shop?.countryCode)return String(shop.countryCode).toUpperCase();const phone=String(shop?.phone||'').replace(/\D/g,'');const matched=countryCatalog.filter(country=>phone.startsWith(country.dialCode.replace(/\D/g,''))).sort((a,b)=>b.dialCode.length-a.dialCode.length)[0];return matched?.code||'LK';}
     function mixProductsForCountry(items){const local=[],global=[];items.forEach(item=>(productCountryCode(item)===shopperCountryCode?local:global).push(item));const mixed=[];while(local.length||global.length){for(let slot=0;slot<4&&local.length;slot++)mixed.push(local.shift());if(global.length)mixed.push(global.shift());else if(local.length)mixed.push(local.shift());}return mixed;}
-    async function detectShopperCountry(){try{const response=await fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(3000)});if(!response.ok)return;const data=await response.json();const code=String(data.country_code||'LK').toUpperCase();if(!countryCatalog.some(country=>country.code===code))return;shopperCountryCode=code;try{localStorage.setItem('alee-shopper-country',code);}catch(_){}const shopCountry=document.getElementById('sellerShopCountry');if(shopCountry&&!currentSellerShop)shopCountry.value=code;const profileCountry=document.getElementById('profileCountryCode');if(profileCountry&&!privateAccountProfile)profileCountry.value=code;const buyerCountry=document.getElementById('buyerCountryCode');if(buyerCountry&&!privateAccountProfile)buyerCountry.value=code;document.querySelectorAll('[data-phone-country]').forEach(select=>{if(!select.closest('label')?.querySelector('[data-phone-local]')?.value)select.value=code;const input=select.closest('label')?.querySelector('[data-phone-local]');if(input)updatePhonePreview(input);});displayProducts(activeProductArray,preserveProductOrder);}catch(_){}}
+    async function detectShopperCountry(){try{const response=await fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(3000)});if(!response.ok)return;const data=await response.json();const code=String(data.country_code||'LK').toUpperCase();if(!countryCatalog.some(country=>country.code===code))return;shopperCountryCode=code;try{localStorage.setItem('alee-shopper-country',code);}catch(_){}setShopperCurrency(code);const shopCountry=document.getElementById('sellerShopCountry');if(shopCountry&&!currentSellerShop){shopCountry.value=code;populateSellerCurrencies(currencyForCountry(code));}const profileCountry=document.getElementById('profileCountryCode');if(profileCountry&&!privateAccountProfile)profileCountry.value=code;const buyerCountry=document.getElementById('buyerCountryCode');if(buyerCountry&&!privateAccountProfile)buyerCountry.value=code;document.querySelectorAll('[data-phone-country]').forEach(select=>{if(!select.closest('label')?.querySelector('[data-phone-local]')?.value)select.value=code;const input=select.closest('label')?.querySelector('[data-phone-local]');if(input)updatePhonePreview(input);});displayProducts(activeProductArray,preserveProductOrder);}catch(_){}}
     function displayProducts(productArray, preserveOrder=false) {
       activeProductArray = productArray.slice();
       preserveProductOrder = preserveOrder;
@@ -3467,7 +3490,7 @@
       updateCart();
     }
 
-    function openOrderConfirmation(){const order=checkoutItems||cart;if(!order.length){alert('Your cart is empty.');return;}for(const [id,label] of [['customerName','Enter your name first.'],['customerAddress','Enter your delivery address first.'],['customerPhone1','Enter your phone number first.']]){const field=document.getElementById(id);if(!field.value.trim()){alert(label);field.focus();return;}}const total=order.reduce((sum,item)=>sum+Number(item.product.price)*Number(item.quantity),0);document.querySelector('#orderConfirmDialog p').textContent=`Place this order for LKR ${total.toLocaleString()}? Your delivery details will be sent to the shop.`;const dialog=document.getElementById('orderConfirmDialog');if(dialog?.showModal){dialog.showModal();pushAppUiLayer('orderConfirm',fromHistory=>closeOrderConfirmation(fromHistory),()=>dialog.showModal());}else if(confirm('Confirm your order?'))submitOrder();}
+    function openOrderConfirmation(){const order=checkoutItems||cart;if(!order.length){alert('Your cart is empty.');return;}for(const [id,label] of [['customerName','Enter your name first.'],['customerAddress','Enter your delivery address first.'],['customerPhone1','Enter your phone number first.']]){const field=document.getElementById(id);if(!field.value.trim()){alert(label);field.focus();return;}}const totals=new Map();order.forEach(item=>{const code=item.product.currencyCode||'LKR';totals.set(code,(totals.get(code)||0)+Number(item.product.price)*Number(item.quantity));});const summary=[...totals].map(([code,total])=>formatCurrencyAmount(total,code)).join(' + ');document.querySelector('#orderConfirmDialog p').textContent=`Confirm your order (${summary})? Prices are charged in each shop’s selected currency.`;const dialog=document.getElementById('orderConfirmDialog');if(dialog?.showModal){dialog.showModal();pushAppUiLayer('orderConfirm',fromHistory=>closeOrderConfirmation(fromHistory),()=>dialog.showModal());}else if(confirm('Confirm your order?'))submitOrder();}
     function closeOrderConfirmation(fromHistory=false,preserveHistory=false){const dialog=document.getElementById('orderConfirmDialog');if(dialog?.open)dialog.close();closeAppUiLayer('orderConfirm',fromHistory,preserveHistory);}
     document.getElementById('orderConfirmDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeOrderConfirmation();});
     function openCart() { checkoutItems = null; document.getElementById("cartOverlay").style.display = "block";pushAppUiLayer('cartOverlay',fromHistory=>closeCart(fromHistory),()=>document.getElementById("cartOverlay").style.display="block"); updateCart(); }
@@ -3482,7 +3505,7 @@
             <div>
               <div style="font-weight:600;">${i.name}</div>
               ${item.color || item.size ? `<div style="color:var(--detail-copy);font-size:12px;">${item.color ? `Color: ${item.color}` : ''}${item.color && item.size ? ' · ' : ''}${item.size ? `Size: ${item.size}` : ''}</div>` : ''}
-              <div style="color:var(--light-leaf); font-size:12px;">LKR ${i.price.toLocaleString()} × ${item.quantity} = LKR ${(i.price * item.quantity).toLocaleString()}</div>
+              <div style="color:var(--light-leaf); font-size:12px;">${productMoney(i.price,i)} × ${item.quantity} = ${productMoney(i.price * item.quantity,i)}</div>
             </div>
             <button class="delete-item-btn" onclick="removeFromCart(${index})" title="Remove item" ${items !== cart ? 'disabled' : ''}>
               <i class="fa-solid fa-trash"></i>
@@ -3514,12 +3537,12 @@
           const candidateShopId = String(item.product.shopId || '');
           const shopId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(candidateShopId) ? candidateShopId : null;
           const key = shopId || 'alee-main';
-          if (!groups.has(key)) groups.set(key, { shop_id: shopId, items: [], total: 0 });
+          if (!groups.has(key)) groups.set(key, { shop_id: shopId, currency_code:item.product.currencyCode||'LKR', items: [], total: 0 });
           const group = groups.get(key);
-          group.items.push({ product_id: item.product.sellerProductId || item.product.id, name: item.product.name, price: Number(item.product.price), quantity: Number(item.quantity), color: item.color || null, size: item.size || null });
+          group.items.push({ product_id: item.product.sellerProductId || item.product.id, name: item.product.name, price: Number(item.product.price), currency_code:item.product.currencyCode||'LKR', quantity: Number(item.quantity), color: item.color || null, size: item.size || null });
           group.total += Number(item.product.price) * Number(item.quantity);
         });
-        const payloads = [...groups.values()].map(group => ({ shop_id: group.shop_id, user_id: activeUser?.id || null, customer_name: name.trim(), customer_address: address.trim(), customer_phone: phone1.trim(), customer_phone2: phone2 || null, customer_note: note || null, items: group.items, total: group.total, payment_method: 'Cash on Delivery', status: 'new' }));
+        const payloads = [...groups.values()].map(group => ({ shop_id: group.shop_id, user_id: activeUser?.id || null, customer_name: name.trim(), customer_address: address.trim(), customer_phone: phone1.trim(), customer_phone2: phone2 || null, customer_note: note || null, items: group.items, total: group.total, currency_code:group.currency_code||'LKR', payment_method: 'Cash on Delivery', status: 'new' }));
         if (status) status.textContent = 'Saving order to the website…';
         const { error } = await supabaseClient.from('store_orders').insert(payloads);
         if (error) { if (status) status.textContent = `Could not save the order to the website (${error.message}). Check the Supabase order setup.`; return; }

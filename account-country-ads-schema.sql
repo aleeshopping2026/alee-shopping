@@ -7,6 +7,7 @@ create index if not exists platform_posts_country_ads_idx
   on public.platform_posts(country_code, created_at desc)
   where post_type = 'ad';
 alter table public.platform_posts add column if not exists sort_order integer not null default 1000;
+alter table public.platform_posts add column if not exists ad_type text not null default 'country' check (ad_type in ('country','offer'));
 create index if not exists platform_posts_offers_rank_idx
   on public.platform_posts(sort_order, created_at desc)
   where post_type = 'ad';

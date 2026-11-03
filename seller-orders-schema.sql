@@ -11,11 +11,13 @@ create table if not exists public.store_orders (
   customer_note text,
   items jsonb not null check (jsonb_typeof(items) = 'array' and jsonb_array_length(items) between 1 and 50),
   total numeric(12,2) not null check (total > 0),
+  currency_code text not null default 'LKR' check (currency_code ~ '^[A-Z]{3}$'),
   payment_method text not null default 'Cash on Delivery',
   status text not null default 'new' check (status in ('new','confirmed','processing','shipped','completed','cancelled')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+alter table public.store_orders add column if not exists currency_code text not null default 'LKR' check (currency_code ~ '^[A-Z]{3}$');
 
 create index if not exists store_orders_shop_recent_idx on public.store_orders (shop_id, created_at desc);
 create index if not exists store_orders_recent_idx on public.store_orders (created_at desc);
@@ -109,7 +111,7 @@ begin
       select string_agg(coalesce(item->>'name','Item') || ' × ' || coalesce(item->>'quantity','1'), ', ')
       from jsonb_array_elements(new.items) as item
     ), '')
-    || E'\nTotal: LKR ' || to_char(new.total, 'FM999,999,999,990.00')
+    || E'\nTotal: ' || new.currency_code || ' ' || to_char(new.total, 'FM999,999,999,990.00')
     || E'\nPayment: ' || new.payment_method
     || case when nullif(new.customer_note, '') is not null then E'\nNote: ' || new.customer_note else '' end;
 

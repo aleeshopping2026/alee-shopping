@@ -234,7 +234,7 @@
     document.getElementById('favoriteShopButton').addEventListener('click', toggleFavoriteShop);
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
-    document.getElementById('products').innerHTML = items.length ? items.map(item => `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">LKR ${Number(item.price||0).toLocaleString()}</div></a>`).join('') : '<div class="empty">This business has no ads yet.</div>';
+    document.getElementById('products').innerHTML = items.length ? items.map(item => {let price;try{price=new Intl.NumberFormat(undefined,{style:'currency',currency:shop.currency_code||'LKR',maximumFractionDigits:2}).format(Number(item.price||0));}catch(_){price=`${shop.currency_code||'LKR'} ${Number(item.price||0).toLocaleString()}`;}return `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">${price}</div></a>`;}).join('') : '<div class="empty">This business has no ads yet.</div>';
     refreshShopVisibility();
   }
 

@@ -20,6 +20,7 @@ create table if not exists public.platform_posts (
 alter table public.platform_posts add column if not exists shop_id uuid references public.seller_shops(id) on delete set null;
 alter table public.platform_posts add column if not exists country_code text not null default 'LK' check (country_code ~ '^[A-Z]{2}$');
 alter table public.platform_posts add column if not exists sort_order integer not null default 1000;
+alter table public.platform_posts add column if not exists ad_type text not null default 'country' check (ad_type in ('country','offer'));
 update public.platform_posts p set shop_id = s.id
 from public.seller_shops s
 where p.post_type = 'job' and p.owner_id = s.owner_id and p.shop_id is null;
@@ -27,6 +28,7 @@ create index if not exists platform_posts_type_created_idx on public.platform_po
 create index if not exists platform_posts_owner_created_idx on public.platform_posts(owner_id, created_at desc);
 create index if not exists platform_posts_shop_idx on public.platform_posts(shop_id) where shop_id is not null;
 create index if not exists platform_posts_offers_rank_idx on public.platform_posts(sort_order, created_at desc) where post_type = 'ad';
+create index if not exists platform_posts_ad_kind_rank_idx on public.platform_posts(ad_type, sort_order, created_at desc) where post_type = 'ad';
 alter table public.platform_posts enable row level security;
 drop policy if exists "Anyone can read platform posts" on public.platform_posts;
 create policy "Anyone can read platform posts" on public.platform_posts for select using (true);
