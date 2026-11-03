@@ -19,12 +19,14 @@ create table if not exists public.platform_posts (
 );
 alter table public.platform_posts add column if not exists shop_id uuid references public.seller_shops(id) on delete set null;
 alter table public.platform_posts add column if not exists country_code text not null default 'LK' check (country_code ~ '^[A-Z]{2}$');
+alter table public.platform_posts add column if not exists sort_order integer not null default 1000;
 update public.platform_posts p set shop_id = s.id
 from public.seller_shops s
 where p.post_type = 'job' and p.owner_id = s.owner_id and p.shop_id is null;
 create index if not exists platform_posts_type_created_idx on public.platform_posts(post_type, created_at desc);
 create index if not exists platform_posts_owner_created_idx on public.platform_posts(owner_id, created_at desc);
 create index if not exists platform_posts_shop_idx on public.platform_posts(shop_id) where shop_id is not null;
+create index if not exists platform_posts_offers_rank_idx on public.platform_posts(sort_order, created_at desc) where post_type = 'ad';
 alter table public.platform_posts enable row level security;
 drop policy if exists "Anyone can read platform posts" on public.platform_posts;
 create policy "Anyone can read platform posts" on public.platform_posts for select using (true);
@@ -33,11 +35,11 @@ create policy "Signed-in users can publish their own platform posts" on public.p
   with check (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can edit their own platform posts" on public.platform_posts;
 create policy "Users can edit their own platform posts" on public.platform_posts for update to authenticated
-  using (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')))
-  with check (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')) and (shop_id is null or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
+  using ((owner_id = (select auth.uid()) and post_type <> 'ad') or (post_type = 'ad' and lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')))
+  with check (((owner_id = (select auth.uid()) and post_type <> 'ad') or (post_type = 'ad' and lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com'))) and (shop_id is null or (post_type = 'ad' and lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')) or exists (select 1 from public.seller_shops s where s.id = shop_id and s.owner_id = (select auth.uid()))));
 drop policy if exists "Users can delete their own platform posts" on public.platform_posts;
 create policy "Users can delete their own platform posts" on public.platform_posts for delete to authenticated
-  using (owner_id = (select auth.uid()) and (post_type <> 'ad' or lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')));
+  using ((owner_id = (select auth.uid()) and post_type <> 'ad') or (post_type = 'ad' and lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com')));
 grant select on public.platform_posts to anon, authenticated;
 grant insert, update, delete on public.platform_posts to authenticated;
 
@@ -54,3 +56,6 @@ create policy "Signed-in users can upload platform post images" on storage.objec
 drop policy if exists "Users can delete their platform post images" on storage.objects;
 create policy "Users can delete their platform post images" on storage.objects for delete to authenticated
   using (bucket_id = 'platform-posts' and (storage.foldername(name))[1] = (select auth.uid())::text);
+drop policy if exists "Alee hosts can delete offer media" on storage.objects;
+create policy "Alee hosts can delete offer media" on storage.objects for delete to authenticated
+  using (bucket_id = 'platform-posts' and lower(coalesce((select auth.jwt() ->> 'email'), '')) in ('aleeshopping2026@gmail.com','aleeshopping@gmail.com'));

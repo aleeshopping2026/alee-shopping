@@ -647,7 +647,7 @@
     .account-private-details>div { display:grid; grid-template-columns:100px minmax(0,1fr); gap:12px; padding:11px 13px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); }
     .account-private-details span { color:#888; font-size:12px; }
     .account-private-details strong { font-size:13px; font-weight:600; overflow-wrap:anywhere; }
-    #accountDeleteShopMenu[hidden],#mobileDeleteShopMenu[hidden],#accountSignInMenu[hidden],#mobileAccountSignIn[hidden],#mobileAccountLogout[hidden],#accountProfileRetry[hidden] { display:none !important; }
+    #accountDeleteShopMenu[hidden],#mobileDeleteShopMenu[hidden],#accountSignInMenu[hidden],#mobileAccountSignIn[hidden],#mobileAccountLogout[hidden],#accountProfileRetry[hidden],#accountOfferManagerButton[hidden] { display:none !important; }
     .seller-product-row { display:grid; grid-template-columns:64px minmax(0,1fr) auto; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--glass-border); }
     .seller-product-row:last-child { border-bottom:0; }
     .seller-product-row img { width:64px; height:58px; object-fit:contain; border-radius:8px; background:white; }
@@ -1043,6 +1043,7 @@
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
+        <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
         <button type="button" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>My Shop</span><small>Open and manage your shop</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
         <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
@@ -1284,6 +1285,7 @@
       document.getElementById('buyerProfileEmail').textContent=user.email||'Signed in';
       document.getElementById('accountHubEmail').textContent=user.email||'Signed in';
       const adManager=document.getElementById('accountCountryAdManagerButton');if(adManager)adManager.hidden=!isAleeHost();
+      const offerManager=document.getElementById('accountOfferManagerButton');if(offerManager)offerManager.hidden=!isAleeHost();
       document.getElementById('buyerDashboard').classList.add('show');
       pushAppUiLayer('buyerAccount',fromHistory=>closeBuyerAccount(fromHistory),()=>document.getElementById('buyerDashboard').classList.add('show'));
       if(!privateAccountProfile){const ready=await ensurePrivateAccountProfile();if(!ready)return;if(activeUser?.id!==user.id)return;}
@@ -2152,7 +2154,7 @@
     async function renderHubApps(kind,body) {
       const isOffers=kind==='offers',isApps=kind==='apps',data=isOffers?[]:isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isOffers?'ad':isApps?'app':'game';
       let items=data.map(item=>({title:item.name,url:item.url,image:item.icon,category:item.category,post_type:type,localGame:Boolean(item.localGame)}));
-      if(supabaseClient){const {data:posts,error}=await supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url').in('post_type',isOffers?['ad']:isApps?['app']:['game']).order('created_at',{ascending:false}).limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
+      if(supabaseClient){let query=supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,sort_order').in('post_type',isOffers?['ad']:isApps?['app']:['game']);query=isOffers?query.order('sort_order',{ascending:true}).order('created_at',{ascending:false}):query.order('created_at',{ascending:false});const {data:posts,error}=await query.limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
       if(isApps){const ads=[];if(ads.length){let seen=[];try{seen=JSON.parse(localStorage.getItem(`alee-seen-ads:${activeUser?.id||'guest'}`)||'[]');}catch(_){}const unseen=ads.filter(ad=>!seen.includes(String(ad.id)));const next=unseen.length?unseen:ads;items=[...items.filter(item=>item.post_type!=='ad'),next[Math.floor(Math.random()*next.length)]];}}
       const localGamePath=/^(?:\.\/)?games\/[a-z0-9-]+\.html(?:#[\w-]+)?$/i;
       items=items.filter(item=>item.post_type==='ad'||/^https:\/\//i.test(String(item.link_url||item.url||''))||(!isApps&&localGamePath.test(String(item.url||''))));
