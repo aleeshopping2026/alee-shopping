@@ -211,6 +211,7 @@
     .search-clear-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
     .search-discovery-overlay { display:none; position:fixed; inset:0; z-index:20000; height:100dvh; overflow-y:auto; overscroll-behavior:contain; background:var(--card-bg); color:var(--text-white); }
     .search-discovery-overlay.show { display:block; }
+    .search-discovery-overlay.results-mode .search-discovery-tabs { display:none; }
     body.search-discovery-open { overflow:hidden; }
     .search-discovery-header { position:sticky; top:0; z-index:3; display:grid; grid-template-columns:42px 1fr; align-items:center; min-height:54px; padding:4px 14px; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
     .search-discovery-back { width:38px; height:38px; border:0; border-radius:50%; background:transparent; color:var(--text-white); font-size:20px; cursor:pointer; }
@@ -224,9 +225,19 @@
     .search-brand-section { margin:0 0 14px; }
     .search-brand-title { margin:0 0 8px; color:var(--text-white); font-size:13px; font-weight:800; }
     .search-brand-rail { display:flex; gap:10px; overflow-x:auto; padding:3px 2px 9px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
-    .search-brand-tile { display:grid; justify-items:center; gap:5px; flex:0 0 88px; padding:6px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; }
-    .search-brand-tile img { width:72px; height:72px; object-fit:contain; border-radius:6px; background:#fff; }
-    .search-brand-tile.active { border-color:var(--light-leaf); box-shadow:0 0 0 2px #ff690033; }
+    .search-brand-tile { display:grid; justify-items:center; align-content:start; gap:7px; flex:0 0 100px; min-height:112px; padding:8px; border:1px solid #e2e6ec; border-radius:15px; background:#fff; color:#202939; font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; box-shadow:0 3px 12px #1018280a; }
+    .search-brand-tile img { width:76px; height:68px; object-fit:contain; padding:5px; border:1px solid #edf0f4; border-radius:11px; background:#fff; }
+    .search-brand-tile.active { border-color:#f36b00; box-shadow:0 0 0 2px #ff690022,0 5px 14px #10182810; }
+    .search-brand-tile.all-brands-tile{align-content:center;gap:7px;border-color:#f6c99f;background:linear-gradient(145deg,#fffaf4,#fff);color:#9c4509;font-weight:800}
+    .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:14px;background:#fff0dc;color:#e86b00;font-size:22px}
+    .search-brand-all-panel{margin:4px 0 16px;padding:14px;border:1px solid #e5e9ef;border-radius:16px;background:#fff}
+    .search-brand-all-heading{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#172033;font-size:16px}
+    .search-brand-all-back{display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid #e3e7ed;border-radius:50%;background:#fff;color:#344054;cursor:pointer}
+    .search-brand-all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
+    .search-brand-all-card{display:grid;justify-items:center;gap:8px;min-height:120px;padding:10px;border:1px solid #e5e9ef;border-radius:14px;background:#fff;color:#172033;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+    .search-brand-all-card:hover{border-color:#f36b00;box-shadow:0 5px 15px #10182810}
+    .search-brand-all-card img{width:82px;height:72px;object-fit:contain;padding:5px;border:1px solid #edf0f4;border-radius:12px;background:#fff}
+    .search-discovery-overlay.results-mode #discoverySearchTitle,.search-discovery-overlay.results-mode .discovery-search-hint{display:none!important}
     .search-brand-tile span { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .discovery-section { margin:14px 0 24px; }
     .discovery-section[hidden] { display:none !important; }
@@ -908,6 +919,7 @@
           <div class="discovery-section-heading"><h2 id="discoverySearchTitle">Search results</h2></div>
           <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
           <div class="search-brand-section" id="searchBrandSection" hidden><h3 class="search-brand-title">Brands</h3><div class="search-brand-rail" id="searchBrandRail"></div></div>
+          <section class="search-brand-all-panel" id="searchBrandAllPanel" hidden aria-label="All matching brands"><h3 class="search-brand-all-heading"><button class="search-brand-all-back" type="button" onclick="closeAllSearchBrands()" aria-label="Back to results"><i class="fa-solid fa-arrow-left"></i></button>All brands</h3><div class="search-brand-all-grid" id="searchBrandAllGrid"></div></section>
           <div class="discovery-products-grid" id="discoverySearchResults"></div>
         </section>
       </div>
@@ -2609,6 +2621,8 @@
     let searchRecommendationsExpanded = false;
     let productHistoryExpanded = false;
     let activeSearchBrandId='';
+    let showAllSearchBrandsView=false;
+    let lastDiscoveryResultsQuery='';
     function openSearchDiscovery(focusInput=true) {
       if (!searchDiscoveryOverlay.classList.contains('show')) {
         searchContainerHomeParent = searchContainer.parentNode;
@@ -2646,7 +2660,7 @@
     }
     function hideSearchSuggestions(){searchSuggestionBox.classList.remove('show');searchSuggestionBox.replaceChildren();suggestionRows=[];activeSuggestionIndex=-1;}
     function renderSearchSuggestions(){const query=searchInput.value.trim();if(query.length<1){hideSearchSuggestions();return;}const productsFound=getProductSearchMatches(query).items.slice(0,6),terms=readSearchUserList('recent-searches',40).filter(term=>String(term).toLowerCase().includes(query.toLowerCase())&&String(term).toLowerCase()!==query.toLowerCase()).slice(0,3);suggestionRows=[...productsFound.map(product=>({kind:'product',label:product.name,meta:product.shopId?getShopForProduct(product)?.name||'Product':'Product' ,product})),...terms.map(term=>({kind:'search',label:String(term),meta:'Recent search'}))];if(!suggestionRows.length){hideSearchSuggestions();return;}searchSuggestionBox.replaceChildren();suggestionRows.forEach((row,index)=>{const button=document.createElement('button');button.type='button';button.className='search-suggestion';button.setAttribute('role','option');button.innerHTML=`<i class="fa-solid ${row.kind==='product'?'fa-magnifying-glass':'fa-clock-rotate-left'}"></i><span>${escapeHTML(row.label)}</span><small>${escapeHTML(row.meta)}</small>`;button.addEventListener('mousedown',event=>event.preventDefault());button.addEventListener('click',()=>{searchInput.value=row.kind==='product'?row.product.name:row.label;hideSearchSuggestions();submitProductSearch();});searchSuggestionBox.appendChild(button);});activeSuggestionIndex=-1;searchSuggestionBox.classList.add('show');}
-    searchInput.addEventListener('input',renderSearchSuggestions);
+    searchInput.addEventListener('input',()=>{renderSearchSuggestions();if(searchDiscoveryOverlay.classList.contains('show')){if(searchInput.value.trim())renderDiscoverySearchResults(searchInput.value.trim());else{activeSearchBrandId='';showAllSearchBrandsView=false;renderSearchDiscovery();}}});
     searchInput.addEventListener('blur',()=>setTimeout(hideSearchSuggestions,150));
     searchInput.addEventListener('focus',()=>{openSearchDiscovery(false);renderSearchSuggestions();});
     document.getElementById('searchInput').addEventListener('keydown', event => {
@@ -3223,17 +3237,22 @@
     }
     function renderDiscoverySearchResults(term,matchedResult=null) {
       const query=String(term||'').trim(),section=document.getElementById('discoverySearchSection');
-      if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;return;}
+      if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;searchDiscoveryOverlay.classList.remove('results-mode');showAllSearchBrandsView=false;activeSearchBrandId='';lastDiscoveryResultsQuery='';return;}
+      if(query.toLocaleLowerCase()!==lastDiscoveryResultsQuery.toLocaleLowerCase()){activeSearchBrandId='';showAllSearchBrandsView=false;lastDiscoveryResultsQuery=query;}
       const result=matchedResult||getProductSearchMatches(query);
-      section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=true;
+      section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=true;searchDiscoveryOverlay.classList.add('results-mode');
       document.getElementById('discoverySearchTitle').textContent=result.corrected?'Discover similar products':'Search results';
       renderSearchBrandStrip(result.items||[]);
-      const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=!result.corrected;
-      if(result.corrected){hint.append(document.createTextNode('Showing the closest matches. Did you mean '));const correction=document.createElement('button');correction.type='button';correction.className='discovery-more';correction.textContent=result.items[0].name;correction.onclick=()=>{searchInput.value=result.items[0].name;submitProductSearch();};hint.append(correction,document.createTextNode('?'));}
-      else if(searchDiscoveryMode==='ai'&&result.items.length){hint.hidden=false;hint.textContent='Shop AI found these catalog matches using product names, categories and descriptions.';}
-      const visibleItems=activeSearchBrandId?result.items.filter(product=>String(getShopForProduct(product).id)===activeSearchBrandId):result.items;document.getElementById('discoverySearchResults').innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No matching products for this brand.</p>'; 
+      const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=true;
+      const allPanel=document.getElementById('searchBrandAllPanel'),resultGrid=document.getElementById('discoverySearchResults');
+      if(showAllSearchBrandsView){document.getElementById('searchBrandSection').hidden=true;allPanel.hidden=false;resultGrid.hidden=true;renderAllSearchBrands(result.items||[]);return;}
+      allPanel.hidden=true;resultGrid.hidden=false;
+      const visibleItems=activeSearchBrandId?result.items.filter(product=>String(getShopForProduct(product).id)===activeSearchBrandId):result.items;resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No matching products for this brand.</p>';
     }
-    function renderSearchBrandStrip(items){const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=[],seen=new Set();(items||[]).forEach(product=>{const shop=getShopForProduct(product);if(!shop?.id||seen.has(String(shop.id)))return;seen.add(String(shop.id));brands.push(shop);});section.hidden=!brands.length;if(!brands.length){activeSearchBrandId='';return;}rail.innerHTML='<button class="search-brand-tile '+(!activeSearchBrandId?'active':'')+'" type="button" data-search-brand=""><span>All brands</span></button>'+brands.map(shop=>'<button class="search-brand-tile '+(activeSearchBrandId===String(shop.id)?'active':'')+'" type="button" data-search-brand="'+escapeHTML(shop.id)+'"><img loading="lazy" src="'+escapeHTML(shop.logo||'assets/alee-logo.png')+'" alt=""><span>'+escapeHTML(shop.name||'Shop')+'</span></button>').join('');rail.querySelectorAll('[data-search-brand]').forEach(button=>button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}));}
+    function getSearchBrands(items){const brands=[],seen=new Set();(items||[]).forEach(product=>{const shop=getShopForProduct(product);if(!shop?.id||seen.has(String(shop.id)))return;seen.add(String(shop.id));brands.push(shop);});return brands;}
+    function renderSearchBrandStrip(items){const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=getSearchBrands(items);section.hidden=!brands.length;if(!brands.length){activeSearchBrandId='';return;}const allButton='<button class="search-brand-tile all-brands-tile" type="button" data-all-search-brands><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>All brands · '+brands.length+'</span></button>';rail.innerHTML=allButton+brands.map(shop=>'<button class="search-brand-tile '+(activeSearchBrandId===String(shop.id)?'active':'')+'" type="button" data-search-brand="'+escapeHTML(shop.id)+'"><img loading="lazy" src="'+escapeHTML(shop.logo||'assets/alee-logo.png')+'" alt=""><span>'+escapeHTML(shop.name||'Shop')+'</span></button>').join('');rail.querySelector('[data-all-search-brands]')?.addEventListener('click',()=>{showAllSearchBrandsView=true;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.querySelectorAll('[data-search-brand]').forEach(button=>button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}));}
+    function renderAllSearchBrands(items){const grid=document.getElementById('searchBrandAllGrid'),brands=getSearchBrands(items);grid.replaceChildren();const addBrand=(shop,id='')=>{const button=document.createElement('button');button.type='button';button.className='search-brand-all-card';const image=document.createElement('img');image.src=shop?.logo||'assets/alee-logo.png';image.alt='';image.onerror=()=>{image.src='assets/alee-logo.png';};const label=document.createElement('span');label.textContent=shop?.name||'All brands';button.append(image,label);button.addEventListener('click',()=>{activeSearchBrandId=id;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});grid.append(button);};addBrand(null,'');brands.forEach(shop=>addBrand(shop,String(shop.id)));}
+    function closeAllSearchBrands(){showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}
     function searchProducts(submitted=false) {
       photoSearchRunId++;
       document.getElementById('photoSearchNotice').classList.remove('show');
@@ -3241,12 +3260,14 @@
       syncSearchClearButton();
       const searchResult=getProductSearchMatches(searchTerm),matches=searchResult.items;
       displayProducts(matches);
-      if(submitted||!searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,searchResult);
+      if(submitted&&!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
+      if(searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,searchResult);
       clearTimeout(searchLogTimer);
       if(searchTerm.length>=2)searchLogTimer=setTimeout(()=>recordProductSearch(searchTerm,matches),700);
     }
     function submitProductSearch() {
       hideSearchSuggestions();
+      if(!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
       saveRecentSearch(searchInput.value);
       searchProducts(true);
       document.getElementById('searchInput').blur();
