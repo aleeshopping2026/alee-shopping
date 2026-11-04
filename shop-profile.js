@@ -253,7 +253,11 @@
     }
     if (shop && supabase) { const {data}=await supabase.from('shop_profile_ratings').select('stars').eq('shop_key',String(shop.id)).maybeSingle(); if(data) shopRating=Math.max(0,Math.min(5,Number(data.stars)||0)); else shopRating=Number(shop.rating||5); }
     renderProfile();
-    if (shop && supabase) await getBusinessStats();
+    if (shop && supabase) {
+      const key='alee-shop-view:'+shop.id,now=Date.now();
+      try { if(now-Number(sessionStorage.getItem(key)||0)>1800000){sessionStorage.setItem(key,String(now));await supabase.rpc('track_seller_shop_view',{p_shop_id:shop.id});} } catch(_) {}
+      await getBusinessStats();
+    }
   }
 
   document.getElementById('shareClose').addEventListener('click', closeShareDialog);
@@ -274,3 +278,6 @@
   window.setTimeout(hideLoader,8000);
   loadShop().catch(error=>{console.error(error);renderProfile();}).finally(hideLoader);
 })();
+
+
+
