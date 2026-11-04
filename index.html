@@ -695,6 +695,51 @@
     @media(min-width:701px) and (max-width:1023px){#sellerDashboard .seller-card{width:min(900px,calc(100vw - 32px));max-height:94vh;overflow-y:auto}}
 
     .seller-analytics-subheading{margin:20px 0 8px;color:#172033;font-size:14px}.seller-analytics-products,.seller-analytics-activity{display:grid;gap:7px}.seller-analytics-product,.seller-analytics-event{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px;border:1px solid #d0d5dd;border-radius:11px;background:#fff;color:#172033}.seller-analytics-product img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#f3f4f6}.seller-analytics-product small,.seller-analytics-event small{display:block;color:#667085;font-size:11px;margin-top:3px}.seller-analytics-product strong,.seller-analytics-event strong{font-size:12px}.seller-analytics-event{grid-template-columns:1fr auto}.seller-analytics-card strong{color:#172033!important}
+    #sellerDashboard #sellerProductPanel:not([hidden]):has(#sellerProductForm[hidden]){display:none!important}#sellerDashboard .seller-shop-link{display:none!important}
+    #sellerDashboard .seller-card{background:#f6f7f9;border:1px solid #e5e7eb;color:#172033;border-radius:22px}
+    #sellerDashboard .seller-panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;color:#172033;box-shadow:0 8px 24px #1720330b}
+    #sellerDashboard .seller-dashboard-title h2,#sellerDashboard #sellerShopName{color:#f36b00}
+    #sellerDashboard .seller-dashboard-quick-actions{display:grid;grid-template-columns:1fr;gap:9px;margin:16px 0}
+    #sellerDashboard .seller-dashboard-quick-actions .seller-action-button{width:100%;min-height:46px;justify-content:flex-start;border:1px solid #e5e7eb;background:#fff;color:#172033}
+    #sellerDashboard .seller-dashboard-quick-actions .seller-action-button.primary{background:#f36b00;color:#fff;border-color:#f36b00}
+    #sellerDashboard .seller-action-row .seller-action-button,#sellerDashboard .seller-action-row .alee-chat-seller-button{background:#fff;color:#172033;border-color:#e5e7eb}
+    #sellerDashboard .seller-action-row .danger{color:#b42318}
+    #sellerDashboard.seller-has-shop .seller-dashboard-header>.seller-dashboard-post{display:none}
+    #sellerDashboard .seller-dashboard-header{background:transparent}
+    #sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    #sellerDashboard .seller-analytics-card{min-height:112px;display:flex;flex-direction:column;justify-content:center;text-align:center;background:#f8f9fb;border-color:#e5e7eb}
+    #sellerDashboard .seller-analytics-card span{color:#667085;font-size:13px}
+    #sellerDashboard .seller-analytics-card strong{font-size:30px;color:#172033!important}
+    #sellerDashboard .seller-analytics-event{background:#fff}
+    #sellerDashboard .seller-reel-panel{border:1px dashed #cbd5e1;background:#f9fafb}
+    #sellerDashboard .seller-reel-dropzone{display:grid;place-items:center;min-height:132px;padding:20px;border:1px dashed #f36b00;border-radius:15px;background:#fff7ed;text-align:center;cursor:pointer}
+    #sellerDashboard .seller-reel-dropzone.drag-over{background:#ffedd5;border-color:#c2410c}
+    #sellerDashboard .seller-reel-dropzone input{max-width:100%}
+    #sellerDashboard .seller-analytics-subheading{color:#172033}
+    @media(min-width:1024px){
+      #sellerDashboard{align-items:flex-start;overflow-y:auto;padding:2vh 2vw}
+      #sellerDashboard .seller-card{display:grid;grid-template-columns:minmax(270px,340px) minmax(0,1fr);align-items:start;gap:16px;width:min(1320px,100%);max-height:96vh;overflow:auto;margin:0 auto;padding:24px;background:#f6f7f9}
+      #sellerDashboard .seller-dashboard-header,#sellerDashboard #sellerDashboardStatus,#sellerDashboard #sellerShopFormPanel:not([hidden]){grid-column:1/-1}
+      #sellerDashboard #sellerShopProfile{grid-column:1;grid-row:2;position:sticky;top:8px;background:#fff}
+      #sellerDashboard #sellerAnalyticsPanel:not([hidden]){grid-column:2;grid-row:2;background:#fff}
+      #sellerDashboard #sellerReelPanel:not([hidden]){grid-column:2;grid-row:3;background:#fff}
+      #sellerDashboard #sellerProductListPanel:not([hidden]){grid-column:1;grid-row:3;background:#fff}
+      #sellerDashboard #sellerProductPanel:not([hidden]):has(#sellerProductForm:not([hidden])){grid-column:2;grid-row:4;background:#fff}
+      #sellerDashboard .seller-dashboard-quick-actions{margin-top:22px}
+      #sellerDashboard .seller-action-row{display:grid;grid-template-columns:1fr;gap:8px}
+      #sellerDashboard .seller-action-row button{width:100%;justify-content:flex-start}
+    }
+    @media(max-width:700px){
+      #sellerDashboard .seller-card{display:flex;flex-direction:column;gap:12px;background:#f6f7f9}
+      #sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #sellerDashboard .seller-analytics-card:last-child{grid-column:1/-1}
+      #sellerDashboard #sellerShopProfile{display:block}
+      #sellerDashboard .seller-dashboard-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-post{grid-column:1/-1}
+      #sellerDashboard .seller-action-row{display:flex;flex-wrap:wrap}
+      #sellerDashboard .seller-action-row button{flex:1 1 145px}
+      #sellerDashboard .seller-reel-dropzone{min-height:118px}
+    }
   </style>
 </head>
 <body class="has-top-searches">
@@ -1022,7 +1067,7 @@
     <dialog class="order-confirm-dialog" id="orderConfirmDialog"><div class="order-confirm-icon">✓</div><h2>Confirm your order</h2><p>Check your delivery details and confirm that you want to place this order.</p><div class="order-confirm-actions"><button type="button" onclick="closeOrderConfirmation()">Go back</button><button class="confirm" type="button" onclick="closeOrderConfirmation();submitOrder()">Confirm order</button></div></dialog>
 
     <div class="footer">
-      <p>Worlds Largest Online Marketplace | www.aleeshopping.com</p>
+      <p>The World&rsquo;s Largest Online Marketplace | www.aleeshopping.com</p>
       <p>📍 Colombo, Sri Lanka | 📞 076 138 9936</p>
       <p style="font-size:11px">Prices for international shoppers are approximate currency conversions. Rates by <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a>.</p>
       <div class="social-icons">
@@ -1082,7 +1127,7 @@
       <section class="seller-panel" id="sellerShopProfile" hidden>
         <div class="seller-logo-wrap"><img class="seller-logo-preview" id="sellerShopLogo" src="assets/alee-logo.png" alt="Shop profile picture"><button class="seller-logo-edit" type="button" onclick="editSellerShop()" aria-label="Edit shop profile"><i class="fa-solid fa-pencil"></i></button></div>
         <h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div>
-        <div class="seller-social-links" id="sellerShopSocials"></div>
+        <div class="seller-social-links" id="sellerShopSocials"></div><div class="seller-dashboard-quick-actions" id="sellerDashboardQuickActions"><button class="seller-action-button primary seller-dashboard-post" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post App / Ad / Job</button></div>
         <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
         <div class="seller-action-row"><button class="seller-action-button" type="button" onclick="editSellerShop()"><i class="fa-solid fa-pencil"></i> Edit Shop Profile</button><button class="seller-action-button" type="button" onclick="openSellerShopShare()"><i class="fa-solid fa-share-nodes"></i> Share Shop</button><button class="alee-chat-seller-button" type="button" onclick="aleeChat.openInbox('seller')"><i class="fa-regular fa-comments"></i> Messages</button><button class="seller-action-button" type="button" onclick="showSellerAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button><button class="seller-action-button" type="button" onclick="switchAccountRole('buyer')"><i class="fa-solid fa-user"></i> Switch profile</button><button class="seller-action-button danger" type="button" onclick="deleteSellerShop()"><i class="fa-solid fa-trash"></i> Delete Shop</button></div>
         <button class="seller-action-button primary" id="sendShopDetailsButton" type="button" onclick="sendShopDetailsToAlee()"><i class="fa-brands fa-whatsapp"></i> Send Details to aleeshopping</button>
@@ -1127,7 +1172,7 @@
         <div class="seller-notice" id="sellerProductStatus" role="status" aria-live="polite"></div>
       </form><div class="seller-panel" style="margin-top:14px"><h3>Add a shop Reel</h3><form id="sellerReelForm" onsubmit="saveSellerReel(event)"><label>Video<input name="video" type="file" accept="video/mp4,video/webm,video/quicktime" required><span class="seller-muted">Upload a short MP4, WebM, or MOV video (up to 50 MB).</span></label><label>Caption<textarea name="caption" maxlength="500" placeholder="Show your products or shop"></textarea></label><div class="seller-action-row"><button class="seller-action-button primary" type="submit">Post Reel</button></div><div class="seller-notice" id="sellerReelStatus" role="status" aria-live="polite"></div></form><div class="seller-reel-manager-list" id="sellerReelList"><p class="seller-muted">Your reels will appear here.</p></div></div></section>
       <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
-      <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsMonth">Month</label><input id="sellerAnalyticsMonth" type="month" onchange="loadSellerAnalytics()"></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Shop views</span><strong id="sellerAnalyticsShopViews">—</strong></div><div class="seller-analytics-card"><span>Product views</span><strong id="sellerAnalyticsProductViews">—</strong></div><div class="seller-analytics-card"><span>Orders this month</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Revenue this month</span><strong id="sellerAnalyticsValue">—</strong></div></div><h4 class="seller-analytics-subheading">Product views</h4><div class="seller-analytics-products" id="sellerAnalyticsProducts"></div><h4 class="seller-analytics-subheading">Recent activity</h4><div class="seller-analytics-activity" id="sellerAnalyticsActivity"></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
+      <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsMonth">Month</label><input id="sellerAnalyticsMonth" type="month" onchange="loadSellerAnalytics()"></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Views</span><strong id="sellerAnalyticsShopViews">—</strong></div><div class="seller-analytics-card"><span>Product views</span><strong id="sellerAnalyticsProductViews">—</strong></div><div class="seller-analytics-card"><span>Orders this month</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Revenue this month</span><strong id="sellerAnalyticsValue">—</strong></div></div><h4 class="seller-analytics-subheading">Product views</h4><div class="seller-analytics-products" id="sellerAnalyticsProducts"></div><h4 class="seller-analytics-subheading">Recent activity</h4><div class="seller-analytics-activity" id="sellerAnalyticsActivity"></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
       <div class="seller-notice" id="sellerDashboardStatus" role="status" aria-live="polite"></div>
     </div>
   </div>
@@ -1358,7 +1403,7 @@
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to create and manage your shop.';return;}
       if(!await ensurePrivateAccountProfile())return;
       try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'seller');}catch(error){}
-      closeBuyerAccount(false,true);document.getElementById('sellerDashboard').classList.add('show');
+      closeBuyerAccount(false,true);arrangeSellerDashboard();document.getElementById('sellerDashboard').classList.add('show');
       pushAppUiLayer('sellerDashboard',fromHistory=>closeSellerAccount(fromHistory),()=>document.getElementById('sellerDashboard').classList.add('show'));
       document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
       await loadSellerWorkspace();
@@ -1513,6 +1558,15 @@
       try { await request; } finally { if(sellerCatalogLoadPromise===request)sellerCatalogLoadPromise=null; }
     }
 
+    function arrangeSellerDashboard() {
+      const card=document.querySelector('#sellerDashboard .seller-card'),quick=document.getElementById('sellerDashboardQuickActions'),add=document.getElementById('sellerAddItemToggle');
+      if(add&&quick&&add.parentElement!==quick)quick.appendChild(add);
+      const profile=document.getElementById('sellerShopProfile');if(profile&&quick&&quick.parentElement!==profile)profile.appendChild(quick);
+      const reelForm=document.getElementById('sellerReelForm'),reelPanel=reelForm?.closest('.seller-panel');
+      if(reelPanel&&card&&reelPanel.id!=='sellerReelPanel'){reelPanel.id='sellerReelPanel';reelPanel.classList.add('seller-reel-panel');const list=document.getElementById('sellerProductListPanel');card.insertBefore(reelPanel,list||null);}
+      const videoLabel=reelForm?.querySelector('label:first-of-type'),videoInput=reelForm?.elements.video;
+      if(videoLabel&&videoInput&&!videoLabel.dataset.dropReady){videoLabel.dataset.dropReady='1';videoLabel.classList.add('seller-reel-dropzone');videoLabel.addEventListener('dragover',event=>{event.preventDefault();videoLabel.classList.add('drag-over');});videoLabel.addEventListener('dragleave',()=>videoLabel.classList.remove('drag-over'));videoLabel.addEventListener('drop',event=>{event.preventDefault();videoLabel.classList.remove('drag-over');const file=event.dataTransfer.files?.[0];if(file&&file.type.startsWith('video/')){const transfer=new DataTransfer();transfer.items.add(file);videoInput.files=transfer.files;videoInput.dispatchEvent(new Event('change',{bubbles:true}));}});}
+    }
     async function loadSellerWorkspace() {
       const status=document.getElementById('sellerDashboardStatus');
       status.textContent='Loading your shop…';
@@ -1525,7 +1579,7 @@
         const profile=document.getElementById('sellerShopProfile'), formPanel=document.getElementById('sellerShopFormPanel');
         const productPanel=document.getElementById('sellerProductPanel'),listPanel=document.getElementById('sellerProductListPanel');
         if(currentSellerShop){
-          profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;
+          profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;document.getElementById('sellerDashboard').classList.add('seller-has-shop');document.getElementById('sellerReelPanel')?.removeAttribute('hidden');
           document.getElementById('sellerShopName').textContent=currentSellerShop.shop_name;
           document.getElementById('sellerShopLogo').src=currentSellerShop.logo_url||'assets/alee-logo.png';
           document.getElementById('sellerShopDetails').textContent=[currentSellerShop.shop_category||'Other',currentSellerShop.phone,currentSellerShop.phone2,currentSellerShop.address].filter(Boolean).join(' · ');
@@ -1545,8 +1599,11 @@
           if(itemError) throw itemError;
           sellerProducts=items||[];renderSellerProductList();
           await loadSellerReels();
+          const analytics=document.getElementById('sellerAnalyticsPanel');analytics.hidden=false;
+          const date=new Date();document.getElementById('sellerAnalyticsMonth').value=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0');
+          loadSellerAnalytics();
         } else {
-          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';
+          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerReelPanel')?.setAttribute('hidden','');document.getElementById('sellerDashboard').classList.remove('seller-has-shop');document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';
           document.getElementById('sellerShopFormTitle').textContent='Create Shop';
           document.getElementById('sellerShopForm').reset();
           document.getElementById('sellerShopLogoFile').required=true;
@@ -1633,15 +1690,8 @@
     }
 
     function showSellerAnalytics() {
-      const panel=document.getElementById('sellerAnalyticsPanel');
-      panel.hidden=!panel.hidden;
-      if(!panel.hidden){
-        const now=new Date(),month=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-        document.getElementById('sellerAnalyticsMonth').value=month;
-        loadSellerAnalytics();panel.scrollIntoView({behavior:'smooth',block:'start'});
-      }
+      document.getElementById('sellerAnalyticsPanel')?.scrollIntoView({behavior:'smooth',block:'start'});
     }
-
     async function loadSellerAnalytics() {
       const status=document.getElementById('sellerAnalyticsStatus'),month=document.getElementById('sellerAnalyticsMonth').value;
       if(!currentSellerShop||!month)return;
@@ -1649,7 +1699,7 @@
       status.textContent='Loading shop performance…';
       try {
         const [ordersResult,shopViewsResult,productViewsResult]=await Promise.all([
-          supabaseClient.from('store_orders').select('total,status,created_at,buyer_name').eq('shop_id',currentSellerShop.id).gte('created_at',start.toISOString()).lt('created_at',end.toISOString()).order('created_at',{ascending:false}).limit(100),
+          supabaseClient.from('store_orders').select('id,total,status,created_at,customer_name').eq('shop_id',currentSellerShop.id).gte('created_at',start.toISOString()).lt('created_at',end.toISOString()).order('created_at',{ascending:false}).limit(100),
           supabaseClient.from('seller_shop_view_counts').select('view_count').eq('shop_id',currentSellerShop.id).maybeSingle(),
           supabaseClient.from('seller_product_view_counts').select('product_id,view_count').eq('shop_id',currentSellerShop.id)
         ]);
@@ -1661,7 +1711,8 @@
         el('sellerAnalyticsProductViews').textContent=productViewsResult.error?'—':[...byProduct.values()].reduce((sum,n)=>sum+n,0).toLocaleString('en');
         const sorted=[...(sellerProducts||[])].sort((x,y)=>(byProduct.get(String(y.id))||0)-(byProduct.get(String(x.id))||0));
         el('sellerAnalyticsProducts').innerHTML=sorted.length?sorted.map(item=>'<div class="seller-analytics-product"><img src="'+escapeHTML(item.image_urls?.[0]||'assets/alee-logo.png')+'" alt=""><div><strong>'+escapeHTML(item.name)+'</strong><small>'+formatCurrencyAmount(Number(item.price||0),currentSellerShop.currency_code||'LKR')+'</small></div><strong>'+(byProduct.get(String(item.id))||0).toLocaleString('en')+' views</strong></div>').join(''):'<p class="seller-muted">Add products to see their views.</p>';
-        el('sellerAnalyticsActivity').innerHTML=orders.slice(0,6).map(o=>'<div class="seller-analytics-event"><div><strong>Order received · '+escapeHTML(o.status||'new')+'</strong><small>'+escapeHTML(o.buyer_name||'Buyer')+' · '+new Date(o.created_at).toLocaleString()+'</small></div><strong>'+formatCurrencyAmount(Number(o.total||0),currentSellerShop.currency_code||'LKR')+'</strong></div>').join('')||'<p class="seller-muted">No orders this month yet.</p>';
+        const events=[...orders.map(order=>({time:new Date(order.created_at),title:'New order #'+String(order.id||'').slice(0,8),detail:(order.customer_name||'Buyer')+' · '+(order.status||'new'),amount:formatCurrencyAmount(Number(order.total||0),currentSellerShop.currency_code||'LKR')})),...(sellerProducts||[]).slice(0,4).map(item=>({time:new Date(item.created_at||Date.now()),title:'Product listing',detail:item.name,amount:''}))].sort((a,b)=>b.time-a.time).slice(0,8);
+        el('sellerAnalyticsActivity').innerHTML=events.map(event=>'<div class="seller-analytics-event"><div><strong>'+escapeHTML(event.title)+'</strong><small>'+escapeHTML(event.detail)+' · '+(Number.isNaN(event.time.getTime())?'':event.time.toLocaleString())+'</small></div><strong>'+escapeHTML(event.amount)+'</strong></div>').join('')||'<p class="seller-muted">Your recent orders and product updates will show here.</p>';
         status.textContent=new Date(year,monthIndex-1).toLocaleString('en',{month:'long',year:'numeric'})+' · Cancelled orders are excluded.'+(shopViewsResult.error||productViewsResult.error?' Run seller-analytics-schema.sql to enable view counts.':'');
       } catch(error) {console.error(error);status.textContent='Analytics could not load. Check seller-orders-schema.sql and seller-analytics-schema.sql in Supabase.';}
     }
@@ -3581,6 +3632,9 @@
 <script src="chat.js?v=20261102-instant-inbox"></script>
 </body>
 </html>
+
+
+
 
 
 
