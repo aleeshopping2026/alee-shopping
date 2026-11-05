@@ -308,10 +308,10 @@
     #shopsSection>.shops-heading { color:var(--text-white); }
     .hub-shortcut { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; padding:2px; border:0; background:transparent; color:var(--text-white); font:inherit; cursor:pointer; }
     .hub-shortcut-icon { width:62px; height:62px; display:grid; place-items:center; border-radius:50%; background:#ff6900; color:#fff; box-shadow:0 3px 9px #ff690044; font-size:25px; }
-    .hub-shortcut:nth-child(2) .hub-shortcut-icon { background:#159447; }
-    .hub-shortcut:nth-child(3) .hub-shortcut-icon { background:#f28a17; }
-    .hub-shortcut:nth-child(4) .hub-shortcut-icon { background:#fb5c32; }
-    .hub-shortcut:nth-child(5) .hub-shortcut-icon { background:#f28a17; }
+    .hub-shortcut[onclick*="offers"] .hub-shortcut-icon { background:#159447; }
+    .hub-shortcut[onclick*="jobs"] .hub-shortcut-icon { background:#f28a17; }
+    .hub-shortcut[onclick*="reels"] .hub-shortcut-icon { background:#fb5c32; }
+    .hub-shortcut[onclick*="games"] .hub-shortcut-icon { background:#f28a17; }
     .hub-shortcut.active .hub-shortcut-icon { outline:3px solid #ffd7b8; outline-offset:2px; }
     .hub-shortcut-label { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:700; }
     .hub-content-panel { padding:12px 3%; background:var(--card-bg); border-bottom:1px solid var(--glass-border); }
@@ -648,8 +648,9 @@
     .account-library-status{padding:18px;border:1px dashed #d0d5dd;border-radius:12px;background:#f8fafc;color:#667085;text-align:center;line-height:1.5}
     #buyerDashboard .account-hub-header{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:10px}
     #buyerDashboard .account-back{width:40px;height:40px;border:0;border-radius:50%;background:#ffffff24;color:#fff;font-size:18px;cursor:pointer}
-    @media(min-width:701px){#shopsSection{position:fixed;left:10px;top:196px;bottom:18px;z-index:80;width:116px;overflow-y:auto;padding:12px 9px;border:1px solid #e5e7eb;border-radius:16px;background:var(--card-bg);box-shadow:0 8px 26px #10182814}#shopsSection>.shops-heading{margin-bottom:12px;font-size:12px;line-height:1.3}#shopsSection .hub-shortcuts{display:flex;flex-direction:column;gap:8px;padding:0}#shopsSection .hub-shortcut{width:100%;min-height:76px;flex-direction:row;justify-content:flex-start;gap:10px;padding:7px;border-radius:12px;text-align:left}#shopsSection .hub-shortcut:hover{background:#f8fafc}#shopsSection .hub-shortcut-icon{width:42px;height:42px;flex:0 0 42px;font-size:18px}#shopsSection .hub-shortcut-label{font-size:12px}#shopsSection #hubShopsPanel{position:fixed;left:140px;top:196px;right:16px;z-index:81;padding:14px;border:1px solid #e5e7eb;border-radius:16px;background:var(--card-bg);box-shadow:0 8px 26px #10182814}#heroBanner,#categoryBar,.container,.footer,#hubContentPanel{margin-left:140px;width:calc(100% - 140px)}#heroBanner{width:calc(100% - 140px)}.container{max-width:none}.shops-section.hub-nav-pinned{position:fixed;top:196px;left:10px;bottom:18px;width:116px}#hubContentPanel{width:calc(100% - 140px)}}
-    @media(min-width:701px) and (max-width:1023px){#shopsSection{width:94px;left:7px;padding:9px 6px}#shopsSection .hub-shortcut{gap:7px;padding:6px}#shopsSection .hub-shortcut-icon{width:34px;height:34px;flex-basis:34px;font-size:15px}#shopsSection .hub-shortcut-label{font-size:11px}#heroBanner,#categoryBar,.container,.footer,#hubContentPanel{margin-left:112px;width:calc(100% - 112px)}#heroBanner{width:calc(100% - 112px)}#shopsSection #hubShopsPanel{left:112px}}
+    .desktop-sidebar-only,.desktop-hub-label,.desktop-sidebar-action-list{display:none}
+    @media(min-width:701px){#shopsSection{position:fixed;left:10px;top:140px;bottom:10px;z-index:80;width:116px;overflow-y:auto;padding:10px 8px;border:1px solid #e5e7eb;border-radius:16px;background:var(--card-bg);box-shadow:0 8px 26px #10182814}#shopsSection>.shops-heading{margin-bottom:9px;font-size:12px;line-height:1.3}#shopsSection .hub-shortcuts{display:flex;flex-direction:column;gap:4px;padding:0}#shopsSection .hub-shortcut{width:100%;min-height:68px;flex-direction:column;justify-content:center;gap:4px;padding:5px 2px;border-radius:12px;text-align:center}#shopsSection .hub-shortcut:hover{background:#f8fafc}#shopsSection .hub-shortcut-icon{width:42px;height:42px;flex:0 0 42px;font-size:18px}#shopsSection .hub-shortcut-label{font-size:11px}#shopsSection .desktop-sidebar-only{display:flex}#shopsSection .desktop-sidebar-action-list{display:grid;gap:3px}#shopsSection .hub-shortcut[onclick*="jobs"] .hub-shortcut-icon{background:#eea900}#shopsSection .hub-shortcut[onclick*="games"] .hub-shortcut-icon{background:#6d7ea8}#shopsSection .mobile-hub-label{display:none}#shopsSection .desktop-hub-label{display:inline}#shopsSection .desktop-sidebar-divider{height:1px;margin:5px 5px;border:0;background:#e5e7eb}#shopsSection .desktop-sidebar-action{width:100%;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;border:0;border-radius:12px;background:transparent;color:var(--text-white);font:inherit;cursor:pointer}#shopsSection .desktop-sidebar-action:hover{background:#f8fafc}#shopsSection .desktop-sidebar-action i{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:#ff6900;color:#fff;font-size:18px;box-shadow:0 3px 9px #ff690044}#shopsSection .desktop-sidebar-action[data-view="messages"] i{background:#e84c9b}#shopsSection .desktop-sidebar-action[data-view="cart"] i{background:#f08b18}#shopsSection .desktop-sidebar-action span{font-size:11px;font-weight:700}#shopsSection #hubShopsPanel{position:fixed;left:140px;top:140px;right:0;bottom:0;z-index:81;overflow:auto;padding:18px 22px;border:0;border-left:1px solid #e5e7eb;border-radius:0;background:var(--card-bg);box-shadow:none}#hubShopsPanel .shops-strip-wrap{display:block}#hubShopsPanel .shops-strip-control{display:none}#hubShopsPanel .shops-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;overflow:visible;padding:10px 0}#hubShopsPanel .shop-tile{width:100%;min-height:120px;border:1px solid #e5e7eb;border-radius:14px;background:#fff}#hubShopsPanel .mobile-shop-search{max-width:480px}#heroBanner,#categoryBar,.container,.footer,#hubContentPanel{margin-left:140px;width:calc(100% - 140px)}#heroBanner{width:calc(100% - 140px)}.container{max-width:none}.shops-section.hub-nav-pinned{position:fixed;top:140px;left:10px;bottom:10px;width:116px}#hubContentPanel{position:fixed;top:140px;right:0;bottom:0;left:140px;z-index:81;width:auto;overflow:auto;margin:0;padding:18px 22px;border:0;border-left:1px solid #e5e7eb;background:var(--card-bg)}body.hub-section-open #heroBanner,body.hub-section-open #categoryBar,body.hub-section-open .container,body.hub-section-open .footer{display:none!important}}
+    @media(min-width:701px) and (max-width:1023px){#shopsSection{width:94px;left:7px;padding:8px 5px}#shopsSection .hub-shortcut-icon,#shopsSection .desktop-sidebar-action i{width:36px;height:36px;flex-basis:36px;font-size:16px}#shopsSection .hub-shortcut{min-height:62px}#shopsSection .hub-shortcut-label,#shopsSection .desktop-sidebar-action span{font-size:10px}#heroBanner,#categoryBar,.container,.footer,#hubContentPanel{margin-left:112px;width:calc(100% - 112px)}#heroBanner{width:calc(100% - 112px)}#shopsSection #hubShopsPanel{left:112px}#hubContentPanel{left:112px;width:auto}}
     #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-post{border:1px solid #e6bd48!important;background:#fff4c2!important;color:#4f4218!important}
     #sellerDashboard .seller-dashboard-quick-actions #sellerAddItemToggle{border:1px solid #d7dce3!important;background:#f6f7f9!important;color:#263244!important}
     #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-items{border:1px solid #e6bd48!important;background:#fff9df!important;color:#5c4a12!important}
@@ -945,13 +946,20 @@
     </div>
 
     <section class="shops-section" id="shopsSection" aria-label="ALEE shortcuts">
-      <h2 class="shops-heading">Top Shops / Company</h2>
+      <h2 class="shops-heading"><span class="mobile-hub-label">Top Shops / Company</span><span class="desktop-hub-label">Browse</span></h2>
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
+        <button class="hub-shortcut desktop-sidebar-only" type="button" onclick="showDesktopHome(this)" aria-label="Items and home"><span class="hub-shortcut-icon"><i class="fa-solid fa-grip"></i></span><span class="hub-shortcut-label">Items</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label">Offers</span></button>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Offers</span><span class="desktop-hub-label">Offer</span></span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('reels',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-video"></i></span><span class="hub-shortcut-label">Reels</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('games',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-gamepad"></i></span><span class="hub-shortcut-label">Games</span></button>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('reels',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-video"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Reels</span><span class="desktop-hub-label">Feed</span></span></button>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('games',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-gamepad"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Games</span><span class="desktop-hub-label">Game</span></span></button>
+      </div>
+      <hr class="desktop-sidebar-only desktop-sidebar-divider">
+      <div class="desktop-sidebar-only desktop-sidebar-action-list">
+        <button class="desktop-sidebar-action" type="button" data-view="my-shop" onclick="openDesktopSidebarView('my-shop')"><i class="fa-solid fa-store"></i><span>My Shop</span></button>
+        <button class="desktop-sidebar-action" type="button" data-view="messages" onclick="openDesktopSidebarView('messages')"><i class="fa-solid fa-comments"></i><span>Messages</span></button>
+        <button class="desktop-sidebar-action" type="button" data-view="cart" onclick="openDesktopSidebarView('cart')"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></button>
       </div>
       <div id="hubShopsPanel" hidden>
         <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800">Search all →</a></span></h2>
@@ -2213,14 +2221,28 @@
         panel.hidden=true;shopsPanel.hidden=false;
         const search=document.getElementById('hubShopSearch');if(search)search.value='';
         document.querySelectorAll('#shopsStrip .shop-tile').forEach(tile=>tile.hidden=false);
-        document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
+        if(!window.matchMedia('(min-width:701px)').matches)document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
       }
       shopsPanel.hidden=true;panel.hidden=false;
-      const titles={apps:'Apps',offers:'Offers',games:'Games',jobs:'Jobs',reels:'Reels'};title.textContent=titles[section]||'';
+      const desktopNav=window.matchMedia('(min-width:701px)').matches,titles={apps:'Apps',offers:desktopNav?'Offer':'Offers',games:desktopNav?'Game':'Games',jobs:'Jobs',reels:desktopNav?'Feed':'Reels'};title.textContent=titles[section]||'';
       if(section==='apps'||section==='games'||section==='offers')renderHubApps(section,body);
       else if(section==='jobs')renderHubJobs(body);
       else if(section==='reels')loadHubReels(body);
-      document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
+      if(!window.matchMedia('(min-width:701px)').matches)document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function showDesktopHome(button){
+      if(document.body.classList.contains('hub-section-open'))closeHubSection();
+      else{document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;document.querySelector('.container')?.classList.remove('hub-content-open');document.body.classList.remove('hub-section-open');}
+      document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function openDesktopSidebarView(view){
+      if(document.body.classList.contains('hub-section-open'))closeHubSection();
+      if(view==='my-shop')openAccountMyShop();
+      else if(view==='messages')openMessagesForCurrentRole();
+      else if(view==='cart')openCart();
     }
 
     function closeHubSection(fromHistory=false) {
