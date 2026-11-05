@@ -274,6 +274,11 @@
       background: var(--bg-dark); color: var(--text-white); border: 1px solid var(--glass-border); padding: 6px 12px; border-radius: 14px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: 600; transition: 0.3s;
     }
     .cat-btn.active, .cat-btn:hover { background: var(--light-leaf); color: #fff; border-color: var(--light-leaf); }
+    /* Dark header text and category outlines requested for the refreshed home screen. */
+    .logo-text,.logo-text span,.cart-btn,.support-button,.header-shop-button { color:#111827!important; }
+    .cart-btn,.support-button,.header-shop-button { border:1px solid #111827!important; }
+    .categories-bar { border-bottom:2px solid #111827!important; }
+    .cat-btn { border-color:#111827!important; }
 
     .hero-banner { width:100%; background:#ef7919; border-bottom:1px solid var(--glass-border); overflow:hidden; position:relative; }
     .hero-track { display:flex; width:100%; transition:opacity .35s ease; will-change:opacity; }
@@ -946,7 +951,7 @@
     </div>
 
     <section class="shops-section" id="shopsSection" aria-label="ALEE shortcuts">
-      <h2 class="shops-heading"><span class="mobile-hub-label">Top Shops / Company</span><span class="desktop-hub-label">Browse</span></h2>
+      
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut desktop-sidebar-only" type="button" onclick="showDesktopHome(this)" aria-label="Items and home"><span class="hub-shortcut-icon"><i class="fa-solid fa-grip"></i></span><span class="hub-shortcut-label">Items</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
