@@ -804,7 +804,20 @@
     .mobile-nav-button,.mobile-nav-button i,.mobile-nav-button span,.mobile-nav-button.active span { color:#111827!important; font-weight:500!important; }
     /* Black product detail section headings and comment action. */
     .detail-section h3,.popup-recommendations h3,.reviews-section h3 { color:#111827!important; font-weight:600; }
-    #reviewSubmitBtn { background:#111827!important; border-color:#111827!important; color:#fff!important; }</style>
+    #reviewSubmitBtn { background:#111827!important; border-color:#111827!important; color:#fff!important; }    /* Keep trust marks compact, borderless, and visible beside shop names in cards and details. */
+    .shop-tile strong .verified-badge { width:16px!important;height:16px!important;margin-left:3px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important; }
+    .card .product-shop-meta img.verified-badge { width:12px!important;height:12px!important;min-width:12px!important;min-height:12px!important;max-width:12px!important;max-height:12px!important;flex:0 0 12px!important;padding:0!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important; }
+    .popup-shop-meta img.verified-badge { width:17px;height:17px;flex:0 0 17px;object-fit:contain;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important; }
+    /* Product detail check marks, item frames, and favorite heart use black and white. */
+    .feature-item i { color:#111827!important; }
+    .products .card { border-color:#111827!important; }
+    .slider img { border-color:#111827!important; }
+    .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
+    .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
+    /* Soften the header buttons while retaining the site palette. */
+    .cart-btn { border-color:#f2d2b5!important;background:#fff4e8!important;color:#475467!important; }
+    .support-button { border-color:#e5e7eb!important;color:#475467!important; }
+    .mobile-nav-button svg { display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }</style>
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -1039,9 +1052,9 @@
     </div>
 
     <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-      <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><i class="fa-solid fa-house"></i><span>Home</span></button>
-      <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><i class="fa-solid fa-border-all"></i><span>Categories</span></button>
-      <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><i class="fa-solid fa-store"></i><span>Shops</span></button>
+      <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9.5 20v-6h5v6"/></svg><span>Home</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categories</span></button>
+      <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-1.5-6h-15L3 10ZM5 10v10h14V10M9 20v-6h6v6M3 10c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0"/></svg><span>Shops</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
       <button type="button" class="mobile-nav-button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
@@ -3461,7 +3474,7 @@
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
       document.getElementById('popupShopMeta').style.setProperty('--shop-accent', shopAccent);
       const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
-      document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="${escapeHTML(shop.name)} shop එකට යන්න"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>`;
+      document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="${escapeHTML(shop.name)} shop එකට යන්න"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified ? '<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">' : ''}</a>`;
       document.getElementById('popupShippingStatus').innerHTML = product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : 'Island-wide';
       document.getElementById("popupPrice").innerHTML = productPriceMarkup(product);
       document.getElementById("popupDesc").innerText = product.desc;
