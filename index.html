@@ -788,7 +788,23 @@
     }
     @media(min-width:1024px){#sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
     #sellerDashboard .seller-analytics-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.seller-analytics-summary span,.seller-analytics-summary strong{padding:12px;background:#f5f6f8;border-radius:10px;text-align:center}.seller-analytics-summary strong{font-size:22px;color:#172033}.seller-analytics-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.seller-analytics-controls #sellerAnalyticsCustom{display:flex;gap:6px}.seller-analytics-controls button{padding:9px 12px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:#172033;cursor:pointer}#sellerAnalyticsChart{width:100%;max-height:220px;margin:8px 0 16px;background:#fff;border:1px solid #e5e7eb;border-radius:12px}.hub-reel-list{display:flex;flex-direction:column;align-items:center;gap:18px}.hub-reel-card{width:min(100%,520px);border-radius:18px}.hub-reel-card video{width:100%;height:min(72vh,760px);aspect-ratio:9/16;object-fit:cover;border-radius:16px;background:#080808}@media(max-width:700px){.hub-reel-card{width:100%}.hub-reel-card video{height:70dvh}.seller-analytics-summary strong{font-size:18px}}
-  </style>
+      /* Keep only the product search field pinned while scrolling. */
+    .header { position:static!important; }
+    .search-bar { position:sticky!important; top:0!important; }
+    .categories-bar { top:59px!important; border-bottom:1px solid #d0d5dd!important; }
+    body.has-top-searches .categories-bar { top:59px!important; }
+    body.has-top-searches.search-extras-open .categories-bar { top:95px!important; }
+    .shops-section.hub-nav-pinned { top:59px; }
+    /* Use calm, regular-weight category chips. */
+    .cat-btn { border-color:#d0d5dd!important; font-weight:500!important; }
+    .cat-btn.active,.cat-btn:hover { border-color:#d0d5dd!important; }
+    /* Black labels for header actions and mobile navigation. */
+    .logo-text,.logo-text span,.cart-btn,.support-button,.header-shop-button,.header-account-button,.header-chat-button { color:#111827!important; }
+    .cart-btn,.support-button,.header-shop-button,.header-account-button,.header-chat-button { border-color:#111827!important; }
+    .mobile-nav-button,.mobile-nav-button i,.mobile-nav-button span,.mobile-nav-button.active span { color:#111827!important; font-weight:500!important; }
+    /* Black product detail section headings and comment action. */
+    .detail-section h3,.popup-recommendations h3,.reviews-section h3 { color:#111827!important; font-weight:600; }
+    #reviewSubmitBtn { background:#111827!important; border-color:#111827!important; color:#fff!important; }</style>
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
