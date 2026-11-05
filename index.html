@@ -299,6 +299,7 @@
     .shop-tile:hover { transform:translateY(-2px); border-color:#ec4899; box-shadow:0 7px 18px rgba(190,24,93,.14); }
     .shop-tile img { width:64px; height:64px; object-fit:cover; border-radius:50%; border:3px solid var(--shop-accent,#ff6900); background:#fff; box-shadow:0 2px 10px color-mix(in srgb,var(--shop-accent,#ff6900) 24%,transparent); }
     .shop-tile strong { width:100%; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
+    .shop-tile strong .verified-badge { width:20px;height:20px;display:inline-block;vertical-align:middle;margin-left:3px;object-fit:contain;border:0;border-radius:0;background:transparent;box-shadow:none; }
     .shop-rating { display:flex; justify-content:center; gap:1px; color:#d1d5db; font-size:9px; line-height:1; white-space:nowrap; }
     .shop-rating .filled { color:#f59e0b; }
     body.hub-section-open .categories-bar { display:none!important; }
@@ -374,6 +375,7 @@
     .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:4px 0 2px; color:var(--text-white); font-size:10px; font-weight:700; }
     .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .product-shop-meta .verified-badge { width:12px;height:12px;flex:0 0 12px;object-fit:contain;border:0;border-radius:0;background:transparent; }
     .popup-shop-meta { display:flex; align-items:center; gap:8px; padding:2px 2px 8px; color:var(--light-leaf); font-size:12px; font-weight:800; }
     .popup-shop-meta a { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; cursor:pointer; }
     .popup-shop-meta a:hover span { text-decoration:underline; }
@@ -982,6 +984,7 @@
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');setTimeout(openAccountMyShop,0)"><i class="fa-solid fa-store"></i> My Shop</button>
@@ -1142,6 +1145,7 @@
       <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close" type="button" onclick="editAccountDetails()" aria-label="Account settings"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
+        <button type="button" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
         <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
         <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, country banners, offers and product popups</small></button>
@@ -1501,7 +1505,7 @@
     }
 
     function mapSellerShop(row) {
-      return {id:String(row.id),countryCode:row.country_code||'LK',currencyCode:row.currency_code||'LKR',name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5,_sellerManaged:true};
+      return {id:String(row.id),countryCode:row.country_code||'LK',currencyCode:row.currency_code||'LKR',name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',youtube:row.youtube_url||'',instagram:row.instagram_url||'',facebook:row.facebook_url||'',tiktok:row.tiktok_url||'',isVerified:Boolean(row.is_verified),verifiedUntil:row.verified_until||null,rank:9999,rating:5,_sellerManaged:true};
     }
     function mapSellerProduct(row) {
       const offer=Number(row.offer_price)||0,base=Number(row.price)||0;return {id:1000000000+Number(row.id),sellerProductId:Number(row.id),name:row.name,price:offer>0?offer:base,originalPrice:offer>0?base:null,discountPercent:offer>0&&base>offer?Math.round((base-offer)*100/base):0,currencyCode:row.currency_code||'LKR',stock:Number(row.stock??1),condition:row.condition||'New',wholesalePrice:Number(row.wholesale_price)||null,colors:Array.isArray(row.colors)?row.colors:[],category:row.category,categoryLabel:row.category_label,shopId:String(row.shop_id),desc:row.description||'',features:Array.isArray(row.features)?row.features:[],sizes:Array.isArray(row.sizes)?row.sizes:[],images:Array.isArray(row.image_urls)?row.image_urls:[],_sellerManaged:true};
@@ -2136,7 +2140,7 @@
         const accent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
         const ratingValue=Number(shop.rating), rating=Number.isFinite(ratingValue)?Math.min(5,Math.max(1,Math.round(ratingValue))):5;
         const stars=Array.from({length:5},(_,index)=>`<span class="${index<rating?'filled':''}" aria-hidden="true">★</span>`).join('');
-        return `<a class="shop-tile" style="--shop-accent:${accent}" href="${url}"><img loading="lazy" decoding="async" src="${logo}" alt="${name} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><strong>${name}</strong><span class="shop-rating" role="img" aria-label="${rating} out of 5 stars">${stars}</span></a>`;
+        return `<a class="shop-tile" style="--shop-accent:${accent}" href="${url}"><img loading="lazy" decoding="async" src="${logo}" alt="${name} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><strong>${name}${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</strong><span class="shop-rating" role="img" aria-label="${rating} out of 5 stars">${stars}</span></a>`;
       }).join('');
       strip.innerHTML = markup || '<p style="color:#888;font-size:12px">No shops have been added yet.</p>';
       if(!strip.dataset.wheelBound){strip.dataset.wheelBound='true';strip.addEventListener('wheel',event=>{if(Math.abs(event.deltaY)>Math.abs(event.deltaX)){event.preventDefault();strip.scrollBy({left:event.deltaY,behavior:'smooth'});}},{passive:false});let dragStart=null;strip.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'){dragStart={x:event.clientX,left:strip.scrollLeft};strip.setPointerCapture(event.pointerId);}});strip.addEventListener('pointermove',event=>{if(dragStart)strip.scrollLeft=dragStart.left-(event.clientX-dragStart.x);});['pointerup','pointercancel','lostpointercapture'].forEach(type=>strip.addEventListener(type,()=>{dragStart=null;}));}
@@ -2527,7 +2531,7 @@
       const image = product.images?.[0] || 'assets/alee-logo.png';
       const shop = getShopForProduct(product);
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
-      return `<div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div>`;
+      return `<div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div>`;
     }
     function renderRecommendationShelf(elementId, items, emptyText) {
       const shelf = document.getElementById(elementId);
@@ -2871,7 +2875,7 @@
         cards.push(`
           <div class="card" onclick="openProductPopup(${p.id})">
             <div class="card-image-wrap"><img loading="${cards.length < 4 ? 'eager' : 'lazy'}" decoding="async" ${cards.length < 4 ? 'fetchpriority="high"' : ''} src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(p.name)}">${p.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div>
-            <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span></a>
+            <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a>
             <h3>${escapeHTML(p.name)}</h3>
             <div class="price-block">${productPriceMarkup(p)}</div>
           </div>`);

@@ -19,7 +19,7 @@
     .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 10px}
     .shop-card{display:flex;min-width:0;flex-direction:column;align-items:center;gap:8px;padding:6px 3px 10px;color:var(--ink);text-decoration:none;text-align:center;border-radius:14px;transition:transform .18s,background .18s}
     .shop-card:hover{transform:translateY(-2px);background:#fff}.logo-ring{width:76px;height:76px;display:grid;place-items:center;padding:4px;border:2px solid var(--shop-accent,#ff6900);border-radius:50%;background:#fff;box-shadow:0 3px 12px color-mix(in srgb,var(--shop-accent,#ff6900) 18%,transparent)}.shop-card img{width:100%;height:100%;object-fit:cover;border-radius:50%;background:#fff}
-    .copy{width:100%;min-width:0}.copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.stars{display:none}.arrow{display:none}
+    .copy{width:100%;min-width:0}.copy strong{display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.directory-verified{width:20px;height:20px;object-fit:contain}.copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.stars{display:none}.arrow{display:none}
     .empty{padding:24px;background:#fff;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
     @media(min-width:760px){.grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:28px 14px}.logo-ring{width:90px;height:90px}.copy strong{font-size:13px}}
     @media(max-width:380px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 7px}.logo-ring{width:64px;height:64px}}
@@ -43,7 +43,7 @@
           window.aleeSupabase.from('seller_shops_profile_public').select('*'),
           window.aleeSupabase.from('seller_products_profile_public').select('id,shop_id')
         ]);
-        (shopRows||[]).forEach(row=>shops.push({id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',facebook:row.facebook_url||'',instagram:row.instagram_url||'',youtube:row.youtube_url||'',tiktok:row.tiktok_url||'',rank:9999,rating:5}));
+        (shopRows||[]).forEach(row=>shops.push({id:String(row.id),name:row.shop_name,logo:row.logo_url||'assets/alee-logo.png',phone:row.phone||'',phone2:row.phone2||'',address:row.address||'',externalLink:row.external_link||'',shopCategory:row.shop_category||'Other',bio:row.bio||'',facebook:row.facebook_url||'',instagram:row.instagram_url||'',youtube:row.youtube_url||'',tiktok:row.tiktok_url||'',isVerified:Boolean(row.is_verified),rank:9999,rating:5}));
         (productRows||[]).forEach(row=>products.push({id:`seller-${row.id}`,shopId:String(row.shop_id)}));
       }
       const entries=shops.map((shop,index)=>({shop,index})).filter(({shop})=>shop?.id&&shop?.name).sort((a,b)=>{
@@ -62,7 +62,7 @@
       const query=document.getElementById('shopSearch').value.trim().toLocaleLowerCase();
       const filtered=shopEntries.filter(({shop})=>`${shop.name||''} ${shop.shopCategory||''}`.toLocaleLowerCase().includes(query));
       if(!filtered.length){grid.innerHTML=`<div class="empty">${shopEntries.length?'No shops match your search.':'No shops have been added yet.'}</div>`;return;}
-      grid.innerHTML=filtered.map(({shop,accent,rating,count})=>`<a class="shop-card" style="--shop-accent:${accent}" href="shop.html?shop=${encodeURIComponent(shop.id)}"><span class="logo-ring"><img loading="lazy" decoding="async" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"></span><span class="copy"><strong title="${esc(shop.name)}">${esc(shop.name)}</strong><small>${count} ad${count===1?'':'s'}</small><span class="stars" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</span></span><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i></a>`).join('');
+      grid.innerHTML=filtered.map(({shop,accent,rating,count})=>`<a class="shop-card" style="--shop-accent:${accent}" href="shop.html?shop=${encodeURIComponent(shop.id)}"><span class="logo-ring"><img loading="lazy" decoding="async" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" onerror="this.onerror=null;this.src='assets/alee-logo.png'"></span><span class="copy"><strong title="${esc(shop.name)}">${esc(shop.name)}${shop.isVerified?` <img class="directory-verified" src="assets/verified-badge.svg" alt="Verified">`:''}</strong><small>${count} ad${count===1?'':'s'}</small><span class="stars" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</span></span><i class="fa-solid fa-chevron-right arrow" aria-hidden="true"></i></a>`).join('');
     }
     document.getElementById('shopSearch').addEventListener('input',paintShopEntries);
     const loader=document.getElementById('siteLoader');
@@ -72,3 +72,4 @@
   </script>
 </body>
 </html>
+
