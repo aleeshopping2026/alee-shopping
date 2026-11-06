@@ -8,7 +8,9 @@ with (security_barrier = true)
 as
 select p.id, p.shop_id, p.name, p.price, p.category, p.category_label, p.description,
        p.features, p.sizes, p.image_urls, p.created_at, p.wholesale_price,
-       p.offer_price, p.stock, p.condition, p.colors, p.free_shipping,
+       p.offer_price, p.stock, p.condition, p.colors,
+       coalesce(s.currency_code, 'LKR') as currency_code,
+       p.free_shipping,
        coalesce((
          select sum(case
            when item.value->>'quantity' ~ '^[0-9]+$' then (item.value->>'quantity')::bigint
@@ -19,8 +21,7 @@ select p.id, p.shop_id, p.name, p.price, p.category, p.category_label, p.descrip
          where o.shop_id = p.shop_id
            and o.status <> 'cancelled'
            and item.value->>'product_id' = p.id::text
-       ), 0)::bigint as sold_count,
-       coalesce(s.currency_code, 'LKR') as currency_code
+       ), 0)::bigint as sold_count
 from public.seller_products p
 join public.seller_shops s on s.id = p.shop_id;
 
