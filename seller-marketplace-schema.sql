@@ -101,18 +101,33 @@ grant select, insert, update, delete on public.seller_products to authenticated;
 grant usage, select on sequence public.seller_products_id_seq to authenticated;
 
 -- Public storefront views expose shop and product information without owner IDs.
-create or replace view public.seller_shops_profile_public
-with (security_barrier = true)
-as select id, shop_name, phone, phone2, address, external_link, created_at,
-          logo_url, shop_category, youtube_url, instagram_url, facebook_url, bio, tiktok_url, country_code, currency_code
-from public.seller_shops;
+-- Create the base views only once. Later feature migrations append columns to
+-- these views; replacing them here on a re-run would try to remove those columns
+-- and PostgreSQL rejects that with 42P16 (cannot drop columns from view).
+do $views$
+begin
+  if to_regclass('public.seller_shops_profile_public') is null then
+    execute $view$
+      create view public.seller_shops_profile_public
+      with (security_barrier = true)
+      as select id, shop_name, phone, phone2, address, external_link, created_at,
+                logo_url, shop_category, youtube_url, instagram_url, facebook_url, bio, tiktok_url, country_code, currency_code
+      from public.seller_shops
+    $view$;
+  end if;
 
-create or replace view public.seller_products_profile_public
-with (security_barrier = true)
-as select p.id, p.shop_id, p.name, p.price, p.category, p.category_label, p.description,
-          p.features, p.sizes, p.image_urls, p.created_at, p.wholesale_price, p.offer_price, p.stock, p.condition, p.colors,
-          coalesce(s.currency_code,'LKR') as currency_code
-from public.seller_products p join public.seller_shops s on s.id=p.shop_id;
+  if to_regclass('public.seller_products_profile_public') is null then
+    execute $view$
+      create view public.seller_products_profile_public
+      with (security_barrier = true)
+      as select p.id, p.shop_id, p.name, p.price, p.category, p.category_label, p.description,
+                p.features, p.sizes, p.image_urls, p.created_at, p.wholesale_price, p.offer_price, p.stock, p.condition, p.colors,
+                coalesce(s.currency_code,'LKR') as currency_code
+      from public.seller_products p join public.seller_shops s on s.id=p.shop_id
+    $view$;
+  end if;
+end
+$views$;
 
 grant select on public.seller_shops_profile_public to anon, authenticated;
 grant select on public.seller_products_profile_public to anon, authenticated;

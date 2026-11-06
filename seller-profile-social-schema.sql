@@ -1,22 +1,13 @@
 -- Safe additive upgrade for ALEE SHOPPING business profiles.
 -- Run in Supabase SQL Editor after seller-marketplace-schema.sql is already installed.
--- This creates new profile views instead of replacing existing public views.
+-- Extends the business profile and follow features without replacing public views.
 
 alter table public.seller_shops add column if not exists bio text not null default '' check (char_length(bio) <= 600);
 alter table public.seller_shops add column if not exists tiktok_url text;
 
-create or replace view public.seller_shops_profile_public
-with (security_barrier = true)
-as select id, shop_name, phone, phone2, address, external_link, created_at,
-          logo_url, shop_category, youtube_url, instagram_url, facebook_url, bio, tiktok_url
-from public.seller_shops;
-
-create or replace view public.seller_products_profile_public
-with (security_barrier = true)
-as select id, shop_id, name, price, category, category_label, description,
-          features, sizes, image_urls, created_at
-from public.seller_products;
-
+-- seller-marketplace-schema.sql already creates the public storefront views.
+-- Do not replace them here: later migrations append columns (currency, sold
+-- totals, verified state), and replacing with an older shorter list causes 42P16.
 grant select on public.seller_shops_profile_public to anon, authenticated;
 grant select on public.seller_products_profile_public to anon, authenticated;
 
