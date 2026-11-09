@@ -858,6 +858,17 @@
     .products .card .product-shop-meta>img:first-child{width:25px;height:25px;flex-basis:25px;}
     .products .card h3{font-size:14px;min-height:2.5em;margin:5px 0;color:#172033;}
     .products .card .price{font-size:17px;color:#f36b00;}
+@media (max-width:767px){
+      #productList{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important;gap:10px!important;}
+      #productList>.card{display:flex!important;min-width:0!important;height:auto!important;align-self:start!important;justify-content:flex-start!important;gap:4px!important;padding:6px!important;border:1px solid #e1e5eb!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 4px rgba(16,24,40,.08)!important;}
+      #productList>.card:hover{transform:translateY(-3px)!important;box-shadow:0 7px 16px rgba(16,24,40,.14)!important;}
+      #productList>.card>.card-image-wrap{position:relative!important;width:100%!important;height:clamp(170px,48vw,230px)!important;aspect-ratio:auto!important;flex:none!important;overflow:hidden!important;border-radius:8px!important;background:#f5f6f8!important;}
+      #productList>.card>.card-image-wrap>img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;padding:0!important;border:0!important;border-radius:8px!important;background:#fff!important;}
+      #productList>.card>.product-shop-meta{flex:none!important;margin:3px 0 0!important;}
+      #productList>.card>h3{height:auto!important;min-height:2.4em!important;margin:3px 0!important;font-size:13px!important;line-height:1.25!important;}
+      #productList>.card>.price-block{min-height:0!important;margin:0!important;}
+      #productList>.card .price{font-size:16px!important;}
+    }
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
