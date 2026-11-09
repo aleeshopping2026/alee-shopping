@@ -377,7 +377,7 @@
     .site-loader-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; animation:aleeLoaderSpin .8s linear infinite reverse; }
     .site-loader span { color:#ff6900; font-size:13px; font-weight:800; }
     @keyframes aleeLoaderSpin { to { transform:rotate(360deg); } }
-    .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:4px 0 2px; color:var(--text-white); font-size:10px; font-weight:700; }
+    .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:2px 0 1px; color:var(--text-white); font-size:10px; font-weight:700; }
     .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .product-shop-meta .verified-badge { width:12px;height:12px;flex:0 0 12px;object-fit:contain;border:0;border-radius:0;background:transparent; }
@@ -864,10 +864,10 @@
       #productList>.card:hover{transform:translateY(-3px)!important;box-shadow:0 7px 16px rgba(16,24,40,.14)!important;}
       #productList>.card>.card-image-wrap{position:relative!important;width:100%!important;height:clamp(170px,48vw,230px)!important;aspect-ratio:auto!important;flex:none!important;overflow:hidden!important;border-radius:8px!important;background:#f5f6f8!important;}
       #productList>.card>.card-image-wrap>img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;padding:0!important;border:0!important;border-radius:8px!important;background:#fff!important;}
-      #productList>.card>.product-shop-meta{flex:none!important;margin:3px 0 0!important;}
-      #productList>.card>h3{height:auto!important;min-height:2.4em!important;margin:3px 0!important;font-size:12px!important;line-height:1.25!important;font-weight:600!important;}
+      #productList>.card>.product-shop-meta{flex:none!important;margin:0!important;}
+      #productList>.card>h3{height:auto!important;min-height:2.4em!important;margin:1px 0!important;font-size:12px!important;line-height:1.25!important;font-weight:600!important;}
       #productList>.card>.price-block{min-height:0!important;margin:0!important;}
-      #productList>.card .price{font-size:13px!important;line-height:1.25!important;color:#111827!important;font-weight:800!important;}
+      #productList>.card .price{font-size:13px!important;line-height:1.25!important;color:#d95f00!important;font-weight:800!important;}
     }
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
@@ -1384,7 +1384,7 @@
     function setShopperCurrency(countryCode){shopperCurrencyCode=currencyForCountry(countryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);});}
     function convertPrice(amount,fromCurrency){const from=String(fromCurrency||'LKR').toUpperCase(),to=shopperCurrencyCode||'LKR';if(from===to)return {amount:Number(amount),currency:from,converted:false};const rates=exchangeRatesUSD;if(!rates||!rates[from]||!rates[to])return {amount:Number(amount),currency:from,converted:false};return {amount:Number(amount)/Number(rates[from])*Number(rates[to]),currency:to,converted:true};}
     function formatCurrencyAmount(amount,currencyCode='LKR'){try{return new Intl.NumberFormat(undefined,{style:'currency',currency:currencyCode,maximumFractionDigits:2}).format(Number(amount)||0);}catch(_){return `${currencyCode} ${(Number(amount)||0).toLocaleString()}`;}}
-    function productMoney(amount,product){const result=convertPrice(amount,product?.currencyCode||'LKR');return `${result.converted?'≈ ':''}${formatCurrencyAmount(result.amount,result.currency)}`;}
+    function productMoney(amount,product){const shop=product?getShopForProduct(product):null,currency=String(product?.currencyCode||shop?.currencyCode||currencyForCountry(shop?.countryCode)||'LKR').toUpperCase(),value=Number(amount)||0;if(currency==='LKR')return `Rs ${value.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;return formatCurrencyAmount(value,currency);}
     try{shopperCountryCode=localStorage.getItem('alee-shopper-country')||'LK';}catch(_){}shopperCurrencyCode=currencyForCountry(shopperCountryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);return fetch('https://country.io/currency.json',{signal:AbortSignal.timeout(3500)}).then(response=>response.ok?response.json():null);}).then(mapping=>{if(mapping){for(const [country,currency] of Object.entries(mapping))if(!countryCurrencyCodes[country]&&exchangeRatesUSD?.[currency])countryCurrencyCodes[country]=currency;setShopperCurrency(shopperCountryCode);}}).catch(()=>{});
     function populateSellerCurrencies(selected='LKR'){const select=document.getElementById('sellerShopCurrency');if(!select)return;const codes=typeof Intl.supportedValuesOf==='function'?Intl.supportedValuesOf('currency'):['LKR','USD','EUR','GBP','INR','AUD','CAD','JPY','CNY','SGD','AED'];if(!codes.includes(selected))codes.push(selected);let names;try{names=new Intl.DisplayNames(['en'],{type:'currency'});}catch(_){}select.replaceChildren(...codes.sort().map(code=>new Option(`${code} · ${names?.of(code)||code}`,code)));select.value=selected;updateSellerCurrencyLabels();}
     function updateSellerCurrencyLabels(){const code=document.getElementById('sellerShopCurrency')?.value||'LKR';document.querySelectorAll('[data-currency-label]').forEach(node=>node.textContent=code);}
