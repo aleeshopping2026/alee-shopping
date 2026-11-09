@@ -869,6 +869,13 @@
       #productList>.card>.price-block{min-height:0!important;margin:0!important;}
       #productList>.card .price{font-size:13px!important;line-height:1.25!important;color:#d95f00!important;font-weight:800!important;}
     }
+.profile-badge:not(.guest) #profileNameDisplay{display:none!important;}
+    .profile-badge:not(.guest){gap:5px;padding:4px 7px!important;}
+    .profile-header-avatar{display:block;width:27px;height:27px;flex:0 0 27px;object-fit:cover;border-radius:50%;}
+    .profile-header-avatar[hidden]{display:none!important;}
+    .profile-header-chevron{font-size:9px;margin-left:1px;color:#667085;}
+    .header-actions>.header-shop-button,.header-actions>.header-account-button,.header-actions>.header-chat-button,.header-actions>.cart-btn,.header-actions>.support-button{border-width:1px!important;border-color:#e2e6ec!important;box-shadow:none!important;}
+    .header-actions>.header-chat-button{border-color:#f0bfd5!important;}
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
@@ -937,7 +944,7 @@
         </div>
         <!-- Profile Badge with Click Dropdown for Switch/Logout -->
         <div class="profile-badge guest" onclick="handleProfileClick(event)" title="Guest: tap to sign in or create an account">
-          <i class="fa-solid fa-user-circle"></i> <span id="profileNameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
+          <i class="fa-solid fa-user-circle" id="profileHeaderFallback"></i><img id="profileHeaderAvatar" class="profile-header-avatar" alt="" hidden><span id="profileNameDisplay">User</span><i class="fa-solid fa-chevron-down profile-header-chevron" aria-hidden="true"></i>
         </div>
         
         <!-- Dropdown Menu for Logout / Switch Email -->
@@ -2170,7 +2177,11 @@
       }
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
-      document.getElementById('profileNameDisplay').innerText = user ? label : 'Guest';
+      document.getElementById('profileNameDisplay').textContent = user ? '' : 'Guest';
+      const headerAvatar=document.getElementById('profileHeaderAvatar'),headerFallback=document.getElementById('profileHeaderFallback'),avatarUrl=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||'';
+      if(headerAvatar){headerAvatar.hidden=!avatarUrl;if(avatarUrl)headerAvatar.src=avatarUrl;}
+      if(headerFallback)headerFallback.hidden=Boolean(avatarUrl);
+      badge.title=user?'Open account menu':'Guest: tap to sign in or create an account';
       document.getElementById('mobileAccountNavLabel').textContent = 'My Account';
       document.getElementById('mobileAccountNavLabel').title = user ? label : 'My Account';
       badge.classList.toggle('guest', !user);
