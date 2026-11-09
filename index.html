@@ -876,6 +876,13 @@
     .profile-header-chevron{font-size:9px;margin-left:1px;color:#667085;}
     .header-actions>.header-shop-button,.header-actions>.header-account-button,.header-actions>.header-chat-button,.header-actions>.cart-btn,.header-actions>.support-button{border-width:1px!important;border-color:#e2e6ec!important;box-shadow:none!important;}
     .header-actions>.header-chat-button{border-color:#f0bfd5!important;}
+/* Unified search and category navigation across screen sizes. */
+    .search-bar{margin:0!important;padding-bottom:8px!important;border-bottom:0!important;background:var(--card-bg)!important;}
+    .categories-bar{display:flex!important;align-items:stretch!important;gap:20px!important;min-height:44px!important;margin:0!important;padding:0 3%!important;border-top:1px solid #f1f2f4!important;border-bottom:1px solid #e5e7eb!important;background:var(--card-bg)!important;}
+    .cat-btn{position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:0 4px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#667085!important;font-size:13px!important;font-weight:500!important;}
+    .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
+    .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
+    .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#f36b00;}
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
