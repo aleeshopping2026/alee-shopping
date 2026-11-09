@@ -2816,6 +2816,22 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
 
     document.addEventListener('wheel',event=>{
       if(event.ctrlKey)return;
+      const target=event.target instanceof Element?event.target:null;
+      const shelf=target?.closest('.recommendation-shelf');
+      if(!shelf)return;
+      const delta=Math.abs(event.deltaY)>Math.abs(event.deltaX)?event.deltaY:event.deltaX;
+      if(!delta)return;
+      const max=shelf.scrollWidth-shelf.clientWidth;
+      if(max<=1)return;
+      const next=Math.max(0,Math.min(max,shelf.scrollLeft+delta));
+      if(next===shelf.scrollLeft)return;
+      shelf.dataset.wheelBound='true';
+      event.preventDefault();
+      event.stopPropagation();
+      shelf.scrollLeft=next;
+    },{passive:false,capture:true});
+    document.addEventListener('wheel',event=>{
+      if(event.ctrlKey)return;
       const path=typeof event.composedPath==='function'?event.composedPath():[event.target];
       const strip=path.find(node=>node instanceof HTMLElement&&node.scrollWidth>node.clientWidth+1&&['auto','scroll'].includes(getComputedStyle(node).overflowX));
       if(!strip||strip.dataset.wheelBound==='true')return;
