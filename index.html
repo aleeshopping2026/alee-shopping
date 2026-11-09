@@ -828,9 +828,9 @@
       /* Keep only the product search field pinned while scrolling. */
     .header { position:static!important; }
     .search-bar { position:sticky!important; top:0!important; }
-    .categories-bar { top:59px!important; border-bottom:1px solid #d0d5dd!important; }
-    body.has-top-searches .categories-bar { top:59px!important; }
-    body.has-top-searches.search-extras-open .categories-bar { top:95px!important; }
+    .categories-bar { top:var(--search-sticky-height,59px)!important; border-bottom:1px solid #d0d5dd!important; }
+    body.has-top-searches .categories-bar { top:var(--search-sticky-height,59px)!important; }
+    body.has-top-searches.search-extras-open .categories-bar { top:var(--search-sticky-height,59px)!important; }
     .shops-section.hub-nav-pinned { top:59px; }
     /* Use calm, regular-weight category chips. */
     .cat-btn { border-color:#d0d5dd!important; font-weight:500!important; }
@@ -878,7 +878,7 @@
     .header-actions>.header-chat-button{border-color:#f0bfd5!important;}
 /* Unified search and category navigation across screen sizes. */
     .search-bar{margin:0!important;padding-bottom:8px!important;border-bottom:0!important;background:var(--card-bg)!important;}
-    .categories-bar{display:flex!important;align-items:stretch!important;gap:20px!important;min-height:44px!important;margin:0!important;padding:0 3%!important;border-top:1px solid #f1f2f4!important;border-bottom:1px solid #e5e7eb!important;background:var(--card-bg)!important;}
+    .categories-bar{display:flex!important;align-items:stretch!important;gap:20px!important;min-height:44px!important;margin-top:0!important;margin-bottom:0!important;padding:0 3%!important;border-top:1px solid #f1f2f4!important;border-bottom:1px solid #e5e7eb!important;background:var(--card-bg)!important;}
     .cat-btn{position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:0 4px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#667085!important;font-size:13px!important;font-weight:500!important;}
     .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
     .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
@@ -2827,6 +2827,10 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     },{passive:false});
 
     const searchBar = document.querySelector('.search-bar');
+    function syncSearchCategoryStickyHeight(){if(searchBar)document.documentElement.style.setProperty('--search-sticky-height',`${Math.ceil(searchBar.getBoundingClientRect().height)}px`);}
+    syncSearchCategoryStickyHeight();
+    if(searchBar&&'ResizeObserver'in window)new ResizeObserver(syncSearchCategoryStickyHeight).observe(searchBar);
+    window.addEventListener('resize',syncSearchCategoryStickyHeight,{passive:true});
     const searchContainer = document.querySelector('.search-container');
     const searchInput = document.getElementById('searchInput');
     const searchSuggestionBox=document.createElement('div');searchSuggestionBox.id='searchSuggestions';searchSuggestionBox.className='search-suggestions';searchSuggestionBox.setAttribute('role','listbox');searchInput.closest('.search-container').appendChild(searchSuggestionBox);let activeSuggestionIndex=-1;let suggestionRows=[];
@@ -2984,7 +2988,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       filterCategory(categoryId, topButton || button);
       closeMobileSheet('mobileCategorySheet');
       document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Categories')));
-      document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
+      scrollToFilteredProducts();
     }
 
     function openMobileCategories() {
@@ -3539,6 +3543,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       });
     }
 
+    function scrollToFilteredProducts(){requestAnimationFrame(()=>{const list=document.getElementById('productList'),search=document.querySelector('.search-bar'),bar=document.getElementById('categoryBar');if(!list)return;const fixedHeight=(search?.getBoundingClientRect().height||0)+(bar?.getBoundingClientRect().height||0)+8,target=list.getBoundingClientRect().top+window.scrollY-fixedHeight;window.scrollTo({top:Math.max(0,target),behavior:'smooth'});});}
     function filterCategory(category, btn) {
       closeHubSection();
       photoSearchRunId++;
@@ -3556,6 +3561,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
         const productCategory = getProductCategoryId(product);
         return group ? leafIds.includes(productCategory) : legacyTabs[category] ? legacyLeafIds.includes(productCategory) : productCategory === category;
       }));
+      scrollToFilteredProducts();
     }
 
     function syncSearchClearButton() {
