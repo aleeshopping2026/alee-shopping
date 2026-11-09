@@ -410,8 +410,8 @@
 
     .container { max-width: 1400px; margin: 15px auto; padding: 0 2%; }
     
-    .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } }
+    .products { display:block; column-count:2; column-gap:12px; } .products .card { display:inline-flex; width:100%; break-inside:avoid; margin:0 0 12px; vertical-align:top; }
+    @media (min-width: 768px) { .products { display:grid; column-count:initial; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } .products .card { display:flex; width:auto; margin:0; } }
 
     .card {
       background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid #e3e5e8;
@@ -524,6 +524,7 @@
     .review-actions { display:flex; gap:8px; margin-top:9px; }
     .review-actions button { padding:5px 9px; border:1px solid #d6dbe2; border-radius:7px; background:#fff; color:#172033; font-family:inherit; font-size:11px; font-weight:600; line-height:1.3; cursor:pointer; }
     .review-photo-input { display:grid; gap:6px; font-size:12px; color:var(--detail-copy); }
+.review-gallery-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;width:max-content;padding:10px 15px;border:1px solid #d6dbe2;border-radius:12px;background:#fff;color:#172033;font:inherit;font-weight:700;cursor:pointer}.review-gallery-button i{font-size:20px;color:#ff6900}.review-photo-chooser{width:min(360px,calc(100% - 32px));padding:20px;border:1px solid #e5e7eb;border-radius:18px;background:#fff;color:#172033;box-shadow:0 16px 50px #0003}.review-photo-chooser::backdrop{background:#11182788}.review-photo-chooser form{display:grid;gap:10px}.review-photo-chooser h3{margin:0 0 4px}.review-photo-chooser button{display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;color:#172033;font:inherit;text-align:left;cursor:pointer}.review-photo-chooser button i{width:24px;color:#f36b00}.review-photo-chooser .review-photo-cancel{justify-content:center;color:#667085}
     .review-photo-preview { display:flex; flex-wrap:wrap; gap:8px; }
     .review-photo-preview img { width:58px; height:58px; object-fit:cover; border-radius:8px; border:1px solid #d6dbe2; }
     .review-image-viewer { position:fixed; inset:0; z-index:10010; display:none; align-items:center; justify-content:center; padding:20px; background:#000d; }
@@ -1153,7 +1154,7 @@
           <h3>Customer comments</h3>
           <form class="review-form" onsubmit="submitProductReview(event)">
             <textarea id="reviewText" class="input-field" maxlength="1000" placeholder="Share your experience with this product…" required></textarea>
-            <label class="review-photo-input">Add up to 2 photos<input id="reviewPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple><span id="reviewPhotoHint">Photos are optional. Tap a thumbnail to view it larger.</span></label>
+            <div class="review-photo-input"><span>Add up to 2 photos</span><input id="reviewPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden><input id="reviewCameraPhotos" type="file" accept="image/*" capture="environment" hidden><button class="review-gallery-button" type="button" onclick="openReviewPhotoChooser()" aria-label="Choose a photo from camera or gallery"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Camera or gallery</span></button><span id="reviewPhotoHint">Photos are optional. Tap a thumbnail to view it larger.</span><dialog id="reviewPhotoChooser" class="review-photo-chooser"><form method="dialog"><h3>Add a photo</h3><button type="button" onclick="chooseReviewPhotoSource('camera')"><i class="fa-solid fa-camera"></i> Take a photo</button><button type="button" onclick="chooseReviewPhotoSource('gallery')"><i class="fa-regular fa-images"></i> Choose from gallery</button><button class="review-photo-cancel" value="cancel">Cancel</button></form></dialog></div>
             <div class="review-photo-preview" id="reviewPhotoPreview" aria-live="polite"></div>
             <button class="btn" id="reviewSubmitBtn" type="submit" style="margin-top:0">Post comment</button>
             <div class="review-status" id="reviewStatus"></div>
@@ -2502,12 +2503,17 @@
     function resetProductReviewForm() {
       editingProductReview = null;
       document.getElementById('reviewText').value = '';
-      document.getElementById('reviewPhotos').value = '';
+      document.getElementById('reviewPhotos').value = ''; document.getElementById('reviewCameraPhotos').value=''; document.getElementById('reviewPhotos')._selectedFiles=[]; document.getElementById('reviewCameraPhotos')._selectedFiles=[];
       document.getElementById('reviewPhotoPreview').replaceChildren();
       document.getElementById('reviewPhotoHint').textContent = 'Photos are optional. Tap a thumbnail to view it larger.';
       document.getElementById('reviewSubmitBtn').textContent = 'Post comment';
       document.getElementById('reviewCancelEdit')?.remove();
     }
+function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?.showModal();}
+    function chooseReviewPhotoSource(source){document.getElementById('reviewPhotoChooser')?.close();document.getElementById(source==='camera'?'reviewCameraPhotos':'reviewPhotos')?.click();}
+    function handleReviewPhotoSelection(event){const files=[...event.target.files],remaining=2-(editingProductReview?.images.length||0);if(files.length>remaining){event.target.value='';document.getElementById('reviewPhotoHint').textContent=`Choose no more than ${remaining} additional photo${remaining===1?'':'s'}.`;document.getElementById('reviewPhotoPreview').replaceChildren();return;}if(files.some(file=>!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)||file.size>8*1024*1024)){event.target.value='';document.getElementById('reviewPhotoHint').textContent='Use JPG, PNG, WebP or GIF photos up to 8 MB each.';document.getElementById('reviewPhotoPreview').replaceChildren();return;}document.getElementById('reviewPhotos')._selectedFiles=event.target.id==='reviewPhotos'?files:[];document.getElementById('reviewCameraPhotos')._selectedFiles=event.target.id==='reviewCameraPhotos'?files:[];document.getElementById('reviewPhotoHint').textContent=`${files.length}/2 photos selected (up to 8 MB each).`;previewReviewPhotos(files);}
+    document.getElementById('reviewPhotos')?.addEventListener('change',handleReviewPhotoSelection);document.getElementById('reviewCameraPhotos')?.addEventListener('change',handleReviewPhotoSelection);
+    function getSelectedReviewPhotos(){return [...(document.getElementById('reviewPhotos')?._selectedFiles||[]),...(document.getElementById('reviewCameraPhotos')?._selectedFiles||[])];}
     function previewReviewPhotos(files) {
       const preview = document.getElementById('reviewPhotoPreview');
       preview.replaceChildren();
@@ -2516,14 +2522,6 @@
         const img = document.createElement('img'); img.alt = 'Photo preview'; img.src = URL.createObjectURL(file); preview.appendChild(img);
       });
     }
-    document.getElementById('reviewPhotos')?.addEventListener('change', event => {
-      const files = [...event.target.files];
-      const remaining = 2 - (editingProductReview?.images.length || 0);
-      if (files.length > remaining) { event.target.value = ''; document.getElementById('reviewPhotoHint').textContent = `Choose no more than ${remaining} additional photo${remaining===1?'':'s'}.`; document.getElementById('reviewPhotoPreview').replaceChildren(); return; }
-      if (files.some(file => !['image/jpeg','image/png','image/webp','image/gif'].includes(file.type) || file.size > 8*1024*1024)) { event.target.value = ''; document.getElementById('reviewPhotoHint').textContent = 'Use JPG, PNG, WebP or GIF photos up to 8 MB each.'; document.getElementById('reviewPhotoPreview').replaceChildren(); return; }
-      document.getElementById('reviewPhotoHint').textContent = `${files.length}/2 photos selected (up to 8 MB each).`;
-      previewReviewPhotos(files);
-    });
     async function uploadReviewPhotos(files) {
       const urls = [];
       for (const file of files) {
@@ -2539,7 +2537,7 @@
       e.preventDefault();
       const status = document.getElementById('reviewStatus');
       const text = document.getElementById('reviewText').value.trim();
-      const files = [...document.getElementById('reviewPhotos').files];
+      const files = getSelectedReviewPhotos();
       if (!supabaseClient) { status.textContent = 'Online comments are not configured yet. See SETUP.txt.'; return; }
       if (!activeUser) { openAccountModal(); status.textContent = 'Sign in with your email to post a comment.'; return; }
       if (!activeGalleryProduct || !text) return;
@@ -2569,7 +2567,7 @@
     function startEditProductReview(review) {
       editingProductReview={id:review.id,images:Array.isArray(review.images)?review.images:[]};
       document.getElementById('reviewText').value=review.body||'';
-      document.getElementById('reviewPhotos').value='';
+      document.getElementById('reviewPhotos').value='';document.getElementById('reviewCameraPhotos').value='';document.getElementById('reviewPhotos')._selectedFiles=[];document.getElementById('reviewCameraPhotos')._selectedFiles=[];
       const preview=document.getElementById('reviewPhotoPreview');preview.replaceChildren();
       editingProductReview.images.forEach(url=>{const img=document.createElement('img');img.alt='Attached comment photo';img.src=url;preview.appendChild(img);});
       document.getElementById('reviewPhotoHint').textContent='Choose up to 2 additional photos, or leave empty to keep the current photos.';
