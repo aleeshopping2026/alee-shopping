@@ -105,6 +105,7 @@
       const workerPath = basePath.replace(/^\/+/, "") + "OneSignalSDKWorker.js";
       await sdk.init({
         appId: config.appId,
+        safari_web_id: config.safariWebId,
         serviceWorkerPath: workerPath,
         serviceWorkerParam: { scope: basePath },
         promptOptions: {
@@ -113,9 +114,9 @@
               type: "push",
               autoPrompt: true,
               text: {
-                actionMessage: "ALEE එකෙන් Offer සහ Message Notification එවන්නද?",
-                acceptButton: "අවසර දෙන්න",
-                cancelButton: "දැන් එපා",
+                actionMessage: "Would you like to receive offers and messages from ALEE?",
+                acceptButton: "Allow",
+                cancelButton: "Not now",
               },
               delay: { pageViews: 1, timeDelay: 12 },
             }],

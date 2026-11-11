@@ -258,7 +258,7 @@ Deno.serve(async (request) => {
         const sent = await sendOneSignal({
           include_subscription_ids: subscriptionIds,
           headings: { en: "ALEE" },
-          contents: { en: "කඩෙන් පණිවිඩයක් ආවා" },
+          contents: { en: "You have a new message from a shop." },
           url: chatUrl.href,
           data: { type: "chat", conversationId: String(conversation.id) },
         });
