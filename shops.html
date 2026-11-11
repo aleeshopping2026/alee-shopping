@@ -19,7 +19,7 @@
     .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 10px}
     .shop-card{display:flex;min-width:0;flex-direction:column;align-items:center;gap:8px;padding:6px 3px 10px;color:var(--ink);text-decoration:none;text-align:center;border-radius:14px;transition:transform .18s,background .18s}
     .shop-card:hover{transform:translateY(-2px);background:#fff}.logo-ring{width:76px;height:76px;display:grid;place-items:center;padding:4px;border:2px solid var(--shop-accent,#ff6900);border-radius:50%;background:#fff;box-shadow:0 3px 12px color-mix(in srgb,var(--shop-accent,#ff6900) 18%,transparent)}.shop-card img{width:100%;height:100%;object-fit:cover;border-radius:50%;background:#fff}
-    .copy{width:100%;min-width:0}.copy strong{display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.directory-verified{width:20px;height:20px;object-fit:contain}.copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.stars{display:none}.arrow{display:none}
+    .copy{width:100%;min-width:0}.copy strong{display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.shop-card .directory-verified{width:16px;height:16px;min-width:16px;min-height:16px;max-width:16px;max-height:16px;flex:0 0 16px;object-fit:contain;border-radius:0;background:transparent}.copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.stars{display:none}.arrow{display:none}
     .empty{padding:24px;background:#fff;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
     @media(min-width:760px){.grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:28px 14px}.logo-ring{width:90px;height:90px}.copy strong{font-size:13px}}
     @media(max-width:380px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 7px}.logo-ring{width:64px;height:64px}}
@@ -70,6 +70,7 @@
     window.setTimeout(hideLoader,8000);
     renderShopDirectory().catch(error=>{console.error(error);paintShopEntries();}).finally(hideLoader);
   </script>
+<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111"></script>
 </body>
 </html>
 

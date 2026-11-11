@@ -244,6 +244,30 @@
     .discovery-section-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
     .discovery-section-heading h2 { margin:0; font-size:16px; color:var(--text-white); }
     .discovery-section-heading button,.discovery-more { border:0; background:transparent; color:#838894; font:inherit; cursor:pointer; }
+    .trending-search-chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .trending-search-chip { padding:8px 12px; border:1px solid var(--glass-border); border-radius:999px; background:var(--bg-dark); color:var(--text-white); font:inherit; font-size:12px; cursor:pointer; }
+    .trending-search-chip:hover,.trending-search-chip:focus-visible { border-color:var(--light-leaf); color:var(--light-leaf); }
+    .recent-search-row { display:flex; align-items:center; gap:8px; border-bottom:1px solid color-mix(in srgb,var(--glass-border),transparent 45%); }
+    .recent-search-row .discovery-list-button { flex:1; min-width:0; border-bottom:0; }
+    .recent-search-delete { flex:0 0 36px; width:36px; height:36px; border:0; border-radius:50%; background:transparent; color:#858b95; cursor:pointer; }
+    .recent-search-delete:hover { background:#f0443818; color:#d92d20; }
+    .search-filter-panel { display:grid; gap:14px; margin:12px 0; padding:14px; border:1px solid var(--glass-border); border-radius:14px; background:var(--bg-dark); }
+    .search-filter-top,.search-filter-values { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .search-filter-top strong { color:var(--text-white); font-size:14px; }
+    .search-filter-reset { border:0; background:transparent; color:var(--light-leaf); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+    .search-filter-panel fieldset { min-width:0; margin:0; padding:0; border:0; }
+    .search-filter-panel legend { margin-bottom:8px; color:var(--text-white); font-size:12px; font-weight:800; }
+    .search-filter-values { color:var(--text-white); font-size:12px; font-weight:700; }
+    .search-range-row { display:grid; grid-template-columns:60px minmax(0,1fr); align-items:center; gap:8px; margin-top:6px; color:#858b95; font-size:11px; }
+    .search-range-row input { width:100%; min-height:22px; accent-color:var(--light-leaf); }
+    .search-filter-categories { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+    .search-filter-category { display:flex; align-items:center; gap:7px; min-width:0; color:var(--text-white); font-size:12px; }
+    .search-filter-category input { width:16px; height:16px; accent-color:var(--light-leaf); }
+    .search-result-status { display:flex; align-items:center; gap:8px; min-height:24px; margin:8px 0 12px; color:var(--detail-copy,#777); font-size:13px; font-weight:700; }
+    .search-result-spinner { display:none; width:15px; height:15px; border:2px solid color-mix(in srgb,var(--light-leaf),transparent 75%); border-top-color:var(--light-leaf); border-radius:50%; animation:searchSpin .7s linear infinite; }
+    .search-result-status.is-loading .search-result-spinner { display:inline-block; }
+    @keyframes searchSpin { to { transform:rotate(360deg); } }
+    @media(prefers-reduced-motion:reduce) { .search-result-spinner { animation-duration:1.6s; } }
     .discovery-list { display:grid; gap:0; }
     .discovery-list-button { width:100%; min-height:42px; padding:8px 2px; border:0; border-bottom:1px solid color-mix(in srgb,var(--glass-border),transparent 45%); background:transparent; color:var(--text-white); text-align:left; font:inherit; cursor:pointer; }
     .discovery-list-button:hover { color:var(--light-leaf); }
@@ -377,7 +401,7 @@
     .site-loader-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; animation:aleeLoaderSpin .8s linear infinite reverse; }
     .site-loader span { color:#ff6900; font-size:13px; font-weight:800; }
     @keyframes aleeLoaderSpin { to { transform:rotate(360deg); } }
-    .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:4px 0 2px; color:var(--text-white); font-size:10px; font-weight:700; }
+    .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:2px 0 1px; color:var(--text-white); font-size:10px; font-weight:700; }
     .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .product-shop-meta .verified-badge { width:12px;height:12px;flex:0 0 12px;object-fit:contain;border:0;border-radius:0;background:transparent; }
@@ -410,8 +434,8 @@
 
     .container { max-width: 1400px; margin: 15px auto; padding: 0 2%; }
     
-    .products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } }
+    .products { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:10px; } .products .card { min-width:0; justify-content:flex-start; gap:2px; padding:7px; } .products .card h3 { height:auto; min-height:2.4em; font-size:13px; line-height:1.25; margin:5px 0; } .products .card .price { font-size:15px; } .products .card .price-block { min-height:30px; }
+    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } .products .card h3 { font-size:14px; min-height:40px; } .products .card .price { font-size:18px; } }
 
     .card {
       background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid #e3e5e8;
@@ -518,6 +542,19 @@
     .review-card strong { font-size:12px; }
     .review-card time { color:#888; font-size:10px; margin-left:8px; }
     .review-card p { color:#bbb; font-size:13px; margin-top:5px; line-height:1.5; white-space:pre-wrap; }
+    .review-photo-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:9px; }
+    .review-photo-thumb { width:76px; height:76px; padding:0; overflow:hidden; border:1px solid var(--glass-border); border-radius:9px; background:#fff; cursor:zoom-in; }
+    .review-photo-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+    .review-actions { display:flex; gap:8px; margin-top:9px; }
+    .review-actions button { padding:5px 9px; border:1px solid #d6dbe2; border-radius:7px; background:#fff; color:#172033; font-family:inherit; font-size:11px; font-weight:600; line-height:1.3; cursor:pointer; }
+    .review-photo-input { display:grid; gap:6px; font-size:12px; color:var(--detail-copy); }
+.review-gallery-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;width:max-content;padding:10px 15px;border:1px solid #d6dbe2;border-radius:12px;background:#fff;color:#172033;font:inherit;font-weight:700;cursor:pointer}.review-gallery-button i{font-size:20px;color:#ff6900}.review-photo-chooser{width:min(360px,calc(100% - 32px));padding:20px;border:1px solid #e5e7eb;border-radius:18px;background:#fff;color:#172033;box-shadow:0 16px 50px #0003}.review-photo-chooser::backdrop{background:#11182788}.review-photo-chooser form{display:grid;gap:10px}.review-photo-chooser h3{margin:0 0 4px}.review-photo-chooser button{display:flex;align-items:center;gap:12px;min-height:48px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;color:#172033;font:inherit;text-align:left;cursor:pointer}.review-photo-chooser button i{width:24px;color:#f36b00}.review-photo-chooser .review-photo-cancel{justify-content:center;color:#667085}
+    .review-photo-preview { display:flex; flex-wrap:wrap; gap:8px; }
+    .review-photo-preview img { width:58px; height:58px; object-fit:cover; border-radius:8px; border:1px solid #d6dbe2; }
+    .review-image-viewer { position:fixed; inset:0; z-index:10010; display:none; align-items:center; justify-content:center; padding:20px; background:#000d; }
+    .review-image-viewer.open { display:flex; }
+    .review-image-viewer img { max-width:min(94vw,1100px); max-height:88vh; object-fit:contain; border-radius:10px; background:#fff; }
+    .review-image-viewer button { position:absolute; top:16px; right:18px; width:42px; height:42px; border:0; border-radius:50%; background:#fff; color:#172033; font-size:25px; cursor:pointer; }
     .popup-title-row { position:relative; padding:4px 52px 8px 2px; border-bottom:1px solid var(--glass-border); }
     .popup-details h2 { font-size:21px; font-weight:800; color:var(--text-white); line-height:1.35; margin-bottom:6px; padding-right:36px; }
     .popup-details .price { font-size:22px; font-weight:900; color:var(--light-leaf); }
@@ -561,8 +598,8 @@
     .popup-content { padding-bottom:82px; }
     .popup-stock-status { display:block;min-height:16px;margin:4px 0 8px;color:#667085;font-weight:700; }
     @media (max-width: 700px) {
-      .product-popup { padding:8px 5px calc(18px + env(safe-area-inset-bottom)); }
-      .popup-content { width:100%; min-width:0; margin:0 auto; border-radius:14px; padding:10px 10px 88px; }
+      .product-popup { padding:0; }
+      .popup-content { width:100%; min-width:0; max-width:none; min-height:100vh; min-height:100dvh; margin:0; border:0; border-radius:0; padding:max(10px,env(safe-area-inset-top)) 10px calc(88px + env(safe-area-inset-bottom)); box-shadow:none; }
       .popup-main-grid { grid-template-columns:minmax(0,1fr); min-width:0; gap:6px; }
       .popup-media,.gallery-main-wrap { position:relative; width:100%; min-width:0; overflow:hidden; }
       .slider img { height:min(68vw,320px); min-height:220px; }
@@ -815,9 +852,9 @@
       /* Keep only the product search field pinned while scrolling. */
     .header { position:static!important; }
     .search-bar { position:sticky!important; top:0!important; }
-    .categories-bar { top:59px!important; border-bottom:1px solid #d0d5dd!important; }
-    body.has-top-searches .categories-bar { top:59px!important; }
-    body.has-top-searches.search-extras-open .categories-bar { top:95px!important; }
+    .categories-bar { top:var(--search-sticky-height,59px)!important; border-bottom:1px solid #d0d5dd!important; }
+    body.has-top-searches .categories-bar { top:var(--search-sticky-height,59px)!important; }
+    body.has-top-searches.search-extras-open .categories-bar { top:var(--search-sticky-height,59px)!important; }
     .shops-section.hub-nav-pinned { top:59px; }
     /* Use calm, regular-weight category chips. */
     .cat-btn { border-color:#d0d5dd!important; font-weight:500!important; }
@@ -836,6 +873,50 @@
     .feature-item i { color:#111827!important; }
     .products .card { border-color:#e3e5e8!important;box-shadow:0 1px 3px rgba(16,24,40,.045)!important; }
     .products .card:hover { border-color:#d7dbe1!important;box-shadow:0 5px 14px rgba(16,24,40,.10)!important; }
+/* Mobile product cards: larger photos and no enclosing card outline. */
+    .products .card{border:1px solid #e2e6ec!important;border-radius:12px!important;box-shadow:0 1px 4px rgba(16,24,40,.08)!important;background:#fff!important;padding:6px!important;justify-content:flex-start!important;gap:3px!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;}
+    .products .card:hover{border-color:#d4d9e0!important;box-shadow:0 7px 18px rgba(16,24,40,.14)!important;transform:translateY(-3px)!important;}
+    .products .card-image-wrap{aspect-ratio:1.28/1;border-radius:9px;background:#fff;}
+    .products .card-image-wrap>img{object-fit:cover!important;width:100%;height:100%;padding:0!important;border:0!important;border-radius:9px!important;background:#fff;}
+    .products .card .product-shop-meta{gap:5px;font-size:11px;margin-top:6px;}
+    .products .card .product-shop-meta>img:first-child{width:25px;height:25px;flex-basis:25px;}
+    .products .card h3{font-size:14px;min-height:2.5em;margin:5px 0;color:#172033;}
+    .products .card .price{font-size:17px;color:#f36b00;}
+@media (max-width:767px){
+      #productList{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important;gap:10px!important;}
+      #productList>.card{display:flex!important;min-width:0!important;height:auto!important;align-self:start!important;justify-content:flex-start!important;gap:4px!important;padding:6px!important;border:1px solid #e1e5eb!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 4px rgba(16,24,40,.08)!important;}
+      #productList>.card:hover{transform:translateY(-3px)!important;box-shadow:0 7px 16px rgba(16,24,40,.14)!important;}
+      #productList>.card>.card-image-wrap{position:relative!important;width:100%!important;height:clamp(170px,48vw,230px)!important;aspect-ratio:auto!important;flex:none!important;overflow:hidden!important;border-radius:8px!important;background:#f5f6f8!important;}
+      #productList>.card>.card-image-wrap>img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;padding:0!important;border:0!important;border-radius:8px!important;background:#fff!important;}
+      #productList>.card>.product-shop-meta{flex:none!important;margin:0!important;}
+      #productList>.card>h3{height:auto!important;min-height:2.4em!important;margin:1px 0!important;font-size:12px!important;line-height:1.25!important;font-weight:600!important;}
+      #productList>.card>.price-block{min-height:0!important;margin:0!important;}
+      #productList>.card .price{font-size:13px!important;line-height:1.25!important;color:#d95f00!important;font-weight:800!important;}
+    }
+.profile-badge:not(.guest) #profileNameDisplay{display:none!important;}
+    .profile-badge:not(.guest){gap:5px;padding:4px 7px!important;}
+    .profile-header-avatar{display:block;width:27px;height:27px;flex:0 0 27px;object-fit:cover;border-radius:50%;}
+    .profile-header-avatar[hidden]{display:none!important;}
+    .profile-header-chevron{font-size:9px;margin-left:1px;color:#667085;}
+    .header-actions>.header-shop-button,.header-actions>.header-account-button,.header-actions>.header-chat-button,.header-actions>.cart-btn,.header-actions>.support-button{border-width:1px!important;border-color:#e2e6ec!important;box-shadow:none!important;}
+    .header-actions>.header-chat-button{border-color:#f0bfd5!important;}
+/* Unified search and category navigation across screen sizes. */
+    .search-bar{margin:0!important;padding-bottom:8px!important;border-bottom:0!important;background:var(--card-bg)!important;}
+    .categories-bar{display:flex!important;align-items:stretch!important;gap:20px!important;min-height:44px!important;margin-top:0!important;margin-bottom:0!important;padding:0 3%!important;border-top:1px solid #f1f2f4!important;border-bottom:1px solid #e5e7eb!important;background:var(--card-bg)!important;}
+    .cat-btn{position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:0 4px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#667085!important;font-size:13px!important;font-weight:500!important;}
+    .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
+    .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
+    .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#f36b00;}
+@media (max-width:767px){
+    /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
+    #productList.products{display:block!important;column-count:2!important;column-gap:10px!important;}
+    #productList.products>.card{display:inline-flex!important;width:100%!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 10px!important;}
+    #productList.products>.card>.card-image-wrap{width:calc(100% + 12px)!important;margin:-6px -6px 0!important;border-radius:11px 11px 8px 8px!important;}
+    #productList.products>.card>.card-image-wrap>img{border-radius:inherit!important;}
+}
+@media (min-width:1024px){
+    #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
+}
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
@@ -904,7 +985,7 @@
         </div>
         <!-- Profile Badge with Click Dropdown for Switch/Logout -->
         <div class="profile-badge guest" onclick="handleProfileClick(event)" title="Guest: tap to sign in or create an account">
-          <i class="fa-solid fa-user-circle"></i> <span id="profileNameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
+          <i class="fa-solid fa-user-circle" id="profileHeaderFallback"></i><img id="profileHeaderAvatar" class="profile-header-avatar" alt="" hidden><span id="profileNameDisplay">User</span><i class="fa-solid fa-chevron-down profile-header-chevron" aria-hidden="true"></i>
         </div>
         
         <!-- Dropdown Menu for Logout / Switch Email -->
@@ -931,7 +1012,7 @@
     <!-- Search Bar -->
     <div class="search-bar">
       <div class="search-container">
-        <input type="text" id="searchInput" placeholder="🔍 Search products..." oninput="searchProducts()">
+        <input type="text" id="searchInput" placeholder="🔍 Search products...">
         <input type="file" id="photoSearchInput" class="photo-search-input" accept="image/*" onchange="searchProductsByPhoto(this.files[0]);this.value=''">
         <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
@@ -961,6 +1042,10 @@
       <div class="search-discovery-body">
         <div class="discovery-ai-note" id="discoveryAiNote" hidden>Shop AI checks product names, categories and descriptions to correct likely typing mistakes and suggest close matches from the catalog.</div>
         <div id="searchDiscoveryHome">
+          <section class="discovery-section" aria-labelledby="trendingSearchTitle">
+            <div class="discovery-section-heading"><h2 id="trendingSearchTitle">Trending Searches</h2></div>
+            <div class="trending-search-chips" id="trendingSearchList"></div>
+          </section>
           <section class="discovery-section" aria-labelledby="recentSearchTitle">
             <div class="discovery-section-heading"><h2 id="recentSearchTitle">Recent searches</h2><button type="button" onclick="clearRecentSearches()" aria-label="Clear recent searches" title="Clear recent searches"><i class="fa-regular fa-trash-can"></i></button></div>
             <div class="discovery-list" id="recentSearchList"></div>
@@ -979,6 +1064,12 @@
         </div>
         <section class="discovery-section" id="discoverySearchSection" hidden>
           <div class="discovery-section-heading"><h2 id="discoverySearchTitle">Search results</h2></div>
+          <div class="search-result-status" id="searchResultStatus" role="status" aria-live="polite"><span class="search-result-spinner" aria-hidden="true"></span><span id="searchResultStatusText"></span></div>
+          <div class="search-filter-panel" id="searchFilterPanel">
+            <div class="search-filter-top"><strong>Filter results</strong><button class="search-filter-reset" id="searchFilterReset" type="button">Reset</button></div>
+            <fieldset><legend>Price range</legend><div class="search-filter-values"><span id="searchMinPriceLabel">Rs 100</span><span id="searchMaxPriceLabel">Rs 10,000</span></div><div class="search-range-row"><span>Minimum</span><input id="searchMinPrice" type="range" min="100" max="10000" step="100" value="100" aria-label="Minimum price"></div><div class="search-range-row"><span>Maximum</span><input id="searchMaxPrice" type="range" min="100" max="10000" step="100" value="10000" aria-label="Maximum price"></div></fieldset>
+            <fieldset><legend>Category</legend><div class="search-filter-categories"><label class="search-filter-category"><input type="checkbox" value="tea" data-search-category> Tea</label><label class="search-filter-category"><input type="checkbox" value="cinnamon" data-search-category> Cinnamon</label><label class="search-filter-category"><input type="checkbox" value="fashion" data-search-category> Fashion</label><label class="search-filter-category"><input type="checkbox" value="electronics" data-search-category> Electronics</label></div></fieldset>
+          </div>
           <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
           <div class="search-brand-section" id="searchBrandSection" hidden><h3 class="search-brand-title">Brands</h3><div class="search-brand-rail" id="searchBrandRail"></div></div>
           <section class="search-brand-all-panel" id="searchBrandAllPanel" hidden aria-label="All matching brands"><h3 class="search-brand-all-heading"><button class="search-brand-all-back" type="button" onclick="closeAllSearchBrands()" aria-label="Back to results"><i class="fa-solid fa-arrow-left"></i></button>All brands</h3><div class="search-brand-all-grid" id="searchBrandAllGrid"></div></section>
@@ -1059,7 +1150,7 @@
         <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet',false,true);switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
         <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet',false,true);deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
         <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountModal()">Sign In / Create Account</button>
-        <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser();closeMobileSheet('mobileAccountSheet',false,true)">Log Out</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser()">Log Out</button>
       </section>
     </div>
 
@@ -1141,6 +1232,8 @@
           <h3>Customer comments</h3>
           <form class="review-form" onsubmit="submitProductReview(event)">
             <textarea id="reviewText" class="input-field" maxlength="1000" placeholder="Share your experience with this product…" required></textarea>
+            <div class="review-photo-input"><span>Add up to 2 photos</span><input id="reviewPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden><input id="reviewCameraPhotos" type="file" accept="image/*" capture="environment" hidden><button class="review-gallery-button" type="button" onclick="openReviewPhotoChooser()" aria-label="Choose a photo from camera or gallery"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Camera or gallery</span></button><span id="reviewPhotoHint">Photos are optional. Tap a thumbnail to view it larger.</span><dialog id="reviewPhotoChooser" class="review-photo-chooser"><form method="dialog"><h3>Add a photo</h3><button type="button" onclick="chooseReviewPhotoSource('camera')"><i class="fa-solid fa-camera"></i> Take a photo</button><button type="button" onclick="chooseReviewPhotoSource('gallery')"><i class="fa-regular fa-images"></i> Choose from gallery</button><button class="review-photo-cancel" value="cancel">Cancel</button></form></dialog></div>
+            <div class="review-photo-preview" id="reviewPhotoPreview" aria-live="polite"></div>
             <button class="btn" id="reviewSubmitBtn" type="submit" style="margin-top:0">Post comment</button>
             <div class="review-status" id="reviewStatus"></div>
           </form>
@@ -1349,7 +1442,7 @@
     function setShopperCurrency(countryCode){shopperCurrencyCode=currencyForCountry(countryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);});}
     function convertPrice(amount,fromCurrency){const from=String(fromCurrency||'LKR').toUpperCase(),to=shopperCurrencyCode||'LKR';if(from===to)return {amount:Number(amount),currency:from,converted:false};const rates=exchangeRatesUSD;if(!rates||!rates[from]||!rates[to])return {amount:Number(amount),currency:from,converted:false};return {amount:Number(amount)/Number(rates[from])*Number(rates[to]),currency:to,converted:true};}
     function formatCurrencyAmount(amount,currencyCode='LKR'){try{return new Intl.NumberFormat(undefined,{style:'currency',currency:currencyCode,maximumFractionDigits:2}).format(Number(amount)||0);}catch(_){return `${currencyCode} ${(Number(amount)||0).toLocaleString()}`;}}
-    function productMoney(amount,product){const result=convertPrice(amount,product?.currencyCode||'LKR');return `${result.converted?'≈ ':''}${formatCurrencyAmount(result.amount,result.currency)}`;}
+    function productMoney(amount,product){const shop=product?getShopForProduct(product):null,currency=String(product?.currencyCode||shop?.currencyCode||currencyForCountry(shop?.countryCode)||'LKR').toUpperCase(),value=Number(amount)||0;if(currency==='LKR')return `Rs ${value.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;return formatCurrencyAmount(value,currency);}
     try{shopperCountryCode=localStorage.getItem('alee-shopper-country')||'LK';}catch(_){}shopperCurrencyCode=currencyForCountry(shopperCountryCode);loadExchangeRates().then(rates=>{if(rates)displayProducts(activeProductArray,preserveProductOrder);return fetch('https://country.io/currency.json',{signal:AbortSignal.timeout(3500)}).then(response=>response.ok?response.json():null);}).then(mapping=>{if(mapping){for(const [country,currency] of Object.entries(mapping))if(!countryCurrencyCodes[country]&&exchangeRatesUSD?.[currency])countryCurrencyCodes[country]=currency;setShopperCurrency(shopperCountryCode);}}).catch(()=>{});
     function populateSellerCurrencies(selected='LKR'){const select=document.getElementById('sellerShopCurrency');if(!select)return;const codes=typeof Intl.supportedValuesOf==='function'?Intl.supportedValuesOf('currency'):['LKR','USD','EUR','GBP','INR','AUD','CAD','JPY','CNY','SGD','AED'];if(!codes.includes(selected))codes.push(selected);let names;try{names=new Intl.DisplayNames(['en'],{type:'currency'});}catch(_){}select.replaceChildren(...codes.sort().map(code=>new Option(`${code} · ${names?.of(code)||code}`,code)));select.value=selected;updateSellerCurrencyLabels();}
     function updateSellerCurrencyLabels(){const code=document.getElementById('sellerShopCurrency')?.value||'LKR';document.querySelectorAll('[data-currency-label]').forEach(node=>node.textContent=code);}
@@ -1410,6 +1503,9 @@
     function pushAppUiLayer(key,close,restore){if(appUiHistoryLayers.at(-1)?.key===key&&history.state?.aleeUiLayer===key)return;history.pushState({...history.state,aleeUiLayer:key},'',location.href);appUiHistoryLayers.push({key,close,restore});}
     function closeAppUiLayer(key,fromHistory=false,preserveHistory=false){if(fromHistory||preserveHistory)return;const top=appUiHistoryLayers.at(-1);if(top?.key===key&&history.state?.aleeUiLayer===key)history.back();}
     window.addEventListener('popstate',event=>{const destination=event.state?.aleeUiLayer||null;while(appUiHistoryLayers.length&&appUiHistoryLayers.at(-1).key!==destination){const layer=appUiHistoryLayers.pop();try{layer.close?.(true);}catch(error){console.warn('Could not close previous view',layer.key,error);}}const current=appUiHistoryLayers.at(-1);if(current?.key===destination)try{current.restore?.();}catch(error){console.warn('Could not restore previous view',current.key,error);}});
+    // Keep the home page as an in-app back stop; ask before the browser exits the site.
+    if(!history.state?.aleeRootBackStop){history.replaceState({...history.state,aleeRootBackStop:true,aleeRootBackTop:false},'',location.href);history.pushState({...history.state,aleeRootBackStop:true,aleeRootBackTop:true},'',location.href);}
+    window.addEventListener('popstate',event=>{if(event.state?.aleeRootBackStop&&!event.state?.aleeRootBackTop){if(sessionStorage.getItem('aleeExitConfirmedOnce')==='1'){sessionStorage.removeItem('aleeExitConfirmedOnce');history.pushState({...event.state,aleeRootBackTop:true},'',location.href);return;}if(confirm('Exit aleeshopping?')){sessionStorage.setItem('aleeExitConfirmedOnce','1');history.back();}else history.pushState({...event.state,aleeRootBackTop:true},'',location.href);}});
     function showAccountProfileSetup(){const overlay=document.getElementById('accountProfileSetup');overlay.classList.add('show');pushAppUiLayer('accountProfileSetup',fromHistory=>closeAccountProfileSetup(fromHistory),()=>overlay.classList.add('show'));}
     function closeAccountProfileSetup(fromHistory=false,preserveHistory=false){document.getElementById('accountProfileSetup').classList.remove('show');closeAppUiLayer('accountProfileSetup',fromHistory,preserveHistory);}
 
@@ -2132,7 +2228,11 @@
       }
       const badge = document.querySelector('.profile-badge');
       const label = user?.email || 'Guest';
-      document.getElementById('profileNameDisplay').innerText = user ? label : 'Guest';
+      document.getElementById('profileNameDisplay').textContent = user ? '' : 'Guest';
+      const headerAvatar=document.getElementById('profileHeaderAvatar'),headerFallback=document.getElementById('profileHeaderFallback'),avatarUrl=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||'';
+      if(headerAvatar){headerAvatar.hidden=!avatarUrl;if(avatarUrl)headerAvatar.src=avatarUrl;}
+      if(headerFallback)headerFallback.hidden=Boolean(avatarUrl);
+      badge.title=user?'Open account menu':'Guest: tap to sign in or create an account';
       document.getElementById('mobileAccountNavLabel').textContent = 'My Account';
       document.getElementById('mobileAccountNavLabel').title = user ? label : 'My Account';
       badge.classList.toggle('guest', !user);
@@ -2153,6 +2253,8 @@
     }
 
     async function logoutUser() {
+      if (!confirm('Are you sure you want to log out?')) return;
+      closeMobileSheet('mobileAccountSheet',false,true);
       if (supabaseClient) await supabaseClient.auth.signOut();
       setLoggedInUser(null);
       document.getElementById('profileDropdown').classList.remove('show');
@@ -2476,41 +2578,107 @@
       }
     });
 
+    let editingProductReview = null;
+    const productReviewBucket = 'product-comment-images';
+    const reviewHostEmails = ['aleeshopping2026@gmail.com','aleeshopping@gmail.com'];
+    function isReviewHost() { return reviewHostEmails.includes(String(activeUser?.email || '').toLowerCase()); }
+    function resetProductReviewForm() {
+      editingProductReview = null;
+      document.getElementById('reviewText').value = '';
+      document.getElementById('reviewPhotos').value = ''; document.getElementById('reviewCameraPhotos').value=''; document.getElementById('reviewPhotos')._selectedFiles=[]; document.getElementById('reviewCameraPhotos')._selectedFiles=[];
+      document.getElementById('reviewPhotoPreview').replaceChildren();
+      document.getElementById('reviewPhotoHint').textContent = 'Photos are optional. Tap a thumbnail to view it larger.';
+      document.getElementById('reviewSubmitBtn').textContent = 'Post comment';
+      document.getElementById('reviewCancelEdit')?.remove();
+    }
+function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?.showModal();}
+    function chooseReviewPhotoSource(source){document.getElementById('reviewPhotoChooser')?.close();document.getElementById(source==='camera'?'reviewCameraPhotos':'reviewPhotos')?.click();}
+    function handleReviewPhotoSelection(event){const files=[...event.target.files],remaining=2-(editingProductReview?.images.length||0);if(files.length>remaining){event.target.value='';document.getElementById('reviewPhotoHint').textContent=`Choose no more than ${remaining} additional photo${remaining===1?'':'s'}.`;document.getElementById('reviewPhotoPreview').replaceChildren();return;}if(files.some(file=>!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)||file.size>8*1024*1024)){event.target.value='';document.getElementById('reviewPhotoHint').textContent='Use JPG, PNG, WebP or GIF photos up to 8 MB each.';document.getElementById('reviewPhotoPreview').replaceChildren();return;}document.getElementById('reviewPhotos')._selectedFiles=event.target.id==='reviewPhotos'?files:[];document.getElementById('reviewCameraPhotos')._selectedFiles=event.target.id==='reviewCameraPhotos'?files:[];document.getElementById('reviewPhotoHint').textContent=`${files.length}/2 photos selected (up to 8 MB each).`;previewReviewPhotos(files);}
+    document.getElementById('reviewPhotos')?.addEventListener('change',handleReviewPhotoSelection);document.getElementById('reviewCameraPhotos')?.addEventListener('change',handleReviewPhotoSelection);
+    function getSelectedReviewPhotos(){return [...(document.getElementById('reviewPhotos')?._selectedFiles||[]),...(document.getElementById('reviewCameraPhotos')?._selectedFiles||[])];}
+    function previewReviewPhotos(files) {
+      const preview = document.getElementById('reviewPhotoPreview');
+      preview.replaceChildren();
+      [...files].slice(0,2).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const img = document.createElement('img'); img.alt = 'Photo preview'; img.src = URL.createObjectURL(file); preview.appendChild(img);
+      });
+    }
+    async function uploadReviewPhotos(files) {
+      const urls = [];
+      for (const file of files) {
+        const ext = ({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'})[file.type];
+        const path = `${activeUser.id}/${crypto.randomUUID()}.${ext}`;
+        const {error} = await supabaseClient.storage.from(productReviewBucket).upload(path,file,{contentType:file.type,upsert:false});
+        if (error) throw error;
+        urls.push(supabaseClient.storage.from(productReviewBucket).getPublicUrl(path).data.publicUrl);
+      }
+      return urls;
+    }
     async function submitProductReview(e) {
       e.preventDefault();
       const status = document.getElementById('reviewStatus');
       const text = document.getElementById('reviewText').value.trim();
+      const files = getSelectedReviewPhotos();
       if (!supabaseClient) { status.textContent = 'Online comments are not configured yet. See SETUP.txt.'; return; }
       if (!activeUser) { openAccountModal(); status.textContent = 'Sign in with your email to post a comment.'; return; }
       if (!activeGalleryProduct || !text) return;
-      const button = document.getElementById('reviewSubmitBtn');
-      button.disabled = true;
-      const { error } = await supabaseClient.from('product_reviews').insert({
-        product_id: activeGalleryProduct.id,
-        user_id: activeUser.id,
-        body: text
-      });
-      button.disabled = false;
-      if (error) { status.textContent = 'Could not post this comment. Please try again.'; return; }
-      document.getElementById('reviewText').value = '';
-      status.textContent = 'Your comment has been posted.';
-      loadProductReviews(activeGalleryProduct.id);
+      if (files.length > 2) { status.textContent = 'Choose up to 2 photos.'; return; }
+      const button = document.getElementById('reviewSubmitBtn'); button.disabled = true; status.textContent = files.length ? 'Uploading photos…' : 'Posting comment…';
+      try {
+        let imageUrls = editingProductReview ? [...editingProductReview.images] : [];
+        if (files.length) imageUrls = [...imageUrls, ...await uploadReviewPhotos(files)];
+        const payload = {body:text, images:imageUrls, updated_at:new Date().toISOString()};
+        const result = editingProductReview
+          ? await supabaseClient.from('product_reviews').update(payload).eq('id',editingProductReview.id).select('id').maybeSingle()
+          : await supabaseClient.from('product_reviews').insert({product_id:activeGalleryProduct.id,user_id:activeUser.id,...payload});
+        if (result.error) throw result.error;
+        const wasEditing = Boolean(editingProductReview); resetProductReviewForm();
+        status.textContent = wasEditing ? 'Your comment has been updated.' : 'Your comment has been posted.';
+        await loadProductReviews(activeGalleryProduct.id);
+      } catch(error) {
+        console.error('Product comment save failed:',error);
+        status.textContent = error?.message?.includes('product-comment-images') ? 'Photo upload is not set up yet. Run product-comments-schema.sql in Supabase.' : 'Could not save this comment. Check the comment setup in Supabase and try again.';
+      } finally { button.disabled = false; }
     }
-
+    function openReviewImage(src) {
+      let viewer=document.getElementById('reviewImageViewer');
+      if(!viewer){viewer=document.createElement('div');viewer.id='reviewImageViewer';viewer.className='review-image-viewer';viewer.innerHTML='<button type="button" aria-label="Close photo">×</button><img alt="Comment photo enlarged">';viewer.addEventListener('click',event=>{if(event.target===viewer||event.target.tagName==='BUTTON')viewer.classList.remove('open');});document.body.appendChild(viewer);}
+      viewer.querySelector('img').src=src;viewer.classList.add('open');
+    }
+    function startEditProductReview(review) {
+      editingProductReview={id:review.id,images:Array.isArray(review.images)?review.images:[]};
+      document.getElementById('reviewText').value=review.body||'';
+      document.getElementById('reviewPhotos').value='';document.getElementById('reviewCameraPhotos').value='';document.getElementById('reviewPhotos')._selectedFiles=[];document.getElementById('reviewCameraPhotos')._selectedFiles=[];
+      const preview=document.getElementById('reviewPhotoPreview');preview.replaceChildren();
+      editingProductReview.images.forEach(url=>{const img=document.createElement('img');img.alt='Attached comment photo';img.src=url;preview.appendChild(img);});
+      document.getElementById('reviewPhotoHint').textContent='Choose up to 2 additional photos, or leave empty to keep the current photos.';
+      document.getElementById('reviewSubmitBtn').textContent='Save changes';
+      if(!document.getElementById('reviewCancelEdit')){const cancel=document.createElement('button');cancel.id='reviewCancelEdit';cancel.type='button';cancel.className='popup-product-share';cancel.textContent='Cancel edit';cancel.onclick=resetProductReviewForm;document.getElementById('reviewSubmitBtn').after(cancel);}
+      document.getElementById('reviewText').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('reviewText').focus({preventScroll:true});
+    }
+    async function deleteProductReview(review) {
+      if(!confirm('Delete this comment?'))return;
+      const {error}=await supabaseClient.from('product_reviews').delete().eq('id',review.id);
+      if(error){document.getElementById('reviewStatus').textContent='Could not delete this comment. Check comment permissions in Supabase.';return;}
+      document.getElementById('reviewStatus').textContent='Comment deleted.';
+      if(activeGalleryProduct)await loadProductReviews(activeGalleryProduct.id);
+    }
     async function loadProductReviews(productId) {
-      const list = document.getElementById('reviewList');
-      list.innerHTML = '';
+      const list = document.getElementById('reviewList'); list.innerHTML = '';
       if (!supabaseClient) return;
-      const { data, error } = await supabaseClient.from('product_reviews').select('body,created_at').eq('product_id', productId).order('created_at', { ascending: false }).limit(50);
-      if (error) { document.getElementById('reviewStatus').textContent = 'Could not load comments right now.'; return; }
+      const { data, error } = await supabaseClient.from('product_reviews').select('id,user_id,body,images,created_at,updated_at').eq('product_id', productId).order('created_at', { ascending: false }).limit(50);
+      if (error) { document.getElementById('reviewStatus').textContent = error.code==='42703' ? 'Comment photos/editing need the latest product-comments-schema.sql migration.' : 'Could not load comments right now.'; return; }
       if (!data?.length) { list.innerHTML = '<p style="color:#888;font-size:12px">No comments yet. Be the first to comment.</p>'; return; }
       data.forEach(review => {
-        const card = document.createElement('article');
-        card.className = 'review-card';
-        const author = document.createElement('strong'); author.textContent = 'Customer';
-        const date = document.createElement('time'); date.textContent = new Date(review.created_at).toLocaleDateString();
-        const body = document.createElement('p'); body.textContent = review.body;
-        card.append(author, date, body); list.appendChild(card);
+        const card=document.createElement('article');card.className='review-card';
+        const author=document.createElement('strong');author.textContent=review.user_id===activeUser?.id?'You':'Customer';
+        const date=document.createElement('time');date.textContent=new Date(review.created_at).toLocaleDateString()+(review.updated_at&&review.updated_at!==review.created_at?' · edited':'');
+        const body=document.createElement('p');body.textContent=review.body||'';card.append(author,date,body);
+        const images=Array.isArray(review.images)?review.images.slice(0,2):[];
+        if(images.length){const photos=document.createElement('div');photos.className='review-photo-list';images.forEach(url=>{const button=document.createElement('button');button.type='button';button.className='review-photo-thumb';button.setAttribute('aria-label','View comment photo larger');const img=document.createElement('img');img.src=url;img.alt='Customer comment photo';img.loading='lazy';button.appendChild(img);button.addEventListener('click',()=>openReviewImage(url));photos.appendChild(button);});card.appendChild(photos);}
+        if(activeUser&&(review.user_id===activeUser.id||isReviewHost())){const actions=document.createElement('div');actions.className='review-actions';const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>startEditProductReview(review);const remove=document.createElement('button');remove.type='button';remove.textContent='Delete';remove.onclick=()=>deleteProductReview(review);actions.append(edit,remove);card.appendChild(actions);}
+        list.appendChild(card);
       });
     }
 
@@ -2692,6 +2860,22 @@
 
     document.addEventListener('wheel',event=>{
       if(event.ctrlKey)return;
+      const target=event.target instanceof Element?event.target:null;
+      const shelf=target?.closest('.recommendation-shelf');
+      if(!shelf)return;
+      const delta=Math.abs(event.deltaY)>Math.abs(event.deltaX)?event.deltaY:event.deltaX;
+      if(!delta)return;
+      const max=shelf.scrollWidth-shelf.clientWidth;
+      if(max<=1)return;
+      const next=Math.max(0,Math.min(max,shelf.scrollLeft+delta));
+      if(next===shelf.scrollLeft)return;
+      shelf.dataset.wheelBound='true';
+      event.preventDefault();
+      event.stopPropagation();
+      shelf.scrollLeft=next;
+    },{passive:false,capture:true});
+    document.addEventListener('wheel',event=>{
+      if(event.ctrlKey)return;
       const path=typeof event.composedPath==='function'?event.composedPath():[event.target];
       const strip=path.find(node=>node instanceof HTMLElement&&node.scrollWidth>node.clientWidth+1&&['auto','scroll'].includes(getComputedStyle(node).overflowX));
       if(!strip||strip.dataset.wheelBound==='true')return;
@@ -2703,8 +2887,19 @@
     },{passive:false});
 
     const searchBar = document.querySelector('.search-bar');
+    function syncSearchCategoryStickyHeight(){if(searchBar)document.documentElement.style.setProperty('--search-sticky-height',`${Math.ceil(searchBar.getBoundingClientRect().height)}px`);}
+    syncSearchCategoryStickyHeight();
+    if(searchBar&&'ResizeObserver'in window)new ResizeObserver(syncSearchCategoryStickyHeight).observe(searchBar);
+    window.addEventListener('resize',syncSearchCategoryStickyHeight,{passive:true});
     const searchContainer = document.querySelector('.search-container');
     const searchInput = document.getElementById('searchInput');
+    const defaultSearchHint='🔍 Search products...';
+    const rotatingSearchHints=[...new Set((products||[]).map(item=>String(item.name||'').trim()).filter(Boolean))].slice(0,12);
+    let rotatingSearchHintIndex=0;
+    searchInput.addEventListener('focus',()=>{searchInput.placeholder=defaultSearchHint;});
+    searchInput.addEventListener('input',()=>{if(searchInput.value.trim())searchInput.placeholder=defaultSearchHint;});
+    searchInput.addEventListener('blur',()=>{if(!searchInput.value.trim()&&rotatingSearchHints.length)searchInput.placeholder=`🔍 Search ${rotatingSearchHints[rotatingSearchHintIndex%rotatingSearchHints.length]}...`;});
+    if(rotatingSearchHints.length){searchInput.placeholder=`🔍 Search ${rotatingSearchHints[0]}...`;setInterval(()=>{const discovery=document.getElementById('searchDiscoveryOverlay'),isHome=!document.body.classList.contains('hub-section-open')&&!discovery?.classList.contains('show')&&searchInput.isConnected;if(!isHome||document.activeElement===searchInput||searchInput.value.trim())return;searchInput.placeholder=`🔍 Search ${rotatingSearchHints[rotatingSearchHintIndex%rotatingSearchHints.length]}...`;rotatingSearchHintIndex=(rotatingSearchHintIndex+1)%rotatingSearchHints.length;},3200);}
     const searchSuggestionBox=document.createElement('div');searchSuggestionBox.id='searchSuggestions';searchSuggestionBox.className='search-suggestions';searchSuggestionBox.setAttribute('role','listbox');searchInput.closest('.search-container').appendChild(searchSuggestionBox);let activeSuggestionIndex=-1;let suggestionRows=[];
     const searchDiscoveryOverlay = document.getElementById('searchDiscoveryOverlay');
     const searchDiscoveryMount = document.getElementById('searchDiscoveryMount');
@@ -2717,6 +2912,12 @@
     let activeSearchBrandId='';
     let showAllSearchBrandsView=false;
     let lastDiscoveryResultsQuery='';
+    let searchExecutionTimer=null;
+    let searchExecutionSequence=0;
+    let searchPriceFilterEnabled=false;
+    let searchPriceMinimum=100;
+    let searchPriceMaximum=10000;
+    const activeSearchCategoryFilters=new Set();
     function openSearchDiscovery(focusInput=true) {
       if (!searchDiscoveryOverlay.classList.contains('show')) {
         searchContainerHomeParent = searchContainer.parentNode;
@@ -2739,7 +2940,9 @@
       closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
-      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn'))openSearchDiscovery(false);
+      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn')){
+        openSearchDiscovery(event.target.closest('#searchInput')!==null);
+      }
     });
     function setSearchDiscoveryMode(mode) {
       searchDiscoveryMode=mode==='ai'?'ai':'products';
@@ -2754,9 +2957,9 @@
     }
     function hideSearchSuggestions(){searchSuggestionBox.classList.remove('show');searchSuggestionBox.replaceChildren();suggestionRows=[];activeSuggestionIndex=-1;}
     function renderSearchSuggestions(){const query=searchInput.value.trim();if(query.length<1){hideSearchSuggestions();return;}const productsFound=getProductSearchMatches(query).items.slice(0,6),terms=readSearchUserList('recent-searches',40).filter(term=>String(term).toLowerCase().includes(query.toLowerCase())&&String(term).toLowerCase()!==query.toLowerCase()).slice(0,3);suggestionRows=[...productsFound.map(product=>({kind:'product',label:product.name,meta:product.shopId?getShopForProduct(product)?.name||'Product':'Product' ,product})),...terms.map(term=>({kind:'search',label:String(term),meta:'Recent search'}))];if(!suggestionRows.length){hideSearchSuggestions();return;}searchSuggestionBox.replaceChildren();suggestionRows.forEach((row,index)=>{const button=document.createElement('button');button.type='button';button.className='search-suggestion';button.setAttribute('role','option');button.innerHTML=`<i class="fa-solid ${row.kind==='product'?'fa-magnifying-glass':'fa-clock-rotate-left'}"></i><span>${escapeHTML(row.label)}</span><small>${escapeHTML(row.meta)}</small>`;button.addEventListener('mousedown',event=>event.preventDefault());button.addEventListener('click',()=>{searchInput.value=row.kind==='product'?row.product.name:row.label;hideSearchSuggestions();submitProductSearch();});searchSuggestionBox.appendChild(button);});activeSuggestionIndex=-1;searchSuggestionBox.classList.add('show');}
-    searchInput.addEventListener('input',()=>{renderSearchSuggestions();if(searchDiscoveryOverlay.classList.contains('show')){if(searchInput.value.trim())renderDiscoverySearchResults(searchInput.value.trim());else{activeSearchBrandId='';showAllSearchBrandsView=false;renderSearchDiscovery();}}});
+    searchInput.addEventListener('input',()=>{renderSearchSuggestions();scheduleSearchProducts();});
     searchInput.addEventListener('blur',()=>setTimeout(hideSearchSuggestions,150));
-    searchInput.addEventListener('focus',()=>{openSearchDiscovery(false);renderSearchSuggestions();});
+    searchInput.addEventListener('focus',()=>{openSearchDiscovery(true);renderSearchSuggestions();});
     document.getElementById('searchInput').addEventListener('keydown', event => {
       if(event.key==='ArrowDown'&&suggestionRows.length){event.preventDefault();activeSuggestionIndex=(activeSuggestionIndex+1)%suggestionRows.length;searchSuggestionBox.querySelectorAll('.search-suggestion').forEach((button,index)=>button.classList.toggle('active',index===activeSuggestionIndex));return;}else if(event.key==='ArrowUp'&&suggestionRows.length){event.preventDefault();activeSuggestionIndex=(activeSuggestionIndex-1+suggestionRows.length)%suggestionRows.length;searchSuggestionBox.querySelectorAll('.search-suggestion').forEach((button,index)=>button.classList.toggle('active',index===activeSuggestionIndex));return;}else if(event.key==='Escape') {
         if(searchSuggestionBox.classList.contains('show')){event.preventDefault();hideSearchSuggestions();return;}
@@ -2860,7 +3063,7 @@
       filterCategory(categoryId, topButton || button);
       closeMobileSheet('mobileCategorySheet');
       document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Categories')));
-      document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
+      scrollToFilteredProducts();
     }
 
     function openMobileCategories() {
@@ -3021,8 +3224,11 @@
       const list=document.getElementById('recentSearchList'),items=readSearchUserList('recent-searches',40);
       list.replaceChildren();
       items.slice(0,recentSearchesExpanded?items.length:3).forEach(term=>{
+        const row=document.createElement('div');row.className='recent-search-row';
         const button=document.createElement('button');button.type='button';button.className='discovery-list-button';button.textContent=String(term);
-        button.addEventListener('click',()=>{searchInput.value=String(term);submitProductSearch();});list.appendChild(button);
+        button.addEventListener('click',()=>{searchInput.value=String(term);submitProductSearch();});
+        const remove=document.createElement('button');remove.type='button';remove.className='recent-search-delete';remove.title='Delete this search';remove.setAttribute('aria-label',`Delete recent search: ${String(term)}`);remove.innerHTML='<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+        remove.addEventListener('click',()=>removeRecentSearch(term));row.append(button,remove);list.appendChild(row);
       });
       if(!items.length){const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='Your recent searches will appear here.';list.appendChild(empty);}
       const more=document.getElementById('recentSearchMore');more.hidden=items.length<=3;more.textContent=recentSearchesExpanded?'Show less':'Show more';
@@ -3034,11 +3240,46 @@
       try{localStorage.setItem(searchUserStorageKey('recent-searches'),JSON.stringify(items.slice(0,40)));}catch(_){}
       renderRecentSearches();
     }
+    function removeRecentSearch(term) {
+      const normalized=String(term||'').toLocaleLowerCase();
+      const items=readSearchUserList('recent-searches',40).filter(item=>String(item).toLocaleLowerCase()!==normalized);
+      try{localStorage.setItem(searchUserStorageKey('recent-searches'),JSON.stringify(items));}catch(_){}
+      renderRecentSearches();
+    }
     function clearRecentSearches() {
       try{localStorage.removeItem(searchUserStorageKey('recent-searches'));}catch(_){}
       recentSearchesExpanded=false;renderRecentSearches();
     }
     function toggleRecentSearches() { recentSearchesExpanded=!recentSearchesExpanded;renderRecentSearches(); }
+    async function renderTrendingSearches() {
+      const list=document.getElementById('trendingSearchList');if(!list)return;list.replaceChildren();
+      const showEmpty=()=>{const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='තවම ජනප්‍රිය සෙවීම් නැහැ.';list.appendChild(empty);};
+      if(!supabaseClient){showEmpty();return;}
+      try{
+        const {data,error}=await supabaseClient.rpc('get_trending_search_terms',{p_days:30,p_limit:12});
+        if(error||!Array.isArray(data))throw error||new Error('Trending searches are unavailable.');
+        const terms=data.map(row=>String(row.search_term||'').trim()).filter(term=>term.length>=2);
+        if(!terms.length){showEmpty();return;}
+        terms.forEach(term=>{const button=document.createElement('button');button.type='button';button.className='trending-search-chip';button.textContent=term;button.addEventListener('click',()=>{searchInput.value=term;submitProductSearch();});list.appendChild(button);});
+      }catch(_){showEmpty();}
+    }
+    function formatSearchPrice(value) { return `Rs ${Number(value).toLocaleString('en-LK')}`; }
+    function updateSearchPriceLabels() {
+      document.getElementById('searchMinPriceLabel').textContent=formatSearchPrice(searchPriceMinimum);
+      document.getElementById('searchMaxPriceLabel').textContent=formatSearchPrice(searchPriceMaximum);
+    }
+    function initializeAdvancedSearchControls() {
+      const minInput=document.getElementById('searchMinPrice'),maxInput=document.getElementById('searchMaxPrice');
+      minInput.addEventListener('input',()=>{searchPriceMinimum=Math.min(Number(minInput.value),searchPriceMaximum);minInput.value=String(searchPriceMinimum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
+      maxInput.addEventListener('input',()=>{searchPriceMaximum=Math.max(Number(maxInput.value),searchPriceMinimum);maxInput.value=String(searchPriceMaximum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
+      document.querySelectorAll('[data-search-category]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)activeSearchCategoryFilters.add(input.value);else activeSearchCategoryFilters.delete(input.value);searchProducts();}));
+      document.getElementById('searchFilterReset').addEventListener('click',()=>{
+        searchPriceFilterEnabled=false;searchPriceMinimum=100;searchPriceMaximum=10000;minInput.value='100';maxInput.value='10000';
+        activeSearchCategoryFilters.clear();document.querySelectorAll('[data-search-category]').forEach(input=>input.checked=false);updateSearchPriceLabels();searchProducts();
+      });
+      updateSearchPriceLabels();
+    }
+    initializeAdvancedSearchControls();
     function getPersonalizedProductList() {
       let counts={};try{counts=JSON.parse(localStorage.getItem(forYouLocalKey(activeUser?.id))||'{}')||{};}catch(_){}
       const viewedOrder=new Map(readSearchUserList('product-history',60).map((id,index)=>[String(id),index]));return Object.entries(counts).map(([id,count])=>({product:products.find(item=>String(item.id)===String(id)),count:Number(count)||0,id:String(id)})).filter(row=>row.product&&row.count>0).sort((a,b)=>b.count-a.count||(viewedOrder.get(a.id)??999)-(viewedOrder.get(b.id)??999)).map(row=>row.product);
@@ -3081,7 +3322,7 @@
       } catch (_) {}
     }
     function renderSearchDiscovery() {
-      renderRecentSearches();renderSearchRecommendations();renderProductHistory();
+      renderRecentSearches();renderTrendingSearches();renderSearchRecommendations();renderProductHistory();
       if(searchInput.value.trim())renderDiscoverySearchResults(searchInput.value.trim());
     }
     async function recordPersonalProductView(productId) {
@@ -3141,6 +3382,15 @@
         }
         if(!error)await loadProductSearchTrends();
       } catch (_) {}
+    }
+
+    async function recordSearchTerm(searchTerm) {
+      const term=String(searchTerm||'').trim().replace(/\s+/g,' ');
+      if(term.length<2||term.length>80||!supabaseClient)return;
+      try{
+        const {error}=await supabaseClient.from('search_term_events').insert({search_term:term});
+        if(!error)renderTrendingSearches();
+      }catch(_){}
     }
 
     renderCategoryBar();
@@ -3288,11 +3538,45 @@
       if (allButton) filterCategory('all', allButton);
     }
 
+    const searchSynonymGroups=[
+      ['tea','teas','tee','තේ'],['cinnamon','cinnamun','cinnamomum','කුරුඳු','kurundu','kurundhu'],
+      ['kurakkan','කුරක්කන්','ragi','finger millet'],['fashion','clothing','apparel','ඇඳුම්','ඇදුම්'],
+      ['electronics','electronic','gadget','device','ඉලෙක්ට්‍රොනික','ගැජට්'],
+      ['sale','discount','11.11','වට්ටම්']
+    ];
+    const searchCategoryTerms={
+      tea:['tea','teas','තේ','ceylon tea','black tea','green tea','herbal tea'],
+      cinnamon:['cinnamon','cinnamomum','කුරුඳු','kurundu','kurundhu'],
+      fashion:['fashion','clothing','apparel','dress','shirt','saree','wear','ඇඳුම්','ඇදුම්','වස්ත්‍ර'],
+      electronics:['electronics','electronic','gadget','device','phone','mobile','speaker','earbud','watch','charger','cable','ඉලෙක්ට්‍රොනික','ගැජට්','දුරකථන']
+    };
+    const productSearchIndexCache=new WeakMap();
     function normalizedSearchWords(value) {
-      return String(value||'').toLowerCase().replace(/[^a-z0-9\u0D80-\u0DFF]+/gi,' ').trim().split(/\s+/).filter(Boolean);
+      return String(value||'').toLocaleLowerCase().replace(/[^a-z0-9\u0D80-\u0DFF]+/gi,' ').trim().split(/\s+/).filter(Boolean);
+    }
+    function expandSearchWord(word) {
+      const group=searchSynonymGroups.find(items=>items.includes(word));
+      return group||[word];
     }
     function productSearchCorpus(product) {
-      return `${product.name||''} ${product.category||''} ${product.categoryLabel||product.category_label||''} ${product.desc||product.description||''} ${(product.features||[]).join(' ')}`.toLowerCase();
+      return `${product.name||''} ${product.category||''} ${product.categoryLabel||product.category_label||''} ${product.desc||product.description||''} ${(product.features||[]).join(' ')}`.toLocaleLowerCase();
+    }
+    function getProductSearchIndexEntry(product) {
+      let entry=productSearchIndexCache.get(product);
+      if(!entry){const corpus=productSearchCorpus(product);entry={corpus,words:normalizedSearchWords(corpus)};productSearchIndexCache.set(product,entry);}
+      return entry;
+    }
+    function searchProductMatchesCategory(product,category) {
+      const corpus=`${productSearchCorpus(product)} ${getProductCategoryId(product)}`;
+      return (searchCategoryTerms[category]||[]).some(term=>corpus.includes(term));
+    }
+    function applySearchFilters(items) {
+      return (items||[]).filter(product=>{
+        const price=Number(product.price)||0;
+        if(searchPriceFilterEnabled&&(price<searchPriceMinimum||price>searchPriceMaximum))return false;
+        if(activeSearchCategoryFilters.size&&!Array.from(activeSearchCategoryFilters).some(category=>searchProductMatchesCategory(product,category)))return false;
+        return true;
+      });
     }
     function editDistance(left,right) {
       if(left===right)return 0;
@@ -3311,51 +3595,73 @@
     function getProductSearchMatches(term) {
       const queryWords=normalizedSearchWords(term);
       if(!queryWords.length)return {items:products,corrected:false};
-      const exact=products.filter(product=>{
-        const corpus=productSearchCorpus(product);
-        return corpus.includes(term.toLowerCase())||queryWords.every(word=>corpus.includes(word));
-      });
+      const queryGroups=queryWords.map(expandSearchWord);
+      const indexedProducts=products.map(product=>({product,...getProductSearchIndexEntry(product)}));
+      const exact=indexedProducts.filter(entry=>{
+        return entry.corpus.includes(String(term).toLocaleLowerCase())||queryGroups.every(group=>group.some(word=>entry.words.some(candidate=>candidate.includes(word)||word.includes(candidate))));
+      }).map(entry=>entry.product);
       if(exact.length)return {items:exact,corrected:false};
-      if(queryWords.some(word=>word.length<3))return {items:[],corrected:false};
-      const ranked=products.map((product,index)=>{
-        const words=normalizedSearchWords(productSearchCorpus(product));let score=0;
-        for(const queryWord of queryWords){
+      if(queryWords.some(word=>word.length<3&&!expandSearchWord(word).some(alias=>alias.length>=3)))return {items:[],corrected:false};
+      const ranked=indexedProducts.map(({product,words},index)=>{
+        let score=0;
+        for(const aliases of queryGroups){
           let best=3;
-          for(const word of words){if(word.includes(queryWord)||queryWord.includes(word)){best=0;break;}best=Math.min(best,editDistance(queryWord,word));}
-          const maxDistance=queryWord.length<=5?1:2;if(best>maxDistance)return null;
-          score+=1-best/Math.max(queryWord.length,1);
+          let bestLength=1;
+          for(const queryWord of aliases){
+            for(const word of words){if(word.includes(queryWord)||queryWord.includes(word)){best=0;bestLength=queryWord.length;break;}const distance=editDistance(queryWord,word);if(distance<best){best=distance;bestLength=queryWord.length;}}
+            if(best===0)break;
+          }
+          const maxDistance=bestLength<=5?1:2;if(best>maxDistance)return null;
+          score+=1-best/Math.max(bestLength,1);
         }
         return {product,index,score:score/queryWords.length};
-      }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,8);
+      }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index);
       return {items:ranked.map(row=>row.product),corrected:ranked.length>0};
     }
-    function renderDiscoverySearchResults(term,matchedResult=null) {
+    function setSearchResultLoading(isLoading) {
+      const status=document.getElementById('searchResultStatus'),text=document.getElementById('searchResultStatusText');
+      status.classList.toggle('is-loading',Boolean(isLoading));status.setAttribute('aria-busy',String(Boolean(isLoading)));
+      if(isLoading)text.textContent='සොයමින්...';
+    }
+    function scheduleSearchProducts() {
+      clearTimeout(searchExecutionTimer);const sequence=++searchExecutionSequence,query=searchInput.value.trim();
+      if(searchDiscoveryOverlay.classList.contains('show')&&query){
+        const section=document.getElementById('discoverySearchSection');section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=true;searchDiscoveryOverlay.classList.add('results-mode');setSearchResultLoading(true);
+      }
+      searchExecutionTimer=setTimeout(()=>{if(sequence===searchExecutionSequence)searchProducts();},90);
+    }
+    function renderDiscoverySearchResults(term,matchedResult=null,elapsedMs=0) {
       const query=String(term||'').trim(),section=document.getElementById('discoverySearchSection');
-      if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;searchDiscoveryOverlay.classList.remove('results-mode');showAllSearchBrandsView=false;activeSearchBrandId='';lastDiscoveryResultsQuery='';return;}
+      if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;searchDiscoveryOverlay.classList.remove('results-mode');showAllSearchBrandsView=false;activeSearchBrandId='';lastDiscoveryResultsQuery='';setSearchResultLoading(false);document.getElementById('searchResultStatusText').textContent='';return;}
       if(query.toLocaleLowerCase()!==lastDiscoveryResultsQuery.toLocaleLowerCase()){activeSearchBrandId='';showAllSearchBrandsView=false;lastDiscoveryResultsQuery=query;}
       const result=matchedResult||getProductSearchMatches(query);
       section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=true;searchDiscoveryOverlay.classList.add('results-mode');
       document.getElementById('discoverySearchTitle').textContent=result.corrected?'Discover similar products':'Search results';
-      renderSearchBrandStrip(result.items||[]);
+      const filteredItems=applySearchFilters(result.items||[]);
+      const visibleItems=activeSearchBrandId?filteredItems.filter(product=>String(getShopForProduct(product)?.id||'')===activeSearchBrandId):filteredItems;
+      setSearchResultLoading(false);
+      document.getElementById('searchResultStatusText').textContent=`බඩු ${visibleItems.length}ක් හමු වුණා · ${Math.max(0,Number(elapsedMs)||0).toFixed(1)} ms`;
+      renderSearchBrandStrip(filteredItems);
       const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=true;
       const allPanel=document.getElementById('searchBrandAllPanel'),resultGrid=document.getElementById('discoverySearchResults');
-      if(showAllSearchBrandsView){document.getElementById('searchBrandSection').hidden=true;allPanel.hidden=false;resultGrid.hidden=true;renderAllSearchBrands(result.items||[]);return;}
+      if(showAllSearchBrandsView){document.getElementById('searchBrandSection').hidden=true;allPanel.hidden=false;resultGrid.hidden=true;renderAllSearchBrands(filteredItems);return;}
       allPanel.hidden=true;resultGrid.hidden=false;
-      const visibleItems=activeSearchBrandId?result.items.filter(product=>String(getShopForProduct(product).id)===activeSearchBrandId):result.items;resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No matching products for this brand.</p>';
+      resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">ගැළපෙන බඩු හමු වුණේ නැහැ.</p>';
     }
     function getSearchBrands(items){const brands=[],seen=new Set();(items||[]).forEach(product=>{const shop=getShopForProduct(product);if(!shop?.id||seen.has(String(shop.id)))return;seen.add(String(shop.id));brands.push(shop);});return brands;}
     function renderSearchBrandStrip(items){const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=getSearchBrands(items);section.hidden=!brands.length;if(!brands.length){activeSearchBrandId='';return;}const allButton='<button class="search-brand-tile all-brands-tile" type="button" data-all-search-brands><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>All brands · '+brands.length+'</span></button>';rail.innerHTML=allButton+brands.map(shop=>'<button class="search-brand-tile '+(activeSearchBrandId===String(shop.id)?'active':'')+'" type="button" data-search-brand="'+escapeHTML(shop.id)+'"><img loading="lazy" src="'+escapeHTML(shop.logo||'assets/alee-logo.png')+'" alt=""><span>'+escapeHTML(shop.name||'Shop')+'</span></button>').join('');rail.querySelector('[data-all-search-brands]')?.addEventListener('click',()=>{showAllSearchBrandsView=true;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.querySelectorAll('[data-search-brand]').forEach(button=>button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}));}
     function renderAllSearchBrands(items){const grid=document.getElementById('searchBrandAllGrid'),brands=getSearchBrands(items);grid.replaceChildren();const addBrand=(shop,id='')=>{const button=document.createElement('button');button.type='button';button.className='search-brand-all-card';const image=document.createElement('img');image.src=shop?.logo||'assets/alee-logo.png';image.alt='';image.onerror=()=>{image.src='assets/alee-logo.png';};const label=document.createElement('span');label.textContent=shop?.name||'All brands';button.append(image,label);button.addEventListener('click',()=>{activeSearchBrandId=id;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});grid.append(button);};addBrand(null,'');brands.forEach(shop=>addBrand(shop,String(shop.id)));}
     function closeAllSearchBrands(){showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}
     function searchProducts(submitted=false) {
+      clearTimeout(searchExecutionTimer);searchExecutionSequence++;
       photoSearchRunId++;
       document.getElementById('photoSearchNotice').classList.remove('show');
       const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();if(!searchTerm)activeSearchBrandId='';
       syncSearchClearButton();
-      const searchResult=getProductSearchMatches(searchTerm),matches=searchResult.items;
+      const startedAt=performance.now(),searchResult=getProductSearchMatches(searchTerm),matches=applySearchFilters(searchResult.items),elapsedMs=performance.now()-startedAt;
       displayProducts(matches);
       if(submitted&&!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
-      if(searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,searchResult);
+      if(searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,{...searchResult,items:matches},elapsedMs);
       clearTimeout(searchLogTimer);
       if(searchTerm.length>=2)searchLogTimer=setTimeout(()=>recordProductSearch(searchTerm,matches),700);
     }
@@ -3364,6 +3670,7 @@
       if(!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
       saveRecentSearch(searchInput.value);
       searchProducts(true);
+      recordSearchTerm(searchInput.value);
       document.getElementById('searchInput').blur();
     }
 
@@ -3415,6 +3722,7 @@
       });
     }
 
+    function scrollToFilteredProducts(){requestAnimationFrame(()=>{const list=document.getElementById('productList'),search=document.querySelector('.search-bar'),bar=document.getElementById('categoryBar');if(!list)return;const fixedHeight=(search?.getBoundingClientRect().height||0)+(bar?.getBoundingClientRect().height||0)+8,target=list.getBoundingClientRect().top+window.scrollY-fixedHeight;window.scrollTo({top:Math.max(0,target),behavior:'smooth'});});}
     function filterCategory(category, btn) {
       closeHubSection();
       photoSearchRunId++;
@@ -3432,6 +3740,7 @@
         const productCategory = getProductCategoryId(product);
         return group ? leafIds.includes(productCategory) : legacyTabs[category] ? legacyLeafIds.includes(productCategory) : productCategory === category;
       }));
+      scrollToFilteredProducts();
     }
 
     function syncSearchClearButton() {
@@ -3819,7 +4128,8 @@
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
-<script src="chat.js?v=20261102-instant-inbox"></script>
+<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111"></script>
+<script src="chat.js?v=20261111-onesignal-push"></script>
 </body>
 </html>
 
