@@ -76,3 +76,5 @@ Ad requests and verified shop badge (2026-11-04): Any signed-in ALEE profile can
 
 
 Product comment photos and moderation (2026-11-05): after database-schema.sql, run product-comments-schema.sql as its own Supabase SQL Editor query. It adds up to two public thumbnails per comment, edit/delete rights for the comment author, and moderation rights for the two ALEE host accounts. Each photo is limited to 8 MB (JPG, PNG, WebP or GIF). Product comments work in the product detail popup; tap a thumbnail to open the full-size image. Banner Ad requests are available to any signed-in ALEE profile; a shop is optional. A buyer's profile name/mobile are included when available, and the host still reviews and publishes the request manually. Shop verified badges now use the smaller 16 px profile size.
+
+Web Push Notifications: මෙම සකස් කිරීමේ ගොනු සහ OneSignal, Supabase SQL, රහස් යතුරු, සේවා කේතය යැවීම, GitHub Pages සහ iPhone/Android පියවර සඳහා ALEE-WEB-PUSH-SETUP-SI.txt බලන්න. OneSignal App ID එක alee-push-config.js තුළ පුරවන්න. OneSignal REST API Key එක කිසිවිටෙක වෙබ් ගොනුවකට නොදමා Supabase Edge Function Secrets තුළ පමණක් තබන්න.
