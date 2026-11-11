@@ -226,17 +226,18 @@
     .search-brand-title { margin:0 0 8px; color:var(--text-white); font-size:13px; font-weight:800; }
     .search-brand-rail { display:flex; gap:10px; overflow-x:auto; padding:3px 2px 9px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
     .search-brand-tile { display:grid; justify-items:center; align-content:start; gap:7px; flex:0 0 100px; min-height:112px; padding:8px; border:1px solid #e2e6ec; border-radius:15px; background:#fff; color:#202939; font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; box-shadow:0 3px 12px #1018280a; }
-    .search-brand-tile img { width:76px; height:68px; object-fit:contain; padding:5px; border:1px solid #edf0f4; border-radius:11px; background:#fff; }
+    .search-brand-tile img { width:68px; height:68px; object-fit:contain; padding:5px; border:1px solid #edf0f4; border-radius:50%; background:#fff; }
     .search-brand-tile.active { border-color:#f36b00; box-shadow:0 0 0 2px #ff690022,0 5px 14px #10182810; }
     .search-brand-tile.all-brands-tile{align-content:center;gap:7px;border-color:#f6c99f;background:linear-gradient(145deg,#fffaf4,#fff);color:#9c4509;font-weight:800}
-    .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:14px;background:#fff0dc;color:#e86b00;font-size:22px}
+    .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#fff0dc;color:#e86b00;font-size:22px}
     .search-brand-all-panel{margin:4px 0 16px;padding:14px;border:1px solid #e5e9ef;border-radius:16px;background:#fff}
     .search-brand-all-heading{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#172033;font-size:16px}
     .search-brand-all-back{display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid #e3e7ed;border-radius:50%;background:#fff;color:#344054;cursor:pointer}
     .search-brand-all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
     .search-brand-all-card{display:grid;justify-items:center;gap:8px;min-height:120px;padding:10px;border:1px solid #e5e9ef;border-radius:14px;background:#fff;color:#172033;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
     .search-brand-all-card:hover{border-color:#f36b00;box-shadow:0 5px 15px #10182810}
-    .search-brand-all-card img{width:82px;height:72px;object-fit:contain;padding:5px;border:1px solid #edf0f4;border-radius:12px;background:#fff}
+    .search-brand-all-card img{width:68px;height:68px;object-fit:contain;padding:5px;border:1px solid #edf0f4;border-radius:50%;background:#fff}
+    .search-discovery-overlay #discoverySearchResults .price{color:#111827!important;}
     .search-discovery-overlay.results-mode #discoverySearchTitle,.search-discovery-overlay.results-mode .discovery-search-hint{display:none!important}
     .search-brand-tile span { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .discovery-section { margin:14px 0 24px; }
@@ -1068,7 +1069,6 @@
           <div class="search-filter-panel" id="searchFilterPanel">
             <div class="search-filter-top"><strong>Filter results</strong><button class="search-filter-reset" id="searchFilterReset" type="button">Reset</button></div>
             <fieldset><legend>Price range</legend><div class="search-filter-values"><span id="searchMinPriceLabel">Rs 100</span><span id="searchMaxPriceLabel">Rs 10,000</span></div><div class="search-range-row"><span>Minimum</span><input id="searchMinPrice" type="range" min="100" max="10000" step="100" value="100" aria-label="Minimum price"></div><div class="search-range-row"><span>Maximum</span><input id="searchMaxPrice" type="range" min="100" max="10000" step="100" value="10000" aria-label="Maximum price"></div></fieldset>
-            <fieldset><legend>Category</legend><div class="search-filter-categories"><label class="search-filter-category"><input type="checkbox" value="tea" data-search-category> Tea</label><label class="search-filter-category"><input type="checkbox" value="cinnamon" data-search-category> Cinnamon</label><label class="search-filter-category"><input type="checkbox" value="fashion" data-search-category> Fashion</label><label class="search-filter-category"><input type="checkbox" value="electronics" data-search-category> Electronics</label></div></fieldset>
           </div>
           <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
           <div class="search-brand-section" id="searchBrandSection" hidden><h3 class="search-brand-title">Brands</h3><div class="search-brand-rail" id="searchBrandRail"></div></div>
@@ -2917,7 +2917,6 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     let searchPriceFilterEnabled=false;
     let searchPriceMinimum=100;
     let searchPriceMaximum=10000;
-    const activeSearchCategoryFilters=new Set();
     function openSearchDiscovery(focusInput=true) {
       if (!searchDiscoveryOverlay.classList.contains('show')) {
         searchContainerHomeParent = searchContainer.parentNode;
@@ -3272,10 +3271,9 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       const minInput=document.getElementById('searchMinPrice'),maxInput=document.getElementById('searchMaxPrice');
       minInput.addEventListener('input',()=>{searchPriceMinimum=Math.min(Number(minInput.value),searchPriceMaximum);minInput.value=String(searchPriceMinimum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
       maxInput.addEventListener('input',()=>{searchPriceMaximum=Math.max(Number(maxInput.value),searchPriceMinimum);maxInput.value=String(searchPriceMaximum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
-      document.querySelectorAll('[data-search-category]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)activeSearchCategoryFilters.add(input.value);else activeSearchCategoryFilters.delete(input.value);searchProducts();}));
       document.getElementById('searchFilterReset').addEventListener('click',()=>{
         searchPriceFilterEnabled=false;searchPriceMinimum=100;searchPriceMaximum=10000;minInput.value='100';maxInput.value='10000';
-        activeSearchCategoryFilters.clear();document.querySelectorAll('[data-search-category]').forEach(input=>input.checked=false);updateSearchPriceLabels();searchProducts();
+        updateSearchPriceLabels();searchProducts();
       });
       updateSearchPriceLabels();
     }
@@ -3544,12 +3542,6 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       ['electronics','electronic','gadget','device','ඉලෙක්ට්‍රොනික','ගැජට්'],
       ['sale','discount','11.11','වට්ටම්']
     ];
-    const searchCategoryTerms={
-      tea:['tea','teas','තේ','ceylon tea','black tea','green tea','herbal tea'],
-      cinnamon:['cinnamon','cinnamomum','කුරුඳු','kurundu','kurundhu'],
-      fashion:['fashion','clothing','apparel','dress','shirt','saree','wear','ඇඳුම්','ඇදුම්','වස්ත්‍ර'],
-      electronics:['electronics','electronic','gadget','device','phone','mobile','speaker','earbud','watch','charger','cable','ඉලෙක්ට්‍රොනික','ගැජට්','දුරකථන']
-    };
     const productSearchIndexCache=new WeakMap();
     function normalizedSearchWords(value) {
       return String(value||'').toLocaleLowerCase().replace(/[^a-z0-9\u0D80-\u0DFF]+/gi,' ').trim().split(/\s+/).filter(Boolean);
@@ -3566,15 +3558,10 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       if(!entry){const corpus=productSearchCorpus(product);entry={corpus,words:normalizedSearchWords(corpus)};productSearchIndexCache.set(product,entry);}
       return entry;
     }
-    function searchProductMatchesCategory(product,category) {
-      const corpus=`${productSearchCorpus(product)} ${getProductCategoryId(product)}`;
-      return (searchCategoryTerms[category]||[]).some(term=>corpus.includes(term));
-    }
     function applySearchFilters(items) {
       return (items||[]).filter(product=>{
         const price=Number(product.price)||0;
         if(searchPriceFilterEnabled&&(price<searchPriceMinimum||price>searchPriceMaximum))return false;
-        if(activeSearchCategoryFilters.size&&!Array.from(activeSearchCategoryFilters).some(category=>searchProductMatchesCategory(product,category)))return false;
         return true;
       });
     }
@@ -3640,7 +3627,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       const filteredItems=applySearchFilters(result.items||[]);
       const visibleItems=activeSearchBrandId?filteredItems.filter(product=>String(getShopForProduct(product)?.id||'')===activeSearchBrandId):filteredItems;
       setSearchResultLoading(false);
-      document.getElementById('searchResultStatusText').textContent=`බඩු ${visibleItems.length}ක් හමු වුණා · ${Math.max(0,Number(elapsedMs)||0).toFixed(1)} ms`;
+      document.getElementById('searchResultStatusText').textContent=`${visibleItems.length} ${visibleItems.length===1?'item':'items'} found · ${Math.max(0,Number(elapsedMs)||0).toFixed(1)} ms`;
       renderSearchBrandStrip(filteredItems);
       const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=true;
       const allPanel=document.getElementById('searchBrandAllPanel'),resultGrid=document.getElementById('discoverySearchResults');
