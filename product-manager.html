@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>භාණ්ඩ එකතු කිරීම — aleeshopping</title>
+<title>Add Products — aleeshopping</title>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="products.js"></script>
 <script src="categories.js"></script>
@@ -12,21 +12,21 @@
 </style>
 </head>
 <body><main class="wrap">
-<h1>aleeshopping — අලුත් භාණ්ඩයක් එක් කරන්න</h1>
-<p class="help">මෙහි විස්තර පුරවා පින්තූර තෝරන්න. “ZIP ගොනුව හදන්න” ඔබා ලැබෙන ZIP ගොනුව වෙබ් අඩවියේ ගොනු තිබෙන ෆෝල්ඩරයට උපුටා දමන්න. ඉන්පසු වෙබ් අඩවිය නැවත පළ කරන්න. කේතය ටයිප් කරන්න ඕනෑ නැහැ.</p>
-<p><a href="shop-manager.html">අලුත් shop එකක් එක් කිරීමට මෙතැන ඔබන්න</a></p>
+<h1>aleeshopping — Add a product</h1>
+<p class="help">Enter the details and choose photos. Select “Create ZIP” and extract the downloaded ZIP into the folder containing your website files. Then publish the website again. No coding is required.</p>
+<p><a href="shop-manager.html">Click here to add a shop</a></p>
 <p id="catalogCount" class="muted"></p>
 <form id="productForm">
-<div class="grid"><label>භාණ්ඩයේ නම<input name="name" required></label><label>මිල (රුපියල්)<input name="price" type="number" min="1" required></label></div>
-<label>කාණ්ඩය<select name="category" id="categorySelect" required></select><span class="muted">ප්‍රධාන කාණ්ඩය විවෘත කර භාණ්ඩයට ගැළපෙන උපකාණ්ඩය තෝරන්න.</span></label>
-<label>විකුණන shop එක<select name="shopId" id="shopSelect"></select><span class="muted">අලුත් shop එකක් එක් කරන්න නම් shop-manager.html භාවිත කරන්න.</span></label>
-<label>හංවඩු මිල තිබේ නම්<input name="oldPrice" type="number" min="0"></label>
-<label>භාණ්ඩය ගැන විස්තර<textarea name="desc"></textarea></label>
-<label>විශේෂාංග (කොමාවෙන් වෙන් කරන්න)<input name="features" placeholder="උදා: Cotton රෙදි, Machine wash"></label>
-<label style="display:flex;align-items:center;gap:10px"><input name="freeShipping" type="checkbox" style="width:auto;transform:scale(1.2)"> නොමිලේ බෙදාහැරීම (භාණ්ඩයේ කාඩ්පතේ කහ පැහැති “FREE SHIPPING” ලකුණ පෙන්වන්න)</label>
-<div class="grid"><label>පාට (කොමාවෙන් වෙන් කරන්න)<input name="colors" placeholder="උදා: කළු, සුදු, නිල්"></label><label>ප්‍රමාණ (කොමාවෙන් වෙන් කරන්න)<input name="sizes" placeholder="උදා: S, M, L, XL"></label></div>
-<label>භාණ්ඩයේ පින්තූර (20ක් දක්වා)<input name="photos" type="file" accept="image/*" multiple required><span class="muted">ඇඳුම් සඳහා පාට සහ ප්‍රමාණ දාන්න. එවිට මිලදී ගන්නා අයට ඒවා තෝරන්න පුළුවන්.</span></label>
-<button type="submit">ZIP ගොනුව හදන්න</button><div id="status" class="status" role="status"></div>
+<div class="grid"><label>Product name<input name="name" required></label><label>Price (LKR)<input name="price" type="number" min="1" required></label></div>
+<label>Category<select name="category" id="categorySelect" required></select><span class="muted">Open a main category and choose a matching subcategory.</span></label>
+<label>Shop selling this product<select name="shopId" id="shopSelect"></select><span class="muted">To add a new shop, use shop-manager.html.</span></label>
+<label>Old price, if applicable<input name="oldPrice" type="number" min="0"></label>
+<label>Product description<textarea name="desc"></textarea></label>
+<label>Features (separate with commas)<input name="features" placeholder="e.g. Cotton fabric, machine washable"></label>
+<label style="display:flex;align-items:center;gap:10px"><input name="freeShipping" type="checkbox" style="width:auto;transform:scale(1.2)"> Free shipping (show the yellow “FREE SHIPPING” label on the product card)</label>
+<div class="grid"><label>Colors (separate with commas)<input name="colors" placeholder="e.g. Black, white, blue"></label><label>Sizes (separate with commas)<input name="sizes" placeholder="e.g. S, M, L, XL"></label></div>
+<label>Product photos (up to 20)<input name="photos" type="file" accept="image/*" multiple required><span class="muted">Add colors and sizes for clothing so shoppers can choose them.</span></label>
+<button type="submit">Create ZIP</button><div id="status" class="status" role="status"></div>
 </form>
 </main>
 <script>
@@ -36,11 +36,11 @@ const categoryGroups = Array.isArray(window.aleeCategoryGroups) ? window.aleeCat
 const catalogTabs = Array.isArray(window.aleeCatalogTabs) ? window.aleeCatalogTabs : [];
 const shops = Array.isArray(window.aleeShops) ? [...window.aleeShops] : [];
 const categorySelect = document.getElementById('categorySelect');
-categorySelect.appendChild(new Option('කාණ්ඩයක් තෝරන්න',''));
+categorySelect.appendChild(new Option('Select a category',''));
 categoryGroups.forEach(group => { const optionGroup=document.createElement('optgroup'); optionGroup.label=group.label; categories.filter(category=>category.parent===group.id).forEach(category=>optionGroup.appendChild(new Option(category.label,category.id))); categorySelect.appendChild(optionGroup); });
 const shopSelect = document.getElementById('shopSelect');
 shops.forEach(shop => { const option=document.createElement('option'); option.value=shop.id; option.textContent=shop.name; shopSelect.appendChild(option); });
-document.getElementById('catalogCount').textContent = `දැනට ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
+document.getElementById('catalogCount').textContent = `${catalog.length} products are currently in the file.`;
 const splitList = value => value.split(',').map(item => item.trim()).filter(Boolean);
 const slug = value => value.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase() || 'product';
 document.getElementById('productForm').addEventListener('submit', async event => {
@@ -49,13 +49,13 @@ document.getElementById('productForm').addEventListener('submit', async event =>
  const form = event.currentTarget;
  const data = new FormData(form);
  const photos = [...form.elements.photos.files];
- if (photos.length > 20) { status.textContent = 'පින්තූර 20ක් දක්වා පමණක් තෝරන්න.'; return; }
- if (!window.JSZip) { status.textContent = 'ZIP සකස් කිරීමේ සේවාව සම්බන්ධ වුණේ නැහැ. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කර නැවත උත්සාහ කරන්න.'; return; }
- status.textContent = 'ZIP ගොනුව සකස් කරනවා…';
+ if (photos.length > 20) { status.textContent = 'Choose no more than 20 photos.'; return; }
+ if (!window.JSZip) { status.textContent = 'Could not connect to the ZIP service. Check your internet connection and try again.'; return; }
+ status.textContent = 'Creating ZIP…';
  try {
   const nextId = Math.max(0, ...catalog.map(item => Number(item.id) || 0)) + 1;
   const categoryId = String(data.get('category') || '');
-  if (!categories.some(category => category.id === categoryId)) { status.textContent='භාණ්ඩයට අදාළ උපකාණ්ඩයක් තෝරන්න.'; return; }
+  if (!categories.some(category => category.id === categoryId)) { status.textContent='Choose a subcategory for this product.'; return; }
   const imagePaths = [];
   const zip = new JSZip();
   for (let index=0; index<photos.length; index++) {
@@ -83,10 +83,10 @@ document.getElementById('productForm').addEventListener('submit', async event =>
   const link = document.createElement('a'); link.href=url; link.download=`alee-product-${nextId}.zip`; link.click();
   setTimeout(()=>URL.revokeObjectURL(url), 30000);
   catalog.push(product);
-  document.getElementById('catalogCount').textContent = `දැන් ගොනුවේ භාණ්ඩ ${catalog.length}ක් ඇත.`;
+  document.getElementById('catalogCount').textContent = `${catalog.length} products are now in the file.`;
   form.reset();
-  status.textContent = 'ZIP ගොනුව බාගත වුණා. එය වෙබ් අඩවියේ මුල් ෆෝල්ඩරයට උපුටා දමා නැවත පළ කරන්න.';
- } catch (error) { console.error(error); status.textContent = 'ZIP ගොනුව හදන්න බැරි වුණා. නැවත උත්සාහ කරන්න.'; }
+  status.textContent = 'ZIP downloaded. Extract it into the website root folder and publish the site again.';
+ } catch (error) { console.error(error); status.textContent = 'Could not create the ZIP. Please try again.'; }
 });
 </script></body></html>
 

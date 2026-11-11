@@ -90,7 +90,7 @@
 
     .header { background: var(--card-bg); padding: 10px 3%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; border-bottom: 1px solid var(--glass-border); z-index: 100; }
     .logo-area { display: flex; align-items: center; gap: 8px; }
-    .logo-img { height: 32px; width: 32px; border-radius: 6px; object-fit: cover; border: 1px solid var(--glass-border); }
+    .logo-img { height: 32px; width: 32px; border-radius: 50%; object-fit: cover; border: 0; }
     .logo-text { font-size: 18px; font-weight: 800; color: var(--light-leaf); }
     .logo-text span { color: var(--text-white); }
     
@@ -225,18 +225,18 @@
     .search-brand-section { margin:0 0 14px; }
     .search-brand-title { margin:0 0 8px; color:var(--text-white); font-size:13px; font-weight:800; }
     .search-brand-rail { display:flex; gap:10px; overflow-x:auto; padding:3px 2px 9px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
-    .search-brand-tile { display:grid; justify-items:center; align-content:start; gap:7px; flex:0 0 100px; min-height:112px; padding:8px; border:1px solid #e2e6ec; border-radius:15px; background:#fff; color:#202939; font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; box-shadow:0 3px 12px #1018280a; }
-    .search-brand-tile img { width:76px; height:68px; object-fit:contain; padding:5px; border:1px solid #edf0f4; border-radius:11px; background:#fff; }
-    .search-brand-tile.active { border-color:#f36b00; box-shadow:0 0 0 2px #ff690022,0 5px 14px #10182810; }
-    .search-brand-tile.all-brands-tile{align-content:center;gap:7px;border-color:#f6c99f;background:linear-gradient(145deg,#fffaf4,#fff);color:#9c4509;font-weight:800}
-    .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:14px;background:#fff0dc;color:#e86b00;font-size:22px}
+    .search-brand-tile { display:grid; justify-items:center; align-content:start; gap:7px; flex:0 0 100px; min-height:112px; padding:8px; border:0; border-radius:15px; background:transparent; color:#202939; font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; box-shadow:none; }
+    .search-brand-tile img { width:68px; height:68px; object-fit:contain; padding:3px; border:0; border-radius:50%; background:transparent; }
+    .search-brand-tile.active { background:#fff2e5; color:#9c4509; }
+    .search-brand-tile.all-brands-tile{align-content:center;gap:7px;border:0;background:transparent;color:#9c4509;font-weight:800}
+    .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#fff0dc;color:#e86b00;font-size:22px}
     .search-brand-all-panel{margin:4px 0 16px;padding:14px;border:1px solid #e5e9ef;border-radius:16px;background:#fff}
     .search-brand-all-heading{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#172033;font-size:16px}
     .search-brand-all-back{display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid #e3e7ed;border-radius:50%;background:#fff;color:#344054;cursor:pointer}
     .search-brand-all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
-    .search-brand-all-card{display:grid;justify-items:center;gap:8px;min-height:120px;padding:10px;border:1px solid #e5e9ef;border-radius:14px;background:#fff;color:#172033;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
-    .search-brand-all-card:hover{border-color:#f36b00;box-shadow:0 5px 15px #10182810}
-    .search-brand-all-card img{width:82px;height:72px;object-fit:contain;padding:5px;border:1px solid #edf0f4;border-radius:12px;background:#fff}
+    .search-brand-all-card{display:grid;justify-items:center;gap:8px;min-height:120px;padding:10px;border:0;border-radius:14px;background:transparent;color:#172033;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+    .search-brand-all-card:hover{background:#fff7ed}
+    .search-brand-all-card img{width:72px;height:72px;object-fit:contain;padding:3px;border:0;border-radius:50%;background:transparent}
     .search-discovery-overlay.results-mode #discoverySearchTitle,.search-discovery-overlay.results-mode .discovery-search-hint{display:none!important}
     .search-brand-tile span { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .discovery-section { margin:14px 0 24px; }
@@ -251,7 +251,7 @@
     .recent-search-row .discovery-list-button { flex:1; min-width:0; border-bottom:0; }
     .recent-search-delete { flex:0 0 36px; width:36px; height:36px; border:0; border-radius:50%; background:transparent; color:#858b95; cursor:pointer; }
     .recent-search-delete:hover { background:#f0443818; color:#d92d20; }
-    .search-filter-panel { display:grid; gap:14px; margin:12px 0; padding:14px; border:1px solid var(--glass-border); border-radius:14px; background:var(--bg-dark); }
+    .search-filter-panel { display:grid; gap:14px; margin:12px 0; padding:0; border:0; border-radius:0; background:transparent; }
     .search-filter-top,.search-filter-values { display:flex; align-items:center; justify-content:space-between; gap:10px; }
     .search-filter-top strong { color:var(--text-white); font-size:14px; }
     .search-filter-reset { border:0; background:transparent; color:var(--light-leaf); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
@@ -259,7 +259,7 @@
     .search-filter-panel legend { margin-bottom:8px; color:var(--text-white); font-size:12px; font-weight:800; }
     .search-filter-values { color:var(--text-white); font-size:12px; font-weight:700; }
     .search-range-row { display:grid; grid-template-columns:60px minmax(0,1fr); align-items:center; gap:8px; margin-top:6px; color:#858b95; font-size:11px; }
-    .search-range-row input { width:100%; min-height:22px; accent-color:var(--light-leaf); }
+    .search-range-row input { width:100%; min-height:22px; accent-color:#ff6900; }
     .search-filter-categories { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
     .search-filter-category { display:flex; align-items:center; gap:7px; min-width:0; color:var(--text-white); font-size:12px; }
     .search-filter-category input { width:16px; height:16px; accent-color:var(--light-leaf); }
@@ -326,7 +326,7 @@
     .shops-strip { display:flex; flex:1 1 auto; gap:12px; min-width:0; overflow-x:auto; padding:2px 1px 7px; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scroll-behavior:smooth; touch-action:pan-x; }
     .shop-tile { flex:0 0 82px; min-height:104px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:5px 3px; color:var(--text-white); text-decoration:none; text-align:center; background:transparent; border:0; border-radius:12px; transition:transform .18s; }
     .shop-tile:hover { transform:translateY(-2px); border-color:#ec4899; box-shadow:0 7px 18px rgba(190,24,93,.14); }
-    .shop-tile img { width:64px; height:64px; object-fit:cover; border-radius:50%; border:3px solid var(--shop-accent,#ff6900); background:#fff; box-shadow:0 2px 10px color-mix(in srgb,var(--shop-accent,#ff6900) 24%,transparent); }
+    .shop-tile img { width:64px; height:64px; object-fit:cover; border-radius:50%; border:0; background:#fff; box-shadow:none; }
     .shop-tile strong { width:100%; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
     .shop-tile strong .verified-badge { width:20px;height:20px;display:inline-block;vertical-align:middle;margin-left:3px;object-fit:contain;border:0;border-radius:0;background:transparent;box-shadow:none; }
     .shop-rating { display:flex; justify-content:center; gap:1px; color:#d1d5db; font-size:9px; line-height:1; white-space:nowrap; }
@@ -402,13 +402,13 @@
     .site-loader span { color:#ff6900; font-size:13px; font-weight:800; }
     @keyframes aleeLoaderSpin { to { transform:rotate(360deg); } }
     .product-shop-meta { display:flex; align-items:center; gap:6px; min-width:0; margin:2px 0 1px; color:var(--text-white); font-size:10px; font-weight:700; }
-    .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:0; border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .product-shop-meta .verified-badge { width:12px;height:12px;flex:0 0 12px;object-fit:contain;border:0;border-radius:0;background:transparent; }
     .popup-shop-meta { display:flex; align-items:center; gap:8px; padding:2px 2px 8px; color:var(--light-leaf); font-size:12px; font-weight:800; }
     .popup-shop-meta a { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; cursor:pointer; }
     .popup-shop-meta a:hover span { text-decoration:underline; }
-    .popup-shop-meta img { width:34px; height:34px; object-fit:cover; border:2px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .popup-shop-meta img { width:34px; height:34px; object-fit:cover; border:0; border-radius:50%; background:#fff; }
     .mobile-sheet-shop-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
     @media (max-width: 700px) {
       body { padding-bottom:calc(66px + env(safe-area-inset-bottom)); }
@@ -444,7 +444,7 @@
     .card:hover { border-color: #20242b; transform: translateY(-3px); box-shadow: 0 8px 18px rgba(16,24,40,.16); }
     .card-image-wrap { position:relative; aspect-ratio:1; overflow:hidden; border-radius:9px; background:#fff; }
     .card-image-wrap > img { display:block; }
-    .card .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; padding:0; object-fit:cover; border:1px solid var(--shop-accent,var(--light-leaf)); border-radius:50%; background:#fff; }
+    .card .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; padding:0; object-fit:cover; border:0; border-radius:50%; background:#fff; }
     .free-shipping-badge { display:inline-flex; align-items:center; gap:4px; padding:5px 8px; border-radius:6px; background:#facc15; border:1px solid #eab308; color:#422006; font-size:10px; line-height:1.15; font-weight:900; box-shadow:0 2px 7px #0002; }
     .card-image-wrap .free-shipping-badge { position:absolute; top:7px; left:7px; }
     .card img { width: 100%; height: 145px; object-fit: contain; border-radius: 9px; background: #fff; padding: 8px; border: 1px solid rgba(255,105,0,.10); }
@@ -744,7 +744,7 @@
     @media(max-width:560px){.seller-reel-manager-card{grid-template-columns:1fr 1.2fr;gap:9px;padding:9px}.seller-reel-manager-card video{max-height:210px}.seller-reel-manager-actions .seller-action-button{min-height:36px;padding:7px 9px;font-size:11px}}
     .seller-shop-link { display:block; margin:8px 0; color:#93c5fd; overflow-wrap:anywhere; }
     .seller-logo-wrap { position:relative; width:88px; margin:4px 0 12px; }
-    .seller-logo-preview { display:block; width:88px; height:88px; object-fit:cover; border:3px solid var(--light-leaf); border-radius:22px; background:#fff; }
+    .seller-logo-preview { display:block; width:88px; height:88px; object-fit:cover; border:0; border-radius:50%; background:#fff; box-shadow:none; }
     .seller-logo-edit { position:absolute; right:-7px; bottom:-7px; width:34px; height:34px; border:2px solid var(--card-bg); border-radius:50%; background:var(--light-leaf); color:#fff; cursor:pointer; }
     .seller-social-links { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
     .seller-social-links a { color:#93c5fd; overflow-wrap:anywhere; }
@@ -1067,7 +1067,7 @@
           <div class="search-result-status" id="searchResultStatus" role="status" aria-live="polite"><span class="search-result-spinner" aria-hidden="true"></span><span id="searchResultStatusText"></span></div>
           <div class="search-filter-panel" id="searchFilterPanel">
             <div class="search-filter-top"><strong>Filter results</strong><button class="search-filter-reset" id="searchFilterReset" type="button">Reset</button></div>
-            <fieldset><legend>Price range</legend><div class="search-filter-values"><span id="searchMinPriceLabel">Rs 100</span><span id="searchMaxPriceLabel">Rs 10,000</span></div><div class="search-range-row"><span>Minimum</span><input id="searchMinPrice" type="range" min="100" max="10000" step="100" value="100" aria-label="Minimum price"></div><div class="search-range-row"><span>Maximum</span><input id="searchMaxPrice" type="range" min="100" max="10000" step="100" value="10000" aria-label="Maximum price"></div></fieldset>
+            <fieldset><legend>Price range</legend><div class="search-filter-values"><span id="searchMinPriceLabel">Rs 0</span><span id="searchMaxPriceLabel">Rs 0</span></div><div class="search-range-row"><span>Minimum</span><input id="searchMinPrice" type="range" min="0" max="0" step="1" value="0" aria-label="Minimum price"></div><div class="search-range-row"><span>Maximum</span><input id="searchMaxPrice" type="range" min="0" max="0" step="1" value="0" aria-label="Maximum price"></div></fieldset>
             <fieldset><legend>Category</legend><div class="search-filter-categories"><label class="search-filter-category"><input type="checkbox" value="tea" data-search-category> Tea</label><label class="search-filter-category"><input type="checkbox" value="cinnamon" data-search-category> Cinnamon</label><label class="search-filter-category"><input type="checkbox" value="fashion" data-search-category> Fashion</label><label class="search-filter-category"><input type="checkbox" value="electronics" data-search-category> Electronics</label></div></fieldset>
           </div>
           <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
@@ -2926,8 +2926,10 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     let searchExecutionTimer=null;
     let searchExecutionSequence=0;
     let searchPriceFilterEnabled=false;
-    let searchPriceMinimum=100;
-    let searchPriceMaximum=10000;
+    let searchPriceMinimum=0;
+    let searchPriceMaximum=0;
+    let searchPriceBoundsMinimum=0;
+    let searchPriceBoundsMaximum=0;
     const activeSearchCategoryFilters=new Set();
     function openSearchDiscovery(focusInput=true) {
       if (!searchDiscoveryOverlay.classList.contains('show')) {
@@ -3264,7 +3266,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     function toggleRecentSearches() { recentSearchesExpanded=!recentSearchesExpanded;renderRecentSearches(); }
     async function renderTrendingSearches() {
       const list=document.getElementById('trendingSearchList');if(!list)return;list.replaceChildren();
-      const showEmpty=()=>{const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='තවම ජනප්‍රිය සෙවීම් නැහැ.';list.appendChild(empty);};
+      const showEmpty=()=>{const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='No popular searches yet.';list.appendChild(empty);};
       if(!supabaseClient){showEmpty();return;}
       try{
         const {data,error}=await supabaseClient.rpc('get_trending_search_terms',{p_days:30,p_limit:12});
@@ -3279,13 +3281,22 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       document.getElementById('searchMinPriceLabel').textContent=formatSearchPrice(searchPriceMinimum);
       document.getElementById('searchMaxPriceLabel').textContent=formatSearchPrice(searchPriceMaximum);
     }
+    function updateSearchPriceBounds(items) {
+      const prices=(items||[]).map(product=>Number(product.price)).filter(price=>Number.isFinite(price)&&price>0);
+      searchPriceBoundsMinimum=prices.length?Math.floor(prices.reduce((minimum,price)=>Math.min(minimum,price),Infinity)):0;
+      searchPriceBoundsMaximum=prices.length?Math.ceil(prices.reduce((maximum,price)=>Math.max(maximum,price),-Infinity)):0;
+      const minInput=document.getElementById('searchMinPrice'),maxInput=document.getElementById('searchMaxPrice');
+      [minInput,maxInput].forEach(input=>{input.min=String(searchPriceBoundsMinimum);input.max=String(searchPriceBoundsMaximum);input.disabled=!prices.length||searchPriceBoundsMinimum===searchPriceBoundsMaximum;});
+      searchPriceMinimum=searchPriceBoundsMinimum;searchPriceMaximum=searchPriceBoundsMaximum;searchPriceFilterEnabled=false;
+      minInput.value=String(searchPriceMinimum);maxInput.value=String(searchPriceMaximum);updateSearchPriceLabels();
+    }
     function initializeAdvancedSearchControls() {
       const minInput=document.getElementById('searchMinPrice'),maxInput=document.getElementById('searchMaxPrice');
       minInput.addEventListener('input',()=>{searchPriceMinimum=Math.min(Number(minInput.value),searchPriceMaximum);minInput.value=String(searchPriceMinimum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
       maxInput.addEventListener('input',()=>{searchPriceMaximum=Math.max(Number(maxInput.value),searchPriceMinimum);maxInput.value=String(searchPriceMaximum);searchPriceFilterEnabled=true;updateSearchPriceLabels();searchProducts();});
       document.querySelectorAll('[data-search-category]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)activeSearchCategoryFilters.add(input.value);else activeSearchCategoryFilters.delete(input.value);searchProducts();}));
       document.getElementById('searchFilterReset').addEventListener('click',()=>{
-        searchPriceFilterEnabled=false;searchPriceMinimum=100;searchPriceMaximum=10000;minInput.value='100';maxInput.value='10000';
+        searchPriceFilterEnabled=false;searchPriceMinimum=searchPriceBoundsMinimum;searchPriceMaximum=searchPriceBoundsMaximum;minInput.value=String(searchPriceMinimum);maxInput.value=String(searchPriceMaximum);
         activeSearchCategoryFilters.clear();document.querySelectorAll('[data-search-category]').forEach(input=>input.checked=false);updateSearchPriceLabels();searchProducts();
       });
       updateSearchPriceLabels();
@@ -3632,7 +3643,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     function setSearchResultLoading(isLoading) {
       const status=document.getElementById('searchResultStatus'),text=document.getElementById('searchResultStatusText');
       status.classList.toggle('is-loading',Boolean(isLoading));status.setAttribute('aria-busy',String(Boolean(isLoading)));
-      if(isLoading)text.textContent='සොයමින්...';
+      if(isLoading)text.textContent='Searching…';
     }
     function scheduleSearchProducts() {
       clearTimeout(searchExecutionTimer);const sequence=++searchExecutionSequence,query=searchInput.value.trim();
@@ -3644,20 +3655,22 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     function renderDiscoverySearchResults(term,matchedResult=null,elapsedMs=0) {
       const query=String(term||'').trim(),section=document.getElementById('discoverySearchSection');
       if(!query){section.hidden=true;document.getElementById('searchDiscoveryHome').hidden=false;searchDiscoveryOverlay.classList.remove('results-mode');showAllSearchBrandsView=false;activeSearchBrandId='';lastDiscoveryResultsQuery='';setSearchResultLoading(false);document.getElementById('searchResultStatusText').textContent='';return;}
-      if(query.toLocaleLowerCase()!==lastDiscoveryResultsQuery.toLocaleLowerCase()){activeSearchBrandId='';showAllSearchBrandsView=false;lastDiscoveryResultsQuery=query;}
+      const queryChanged=query.toLocaleLowerCase()!==lastDiscoveryResultsQuery.toLocaleLowerCase();
+      if(queryChanged){activeSearchBrandId='';showAllSearchBrandsView=false;lastDiscoveryResultsQuery=query;}
       const result=matchedResult||getProductSearchMatches(query);
+      if(queryChanged){const priceItems=activeSearchCategoryFilters.size?(result.items||[]).filter(product=>Array.from(activeSearchCategoryFilters).some(category=>searchProductMatchesCategory(product,category))):(result.items||[]);updateSearchPriceBounds(priceItems);}
       section.hidden=false;document.getElementById('searchDiscoveryHome').hidden=true;searchDiscoveryOverlay.classList.add('results-mode');
       document.getElementById('discoverySearchTitle').textContent=result.corrected?'Discover similar products':'Search results';
       const filteredItems=applySearchFilters(result.items||[]);
       const visibleItems=activeSearchBrandId?filteredItems.filter(product=>String(getShopForProduct(product)?.id||'')===activeSearchBrandId):filteredItems;
       setSearchResultLoading(false);
-      document.getElementById('searchResultStatusText').textContent=`බඩු ${visibleItems.length}ක් හමු වුණා · ${Math.max(0,Number(elapsedMs)||0).toFixed(1)} ms`;
+      document.getElementById('searchResultStatusText').textContent=`${visibleItems.length} items found · ${Math.max(0,Number(elapsedMs)||0).toFixed(1)} ms`;
       renderSearchBrandStrip(filteredItems);
       const hint=document.getElementById('discoverySearchHint');hint.replaceChildren();hint.hidden=true;
       const allPanel=document.getElementById('searchBrandAllPanel'),resultGrid=document.getElementById('discoverySearchResults');
       if(showAllSearchBrandsView){document.getElementById('searchBrandSection').hidden=true;allPanel.hidden=false;resultGrid.hidden=true;renderAllSearchBrands(filteredItems);return;}
       allPanel.hidden=true;resultGrid.hidden=false;
-      resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">ගැළපෙන බඩු හමු වුණේ නැහැ.</p>';
+      resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No matching items found.</p>';
     }
     function getSearchBrands(items){const brands=[],seen=new Set();(items||[]).forEach(product=>{const shop=getShopForProduct(product);if(!shop?.id||seen.has(String(shop.id)))return;seen.add(String(shop.id));brands.push(shop);});return brands;}
     function renderSearchBrandStrip(items){const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=getSearchBrands(items);section.hidden=!brands.length;if(!brands.length){activeSearchBrandId='';return;}const allButton='<button class="search-brand-tile all-brands-tile" type="button" data-all-search-brands><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>All brands · '+brands.length+'</span></button>';rail.innerHTML=allButton+brands.map(shop=>'<button class="search-brand-tile '+(activeSearchBrandId===String(shop.id)?'active':'')+'" type="button" data-search-brand="'+escapeHTML(shop.id)+'"><img loading="lazy" src="'+escapeHTML(shop.logo||'assets/alee-logo.png')+'" alt=""><span>'+escapeHTML(shop.name||'Shop')+'</span></button>').join('');rail.querySelector('[data-all-search-brands]')?.addEventListener('click',()=>{showAllSearchBrandsView=true;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.querySelectorAll('[data-search-brand]').forEach(button=>button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}));}
@@ -3672,7 +3685,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       const startedAt=performance.now(),searchResult=getProductSearchMatches(searchTerm),matches=applySearchFilters(searchResult.items),elapsedMs=performance.now()-startedAt;
       displayProducts(matches);
       if(submitted&&!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
-      if(searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,{...searchResult,items:matches},elapsedMs);
+      if(searchDiscoveryOverlay.classList.contains('show'))renderDiscoverySearchResults(searchTerm,searchResult,elapsedMs);
       clearTimeout(searchLogTimer);
       if(searchTerm.length>=2)searchLogTimer=setTimeout(()=>recordProductSearch(searchTerm,matches),700);
     }
@@ -3842,7 +3855,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
       document.getElementById('popupShopMeta').style.setProperty('--shop-accent', shopAccent);
       const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
-      document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="${escapeHTML(shop.name)} shop එකට යන්න"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified ? '<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">' : ''}</a>`;
+      document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="Visit the ${escapeHTML(shop.name)} shop"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified ? '<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">' : ''}</a>`;
       document.getElementById('popupShippingStatus').innerHTML = product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : 'Island-wide';
       document.getElementById('popupSoldCount').textContent=`${Number(product.soldCount||0).toLocaleString()} sold`;
       document.getElementById("popupPrice").innerHTML = productPriceMarkup(product);

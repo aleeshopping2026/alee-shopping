@@ -10,7 +10,7 @@
     const card = document.createElement("article");
     card.className = "card";
     card.id = "aleeNotificationManagerCard";
-    card.innerHTML = '<h2>දැනුම්දීම් පාලකය</h2><p>අවසර දුන් පාරිභෝගිකයන්ට දීමනා සහ පණිවිඩ දැනුම්දීම් යවන්න.</p><a class="button" href="notification-manager.html">පාලකය විවෘත කරන්න</a>';
+    card.innerHTML = '<h2>Notification Manager</h2><p>Send offers and message notifications to customers who have allowed notifications.</p><a class="button" href="notification-manager.html">Open manager</a>';
     grid.appendChild(card);
   };
   addLink().catch((error) => console.warn("Could not show the notification manager link.", error));
