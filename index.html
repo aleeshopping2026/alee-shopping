@@ -639,6 +639,17 @@
   
     .cart-toast { position: fixed; z-index: 10000; top: 22px; left: 50%; transform: translate(-50%, -14px); padding: 13px 22px; border-radius: 10px; background: #16803c; color: #fff; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,.22); opacity: 0; transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
     .cart-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .added-cart-toast { position:fixed; z-index:20000; top:max(10px,env(safe-area-inset-top)); left:50%; width:min(520px,calc(100vw - 24px)); min-height:72px; box-sizing:border-box; display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid #e7e9ed; border-radius:15px; background:#fff; color:#111827; box-shadow:0 10px 32px rgba(16,24,40,.2); opacity:0; visibility:hidden; transform:translate(-50%,-12px); transition:opacity .18s ease,transform .18s ease,visibility .18s ease; }
+    .added-cart-toast.show { opacity:1; visibility:visible; transform:translate(-50%,0); }
+    .added-cart-toast-visual { position:relative; flex:0 0 50px; width:50px; height:50px; }
+    .added-cart-toast-photo { display:block; width:50px; height:50px; object-fit:cover; border-radius:10px; background:#f3f4f6; }
+    .added-cart-toast-check { position:absolute; right:-6px; bottom:-5px; color:#fff; background:#16a34a; border:2px solid #fff; border-radius:50%; font-size:19px; line-height:1; }
+    .added-cart-toast-copy { flex:1; min-width:0; display:flex; flex-direction:column; gap:4px; }
+    .added-cart-toast-title { color:#111827; font-size:14px; line-height:1.2; font-weight:800; }
+    .added-cart-toast-item { overflow:hidden; color:#667085; font-size:12px; line-height:1.25; text-overflow:ellipsis; white-space:nowrap; }
+    .added-cart-toast-button { flex:0 0 auto; min-height:40px; padding:0 14px; border:0; border-radius:10px; background:#f36b00; color:#fff; font:inherit; font-size:12px; font-weight:800; white-space:nowrap; cursor:pointer; }
+    .added-cart-toast-button:hover { background:#df5f00; }
+    @media(max-width:420px) { .added-cart-toast { gap:9px; padding:9px; } .added-cart-toast-button { min-height:38px; padding:0 10px; font-size:11px; } .added-cart-toast-title { font-size:13px; } .added-cart-toast-item { font-size:11px; } }
     .order-confirm-dialog { width:min(92vw,430px); margin:auto; padding:28px; border:1px solid #f4d28c; border-radius:22px; color:#172033; background:#fff; box-shadow:0 25px 80px #0005; text-align:center; }
     .order-confirm-dialog::backdrop { background:#17203399;backdrop-filter:blur(4px); }
     .order-confirm-icon { display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#fff4c4;color:#bc8500;font-size:30px;font-weight:900; }
@@ -991,7 +1002,6 @@
         <!-- Dropdown Menu for Logout / Switch Email -->
         <div class="profile-dropdown" id="profileDropdown">
           <div class="dropdown-item" onclick="openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</div>
-          <div class="dropdown-item" id="accountNotificationsMenu" role="menuitem" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i> Notifications: Off</div>
           <div class="dropdown-item" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</div>
           <div class="dropdown-item" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</div>
           <div class="dropdown-item" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</div>
@@ -1143,11 +1153,10 @@
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
-        <button type="button" class="mobile-sheet-action" id="mobileAccountNotifications" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i> Notifications: Off</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
+        <button type="button" class="mobile-sheet-action" id="mobileBannerAdsButton" style="display:none" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
-        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');setTimeout(openAccountMyShop,0)"><i class="fa-solid fa-store"></i> My Shop</button>
+        <button type="button" class="mobile-sheet-action" id="mobileMyShopButton" onclick="closeMobileSheet('mobileAccountSheet');setTimeout(openAccountMyShop,0)"><i class="fa-solid fa-store"></i> Open Shop</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</button>
         <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet',false,true);switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
         <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet',false,true);deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
@@ -1309,15 +1318,16 @@
       <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close" type="button" onclick="editAccountDetails()" aria-label="Account settings"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
-        <button type="button" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
+        <button type="button" id="accountBannerAdsButton" style="display:none" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
         <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
         <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, country banners, offers and product popups</small></button>
-        <button type="button" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>My Shop</span><small>Open and manage your shop</small></button>
+        <button type="button" id="accountMyShopButton" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>Open Shop</span><small>Create or manage your shop</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
         <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
         <button type="button" onclick="editAccountDetails();setTimeout(()=>document.getElementById('buyerMobile')?.focus(),100)"><i class="fa-solid fa-phone"></i><span>Phone Numbers</span><small>Private contact details</small></button>
         <button type="button" onclick="editAccountDetails()"><i class="fa-solid fa-user"></i><span>My Profile</span><small>View or edit your private details</small></button>
+        <button type="button" id="accountNotificationsMenu" style="display:none" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i><span>Notifications: Off</span><small>Turn notifications on or off on this device</small></button>
         <button type="button" onclick="logoutUser()" style="color:#c62828"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span><small>Sign out of aleeshopping</small></button>
       </div></section>
       <section class="seller-panel" id="accountProfilePanel" hidden><h3>My Profile</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Your profile picture"></div><h3 id="buyerProfileName">Your profile</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
@@ -1633,9 +1643,18 @@
       const removeButton=document.getElementById('accountDeleteShopMenu');
       const mobileRemoveButton=document.getElementById('mobileDeleteShopMenu');
       const switchShopButton=document.getElementById('buyerSwitchShopButton'),openShopButton=document.getElementById('buyerOpenShopButton');
+      const bannerAdsButton=document.getElementById('accountBannerAdsButton'),mobileBannerAdsButton=document.getElementById('mobileBannerAdsButton');
+      const accountShopButton=document.getElementById('accountMyShopButton'),mobileShopButton=document.getElementById('mobileMyShopButton');
+      const showShopActions=(hasShop)=>{
+        if(bannerAdsButton)bannerAdsButton.style.display=hasShop?'':'none';
+        if(mobileBannerAdsButton)mobileBannerAdsButton.style.display=hasShop?'':'none';
+        if(accountShopButton){const label=accountShopButton.querySelector('span'),help=accountShopButton.querySelector('small');if(label)label.textContent=hasShop?'My Shop':'Open Shop';if(help)help.textContent=hasShop?'Manage your shop and products':'Create or manage your shop';}
+        if(mobileShopButton)mobileShopButton.innerHTML=`<i class="fa-solid fa-store"></i> ${hasShop?'My Shop':'Open Shop'}`;
+      };
       if(!removeButton)return;
-      if(!activeUser||!supabaseClient){removeButton.hidden=true;if(mobileRemoveButton)mobileRemoveButton.hidden=true;if(switchShopButton)switchShopButton.hidden=true;if(openShopButton){openShopButton.hidden=false;openShopButton.innerHTML='<i class="fa-solid fa-store"></i> Open Shop';}return;}
+      if(!activeUser||!supabaseClient){showShopActions(false);removeButton.hidden=true;if(mobileRemoveButton)mobileRemoveButton.hidden=true;if(switchShopButton)switchShopButton.hidden=true;if(openShopButton){openShopButton.hidden=false;openShopButton.innerHTML='<i class="fa-solid fa-store"></i> Open Shop';}return;}
       const {data,error}=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();
+      showShopActions(!error&&Boolean(data));
       removeButton.hidden=Boolean(error||!data);if(mobileRemoveButton)mobileRemoveButton.hidden=Boolean(error||!data);
       if(switchShopButton)switchShopButton.hidden=Boolean(error||!data);if(openShopButton){openShopButton.hidden=false;openShopButton.innerHTML='<i class="fa-solid fa-store"></i> My Shop';}
     }
@@ -2238,6 +2257,7 @@
       document.getElementById('mobileAccountNavLabel').textContent = 'My Account';
       document.getElementById('mobileAccountNavLabel').title = user ? label : 'My Account';
       badge.classList.toggle('guest', !user);
+      if(identityChanged)window.setTimeout(()=>refreshAccountShopActions(),0);
       document.getElementById('accountSignInMenu').hidden=Boolean(user);
       document.getElementById('mobileAccountEmail').textContent=user?.email||'';
       document.getElementById('mobileAccountSignIn').hidden=Boolean(user);document.getElementById('mobileAccountLogout').hidden=!user;
@@ -4130,7 +4150,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
-<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-login-notifications"></script>
+<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
 <script src="chat.js?v=20261111-onesignal-push"></script>
 </body>
 </html>

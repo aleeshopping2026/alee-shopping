@@ -42,13 +42,12 @@
   };
   const updateNotificationControls = () => {
     const enabled = oneSignal?.User?.PushSubscription?.optedIn === true;
-    ["accountNotificationsMenu", "mobileAccountNotifications"].forEach((id) => {
-      const button = document.getElementById(id);
-      if (button) {
-        button.style.display = currentSession?.user?.id ? "" : "none";
-        button.innerHTML = `<i class=\"fa-solid fa-bell\"></i> Notifications: ${enabled ? "On" : "Off"}`;
-      }
-    });
+    const button = document.getElementById("accountNotificationsMenu");
+    if (button) {
+      button.style.display = currentSession?.user?.id ? "" : "none";
+      const label = button.querySelector("span");
+      if (label) label.textContent = `Notifications: ${enabled ? "On" : "Off"}`;
+    }
   };
 
   const askForPushPermission = async () => {
