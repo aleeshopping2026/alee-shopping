@@ -4013,6 +4013,30 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       return value;
     }
 
+    function showAddedToCartToast(product) {
+      let toast = document.getElementById('addedToCartToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'addedToCartToast';
+        toast.className = 'added-cart-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.innerHTML = '<div class="added-cart-toast-visual"><img class="added-cart-toast-photo" alt=""><i class="fa-solid fa-circle-check added-cart-toast-check" aria-hidden="true"></i></div><div class="added-cart-toast-copy"><strong class="added-cart-toast-title">Added to Cart</strong><span class="added-cart-toast-item"></span></div><button class="added-cart-toast-button" type="button">View Cart</button>';
+        toast.querySelector('.added-cart-toast-button').addEventListener('click', () => {
+          toast.classList.remove('show');
+          openCart();
+        });
+        document.body.appendChild(toast);
+      }
+      const photo = toast.querySelector('.added-cart-toast-photo');
+      photo.src = product.images?.[0] || 'assets/alee-logo.png';
+      photo.onerror = () => { photo.onerror = null; photo.src = 'assets/alee-logo.png'; };
+      toast.querySelector('.added-cart-toast-item').textContent = `${product.name} · ${productMoney(product.price, product)}`;
+      toast.classList.add('show');
+      clearTimeout(window.addedCartToastTimer);
+      window.addedCartToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
     function addToCart(id) {
       const product = products.find(p => p.id === id);
       const quantity = selectedQuantity();
@@ -4024,12 +4048,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       if (existing) existing.quantity += quantity;
       else cart.push({ product, quantity, ...variants });
       document.getElementById("cartCount").innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
-      let toast = document.getElementById("cartToast");
-      if (!toast) { toast = document.createElement("div"); toast.id = "cartToast"; toast.className = "cart-toast"; toast.setAttribute("role", "status"); toast.setAttribute("aria-live", "polite"); document.body.appendChild(toast); }
-      toast.textContent = "✨ 🛍️ Added to Cart ✨";
-      toast.classList.add("show");
-      clearTimeout(window.cartToastTimer);
-      window.cartToastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+      showAddedToCartToast(product);
     }
 
     function restoreCheckoutDetails() {
