@@ -106,3 +106,55 @@ $$;
 
 revoke all on function public.get_my_recent_product_views() from public, anon;
 grant execute on function public.get_my_recent_product_views() to authenticated;
+
+-- Anonymous, site-wide search terms power the Trending Searches chips.
+-- Only submitted terms are stored; this table contains no account or contact fields.
+create table if not exists public.search_term_events (
+  event_id uuid primary key default gen_random_uuid(),
+  search_term text not null check (char_length(btrim(search_term)) between 2 and 80),
+  searched_at timestamptz not null default now()
+);
+
+alter table public.search_term_events enable row level security;
+drop policy if exists "Visitors can record search terms" on public.search_term_events;
+create policy "Visitors can record search terms"
+  on public.search_term_events for insert to anon, authenticated
+  with check (
+    char_length(btrim(search_term)) between 2 and 80
+    and search_term !~ '[[:cntrl:]]'
+  );
+
+grant insert on public.search_term_events to anon, authenticated;
+
+create index if not exists search_term_events_recent_idx
+  on public.search_term_events(searched_at desc);
+
+create or replace function public.get_trending_search_terms(
+  p_days integer default 30,
+  p_limit integer default 12
+)
+returns table(search_term text, search_count bigint)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  with normalized_terms as (
+    select
+      regexp_replace(lower(btrim(event.search_term)), '\s+', ' ', 'g') as normalized_term,
+      btrim(event.search_term) as display_term
+    from public.search_term_events as event
+    where event.searched_at >= now() - make_interval(days => least(greatest(coalesce(p_days, 30), 1), 90))
+  ), aggregated_terms as (
+    select normalized_term, min(display_term) as display_term, count(*)::bigint as search_count
+    from normalized_terms
+    group by normalized_term
+  )
+  select aggregated_terms.display_term, aggregated_terms.search_count
+  from aggregated_terms
+  order by aggregated_terms.search_count desc, aggregated_terms.display_term asc
+  limit least(greatest(coalesce(p_limit, 12), 1), 20);
+$$;
+
+revoke all on function public.get_trending_search_terms(integer, integer) from public;
+grant execute on function public.get_trending_search_terms(integer, integer) to anon, authenticated;

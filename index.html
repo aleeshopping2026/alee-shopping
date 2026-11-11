@@ -907,11 +907,16 @@
     .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
     .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
     .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#f36b00;}
-/* Masonry order for the main product list only; recommendation shelves stay as they are. */
+@media (max-width:767px){
+    /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
     #productList.products{display:block!important;column-count:2!important;column-gap:10px!important;}
     #productList.products>.card{display:inline-flex!important;width:100%!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 10px!important;}
     #productList.products>.card>.card-image-wrap{width:calc(100% + 12px)!important;margin:-6px -6px 0!important;border-radius:11px 11px 8px 8px!important;}
     #productList.products>.card>.card-image-wrap>img{border-radius:inherit!important;}
+}
+@media (min-width:1024px){
+    #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
+}
     .slider img { border-color:rgba(255,105,0,.18)!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
@@ -2935,7 +2940,9 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
-      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn'))openSearchDiscovery(false);
+      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn')){
+        openSearchDiscovery(event.target.closest('#searchInput')!==null);
+      }
     });
     function setSearchDiscoveryMode(mode) {
       searchDiscoveryMode=mode==='ai'?'ai':'products';
@@ -2952,7 +2959,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
     function renderSearchSuggestions(){const query=searchInput.value.trim();if(query.length<1){hideSearchSuggestions();return;}const productsFound=getProductSearchMatches(query).items.slice(0,6),terms=readSearchUserList('recent-searches',40).filter(term=>String(term).toLowerCase().includes(query.toLowerCase())&&String(term).toLowerCase()!==query.toLowerCase()).slice(0,3);suggestionRows=[...productsFound.map(product=>({kind:'product',label:product.name,meta:product.shopId?getShopForProduct(product)?.name||'Product':'Product' ,product})),...terms.map(term=>({kind:'search',label:String(term),meta:'Recent search'}))];if(!suggestionRows.length){hideSearchSuggestions();return;}searchSuggestionBox.replaceChildren();suggestionRows.forEach((row,index)=>{const button=document.createElement('button');button.type='button';button.className='search-suggestion';button.setAttribute('role','option');button.innerHTML=`<i class="fa-solid ${row.kind==='product'?'fa-magnifying-glass':'fa-clock-rotate-left'}"></i><span>${escapeHTML(row.label)}</span><small>${escapeHTML(row.meta)}</small>`;button.addEventListener('mousedown',event=>event.preventDefault());button.addEventListener('click',()=>{searchInput.value=row.kind==='product'?row.product.name:row.label;hideSearchSuggestions();submitProductSearch();});searchSuggestionBox.appendChild(button);});activeSuggestionIndex=-1;searchSuggestionBox.classList.add('show');}
     searchInput.addEventListener('input',()=>{renderSearchSuggestions();scheduleSearchProducts();});
     searchInput.addEventListener('blur',()=>setTimeout(hideSearchSuggestions,150));
-    searchInput.addEventListener('focus',()=>{openSearchDiscovery(false);renderSearchSuggestions();});
+    searchInput.addEventListener('focus',()=>{openSearchDiscovery(true);renderSearchSuggestions();});
     document.getElementById('searchInput').addEventListener('keydown', event => {
       if(event.key==='ArrowDown'&&suggestionRows.length){event.preventDefault();activeSuggestionIndex=(activeSuggestionIndex+1)%suggestionRows.length;searchSuggestionBox.querySelectorAll('.search-suggestion').forEach((button,index)=>button.classList.toggle('active',index===activeSuggestionIndex));return;}else if(event.key==='ArrowUp'&&suggestionRows.length){event.preventDefault();activeSuggestionIndex=(activeSuggestionIndex-1+suggestionRows.length)%suggestionRows.length;searchSuggestionBox.querySelectorAll('.search-suggestion').forEach((button,index)=>button.classList.toggle('active',index===activeSuggestionIndex));return;}else if(event.key==='Escape') {
         if(searchSuggestionBox.classList.contains('show')){event.preventDefault();hideSearchSuggestions();return;}
@@ -3244,10 +3251,17 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       recentSearchesExpanded=false;renderRecentSearches();
     }
     function toggleRecentSearches() { recentSearchesExpanded=!recentSearchesExpanded;renderRecentSearches(); }
-    const fixedTrendingSearches=['11.11 Sale','Ceylon Tea','Kurakkan','Fashion'];
-    function renderTrendingSearches() {
-      const list=document.getElementById('trendingSearchList');if(!list||list.childElementCount)return;
-      fixedTrendingSearches.forEach(term=>{const button=document.createElement('button');button.type='button';button.className='trending-search-chip';button.textContent=term;button.addEventListener('click',()=>{searchInput.value=term;submitProductSearch();});list.appendChild(button);});
+    async function renderTrendingSearches() {
+      const list=document.getElementById('trendingSearchList');if(!list)return;list.replaceChildren();
+      const showEmpty=()=>{const empty=document.createElement('p');empty.className='recommendation-empty';empty.textContent='තවම ජනප්‍රිය සෙවීම් නැහැ.';list.appendChild(empty);};
+      if(!supabaseClient){showEmpty();return;}
+      try{
+        const {data,error}=await supabaseClient.rpc('get_trending_search_terms',{p_days:30,p_limit:12});
+        if(error||!Array.isArray(data))throw error||new Error('Trending searches are unavailable.');
+        const terms=data.map(row=>String(row.search_term||'').trim()).filter(term=>term.length>=2);
+        if(!terms.length){showEmpty();return;}
+        terms.forEach(term=>{const button=document.createElement('button');button.type='button';button.className='trending-search-chip';button.textContent=term;button.addEventListener('click',()=>{searchInput.value=term;submitProductSearch();});list.appendChild(button);});
+      }catch(_){showEmpty();}
     }
     function formatSearchPrice(value) { return `Rs ${Number(value).toLocaleString('en-LK')}`; }
     function updateSearchPriceLabels() {
@@ -3368,6 +3382,15 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
         }
         if(!error)await loadProductSearchTrends();
       } catch (_) {}
+    }
+
+    async function recordSearchTerm(searchTerm) {
+      const term=String(searchTerm||'').trim().replace(/\s+/g,' ');
+      if(term.length<2||term.length>80||!supabaseClient)return;
+      try{
+        const {error}=await supabaseClient.from('search_term_events').insert({search_term:term});
+        if(!error)renderTrendingSearches();
+      }catch(_){}
     }
 
     renderCategoryBar();
@@ -3647,6 +3670,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       if(!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(false);
       saveRecentSearch(searchInput.value);
       searchProducts(true);
+      recordSearchTerm(searchInput.value);
       document.getElementById('searchInput').blur();
     }
 
