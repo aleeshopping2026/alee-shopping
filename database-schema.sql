@@ -5,7 +5,9 @@ create table if not exists public.product_reviews (
   product_id integer not null,
   user_id uuid not null references auth.users(id) on delete cascade,
   body text not null check (char_length(body) between 1 and 1000),
-  created_at timestamptz not null default now()
+    images text[] not null default '{}' check (cardinality(images) <= 2),
+    created_at timestamptz not null default now(),
+    updated_at timestamptz not null default now()
 );
 
 alter table public.product_reviews enable row level security;
@@ -19,5 +21,15 @@ create policy "Signed-in customers can post comments"
 
 grant select on public.product_reviews to anon, authenticated;
 grant insert on public.product_reviews to authenticated;
+drop policy if exists "Comment authors and ALEE hosts can edit comments" on public.product_reviews;
+create policy "Comment authors and ALEE hosts can edit comments"
+  on public.product_reviews for update to authenticated
+  using (auth.uid() = user_id or lower(coalesce(auth.jwt() ->> 'email', '')) in ('aleeshopping2026@gmail.com', 'aleeshopping@gmail.com'))
+  with check (auth.uid() = user_id or lower(coalesce(auth.jwt() ->> 'email', '')) in ('aleeshopping2026@gmail.com', 'aleeshopping@gmail.com'));
+drop policy if exists "Comment authors and ALEE hosts can delete comments" on public.product_reviews;
+create policy "Comment authors and ALEE hosts can delete comments"
+  on public.product_reviews for delete to authenticated
+  using (auth.uid() = user_id or lower(coalesce(auth.jwt() ->> 'email', '')) in ('aleeshopping2026@gmail.com', 'aleeshopping@gmail.com'));
+grant update, delete on public.product_reviews to authenticated;
 create index if not exists product_reviews_product_created_idx
   on public.product_reviews(product_id, created_at desc);
