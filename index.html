@@ -991,6 +991,7 @@
         <!-- Dropdown Menu for Logout / Switch Email -->
         <div class="profile-dropdown" id="profileDropdown">
           <div class="dropdown-item" onclick="openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</div>
+          <div class="dropdown-item" id="accountNotificationsMenu" role="menuitem" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i> Notifications: Off</div>
           <div class="dropdown-item" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</div>
           <div class="dropdown-item" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</div>
           <div class="dropdown-item" onclick="openSellerAccount(true)"><i class="fa-solid fa-store"></i> Open Shop</div>
@@ -1142,6 +1143,7 @@
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountNotifications" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i> Notifications: Off</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
@@ -4128,7 +4130,7 @@ function openReviewPhotoChooser(){document.getElementById('reviewPhotoChooser')?
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
-<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111"></script>
+<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-login-notifications"></script>
 <script src="chat.js?v=20261111-onesignal-push"></script>
 </body>
 </html>

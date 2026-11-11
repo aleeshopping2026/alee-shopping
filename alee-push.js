@@ -33,6 +33,41 @@
   let registeredSubscriptionId = "";
   let registrationInFlight = false;
 
+  const preferenceKey = (userId) => "aleePushPreference:" + userId;
+  const getPreference = (userId) => {
+    try { return localStorage.getItem(preferenceKey(userId)); } catch { return null; }
+  };
+  const setPreference = (userId, value) => {
+    try { localStorage.setItem(preferenceKey(userId), value); } catch { /* Storage may be unavailable. */ }
+  };
+  const updateNotificationControls = () => {
+    const enabled = oneSignal?.User?.PushSubscription?.optedIn === true;
+    ["accountNotificationsMenu", "mobileAccountNotifications"].forEach((id) => {
+      const button = document.getElementById(id);
+      if (button) {
+        button.style.display = currentSession?.user?.id ? "" : "none";
+        button.innerHTML = `<i class=\"fa-solid fa-bell\"></i> Notifications: ${enabled ? "On" : "Off"}`;
+      }
+    });
+  };
+
+  const askForPushPermission = async () => {
+    if (!oneSignal || !("Notification" in window)) return false;
+    if (Notification.permission === "denied") {
+      window.alert("Notifications are blocked in your browser. Open this site's settings and change Notifications to Allow.");
+      return false;
+    }
+    if (Notification.permission === "default") {
+      await oneSignal.Slidedown.promptPush();
+    }
+    if (Notification.permission !== "granted") return false;
+    await oneSignal.User.PushSubscription.optIn();
+    if (currentSession?.user?.id) setPreference(currentSession.user.id, "on");
+    await registerCurrentSubscription();
+    updateNotificationControls();
+    return true;
+  };
+
   const invoke = async (action, subscriptionId, session = currentSession) => {
     if (!db || !session?.access_token || !subscriptionId) return null;
     const { data, error } = await db.functions.invoke(functionName, {
@@ -87,16 +122,48 @@
       }
       currentSession = session;
       await registerCurrentSubscription();
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+        const promptKey = "aleePushPrompted:" + session.user.id;
+        let alreadyPrompted = false;
+        try { alreadyPrompted = sessionStorage.getItem(promptKey) === "yes"; } catch { /* Storage may be unavailable. */ }
+        if (!alreadyPrompted && getPreference(session.user.id) !== "off" && oneSignal && "Notification" in window && Notification.permission === "default") {
+          try { sessionStorage.setItem(promptKey, "yes"); } catch { /* Storage may be unavailable. */ }
+          askForPushPermission().catch((error) => console.warn("ALEE push permission prompt failed.", error));
+        }
+      }
+      updateNotificationControls();
       return;
     }
     if (event === "SIGNED_OUT" && currentSession) {
       const previous = currentSession;
       currentSession = null;
       await unregisterCurrentSubscription(previous);
+      try { sessionStorage.removeItem("aleePushPrompted:" + previous.user.id); } catch { /* Storage may be unavailable. */ }
+      updateNotificationControls();
       return;
     }
     currentSession = null;
+    updateNotificationControls();
   };
+
+  window.aleePush.setNotificationsEnabled = async (enabled) => {
+    if (!currentSession?.user?.id) {
+      window.alert("Please sign in to manage notification settings.");
+      return false;
+    }
+    if (!oneSignal) {
+      window.alert("Notifications are still loading. Please try again shortly.");
+      return false;
+    }
+    const userId = currentSession.user.id;
+    if (enabled) return askForPushPermission();
+    await oneSignal.User.PushSubscription.optOut();
+    setPreference(userId, "off");
+    await unregisterCurrentSubscription(currentSession);
+    updateNotificationControls();
+    return true;
+  };
+  window.aleePush.toggleNotifications = () => window.aleePush.setNotificationsEnabled(oneSignal?.User?.PushSubscription?.optedIn !== true);
 
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   window.OneSignalDeferred.push(async (sdk) => {
@@ -112,7 +179,7 @@
           slidedown: {
             prompts: [{
               type: "push",
-              autoPrompt: true,
+              autoPrompt: false,
               text: {
                 actionMessage: "Would you like to receive offers and messages from ALEE?",
                 acceptButton: "Allow",
@@ -127,14 +194,17 @@
       resolveReady(sdk);
       sdk.User?.PushSubscription?.addEventListener("change", () => {
         registerCurrentSubscription().catch((error) => console.warn("ALEE push sync failed.", error));
+        updateNotificationControls();
       });
       sdk.Notifications?.addEventListener("permissionChange", (allowed) => {
         const permitted = typeof allowed === "boolean" ? allowed : Notification.permission === "granted";
         if (permitted) {
+          if (currentSession?.user?.id) setPreference(currentSession.user.id, "on");
           registerCurrentSubscription().catch((error) => console.warn("ALEE push sync failed.", error));
         } else {
           unregisterCurrentSubscription(currentSession);
         }
+        updateNotificationControls();
       });
 
       if (db?.auth) {
