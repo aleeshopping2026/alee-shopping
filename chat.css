@@ -188,3 +188,108 @@
 .alee-chat-message{touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .alee-chat-thread-dialog [data-msg-action],.alee-chat-thread-dialog [data-delete-mode],.alee-chat-thread-dialog [data-dialog-close]{display:flex;width:100%;min-height:46px;align-items:center;gap:10px;padding:10px 14px;border:0;border-bottom:1px solid #e5e7eb;background:#fff;color:#172033;text-align:left;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
 .alee-chat-thread-dialog [data-delete-mode="everyone"]{color:#dc2626}
+
+/* Clean black-and-white chat controls, dialogs, and contact cards. */
+#aleeChatOverlay .alee-chat-box{border-color:#d1d5db!important}
+#aleeChatOverlay .alee-chat-top{background:#fff!important;border-color:#e5e7eb!important}
+#aleeChatOverlay .alee-chat-top strong,#aleeChatOverlay .alee-chat-list-title{color:#111827!important}
+#aleeChatOverlay .alee-chat-top button{background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-role button,#aleeChatOverlay .alee-chat-shop{border-color:#d1d5db!important}
+#aleeChatOverlay .alee-chat-role button i,#aleeChatOverlay .alee-chat-thread-head button{color:#111827!important}
+#aleeChatOverlay .alee-chat-avatar{border:1px solid #d1d5db;background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-role button:hover,#aleeChatOverlay .alee-chat-shop:hover,#aleeChatOverlay .alee-chat-conversation:hover{border-color:#9ca3af!important;background:#f9fafb!important}
+#aleeChatOverlay .alee-chat-role-tabs button.active,#aleeChatOverlay .alee-chat-filters button.active{background:#111827!important;border-color:#111827!important;color:#fff!important}
+#aleeChatOverlay .alee-chat-row-menu button:hover,#aleeChatOverlay .alee-chat-thread-calls button:hover,#aleeChatOverlay .alee-chat-compose-actions button:hover{background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-favorite.on,#aleeChatOverlay .alee-chat-row-menu-button,#aleeChatOverlay .alee-chat-sidebar-rail>button,#aleeChatOverlay .alee-chat-sidebar-rail .alee-chat-profile-shortcut{color:#111827!important}
+#aleeChatOverlay .alee-chat-sidebar-rail .alee-chat-profile-shortcut,#aleeChatOverlay .alee-chat-sidebar-rail>button:hover{background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-conversation-row.selected,#aleeChatOverlay .alee-chat-selection-toolbar{background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-selection-toolbar>button,#aleeChatOverlay .alee-chat-selection-toolbar>span button{background:#fff!important;color:#111827!important;border:1px solid #d1d5db!important}
+#aleeChatOverlay .alee-chat-row-menu{border-color:#d1d5db!important}
+#aleeChatOverlay .alee-chat-sidebar-menu{background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-sidebar-menu button{color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-calls button,#aleeChatOverlay .alee-chat-thread-actions button{background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-online{color:#111827!important;background:transparent!important}
+#aleeChatOverlay .alee-chat-unread-dot{background:#111827!important}
+#aleeChatOverlay .alee-chat-message.mine{background:#111827!important;border-color:#111827!important;color:#fff!important}
+#aleeChatOverlay .alee-chat-message.mine time{color:#d1d5db!important}
+#aleeChatOverlay .alee-chat-file{border-color:#d1d5db!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-send textarea:focus{border-color:#111827!important;box-shadow:0 0 0 3px #11182718!important}
+#aleeChatOverlay .alee-chat-compose-actions{border-color:#d1d5db!important;background:#f9fafb!important}
+#aleeChatOverlay .alee-chat-compose-actions button,#aleeChatOverlay .alee-chat-action-launch{color:#111827!important}
+#aleeChatOverlay .alee-chat-compose-actions button[type=submit]{background:#111827!important;color:#fff!important;box-shadow:none!important}
+#aleeChatOverlay .alee-chat-action-launch{background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-quick-actions{background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-quick-actions button{border-color:#d1d5db!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-quick-actions button:hover{border-color:#9ca3af!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-options-card,#aleeChatOverlay .alee-chat-action-form,#aleeChatOverlay .alee-chat-quick-replies{border:1px solid #d1d5db!important;background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-options-grid button{border-color:#e5e7eb!important;background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-options-grid button i,#aleeChatOverlay .alee-chat-options-grid button:nth-child(n) i{border:1px solid #d1d5db!important;background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-action-form-buttons button[type=submit],#aleeChatOverlay .alee-chat-quick-replies>header button,#aleeChatOverlay .alee-quick-reply-add{background:#111827!important;color:#fff!important}
+#aleeChatOverlay .alee-chat-action-card.offer,#aleeChatOverlay .alee-chat-action-card.payment{border-color:#d1d5db!important;background:#f9fafb!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-action-card a{color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-menu{border-color:#d1d5db!important;background:#fff!important;color:#111827!important;box-shadow:0 22px 64px #0003!important}
+#aleeChatOverlay .alee-chat-thread-menu>button{border-color:#e5e7eb!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-menu>button:hover{background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-thread-menu>button i{color:#4b5563!important}
+#aleeChatOverlay .alee-chat-thread-dialog{box-sizing:border-box;max-width:calc(100vw - 28px);overflow-x:hidden;border-color:#d1d5db!important;background:#fff!important;color:#111827!important;box-shadow:0 22px 64px #0003!important}
+#aleeChatOverlay .alee-chat-thread-dialog>header{gap:12px;border-color:#e5e7eb!important;background:#fff!important}
+#aleeChatOverlay .alee-chat-thread-dialog>header h2{min-width:0;color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-dialog>header button[data-dialog-close]{display:grid!important;place-items:center!important;box-sizing:border-box!important;width:38px!important;min-width:38px!important;max-width:38px!important;height:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;padding:0!important;border:1px solid #d1d5db!important;border-radius:50%!important;background:#f3f4f6!important;color:#111827!important;font-size:22px!important;line-height:1!important}
+#aleeChatOverlay .alee-chat-thread-dialog-body{min-width:0;color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-dialog-body>p{color:#4b5563!important}
+#aleeChatOverlay .alee-chat-choice-list input{accent-color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-dialog .alee-chat-dialog-actions button,
+#aleeChatOverlay .alee-chat-thread-dialog .alee-chat-contact-card button,
+#aleeChatOverlay .alee-chat-thread-dialog .alee-chat-theme-wallpaper,
+#aleeChatOverlay .alee-chat-thread-dialog .alee-chat-theme-reset{border:1px solid #111827!important;background:#111827!important;color:#fff!important}
+#aleeChatOverlay .alee-chat-thread-dialog .alee-chat-dialog-actions button:first-child{background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-dialog [data-msg-action],
+#aleeChatOverlay .alee-chat-thread-dialog [data-delete-mode],
+#aleeChatOverlay .alee-chat-thread-dialog [data-dialog-close]:not(header [data-dialog-close]){box-sizing:border-box;border-color:#e5e7eb!important;background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-thread-dialog [data-msg-action]:hover,
+#aleeChatOverlay .alee-chat-thread-dialog [data-delete-mode]:hover,
+#aleeChatOverlay .alee-chat-thread-dialog [data-dialog-close]:not(header [data-dialog-close]):hover{background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-thread-dialog [data-delete-mode="everyone"]{color:#111827!important}
+#aleeChatOverlay .alee-chat-contact-card{width:100%;min-width:0;overflow-wrap:anywhere;text-align:center;color:#111827}
+#aleeChatOverlay .alee-chat-contact-card>img{display:block;width:76px;height:76px;margin:0 auto 10px;border:1px solid #d1d5db;background:#f3f4f6}
+#aleeChatOverlay .alee-chat-contact-card h3,#aleeChatOverlay .alee-chat-contact-card>p{max-width:100%;overflow-wrap:anywhere;color:#111827!important}
+#aleeChatOverlay .alee-chat-contact-card>div{min-width:0;border-color:#e5e7eb!important}
+#aleeChatOverlay .alee-chat-contact-card>div small{color:#6b7280!important}
+#aleeChatOverlay .alee-chat-contact-card>div span{min-width:0;color:#111827;}
+#aleeChatOverlay .alee-chat-contact-products{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(92px,1fr))!important;min-width:0;max-width:100%;gap:8px;padding:0!important;border:0!important}
+#aleeChatOverlay .alee-chat-contact-products a{min-width:0;overflow:hidden;border-color:#d1d5db!important;background:#fff!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-contact-products img{max-width:100%;background:#f3f4f6!important}
+#aleeChatOverlay .alee-chat-contact-products small{color:#4b5563!important}
+#aleeChatOverlay .alee-chat-unblock-current{display:inline-flex;align-items:center;min-height:32px;margin:4px 0;padding:5px 11px;border:1px solid #111827;border-radius:8px;background:#111827;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#aleeChatOverlay .alee-chat-loading-state{display:grid;justify-items:center;gap:9px;padding:32px 18px;color:#111827;text-align:center}
+#aleeChatOverlay .alee-chat-loading-state small{color:#6b7280}
+#aleeChatOverlay .alee-chat-spinner{width:22px;height:22px;border:2px solid #d1d5db;border-top-color:#111827;border-radius:50%;animation:alee-chat-spin .7s linear infinite}
+@keyframes alee-chat-spin{to{transform:rotate(360deg)}}
+#aleeChatOverlay .alee-chat-close-inline{display:grid;place-items:center;background:#f3f4f6!important;color:#111827!important}
+#aleeChatOverlay .alee-chat-close-inline:focus-visible,#aleeChatOverlay button:focus-visible{outline:2px solid #111827;outline-offset:2px}
+#aleeChatOverlay button{touch-action:manipulation}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-menu{border-color:#374151!important;background:#111827!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-list-title{color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-avatar{border-color:#4b5563;background:#1f2937!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-menu{border-color:#374151;background:#111827!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-sidebar-menu button{color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-conversation-row.selected,#aleeChatOverlay.alee-chat-dark .alee-chat-selection-toolbar{background:#1f2937!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-selection-toolbar>button,#aleeChatOverlay.alee-chat-dark .alee-chat-selection-toolbar>span button{border-color:#4b5563!important;background:#111827!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-menu>button{border-color:#374151!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-menu>button:hover{background:#1f2937!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-menu>button i{color:#d1d5db!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog{border-color:#374151!important;background:#111827!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog>header{border-color:#374151!important;background:#111827!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog>header h2,
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog-body,
+#aleeChatOverlay.alee-chat-dark .alee-chat-contact-card,
+#aleeChatOverlay.alee-chat-dark .alee-chat-contact-card h3,
+#aleeChatOverlay.alee-chat-dark .alee-chat-contact-card>p,
+#aleeChatOverlay.alee-chat-dark .alee-chat-contact-card>div span{color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-online{color:#e5e7eb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog>header button[data-dialog-close]{border-color:#4b5563!important;background:#1f2937!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-contact-products a{border-color:#374151!important;background:#1f2937!important;color:#f9fafb!important}
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog [data-msg-action],
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog [data-delete-mode],
+#aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog [data-dialog-close]:not(header [data-dialog-close]){border-color:#374151!important;background:#1f2937!important;color:#f9fafb!important}
+@media(max-width:720px){#aleeChatOverlay .alee-chat-thread-dialog{width:100%;max-width:100vw;max-height:88dvh;border-radius:22px 22px 0 0}#aleeChatOverlay .alee-chat-thread-dialog>header{padding:14px 16px}#aleeChatOverlay .alee-chat-thread-dialog-body{padding:14px 16px max(18px,env(safe-area-inset-bottom))}}

@@ -2250,6 +2250,11 @@
       const identityChanged = activeUser?.id !== user?.id;
       if(identityChanged){privateAccountProfile=null;currentSellerShop=null;sellerProducts=[];document.getElementById('accountProfileSetupForm').reset();document.getElementById('buyerDetailsForm').reset();document.getElementById('buyerDetailsForm').hidden=true;document.getElementById('buyerDetailsStatus').textContent='';document.getElementById('accountProfileSetupStatus').textContent='';document.getElementById('accountProfileRetry').hidden=true;}
       activeUser = user || null;
+      if (identityChanged && user) {
+        const warmChatInboxes = () => window.aleeChat?.prefetchInbox?.(user);
+        if ('requestIdleCallback' in window) window.requestIdleCallback(warmChatInboxes, { timeout: 2500 });
+        else window.setTimeout(warmChatInboxes, 500);
+      }
       if (identityChanged && typeof chooseUnseenBannerFor === 'function') chooseUnseenBannerFor(activeUser);
       if (identityChanged && typeof loadForYouRecommendations === 'function') {
         document.getElementById('forYouSection').hidden = !activeUser;
@@ -4194,7 +4199,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
   </script>
 <script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
-<script src="chat.js?v=20261111-onesignal-push"></script>
+<script src="chat.js?v=20261111-chat-fast-ui"></script>
 </body>
 </html>
 
