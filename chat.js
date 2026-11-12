@@ -1,7 +1,7 @@
 (() => {
   const db = window.aleeSupabase;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const ui = { mode:'home', role:'buyer', user:null, conversationId:null, channel:null, callChannel:null, inboxChannel:null, notificationChannel:null, notifiedMessageIds:new Set(), callReady:false, callConnection:null, callLocalStream:null, callRemoteStream:null, callId:null, callPeerId:null, peerId:null, callPeerLogo:'',callPeerLabel:'',callMode:null, pendingOffer:null, queuedIce:[], poll:null, inboxPoll:null, shops:[], rows:[], shopMap:{}, preferences:{}, blockedIds:new Set(), selectedConversationIds:new Set(), quickReplies:[], renderedMessagesKey:null, renderedMessagesSignedAt:0, filter:'all', search:'', inboxRowsCache:{buyer:null,seller:null}, inboxViews:{buyer:null,seller:null}, inboxRequestToken:0 };
+  const ui = { mode:'home', role:'buyer', user:null, conversationId:null, channel:null, callChannel:null, inboxChannel:null, notificationChannel:null, notifiedMessageIds:new Set(), callReady:false, callSubscriptionPromise:null, callSubscriptionResolve:null, callSetupTimer:null, callStarting:false, callConnection:null, callLocalStream:null, callRemoteStream:null, callId:null, callPeerId:null, peerId:null, callPeerLogo:'',callPeerLabel:'',callMode:null, pendingOffer:null, queuedIce:[], poll:null, inboxPoll:null, shops:[], rows:[], shopMap:{}, preferences:{}, blockedIds:new Set(), selectedConversationIds:new Set(), quickReplies:[], renderedMessagesKey:null, renderedMessagesSignedAt:0, filter:'all', search:'', inboxRowsCache:{buyer:null,seller:null}, inboxViews:{buyer:null,seller:null}, inboxRequestToken:0 };
    const style=document.createElement('link');style.rel='stylesheet';style.href='chat.css?v=20261111-chat-black-white-fast';document.head.appendChild(style);
   const overlay=document.createElement('div');overlay.className='alee-chat-launcher';overlay.id='aleeChatOverlay';overlay.setAttribute('aria-hidden','true');
   overlay.innerHTML=`<section class="alee-chat-box" role="dialog" aria-modal="true" aria-label="aleeshopping messages"><header class="alee-chat-top"><button class="alee-chat-mobile-back" id="aleeChatTopBack" type="button" aria-label="Back">‹</button><strong id="aleeChatTitle">Messages</strong><button type="button" id="aleeChatClose" aria-label="Close messages">×</button></header><div class="alee-chat-content" id="aleeChatContent"><aside class="alee-chat-list" id="aleeChatList"></aside><section class="alee-chat-main" id="aleeChatMain"><div class="alee-chat-empty">Choose Buyer or Seller to continue.</div></section></div></section>`;
@@ -256,13 +256,84 @@
   async function toggleFavorite(id,items){const current=ui.preferences[id]||{};const next=!current.is_favorite;const {error}=await db.from('seller_chat_preferences').upsert({user_id:ui.user.id,conversation_id:id,is_favorite:next},{onConflict:'user_id,conversation_id'});if(error){showError('Could not save favourite. Run the latest seller-chat-schema.sql.');return;}ui.preferences[id]={...current,is_favorite:next};renderConversationList(items.map(x=>x.row),ui.role);}
   async function setRead(id){const {error}=await db.from('seller_chat_preferences').upsert({user_id:ui.user.id,conversation_id:id,last_read_at:new Date().toISOString()},{onConflict:'user_id,conversation_id'});if(error)console.warn('Could not update chat read state',error.message);}
   function callStatus(text){const el=mainEl.querySelector('#aleeCallStatus');if(el)el.textContent=text;}
+  function setCallNotice(text){const el=mainEl.querySelector('#aleeChatStatus');if(el)el.textContent=text;}
+  function callErrorText(error,mode='voice'){
+    if(error?.name==='NotAllowedError'||error?.name==='PermissionDeniedError')return `Allow microphone${mode==='video'?' and camera':''} access in your browser settings, then retry.`;
+    if(error?.name==='NotFoundError')return `No microphone${mode==='video'?' or camera':''} was found on this device.`;
+    if(error?.name==='NotReadableError')return 'The microphone or camera is already being used by another app. Close that app and try again.';
+    if(error?.name==='SecurityError'||String(error?.message||'').includes('secure HTTPS'))return 'Calls need the secure HTTPS site. Open aleeshopping using its https:// address.';
+    return `Could not start the call: ${error?.message||'Unknown error'}`;
+  }
   function showCallPanel(text,actions=[]){const panel=mainEl.querySelector('#aleeCallPanel'),root=mainEl.querySelector('#aleeCallActions');if(!panel||!root)return;panel.hidden=false;panel.classList.toggle('video-call',ui.callMode==='video');panel.classList.toggle('voice-call',ui.callMode!=='video');let brand=panel.querySelector('.alee-call-brand');if(!brand){brand=document.createElement('header');brand.className='alee-call-brand';brand.innerHTML='<span class="alee-call-brand-spacer"></span><div><strong></strong><small>🔒 End-to-end encrypted</small></div><button type="button" data-call-close aria-label="Close call screen">×</button>';panel.prepend(brand);}brand.querySelector('strong').textContent=ui.callPeerLabel||titleEl.textContent||'aleeshopping';let center=panel.querySelector('.alee-call-center');if(!center){center=document.createElement('div');center.className='alee-call-center';center.innerHTML='<img alt="Contact profile"><strong></strong>';panel.insertBefore(center,panel.querySelector('#aleeCallRemote'));}center.querySelector('img').src=ui.callPeerLogo||'assets/alee-logo.png';center.querySelector('strong').textContent=ui.callPeerLabel||titleEl.textContent||'aleeshopping';callStatus(text);const incoming=Boolean(ui.pendingOffer),mode=ui.callMode||'voice';const controls=incoming?[{id:'accept',label:'Answer',icon:'fa-phone',kind:'answer'},{id:'decline',label:'Decline',icon:'fa-phone-slash',kind:'end'}]:[{id:'speaker',label:'Audio',icon:'fa-volume-high'},{id:'video',label:'Video',icon:'fa-video',disabled:mode!=='video'&&!ui.callLocalStream},{id:'mute',label:'Mute',icon:'fa-microphone'},{id:'more',label:'More',icon:'fa-ellipsis'},{id:'share',label:'Share',icon:'fa-arrow-up-from-bracket'},{id:'hangup',label:'End',icon:'fa-phone-slash',kind:'end'}];root.innerHTML=controls.map(({id,label,icon,kind,disabled})=>`<button type="button" class="${kind||''}" data-call-action="${id}" ${disabled?'disabled':''}><i class="fa-solid ${icon}"></i><span>${label}</span></button>`).join('');root.querySelectorAll('[data-call-action]').forEach(button=>button.addEventListener('click',async()=>{const action=button.dataset.callAction;if(action==='accept')await acceptCall();else if(action==='decline')await declineCall();else if(action==='hangup')await hangupCall();else if(action==='mute'){const tracks=ui.callLocalStream?.getAudioTracks()||[];const next=tracks.some(track=>track.enabled);tracks.forEach(track=>track.enabled=!next);button.classList.toggle('active',!next);button.querySelector('span').textContent=next?'Unmute':'Mute';}else if(action==='video'){const tracks=ui.callLocalStream?.getVideoTracks()||[];const next=tracks.some(track=>track.enabled);tracks.forEach(track=>track.enabled=!next);button.classList.toggle('active',!next);}else if(action==='speaker'){const audio=mainEl.querySelector('#aleeCallRemoteAudio');if(audio)audio.muted=!audio.muted;button.classList.toggle('active',!audio?.muted);}else if(action==='share'&&navigator.share){navigator.share({title:ui.callPeerLabel||'Call',text:'aleeshopping call'}).catch(()=>{});}else if(action==='more'){let menu=panel.querySelector('.alee-call-more-menu');if(!menu){menu=document.createElement('div');menu.className='alee-call-more-menu';menu.innerHTML='<button type="button" data-call-close>End call and return to chat</button>';panel.appendChild(menu);menu.querySelector('[data-call-close]').addEventListener('click',()=>hangupCall());}else menu.remove();}}));panel.querySelectorAll('[data-call-close]').forEach(button=>button.addEventListener('click',()=>{hangupCall();}));}
   async function sendCallSignal(kind,payload={}){if(!ui.callId||!ui.callPeerId)return {error:new Error('Call is not ready.')};return db.from('seller_call_signals').insert({conversation_id:ui.conversationId,call_id:ui.callId,sender_id:ui.user.id,recipient_id:ui.callPeerId,kind,payload});}
   async function startMedia(mode){if(!navigator.mediaDevices?.getUserMedia)throw new Error('Calls need a secure HTTPS website and a browser that supports camera and microphone.');const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:mode==='video'});ui.callLocalStream=stream;const local=mainEl.querySelector('#aleeCallLocal');if(local){local.srcObject=stream;local.hidden=mode!=='video';}const remote=mainEl.querySelector('#aleeCallRemote'),audio=mainEl.querySelector('#aleeCallRemoteAudio');if(remote){remote.hidden=mode!=='video';remote.srcObject=null;}if(audio)audio.srcObject=null;return stream;}
-  function makePeerConnection(){const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});ui.callConnection=pc;ui.callRemoteStream=new MediaStream();pc.ontrack=event=>{const stream=event.streams?.[0];if(stream)ui.callRemoteStream=stream;else ui.callRemoteStream.addTrack(event.track);const remote=mainEl.querySelector('#aleeCallRemote'),audio=mainEl.querySelector('#aleeCallRemoteAudio');if(ui.callMode==='video'&&remote){remote.srcObject=ui.callRemoteStream;remote.play().catch(()=>{});}else if(audio){audio.srcObject=ui.callRemoteStream;audio.play().catch(()=>{});}};pc.onicecandidate=event=>{if(event.candidate){if(!ui.callDescriptionSent)(ui.queuedLocalIce||(ui.queuedLocalIce=[])).push(event.candidate.toJSON());else sendCallSignal('ice',{candidate:event.candidate.toJSON()});}};pc.onconnectionstatechange=()=>{if(['failed','disconnected'].includes(pc.connectionState))callStatus('Connection interrupted. Check both devices’ internet connections.');};ui.callLocalStream?.getTracks().forEach(track=>pc.addTrack(track,ui.callLocalStream));return pc;}
-  async function publishQueuedIce(){ui.callDescriptionSent=true;const queued=ui.queuedLocalIce||[];ui.queuedLocalIce=[];for(const candidate of queued)await sendCallSignal('ice',{candidate});}
-  async function beginCall(mode){if(!ui.peerId){callStatus('Could not find the other chat participant.');return;}if(!ui.callReady){callStatus('Call setup is not ready. Run the latest seller-chat-schema.sql in Supabase, then reload the site.');return;}if(ui.callId){callStatus('A call is already active.');return;}if(!window.RTCPeerConnection){callStatus('This browser does not support voice/video calls.');return;}ui.callId=window.crypto?.randomUUID?.()||'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});ui.callPeerId=ui.peerId;ui.callMode=mode;ui.queuedIce=[];ui.callDescriptionSent=false;showCallPanel(mode==='video'?'Starting video call…':'Starting voice call…',[{id:'hangup',label:'End call',icon:'fa-phone-slash',kind:'end'}]);try{await startMedia(mode);const pc=makePeerConnection(),offer=await pc.createOffer();await pc.setLocalDescription(offer);const {error}=await sendCallSignal('offer',{sdp:pc.localDescription.toJSON(),mode});if(error)throw error;await publishQueuedIce();callStatus(mode==='video'?'Video call ringing…':'Voice call ringing…');}catch(error){const message=error.name==='NotAllowedError'?'Allow microphone/camera access in your browser to call.':`Could not start call: ${error.message}`;await cleanupCall();const status=mainEl.querySelector('#aleeChatStatus');if(status)status.textContent=message;}}
-  async function acceptCall(){if(!ui.pendingOffer||!ui.callId)return;try{showCallPanel('Connecting…',[{id:'hangup',label:'End call',icon:'fa-phone-slash',kind:'end'}]);await startMedia(ui.callMode);const pc=makePeerConnection();await pc.setRemoteDescription(ui.pendingOffer.sdp);for(const candidate of ui.queuedIce.splice(0))await pc.addIceCandidate(candidate);const answer=await pc.createAnswer();await pc.setLocalDescription(answer);const {error}=await sendCallSignal('answer',{sdp:pc.localDescription.toJSON()});if(error)throw error;ui.pendingOffer=null;await publishQueuedIce();callStatus(ui.callMode==='video'?'Video call connected':'Voice call connected');}catch(error){const message=error.name==='NotAllowedError'?'Allow microphone/camera access to answer.':`Could not answer call: ${error.message}`;await cleanupCall();const status=mainEl.querySelector('#aleeChatStatus');if(status)status.textContent=message;}}
+  function makePeerConnection(){
+    const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});
+    ui.callConnection=pc;ui.callRemoteStream=new MediaStream();
+    pc.ontrack=event=>{
+      const stream=event.streams?.[0];if(stream)ui.callRemoteStream=stream;else ui.callRemoteStream.addTrack(event.track);
+      const remote=mainEl.querySelector('#aleeCallRemote'),audio=mainEl.querySelector('#aleeCallRemoteAudio');
+      if(ui.callMode==='video'&&remote){remote.srcObject=ui.callRemoteStream;remote.play().catch(()=>{});}
+      else if(audio){audio.srcObject=ui.callRemoteStream;audio.play().catch(()=>{});}
+    };
+    pc.onicecandidate=event=>{
+      if(!event.candidate)return;
+      const candidate=event.candidate.toJSON();
+      if(!ui.callDescriptionSent){(ui.queuedLocalIce||(ui.queuedLocalIce=[])).push(candidate);return;}
+      const activeCallId=ui.callId;
+      sendCallSignal('ice',{candidate}).then(({error})=>{
+        if(error&&ui.callId===activeCallId){const message=`Call signaling failed: ${error.message}. Check the Supabase call setup.`;callStatus(message);setCallNotice(message);hangupCall();}
+      }).catch(error=>{
+        if(ui.callId===activeCallId){const message=`Call signaling failed: ${error.message}`;callStatus(message);setCallNotice(message);hangupCall();}
+      });
+    };
+    pc.onconnectionstatechange=()=>{
+      if(pc.connectionState==='failed'){
+        const message='The call could not connect across this network. A TURN relay may be needed.';
+        callStatus(message);setCallNotice(message);
+      }else if(pc.connectionState==='disconnected'){
+        const message='Call connection interrupted. Check both devices’ internet connections.';
+        callStatus(message);setCallNotice(message);
+      }
+    };
+    ui.callLocalStream?.getTracks().forEach(track=>pc.addTrack(track,ui.callLocalStream));
+    return pc;
+  }
+  async function publishQueuedIce(){ui.callDescriptionSent=true;const queued=ui.queuedLocalIce||[];ui.queuedLocalIce=[];for(const candidate of queued){const {error}=await sendCallSignal('ice',{candidate});if(error)throw error;}}
+  async function beginCall(mode){
+    if(!ui.peerId){setCallNotice('Could not identify the other chat participant. Reopen this conversation and try again.');return;}
+    if(ui.callId||ui.callStarting){setCallNotice('A call is already in progress.');return;}
+    if(!window.RTCPeerConnection){setCallNotice('This browser does not support voice or video calls.');return;}
+    ui.callStarting=true;
+    try{
+      ui.callId=window.crypto?.randomUUID?.()||'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});
+      ui.callPeerId=ui.peerId;ui.callMode=mode;ui.queuedIce=[];ui.callDescriptionSent=false;
+      showCallPanel(mode==='video'?'Starting video call…':'Starting voice call…');
+      // Ask for device access while the call button's user gesture is still active.
+      await startMedia(mode);
+      if(!ui.callReady){
+        setCallNotice('Connecting to the call service…');
+        const ready=ui.callSubscriptionPromise?await ui.callSubscriptionPromise:false;
+        if(!ready){
+          await cleanupCall();
+          setCallNotice('Call setup is missing. In Supabase, run seller-call-signaling-schema.sql, then reload this page.');
+          return;
+        }
+      }
+      setCallNotice('');
+      const pc=makePeerConnection(),offer=await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      const {error}=await sendCallSignal('offer',{sdp:pc.localDescription.toJSON(),mode});
+      if(error)throw error;
+      await publishQueuedIce();
+      callStatus(mode==='video'?'Video call ringing…':'Voice call ringing…');
+    }catch(error){
+      const message=callErrorText(error,mode);
+      await cleanupCall();
+      setCallNotice(message);
+    }finally{ui.callStarting=false;}
+  }
+  async function acceptCall(){if(!ui.pendingOffer||!ui.callId)return;try{showCallPanel('Connecting…',[{id:'hangup',label:'End call',icon:'fa-phone-slash',kind:'end'}]);await startMedia(ui.callMode);const pc=makePeerConnection();await pc.setRemoteDescription(ui.pendingOffer.sdp);for(const candidate of ui.queuedIce.splice(0))await pc.addIceCandidate(candidate);const answer=await pc.createAnswer();await pc.setLocalDescription(answer);const {error}=await sendCallSignal('answer',{sdp:pc.localDescription.toJSON()});if(error)throw error;ui.pendingOffer=null;await publishQueuedIce();callStatus(ui.callMode==='video'?'Video call connected':'Voice call connected');}catch(error){const message=callErrorText(error,ui.callMode);await cleanupCall();setCallNotice(message);}}
   async function declineCall(){if(ui.callId)await sendCallSignal('reject');await cleanupCall();}
   async function hangupCall(){if(ui.callId)await sendCallSignal('end');await cleanupCall();}
   async function cleanupCall(){ui.callConnection?.close();ui.callConnection=null;ui.callLocalStream?.getTracks().forEach(track=>track.stop());ui.callLocalStream=null;ui.callRemoteStream?.getTracks().forEach(track=>track.stop());ui.callRemoteStream=null;ui.callId=null;ui.callPeerId=null;ui.callMode=null;ui.pendingOffer=null;ui.queuedIce=[];ui.callDescriptionSent=false;const panel=mainEl.querySelector('#aleeCallPanel');if(panel)panel.hidden=true;}
@@ -277,7 +348,26 @@
     mainEl.querySelector('[data-back-inbox]').addEventListener('click',()=>{if(threadHistoryOpen)history.back();else{contentEl.classList.remove('thread-open');if(ui.role==='seller')openSellerInbox(ui.user);else openBuyerInbox(ui.user);}});
     const {data:callConversation}=await db.from('seller_conversations').select('buyer_id,seller_id,shop_id').eq('id',id).maybeSingle();ui.peerId=isGroup?null:callConversation?(callConversation.buyer_id===ui.user.id?callConversation.seller_id:callConversation.buyer_id):null;ui.isBlocked=ui.peerId?ui.blockedIds.has(ui.peerId):false;ui.callPeerLabel=label||'aleeshopping';ui.callPeerLogo='assets/alee-logo.png';if(callConversation?.shop_id){const {data:shopLogo}=await db.from('seller_shops_public').select('logo_url').eq('id',callConversation.shop_id).maybeSingle();if(shopLogo?.logo_url)ui.callPeerLogo=shopLogo.logo_url;}
     mainEl.querySelectorAll('[data-call]').forEach(button=>button.addEventListener('click',()=>beginCall(button.dataset.call)));
-    ui.callReady=false;ui.callChannel=db.channel(`seller-call-${id}`).on('postgres_changes',{event:'INSERT',schema:'public',table:'seller_call_signals',filter:`conversation_id=eq.${id}`},payload=>onCallSignal(payload.new)).subscribe(status=>{ui.callReady=status==='SUBSCRIBED';if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){const el=mainEl.querySelector('#aleeChatStatus');if(el)el.textContent='Call setup is unavailable. Run the latest seller-chat-schema.sql in Supabase, then reload.';}});
+    ui.callReady=false;
+    let resolveCallSubscription;
+    ui.callSubscriptionPromise=new Promise(resolve=>{resolveCallSubscription=resolve;ui.callSubscriptionResolve=resolve;});
+    const finishCallSubscription=(ready,message='')=>{
+      if(ui.callChannel!==callChannel)return;
+      ui.callReady=ready;
+      if(ui.callSetupTimer){clearTimeout(ui.callSetupTimer);ui.callSetupTimer=null;}
+      ui.callSubscriptionResolve=null;
+      resolveCallSubscription(ready);
+      if(message)setCallNotice(message);
+      else if(ready){const status=mainEl.querySelector('#aleeChatStatus');if(status?.textContent.startsWith('Connecting to the call service'))status.textContent='';}
+    };
+    const callChannel=db.channel(`seller-call-${id}`);
+    ui.callChannel=callChannel;
+    ui.callSetupTimer=window.setTimeout(()=>finishCallSubscription(false,'Call service did not connect. Check your internet and the Supabase call setup, then retry.'),10000);
+    callChannel.on('postgres_changes',{event:'INSERT',schema:'public',table:'seller_call_signals',filter:`conversation_id=eq.${id}`},payload=>onCallSignal(payload.new)).subscribe(status=>{
+      if(ui.callChannel!==callChannel)return;
+      if(status==='SUBSCRIBED')finishCallSubscription(true);
+      else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'||status==='CLOSED')finishCallSubscription(false,'Call service is unavailable. Run seller-call-signaling-schema.sql in Supabase, then reload the site.');
+    });
     const form=mainEl.querySelector('#aleeChatSend'),fileInput=form.elements.attachment;mainEl.querySelector('.alee-chat-attach').addEventListener('click',()=>fileInput.click());mainEl.querySelector('[data-record-voice]').addEventListener('click',event=>toggleVoiceRecording(event.currentTarget));
     const emojiButton=mainEl.querySelector('[data-emoji-toggle]'),emojiPicker=mainEl.querySelector('.alee-emoji-picker'),messageArea=form.elements.body;emojiButton.addEventListener('click',()=>{emojiPicker.hidden=!emojiPicker.hidden;});emojiPicker.addEventListener('click',event=>{const button=event.target.closest('[data-emoji]');if(!button)return;const start=messageArea.selectionStart,end=messageArea.selectionEnd,emoji=button.dataset.emoji;messageArea.value=messageArea.value.slice(0,start)+emoji+messageArea.value.slice(end);messageArea.focus();messageArea.setSelectionRange(start+emoji.length,start+emoji.length);emojiPicker.hidden=true;});
     fileInput.addEventListener('change',()=>{const f=fileInput.files?.[0],status=mainEl.querySelector('#aleeChatStatus');if(f&&status)status.textContent=`Ready to send: ${f.name} · ${(f.size/1024/1024).toFixed(1)} MB`;});
@@ -322,7 +412,7 @@
   function startInboxPolling(role){if(ui.inboxPoll)clearInterval(ui.inboxPoll);ui.inboxPoll=window.setInterval(()=>{if(ui.mode==='inbox'&&ui.role===role){invalidateInboxCaches(role);if(role==='seller')openSellerInbox(ui.user,true);else openBuyerInbox(ui.user,true);}},30000);ui.inboxChannel=db.channel(`seller-inbox-${ui.user.id}`).on('postgres_changes',{event:'INSERT',schema:'public',table:'seller_messages'},payload=>{const message=payload.new;if(message?.sender_id===ui.user?.id)return;const item=ui.rows.find(row=>String(row.row.id)===String(message.conversation_id));if(item)notifyIncomingMessage(message,item.row);if(ui.mode==='inbox'&&ui.role===role){invalidateInboxCaches(role);if(role==='seller')openSellerInbox(ui.user,true);else openBuyerInbox(ui.user,true);}}).subscribe();}
   window.addEventListener('offline',()=>{if(ui.mode==='thread'&&overlay.classList.contains('show')){const status=mainEl.querySelector('#aleeChatStatus');if(status)status.textContent='Internet connection lost. This chat will stay open; messages will load when you reconnect.';}});
   window.addEventListener('online',()=>{if(ui.mode==='thread'&&overlay.classList.contains('show')){const status=mainEl.querySelector('#aleeChatStatus');if(status?.textContent.startsWith('Internet connection lost.'))status.textContent='Connection restored. Updating this chat…';loadMessages();}});
-  function stopLive(){if(ui.callId)sendCallSignal('end');cleanupCall();ui.callReady=false;if(ui.callChannel&&db){db.removeChannel(ui.callChannel);ui.callChannel=null;}if(ui.channel&&db){db.removeChannel(ui.channel);ui.channel=null;}if(ui.inboxChannel&&db){db.removeChannel(ui.inboxChannel);ui.inboxChannel=null;}if(ui.poll){clearInterval(ui.poll);ui.poll=null;}if(ui.inboxPoll){clearInterval(ui.inboxPoll);ui.inboxPoll=null;}}
+  function stopLive(){if(ui.callId)sendCallSignal('end');cleanupCall();if(ui.callSetupTimer){clearTimeout(ui.callSetupTimer);ui.callSetupTimer=null;}ui.callSubscriptionResolve?.(false);ui.callSubscriptionResolve=null;ui.callSubscriptionPromise=null;ui.callReady=false;if(ui.callChannel&&db){db.removeChannel(ui.callChannel);ui.callChannel=null;}if(ui.channel&&db){db.removeChannel(ui.channel);ui.channel=null;}if(ui.inboxChannel&&db){db.removeChannel(ui.inboxChannel);ui.inboxChannel=null;}if(ui.poll){clearInterval(ui.poll);ui.poll=null;}if(ui.inboxPoll){clearInterval(ui.inboxPoll);ui.inboxPoll=null;}}
   async function openHome(){const user=await requireUser();if(!user)return;let role='buyer';try{role=localStorage.getItem(`alee-account-role:${user.id}`)||'buyer';}catch(_){}open();if(role==='seller')await openSellerInbox(user);else await openBuyerInbox(user);}
   async function openShop(shopId,shopName,options={}){if(!db){showError('Online messages need the Supabase chat setup.');return;}const {data}=await db.auth.getUser(),initialMessage=String(options?.initialMessage||'').slice(0,3900);if(!data.user){if(initialMessage)try{sessionStorage.setItem('alee-pending-shop-chat-message',initialMessage);}catch(_){}const url=new URL('index.html',location.href);url.searchParams.set('chatShop',shopId);url.searchParams.set('chatShopName',shopName||'Shop');location.href=url.href;return;}ui.user=data.user;setupNotificationListener(data.user);open();await startShopChat(shopId,shopName,initialMessage);}
   async function openInbox(role='buyer',knownUser=null){const user=knownUser||await requireUser();if(!user)return;ui.user=user;setupNotificationListener(user);open();if(role==='seller')await openSellerInbox(user);else await openBuyerInbox(user);}

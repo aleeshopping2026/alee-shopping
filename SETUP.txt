@@ -30,7 +30,7 @@ Product details popup එකේ ඉහළ ad strip එකට image/video සහ 
 Smart product finder එක පාරිභෝගිකයාගේ අවශ්‍යතාව, product category/features සහ මිල සසඳා site එකේ ගැළපෙන භාණ්ඩ පෙන්වයි. මෙය browser එක තුළම ක්‍රියා කරන නිසා AI API key එකක්, අමතර server එකක් හෝ වෙනම AI ගාස්තුවක් අවශ්‍ය නැහැ. මෙය සාමාන්‍ය නිදහස්-පෙළ කතාබහ කරන AI සේවාවක් නොවේ.
 
 
-Calls: දෙපාර්ශ්වයම HTTPS වෙබ් අඩවියෙන් sign in වී එකම chat එක විවෘත කරගෙන සිටිය යුතුයි. Browser එකෙන් microphone/camera permission ලබා දී voice හෝ video call button ඔබන්න; එන call එක Answer හෝ Decline කළ හැක. WebRTC audio/video stream එක browsers දෙක අතර සෘජුව යවයි. සමහර සීමාකළ ජාලවල TURN relay server එකක් නැතිව call එක connect නොවිය හැක.
+Calls: අලුත් buyer/seller chat setup එකක් නම් මුලින් seller-chat-schema.sql Supabase Dashboard → SQL Editor තුළ Run කරන්න. Chat දැනටමත් වැඩ කරනවා නම් call සඳහා පමණක් seller-call-signaling-schema.sql එහි Run කර website එක refresh කරන්න. දෙපාර්ශ්වයම HTTPS site එකට sign in වී එකම chat එක open කරගෙන, browser එකෙන් microphone/camera අවසර ලබා දෙන්න. WebRTC audio/video එක browser දෙක අතර සෘජුව යවයි; සමහර ජාලවල call connect වීමට TURN relay එකක් අවශ්‍ය විය හැක.
 
 Phone OTP sign-in: Supabase Dashboard → Authentication → Sign In / Providers තුළ Phone provider එක enable කර SMS provider එකක් (උදා: Twilio) සකසන්න. Login modal එකේ Phone tab එක රට IP එකෙන් හඳුනාගෙන country code එක තෝරයි; country picker එකෙන් වෙනත් රටක් තෝරාගත හැක. SMS provider එකේ රට අවසර සහ ගාස්තු provider එකෙන් පාලනය වේ.
 
