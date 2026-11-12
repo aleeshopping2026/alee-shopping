@@ -406,7 +406,7 @@
     .product-shop-meta img { width:22px; height:22px; flex:0 0 22px; object-fit:cover; border:0; border-radius:50%; background:#fff; }
     .product-shop-meta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .product-shop-meta .verified-badge { width:12px;height:12px;flex:0 0 12px;object-fit:contain;border:0;border-radius:0;background:transparent; }
-    .popup-shop-meta { display:flex; align-items:center; gap:8px; padding:2px 2px 8px; color:var(--light-leaf); font-size:12px; font-weight:800; }
+    .popup-shop-meta { display:flex; align-items:center; gap:8px; padding:2px 2px 8px; color:#111827; font-size:12px; font-weight:800; }
     .popup-shop-meta a { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; cursor:pointer; }
     .popup-shop-meta a:hover span { text-decoration:underline; }
     .popup-shop-meta img { width:34px; height:34px; object-fit:cover; border:0; border-radius:50%; background:#fff; }
@@ -508,7 +508,7 @@
     .thumb-strip { display:flex; gap:8px; overflow-x:auto; padding:8px 2px 3px; scroll-behavior:smooth; }
     .thumb-strip::-webkit-scrollbar { height:5px; }
     .thumb { flex:0 0 74px; height:62px; padding:3px; border:1px solid var(--glass-border); border-radius:8px; background:#fff; cursor:pointer; opacity:.72; }
-    .thumb.active { opacity:1; border:2px solid var(--light-leaf); }
+    .thumb.active { opacity:1; border:2px solid #111827; }
     .thumb img { width:100%; height:100%; object-fit:contain; border-radius:5px; }
     .image-zoom { display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,.96); align-items:center; justify-content:center; padding:56px 64px; }
     .image-zoom.open { display:flex; }
@@ -914,7 +914,7 @@
     .cat-btn{position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:0 4px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#667085!important;font-size:13px!important;font-weight:500!important;}
     .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
     .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
-    .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#f36b00;}
+    .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#111827;}
 @media (max-width:767px){
     /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
     #productList.products{display:block!important;column-count:2!important;column-gap:10px!important;}
@@ -925,7 +925,7 @@
 @media (min-width:1024px){
     #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
 }
-    .slider img { border-color:rgba(255,105,0,.18)!important; }
+    .slider img { border-color:#111827!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
     /* Soften the header buttons while retaining the site palette. */
