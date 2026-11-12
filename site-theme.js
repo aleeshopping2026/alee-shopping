@@ -88,10 +88,20 @@
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && menu && !menu.hidden) {
+      event.stopImmediatePropagation();
       closeMenu();
       activeTrigger?.focus({ preventScroll: true });
     }
   });
-  window.addEventListener('resize', () => { if (menu && !menu.hidden && activeTrigger) openThemeSettings(activeTrigger); });
-  window.addEventListener('storage', event => { if (event.key === storageKey) setSiteTheme(event.newValue === 'dark' ? 'dark' : 'light'); });
+  window.addEventListener('resize', closeMenu);
+  window.addEventListener('storage', event => {
+    if (event.key !== storageKey) return;
+    const selected = event.newValue === 'dark' ? 'dark' : 'light';
+    root.dataset.theme = selected;
+    const color = document.querySelector('meta[name="theme-color"]');
+    if (color) color.setAttribute('content', selected === 'dark' ? '#111111' : '#ff6900');
+    if (window.aleeChat?.setTheme) window.aleeChat.setTheme(selected);
+    document.dispatchEvent(new CustomEvent('alee-theme-change', { detail: { theme: selected } }));
+    syncMenu();
+  });
 })();

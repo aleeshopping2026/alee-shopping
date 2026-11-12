@@ -21,10 +21,9 @@
   let shareDialogHistoryOpen = false;
 
   function setTheme(dark) {
-    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    try { localStorage.setItem('alee-shop-theme', dark ? 'dark' : 'light'); } catch (_) {}
+    if (window.setSiteTheme) window.setSiteTheme(dark ? 'dark' : 'light');
+    else document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   }
-  try { document.documentElement.dataset.theme = localStorage.getItem('alee-shop-theme') === 'dark' ? 'dark' : 'light'; } catch (_) {}
 
   const shopMenuToggle = document.getElementById('shopMenuToggle');
   const shopMenu = document.getElementById('shopMenu');
