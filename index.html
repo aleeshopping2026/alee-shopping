@@ -15,6 +15,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('alee-theme')==='dark'?'dark':'light';}catch(_){document.documentElement.dataset.theme='light';}</script>
+  <link rel="stylesheet" href="site-theme.css?v=20261111">
 
   <style>
     /* Light theme is the default. */
@@ -1037,8 +1039,8 @@
         <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         <button type="button" class="photo-search-btn" onclick="document.getElementById('photoSearchInput').click()" title="Search with a photo" aria-label="Search with a photo"><i class="fa-solid fa-camera"></i></button>
-        <button class="search-theme-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to dark mode" aria-label="Switch to dark mode">
-          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        <button class="search-theme-btn" id="themeToggleBtn" type="button" data-open-theme-settings onclick="openThemeSettings(this)" title="Appearance settings" aria-label="Appearance settings" aria-haspopup="true" aria-expanded="false">
+          <i class="fa-solid fa-gear" aria-hidden="true"></i>
         </button>
       </div>
       <div class="search-extras" id="searchExtras">
@@ -1324,7 +1326,7 @@
 
   <div class="seller-overlay" id="buyerDashboard" onclick="if(event.target===this)closeBuyerAccount()" role="dialog" aria-modal="true" aria-labelledby="buyerDashboardTitle">
     <div class="seller-card account-hub-card">
-      <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close" type="button" onclick="editAccountDetails()" aria-label="Account settings"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
+      <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
         <button type="button" id="accountBannerAdsButton" style="display:none" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
@@ -2718,32 +2720,6 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         if(activeUser&&(review.user_id===activeUser.id||isReviewHost())){const actions=document.createElement('div');actions.className='review-actions';const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.onclick=()=>startEditProductReview(review);const remove=document.createElement('button');remove.type='button';remove.textContent='Delete';remove.onclick=()=>deleteProductReview(review);actions.append(edit,remove);card.appendChild(actions);}
         list.appendChild(card);
       });
-    }
-
-    // --- DARK / LIGHT THEME TOGGLE ---
-    function toggleTheme() {
-      const html = document.documentElement;
-      const themeIcon = document.getElementById('themeIcon');
-      const themeButton = document.getElementById('themeToggleBtn');
-      if (html.getAttribute('data-theme') === 'dark') {
-        html.removeAttribute('data-theme');
-        themeIcon.className = 'fa-solid fa-moon';
-        themeButton.title = 'Switch to dark mode';
-        themeButton.setAttribute('aria-label', 'Switch to dark mode');
-        localStorage.setItem('alee-theme', 'light');
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        themeIcon.className = 'fa-solid fa-sun';
-        themeButton.title = 'Switch to light mode';
-        themeButton.setAttribute('aria-label', 'Switch to light mode');
-        localStorage.setItem('alee-theme', 'dark');
-      }
-    }
-    if (localStorage.getItem('alee-theme') === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.getElementById('themeIcon').className = 'fa-solid fa-sun';
-      document.getElementById('themeToggleBtn').title = 'Switch to light mode';
-      document.getElementById('themeToggleBtn').setAttribute('aria-label', 'Switch to light mode');
     }
 
     // Advance the promotional banner every five seconds; users can also navigate it.
@@ -4198,6 +4174,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
+<script src="site-theme.js?v=20261111"></script>
 <script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
 <script src="chat.js?v=20261111-chat-fast-ui"></script>
 </body>

@@ -1,0 +1,104 @@
+:root { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+.site-theme-menu {
+  position: fixed;
+  z-index: 60000;
+  width: 220px;
+  padding: 8px;
+  color: #172033;
+  background: #fff;
+  border: 1px solid #dfe3e8;
+  border-radius: 15px;
+  box-shadow: 0 16px 44px #10182830;
+  font: 600 14px/1.35 "Plus Jakarta Sans", Arial, sans-serif;
+}
+.site-theme-menu[hidden] { display: none !important; }
+.site-theme-menu-title { padding: 8px 10px 7px; color: #667085; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.site-theme-menu button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 42px; padding: 9px 10px; color: #172033; background: transparent; border: 0; border-radius: 9px; text-align: left; font: inherit; cursor: pointer; }
+.site-theme-menu button:hover,.site-theme-menu button:focus-visible { outline: none; background: #f2f4f7; }
+.site-theme-menu button.selected { color: #c84f00; background: #fff3eb; }
+.site-theme-menu button>i:first-child { width: 18px; text-align: center; }
+.site-theme-menu .site-theme-check { margin-left: auto; opacity: 0; }
+.site-theme-menu button.selected .site-theme-check { opacity: 1; }
+
+html[data-theme="dark"] .site-theme-menu { color: #f2f4f7; background: #17191d; border-color: #383d45; box-shadow: 0 18px 48px #0009; }
+html[data-theme="dark"] .site-theme-menu-title { color: #aab2bf; }
+html[data-theme="dark"] .site-theme-menu button { color: #f2f4f7; }
+html[data-theme="dark"] .site-theme-menu button:hover,html[data-theme="dark"] .site-theme-menu button:focus-visible { background: #252a31; }
+html[data-theme="dark"] .site-theme-menu button.selected { color: #ff9a57; background: #382417; }
+
+html[data-theme="dark"] { --glass-border: #343a46; }
+html[data-theme="dark"] body { background-color: var(--bg-dark); color: var(--text-white); }
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select { color-scheme: dark; }
+html[data-theme="dark"] .search-brand-all-panel,
+html[data-theme="dark"] .search-brand-all-back,
+html[data-theme="dark"] .search-brand-all-chip,
+html[data-theme="dark"] .account-library-card,
+html[data-theme="dark"] .account-library-card>.seller-header,
+html[data-theme="dark"] .account-library-card>.seller-panel,
+html[data-theme="dark"] .account-library-row,
+html[data-theme="dark"] .account-favorite-card,
+html[data-theme="dark"] .account-library-status,
+html[data-theme="dark"] .account-country-card,
+html[data-theme="dark"] .account-country-filter,
+html[data-theme="dark"] .account-feature-panel,
+html[data-theme="dark"] .account-hub-card,
+html[data-theme="dark"] #buyerDashboard .seller-panel { color: #eef1f5; background: #17191d; border-color: #343a46; }
+html[data-theme="dark"] .account-library-tabs { border-color: #343a46; }
+html[data-theme="dark"] .account-library-tabs button,
+html[data-theme="dark"] .account-library-row>div:nth-child(2),
+html[data-theme="dark"] .account-ads-filter,
+html[data-theme="dark"] .account-library-card .account-library-tabs button { color: #eef1f5; }
+html[data-theme="dark"] .account-library-card .account-ads-filter select,
+html[data-theme="dark"] .account-library-card .account-library-actions button,
+html[data-theme="dark"] .account-country-filter,
+html[data-theme="dark"] .account-favorites-card,
+html[data-theme="dark"] .account-library-card .account-favorite-card { color: #eef1f5; background: #202329; border-color: #3c424d; }
+html[data-theme="dark"] .account-favorite-card img,
+html[data-theme="dark"] .account-library-row>img { background: #111318; }
+html[data-theme="dark"] #buyerDashboard { background: #000b; }
+html[data-theme="dark"] #buyerDashboard .account-hub-card { background: #111318; border-color: #343a46; }
+html[data-theme="dark"] #buyerDashboard .seller-panel,
+html[data-theme="dark"] #buyerDashboard .seller-panel h3 { color: #eef1f5; }
+html[data-theme="dark"] #buyerDashboard .seller-close { color: #ff9a57; background: #2b211a; border-color: #583a25; }
+html[data-theme="dark"] #sellerDashboard .seller-card,
+html[data-theme="dark"] #sellerDashboard .seller-panel,
+html[data-theme="dark"] #sellerDashboard #sellerShopProfile,
+html[data-theme="dark"] #sellerDashboard #sellerAnalyticsPanel,
+html[data-theme="dark"] #sellerDashboard #sellerReelPanel,
+html[data-theme="dark"] #sellerDashboard #sellerProductListPanel,
+html[data-theme="dark"] #sellerDashboard #sellerProductPanel { color: #eef1f5; background: #14171b; border-color: #343a46; }
+html[data-theme="dark"] #sellerDashboard .seller-header h2,
+html[data-theme="dark"] #sellerDashboard .seller-panel h3,
+html[data-theme="dark"] #sellerDashboard .seller-analytics-subheading { color: #eef1f5; }
+html[data-theme="dark"] #sellerDashboard .seller-action-row .seller-action-button,
+html[data-theme="dark"] #sellerDashboard .seller-action-row .alee-chat-seller-button,
+html[data-theme="dark"] #sellerDashboard .seller-dashboard-quick-actions .seller-action-button,
+html[data-theme="dark"] #sellerDashboard .seller-dashboard-quick-actions #sellerAddItemToggle,
+html[data-theme="dark"] #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-items { color: #eef1f5 !important; background: #22262d !important; border-color: #454c57 !important; }
+html[data-theme="dark"] #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-post,
+html[data-theme="dark"] #sellerDashboard .seller-dashboard-quick-actions .seller-action-button.primary { color: #fff !important; background: #f36b00 !important; border-color: #f36b00 !important; }
+html[data-theme="dark"] #sellerDashboard .seller-analytics-card,
+html[data-theme="dark"] #sellerDashboard .seller-analytics-event,
+html[data-theme="dark"] #sellerDashboard .seller-analytics-summary span,
+html[data-theme="dark"] #sellerDashboard .seller-analytics-summary strong,
+html[data-theme="dark"] #sellerDashboard .seller-reel-dropzone { color: #eef1f5 !important; background: #202329 !important; border-color: #454c57 !important; }
+html[data-theme="dark"] #sellerDashboard .seller-analytics-card span { color: #aab2bf; }
+html[data-theme="dark"] #sellerDashboard .seller-analytics-card strong,
+html[data-theme="dark"] #sellerDashboard .seller-analytics-summary strong { color: #eef1f5 !important; }
+html[data-theme="dark"] #sellerDashboard .seller-analytics-controls button,
+html[data-theme="dark"] #sellerDashboard input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html[data-theme="dark"] #sellerDashboard textarea,
+html[data-theme="dark"] #sellerDashboard select { color: #eef1f5; background: #202329; border-color: #454c57; }
+html[data-theme="dark"] #sellerAnalyticsChart { background: #202329; border-color: #454c57; }
+html[data-theme="dark"] .order-confirm-dialog,
+html[data-theme="dark"] .review-photo-chooser,
+html[data-theme="dark"] .modal-content { color: #eef1f5; background: #17191d; border-color: #343a46; }
+html[data-theme="dark"] #shopsSection,
+html[data-theme="dark"] #shopsSection #hubShopsPanel,
+html[data-theme="dark"] #hubContentPanel { border-color: #343a46; }
+html[data-theme="dark"] #shopsSection .hub-shortcut:hover,
+html[data-theme="dark"] #shopsSection .desktop-sidebar-action:hover { background: #202329; }
