@@ -10,6 +10,10 @@
   let followingCount = 0;
   let isFollowing = false;
   let shopRating = 5;
+  let shopProducts = [];
+  let shopJobs = [];
+  let shopJobsLoadError = false;
+  let activeShopTab = 'all';
   let currentUserEmail = '';
   let shopBlocked = false;
   let shopOnHold = false;
@@ -41,12 +45,17 @@
     const productsEl = document.getElementById('products');
     if (shopBlocked || shopOnHold) {
       productsEl.innerHTML = `<div class="empty">${shopBlocked ? 'You blocked this shop on this device.' : 'This shop is on hold on this device.'}</div>`;
+      const jobsEl=document.getElementById('shopJobs');if(jobsEl)jobsEl.innerHTML=`<div class="empty">${shopBlocked?'You blocked this shop on this device.':'This shop is on hold on this device.'}</div>`;
       document.getElementById('profileStatus').textContent = shopBlocked ? 'This shop is blocked on this device. Open the menu to unblock it.' : 'This shop is on hold on this device. Open the menu to resume it.';
+    } else {
+      const status=document.getElementById('profileStatus');
+      if(status && /^(This shop is blocked|This shop is on hold)/.test(status.textContent)) status.textContent='';
     }
     const blockButton = shopMenu.querySelector('[data-shop-action="block"]');
     const holdButton = shopMenu.querySelector('[data-shop-action="hold"]');
     if (blockButton) blockButton.textContent = shopBlocked ? 'Unblock' : 'Block';
     if (holdButton) holdButton.textContent = shopOnHold ? 'Resume shop' : 'Hold';
+    if (document.getElementById('shopProductsPanel')) renderShopContent();
   }
   async function sendShopReport() {
     const form = document.getElementById('shopReportForm');
@@ -194,7 +203,7 @@
     if (error) { document.getElementById('profileDialogContent').innerHTML='<p>Run the updated seller profile SQL to view followers.</p>'; return; }
     const rows = data || [];
     document.getElementById('profileDialogContent').innerHTML = rows.length
-      ? `<div class="profile-list">${rows.map(row=>`<div class="profile-list-item"><img src="assets/alee-logo.png" alt=""><span>${esc(row.follower_name||'Shopper')}</span></div>`).join('')}</div>`
+      ? `<div class="profile-list">${rows.map(row=>{const avatar=String(row.follower_avatar_url||'');const safeAvatar=/^https:\/\//i.test(avatar)?avatar:'assets/alee-logo.png';return `<div class="profile-list-item"><img src="${esc(safeAvatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><span>${esc(row.follower_name||'Shopper')}</span></div>`;}).join('')}</div>`
       : '<p>No followers yet.</p>';
   }
   async function showFollowing() {
@@ -206,6 +215,40 @@
     document.getElementById('profileDialogContent').innerHTML = rows.length
       ? `<div class="profile-list">${rows.map(row=>`<a class="profile-list-item" href="shop.html?shop=${encodeURIComponent(row.id)}"><img src="${esc(row.logo_url||'assets/alee-logo.png')}" alt=""><span>${esc(row.shop_name)}</span></a>`).join('')}</div>`
       : '<p>This business is not following any shops yet.</p>';
+  }
+
+  function safeJobLink(value) {
+    const raw=String(value||'').trim();if(!raw)return '';
+    try { const url=new URL(raw,location.href);return ['https:','http:','mailto:','tel:'].includes(url.protocol)?url.href:''; } catch (_) { return ''; }
+  }
+  function renderShopJob(job) {
+    const title=esc(job.title||'Job opportunity'),details=[job.employment_type,job.location,job.salary].filter(Boolean).map(esc);
+    const media=String(job.media_url||'').trim();
+    const image=media?`<img class="shop-job-image" src="${esc(media)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`:'<i class="fa-solid fa-briefcase" aria-hidden="true"></i>';
+    const link=safeJobLink(job.link_url);
+    return `<article class="shop-job-card"><div class="shop-job-thumb">${image}</div><div class="shop-job-copy"><h3>${title}</h3><div class="shop-job-meta">${details.map(item=>`<span>${item}</span>`).join('')}</div>${job.description?`<p>${esc(job.description)}</p>`:''}${link?`<a class="shop-job-open" href="${esc(link)}" ${/^https?:/i.test(link)?'target="_blank" rel="noopener noreferrer"':''}>View job details</a>`:''}</div></article>`;
+  }
+  function renderShopContent() {
+    const productsPanel=document.getElementById('shopProductsPanel'),jobsPanel=document.getElementById('shopJobsPanel');
+    const productsEl=document.getElementById('products'),jobsEl=document.getElementById('shopJobs'),heading=document.getElementById('shopContentHeading');
+    const tabButtons=Array.from(document.querySelectorAll('[data-shop-tab]'));
+    tabButtons.forEach(button=>{const active=button.dataset.shopTab===activeShopTab;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+    const showJobs=activeShopTab==='jobs';productsPanel.hidden=showJobs;jobsPanel.hidden=!showJobs;
+    if(showJobs){
+      if(shopBlocked||shopOnHold){jobsEl.innerHTML=`<div class="empty">${shopBlocked?'You blocked this shop on this device.':'This shop is on hold on this device.'}</div>`;return;}
+      jobsEl.innerHTML=shopJobsLoadError?'<div class="empty">Shop jobs could not load. Check platform-posts-schema.sql in Supabase.</div>':shopJobs.length?shopJobs.map(renderShopJob).join(''):'<div class="empty">This shop has no job listings yet.</div>';
+      return;
+    }
+    const labels={all:'All',new:'New arrivals',best:'Best selling'};heading.textContent=labels[activeShopTab]||'All';
+    if(shopBlocked||shopOnHold){productsEl.innerHTML=`<div class="empty">${shopBlocked?'You blocked this shop on this device.':'This shop is on hold on this device.'}</div>`;return;}
+    let items=shopProducts.slice();
+    if(activeShopTab==='new'){
+      const cutoff=Date.now()-7*24*60*60*1000;
+      items=items.filter(item=>{const created=Date.parse(item.createdAt||item.created_at||'');return Number.isFinite(created)&&created>=cutoff;});
+    } else if(activeShopTab==='best'){
+      items.sort((a,b)=>(Number(b.soldCount)||0)-(Number(a.soldCount)||0)||((Date.parse(b.createdAt||b.created_at||'')||0)-(Date.parse(a.createdAt||a.created_at||'')||0)));
+    }
+    productsEl.innerHTML=items.length?items.map(item=>{let price;try{price=new Intl.NumberFormat(undefined,{style:'currency',currency:shop.currency_code||'LKR',maximumFractionDigits:2}).format(Number(item.price||0));}catch(_){price=`${shop.currency_code||'LKR'} ${Number(item.price||0).toLocaleString()}`;}return `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'">${item.freeShipping?'<span class="free-shipping-badge shop-free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>':''}<div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">${price}</div></a>`;}).join(''):`<div class="empty">${activeShopTab==='new'?'No products were added in the last 7 days.':activeShopTab==='best'?'No best-selling products yet.':'This business has no products yet.'}</div>`;
   }
 
 
@@ -223,8 +266,8 @@
     document.getElementById('headerShopLogo').src = shop.logo || 'assets/alee-logo.png';
     shopBlocked = localShopFlag('blocked'); shopOnHold = localShopFlag('hold');
     document.getElementById('ratingToolLink').hidden = currentUserEmail.toLowerCase() !== 'aleeshopping2026@gmail.com';
-    const items = products.filter(item => String(item.shopId || shops[0]?.id || 'alee-shopping') === String(shop.id));
-    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><div class="profile-avatar-wrap"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-rating-stars profile-stars" aria-label="${shopRating} out of 5 stars">${[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('')}</div></div><div class="profile-identity"><h2 class="profile-name"><span>${esc(shop.name)}</span>${shop.isVerified?'<img class="shop-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':''}<button id="favoriteShopButton" class="favorite-heart-button" type="button" aria-label="Add shop to favorites" title="Add to favorites" aria-pressed="false"><i class="fa-regular fa-heart"></i></button></h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${items.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
+    shopProducts=products.filter(item=>String(item.shopId||shops[0]?.id||'alee-shopping')===String(shop.id));
+    document.getElementById('shopProfile').innerHTML = `<div class="profile-top"><div class="profile-avatar-wrap"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-rating-stars profile-stars" aria-label="${shopRating} out of 5 stars">${[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('')}</div></div><div class="profile-identity"><h2 class="profile-name"><span>${esc(shop.name)}</span>${shop.isVerified?'<img class="shop-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':''}<button id="favoriteShopButton" class="favorite-heart-button" type="button" aria-label="Add shop to favorites" title="Add to favorites" aria-pressed="false"><i class="fa-regular fa-heart"></i></button></h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${shopProducts.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><nav class="shop-content-tabs" aria-label="Shop listings"><button type="button" data-shop-tab="all" aria-pressed="true">All</button><button type="button" data-shop-tab="new" aria-pressed="false">New arrivals</button><button type="button" data-shop-tab="best" aria-pressed="false">Best selling</button><button type="button" data-shop-tab="jobs" aria-pressed="false">Jobs</button></nav><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
     document.getElementById('followersStat').addEventListener('click', showFollowers);
     document.getElementById('followingStat').addEventListener('click', showFollowing);
     document.getElementById('adsStat').addEventListener('click', () => document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'}));
@@ -233,7 +276,8 @@
     document.getElementById('favoriteShopButton').addEventListener('click', toggleFavoriteShop);
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
-    document.getElementById('products').innerHTML = items.length ? items.map(item => {let price;try{price=new Intl.NumberFormat(undefined,{style:'currency',currency:shop.currency_code||'LKR',maximumFractionDigits:2}).format(Number(item.price||0));}catch(_){price=`${shop.currency_code||'LKR'} ${Number(item.price||0).toLocaleString()}`;}return `<a class="card" href="index.html?product=${encodeURIComponent(item.id)}"><img src="${esc(item.images?.[0]||'assets/alee-logo.png')}" alt="${esc(item.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-meta"><span>${esc(shop.name)}</span></div><h3>${esc(item.name)}</h3><div class="price">${price}</div></a>`;}).join('') : '<div class="empty">This business has no ads yet.</div>';
+    document.querySelectorAll('[data-shop-tab]').forEach(button=>button.addEventListener('click',()=>{activeShopTab=button.dataset.shopTab;renderShopContent();}));
+    renderShopContent();
     refreshShopVisibility();
   }
 
@@ -241,9 +285,9 @@
     if (!shop && supabase && shopId && isUuid(shopId)) {
       const {data:row,error} = await supabase.from('seller_shops_profile_public').select('*').eq('id',shopId).maybeSingle();
       if (!error && row) {
-        shop = {id:String(row.id), name:row.shop_name, logo:row.logo_url||'assets/alee-logo.png', phone:row.phone||'', phone2:row.phone2||'', address:row.address||'', externalLink:row.external_link||'', shopCategory:row.shop_category||'Other', bio:row.bio||'', facebook:row.facebook_url||'', instagram:row.instagram_url||'', youtube:row.youtube_url||'', tiktok:row.tiktok_url||'', isVerified:Boolean(row.is_verified), rank:9999, rating:5};
+        shop = {id:String(row.id), name:row.shop_name, logo:row.logo_url||'assets/alee-logo.png', phone:row.phone||'', phone2:row.phone2||'', address:row.address||'', externalLink:row.external_link||'', shopCategory:row.shop_category||'Other', bio:row.bio||'', facebook:row.facebook_url||'', instagram:row.instagram_url||'', youtube:row.youtube_url||'', tiktok:row.tiktok_url||'', currency_code:row.currency_code||'LKR', isVerified:Boolean(row.is_verified), rank:9999, rating:5};
         const {data:items} = await supabase.from('seller_products_profile_public').select('*').eq('shop_id',shopId);
-        (items||[]).forEach(item=>{const price=Number(item.offer_price)||Number(item.price);products.push({id:1000000000+Number(item.id),name:item.name,price,originalPrice:Number(item.offer_price)?Number(item.price):null,discountPercent:Number(item.offer_price)&&Number(item.price)>Number(item.offer_price)?Math.round((Number(item.price)-price)*100/Number(item.price)):0,stock:Number(item.stock??1),colors:item.colors||[],category:item.category,shopId:String(item.shop_id),desc:item.description||'',features:item.features||[],sizes:item.sizes||[],images:item.image_urls||[]});});
+        (items||[]).forEach(item=>{const price=Number(item.offer_price)||Number(item.price);products.push({id:1000000000+Number(item.id),name:item.name,price,originalPrice:Number(item.offer_price)?Number(item.price):null,discountPercent:Number(item.offer_price)&&Number(item.price)>Number(item.offer_price)?Math.round((Number(item.price)-price)*100/Number(item.price)):0,stock:Number(item.stock??1),soldCount:Number(item.sold_count||0),freeShipping:Boolean(item.free_shipping),createdAt:item.created_at||'',currencyCode:item.currency_code||row.currency_code||'LKR',colors:item.colors||[],category:item.category,shopId:String(item.shop_id),desc:item.description||'',features:item.features||[],sizes:item.sizes||[],images:item.image_urls||[]});});
         shops.push(shop);
       }
     }
@@ -255,7 +299,9 @@
     if (shop && supabase) {
       const key='alee-shop-view:'+shop.id,now=Date.now();
       try { if(now-Number(sessionStorage.getItem(key)||0)>1800000){sessionStorage.setItem(key,String(now));await supabase.rpc('track_seller_shop_view',{p_shop_id:shop.id});} } catch(_) {}
-      await getBusinessStats();
+      const jobsPromise=isUuid(shop.id)?supabase.from('platform_posts').select('id,title,category,description,link_url,media_url,location,employment_type,salary,created_at').eq('shop_id',shop.id).eq('post_type','job').order('created_at',{ascending:false}).limit(100):null;
+      const [jobsResult]=await Promise.all([jobsPromise,getBusinessStats()]);
+      if(jobsResult){shopJobsLoadError=Boolean(jobsResult.error);shopJobs=jobsResult.error?[]:(jobsResult.data||[]);if(activeShopTab==='jobs')renderShopContent();}
     }
   }
 

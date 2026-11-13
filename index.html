@@ -227,7 +227,7 @@
     .search-brand-title { margin:0 0 8px; color:var(--text-white); font-size:13px; font-weight:800; }
     .search-brand-rail { display:flex; gap:10px; overflow-x:auto; padding:3px 2px 9px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
     .search-brand-tile { display:grid; justify-items:center; align-content:start; gap:7px; flex:0 0 100px; min-height:112px; padding:8px; border:0; border-radius:15px; background:transparent; color:#202939; font:inherit; font-size:11px; cursor:pointer; scroll-snap-align:start; box-shadow:none; }
-    .search-brand-tile img { width:68px; height:68px; object-fit:contain; padding:3px; border:0; border-radius:50%; background:transparent; }
+    .search-brand-tile img { display:block; width:64px; height:64px; object-fit:contain; padding:2px; border:0; border-radius:8px; background:transparent; }
     .search-brand-tile.active { background:#fff2e5; color:#9c4509; }
     .search-brand-tile.all-brands-tile{align-content:center;gap:7px;border:0;background:transparent;color:#9c4509;font-weight:800}
     .search-brand-tile.all-brands-tile i{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#fff0dc;color:#e86b00;font-size:22px}
@@ -575,7 +575,7 @@
     .info-chip { display:flex; min-width:0; min-height:64px; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#fff4bf; border:1px solid #eab308; border-radius:12px; padding:10px 8px; font-size:12px; line-height:1.35; color:#493b10; }
     .info-chip strong { display:block; color:#a16207; font-size:13px; margin-bottom:3px; }
     .popup-sticky-action { position:sticky; bottom:0; z-index:10; background:linear-gradient(180deg, transparent 0%, var(--card-bg) 20%); padding-top:12px; display:grid; grid-template-columns:62px repeat(3,minmax(0,1fr)); gap:7px; align-items:center; }
-    .popup-sticky-action { position:fixed!important; left:50%; bottom:0; transform:translateX(-50%); width:min(100vw,700px); z-index:10002; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,#fff0,#fff 20%); box-sizing:border-box; display:none; }
+    .popup-sticky-action { position:fixed!important; left:0; right:0; bottom:0; margin:0 auto; transform:none; width:min(100%,700px); max-width:100%; z-index:10002; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,#fff0,#fff 20%); box-sizing:border-box; display:none; }
     .popup-quantity { width:100%; height:46px; padding:0 6px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); font:inherit; text-align:center; }
     .popup-sticky-action .btn { margin-top:0; min-height:46px; padding:8px 5px; font-size:14px; }
     .popup-sticky-action .buy-now-btn { background:#f4c430; color:#172033; border-color:#d9a900; }
@@ -638,6 +638,17 @@
     .social-icons svg { width: 20px; height: 20px; fill: var(--text-white); }
     .social-icons a:hover svg { fill: #fff; }
   
+    .added-cart-toast { position:fixed!important; top:calc(env(safe-area-inset-top,0px) + 12px); left:50%; z-index:11010; display:grid; grid-template-columns:50px minmax(0,1fr) auto; align-items:center; gap:11px; width:min(460px,calc(100vw - 24px)); max-width:calc(100% - 20px); padding:10px 12px; box-sizing:border-box; border:1px solid #edf0f2; border-radius:15px; background:#fff; color:#111827; box-shadow:0 12px 36px #10182835; opacity:0; visibility:hidden; pointer-events:none; transform:translate(-50%,-12px); transition:opacity .18s ease,transform .18s ease,visibility .18s ease; }
+    .added-cart-toast.show { opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%,0); }
+    .added-cart-toast-visual { position:relative; width:50px; height:50px; }
+    .added-cart-toast-photo { display:block; width:100%; height:100%; object-fit:cover; border:1px solid #e5e7eb; border-radius:10px; background:#f8fafc; }
+    .added-cart-toast-check { position:absolute; right:-5px; bottom:-4px; display:grid; place-items:center; width:20px; height:20px; border:2px solid #fff; border-radius:50%; background:#16a34a; color:#fff; font-size:15px; }
+    .added-cart-toast-copy { display:grid; min-width:0; gap:3px; }
+    .added-cart-toast-title { overflow:hidden; color:#111827; font-size:14px; font-weight:800; text-overflow:ellipsis; white-space:nowrap; }
+    .added-cart-toast-item { overflow:hidden; color:#667085; font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
+    .added-cart-toast-button { min-height:40px; padding:9px 12px; border:0; border-radius:10px; background:#ff6900; color:#fff; font-family:inherit; font-size:12px; font-weight:800; line-height:1.2; white-space:nowrap; cursor:pointer; }
+    .added-cart-toast-button:hover,.added-cart-toast-button:focus-visible { background:#e85d00; }
+    @media(max-width:480px){.added-cart-toast{top:calc(env(safe-area-inset-top,0px) + 8px);grid-template-columns:44px minmax(0,1fr) auto;gap:8px;width:calc(100vw - 20px);padding:9px 10px;border-radius:13px}.added-cart-toast-visual{width:44px;height:44px}.added-cart-toast-title{font-size:13px}.added-cart-toast-item{font-size:11px}.added-cart-toast-button{min-height:38px;padding:8px 9px;font-size:11px}}
     .cart-toast { position: fixed; z-index: 10000; top: 22px; left: 50%; transform: translate(-50%, -14px); padding: 13px 22px; border-radius: 10px; background: #16803c; color: #fff; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,.22); opacity: 0; transition: opacity .2s ease, transform .2s ease; pointer-events: none; }
     .cart-toast.show { opacity: 1; transform: translate(-50%, 0); }
     .order-confirm-dialog { width:min(92vw,430px); margin:auto; padding:28px; border:1px solid #f4d28c; border-radius:22px; color:#172033; background:#fff; box-shadow:0 25px 80px #0005; text-align:center; }
@@ -801,11 +812,15 @@
       .search-discovery-overlay.results-mode .search-filter-panel { grid-template-columns:minmax(0,1.4fr) minmax(260px,.8fr); align-items:start; column-gap:36px; }
       .search-discovery-overlay.results-mode .search-filter-top { grid-column:1/-1; }
       .search-discovery-overlay.results-mode .search-filter-panel fieldset { min-width:0; }
-      .search-discovery-overlay.results-mode .discovery-products-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),300px)); justify-content:center; gap:16px; }
+      .search-discovery-overlay.results-mode .search-filter-categories-fieldset { display:none; }
+      .search-discovery-overlay.results-mode .search-filter-panel { grid-template-columns:minmax(0,1fr); }
+      .search-discovery-overlay.results-mode .discovery-products-grid { grid-template-columns:repeat(5,minmax(0,1fr)); justify-content:stretch; gap:16px; }
       .popup-content { width:min(94vw,1500px); max-width:1500px; margin:12px auto; }
       .popup-main-grid { grid-template-columns:minmax(0,1.1fr) minmax(400px,.9fr); gap:28px; }
     }
     @media(min-width:701px) and (max-width:1023px){#sellerDashboard .seller-card{width:min(900px,calc(100vw - 32px));max-height:94vh;overflow-y:auto}}
+    @media(min-width:768px) and (max-width:1199px){.search-discovery-overlay.results-mode .discovery-products-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0 12px}}
+    @media(max-width:767px){.search-discovery-overlay.results-mode .discovery-products-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.search-discovery-overlay.results-mode .search-discovery-body{padding:12px 10px calc(78px + env(safe-area-inset-bottom))}.search-discovery-overlay.results-mode .search-filter-panel{margin:8px 0;padding:10px 12px;border:1px solid var(--glass-border);border-radius:12px;background:var(--bg-dark)}}
 
     .seller-analytics-subheading{margin:20px 0 8px;color:#172033;font-size:14px}.seller-analytics-products,.seller-analytics-activity{display:grid;gap:7px}.seller-analytics-product,.seller-analytics-event{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px;border:1px solid #d0d5dd;border-radius:11px;background:#fff;color:#172033}.seller-analytics-product img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#f3f4f6}.seller-analytics-product small,.seller-analytics-event small{display:block;color:#667085;font-size:11px;margin-top:3px}.seller-analytics-product strong,.seller-analytics-event strong{font-size:12px}.seller-analytics-event{grid-template-columns:1fr auto}.seller-analytics-card strong{color:#172033!important}
     #sellerDashboard #sellerProductPanel:not([hidden]):has(#sellerProductForm[hidden]){display:none!important}#sellerDashboard .seller-shop-link{display:none!important}
@@ -1089,7 +1104,7 @@
           <div class="search-filter-panel" id="searchFilterPanel">
             <div class="search-filter-top"><strong>Filter results</strong><button class="search-filter-reset" id="searchFilterReset" type="button">Reset</button></div>
             <fieldset><legend>Price range</legend><div class="search-filter-values"><span id="searchMinPriceLabel">Rs 0</span><span id="searchMaxPriceLabel">Rs 0</span></div><div class="search-range-row"><span>Minimum</span><input id="searchMinPrice" type="range" min="0" max="0" step="1" value="0" aria-label="Minimum price"></div><div class="search-range-row"><span>Maximum</span><input id="searchMaxPrice" type="range" min="0" max="0" step="1" value="0" aria-label="Maximum price"></div></fieldset>
-            <fieldset><legend>Category</legend><div class="search-filter-categories"><label class="search-filter-category"><input type="checkbox" value="tea" data-search-category> Tea</label><label class="search-filter-category"><input type="checkbox" value="cinnamon" data-search-category> Cinnamon</label><label class="search-filter-category"><input type="checkbox" value="fashion" data-search-category> Fashion</label><label class="search-filter-category"><input type="checkbox" value="electronics" data-search-category> Electronics</label></div></fieldset>
+            <fieldset class="search-filter-categories-fieldset"><legend>Category</legend><div class="search-filter-categories"><label class="search-filter-category"><input type="checkbox" value="tea" data-search-category> Tea</label><label class="search-filter-category"><input type="checkbox" value="cinnamon" data-search-category> Cinnamon</label><label class="search-filter-category"><input type="checkbox" value="fashion" data-search-category> Fashion</label><label class="search-filter-category"><input type="checkbox" value="electronics" data-search-category> Electronics</label></div></fieldset>
           </div>
           <p class="discovery-search-hint" id="discoverySearchHint" hidden></p>
           <div class="search-brand-section" id="searchBrandSection" hidden><h3 class="search-brand-title">Brands</h3><div class="search-brand-rail" id="searchBrandRail"></div></div>
@@ -3675,7 +3690,20 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       resultGrid.innerHTML=visibleItems.map((product,index)=>recommendationCardMarkup(product,index)).join('')||'<p class="recommendation-empty">No matching items found.</p>';
     }
     function getSearchBrands(items){const brands=[],seen=new Set();(items||[]).forEach(product=>{const shop=getShopForProduct(product);if(!shop?.id||seen.has(String(shop.id)))return;seen.add(String(shop.id));brands.push(shop);});return brands;}
-    function renderSearchBrandStrip(items){const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=getSearchBrands(items);section.hidden=!brands.length;if(!brands.length){activeSearchBrandId='';return;}const allButton='<button class="search-brand-tile all-brands-tile" type="button" data-all-search-brands><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>All brands · '+brands.length+'</span></button>';rail.innerHTML=allButton+brands.map(shop=>'<button class="search-brand-tile '+(activeSearchBrandId===String(shop.id)?'active':'')+'" type="button" data-search-brand="'+escapeHTML(shop.id)+'"><img loading="lazy" src="'+escapeHTML(shop.logo||'assets/alee-logo.png')+'" alt=""><span>'+escapeHTML(shop.name||'Shop')+'</span></button>').join('');rail.querySelector('[data-all-search-brands]')?.addEventListener('click',()=>{showAllSearchBrandsView=true;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.querySelectorAll('[data-search-brand]').forEach(button=>button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}));}
+    function renderSearchBrandStrip(items){
+      const section=document.getElementById('searchBrandSection'),rail=document.getElementById('searchBrandRail'),brands=getSearchBrands(items);
+      section.hidden=!brands.length;
+      if(!brands.length){activeSearchBrandId='';rail.replaceChildren();return;}
+      rail.replaceChildren();
+      const allButton=document.createElement('button');allButton.type='button';allButton.className='search-brand-tile all-brands-tile';allButton.innerHTML='<i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>All brands · '+brands.length+'</span>';
+      allButton.addEventListener('click',()=>{showAllSearchBrandsView=true;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.append(allButton);
+      brands.forEach(shop=>{
+        const button=document.createElement('button');button.type='button';button.className='search-brand-tile'+(activeSearchBrandId===String(shop.id)?' active':'');button.dataset.searchBrand=String(shop.id);
+        const image=document.createElement('img');image.loading='lazy';image.alt='';image.src=shop.logo||'assets/alee-logo.png';image.onerror=()=>{image.onerror=null;image.src='assets/alee-logo.png';};
+        const name=document.createElement('span');name.textContent=shop.name||'Shop';button.append(image,name);
+        button.addEventListener('click',()=>{activeSearchBrandId=button.dataset.searchBrand;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});rail.append(button);
+      });
+    }
     function renderAllSearchBrands(items){const grid=document.getElementById('searchBrandAllGrid'),brands=getSearchBrands(items);grid.replaceChildren();const addBrand=(shop,id='')=>{const button=document.createElement('button');button.type='button';button.className='search-brand-all-card';const image=document.createElement('img');image.src=shop?.logo||'assets/alee-logo.png';image.alt='';image.onerror=()=>{image.src='assets/alee-logo.png';};const label=document.createElement('span');label.textContent=shop?.name||'All brands';button.append(image,label);button.addEventListener('click',()=>{activeSearchBrandId=id;showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));});grid.append(button);};addBrand(null,'');brands.forEach(shop=>addBrand(shop,String(shop.id)));}
     function closeAllSearchBrands(){showAllSearchBrandsView=false;renderDiscoverySearchResults(searchInput.value,getProductSearchMatches(searchInput.value));}
     function searchProducts(submitted=false) {
@@ -4047,9 +4075,10 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       photo.src = product.images?.[0] || 'assets/alee-logo.png';
       photo.onerror = () => { photo.onerror = null; photo.src = 'assets/alee-logo.png'; };
       toast.querySelector('.added-cart-toast-item').textContent = `${product.name} · ${productMoney(product.price, product)}`;
+      toast.querySelector('.added-cart-toast-item').title = `${product.name} · ${productMoney(product.price, product)}`;
       toast.classList.add('show');
       clearTimeout(window.addedCartToastTimer);
-      window.addedCartToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      window.addedCartToastTimer = setTimeout(() => toast.classList.remove('show'), 3600);
     }
 
     function addToCart(id) {
