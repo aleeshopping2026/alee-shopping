@@ -161,7 +161,7 @@
     .search-suggestion i { width:18px; color:var(--light-leaf); }
     .search-suggestion small { margin-left:auto; color:#8a8f98; }
     .search-container input {
-      width: 100%; padding: 10px 152px 10px 15px; border-radius: 20px;
+      width: 100%; padding: 10px 116px 10px 15px; border-radius: 20px;
       border: 1px solid var(--glass-border); background: var(--bg-dark);
       color: var(--text-white); font-size: 13px; outline: none; transition: 0.3s;
     }
@@ -196,12 +196,6 @@
     .finder-result small { margin-top:3px; color:var(--detail-copy,#777); }
     .finder-price { color:var(--light-leaf); font-weight:800; white-space:nowrap; }
 
-    .search-theme-btn {
-      position: absolute; right: 4px; background: transparent; border: none; color: var(--text-white);
-      width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-      cursor: pointer; transition: 0.3s; font-size: 13px;
-    }
-    .search-theme-btn:hover { background: rgba(249, 115, 22, 0.15); color: var(--light-leaf); transform: scale(1.1); }
     .photo-search-btn { position:absolute; right:40px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--text-white); cursor:pointer; font-size:15px; }
     .photo-search-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
     .search-submit-btn { position:absolute; right:76px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--light-leaf); cursor:pointer; font-size:15px; }
@@ -958,7 +952,7 @@
     .cart-btn { border-color:#f2d2b5!important;background:#fff4e8!important;color:#475467!important; }
     .support-button { border-color:#e5e7eb!important;color:#475467!important; }
     .mobile-nav-button svg { display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }</style>
-  <link rel="stylesheet" href="site-theme.css?v=20261111">
+  <link rel="stylesheet" href="site-theme.css?v=20261112-theme-unified">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -1010,6 +1004,7 @@
         <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
         <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
+        <button type="button" class="site-theme-trigger header-theme-trigger" id="themeToggleBtn" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" title="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" aria-hidden="true"></i></button>
         <div class="support-dropdown" id="supportDropdown" role="menu">
           <div class="dropdown-item" role="menuitem" onclick="contactSupport('Help Center')"><i class="fa-solid fa-headset"></i> Help Center</div>
           <div class="dropdown-item" role="menuitem" onclick="contactSupport('Contact Customer Care')"><i class="fa-solid fa-comment-dots"></i> Contact Customer Care</div>
@@ -1052,9 +1047,6 @@
         <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         <button type="button" class="photo-search-btn" onclick="document.getElementById('photoSearchInput').click()" title="Search with a photo" aria-label="Search with a photo"><i class="fa-solid fa-camera"></i></button>
-        <button class="search-theme-btn" id="themeToggleBtn" type="button" data-open-theme-settings onclick="openThemeSettings(this)" title="Appearance settings" aria-label="Appearance settings" aria-haspopup="true" aria-expanded="false">
-          <i class="fa-solid fa-gear" aria-hidden="true"></i>
-        </button>
       </div>
       <div class="search-extras" id="searchExtras">
         <div class="top-searches" id="topSearches">
@@ -1343,9 +1335,10 @@
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
         <button type="button" id="accountBannerAdsButton" style="display:none" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
+         <button type="button" id="accountBannerPricingButton" hidden onclick="window.location.href='banner-pricing-manager.html'"><i class="fa-solid fa-tags"></i><span>Banner Ad Pricing</span><small>Change the prices shown to advertisers</small></button>
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
         <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
-        <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, country banners, offers and product popups</small></button>
+        <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, banner pricing, country ads, offers and product popups</small></button>
         <button type="button" id="accountMyShopButton" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>Open Shop</span><small>Create or manage your shop</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
         <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
@@ -1611,6 +1604,7 @@
       document.getElementById('buyerProfileEmail').textContent=user.email||'Signed in';
       document.getElementById('accountHubEmail').textContent=user.email||'Signed in';
       const adManager=document.getElementById('accountCountryAdManagerButton');if(adManager)adManager.hidden=!isAleeHost();
+      const bannerPricing=document.getElementById('accountBannerPricingButton');if(bannerPricing)bannerPricing.hidden=!isAleeHost();
       const offerManager=document.getElementById('accountOfferManagerButton');if(offerManager)offerManager.hidden=!isAleeHost();
       const contentManagers=document.getElementById('accountContentManagersButton');if(contentManagers)contentManagers.hidden=!isAleeHost();
       document.getElementById('buyerDashboard').classList.add('show');
@@ -2969,7 +2963,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
-      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn,.search-theme-btn')){
+      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn')){
         openSearchDiscovery(event.target.closest('#searchInput')!==null);
       }
     });
@@ -4217,7 +4211,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
   </script>
 <script src="site-theme.js?v=20261111"></script>
 <script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
-<script src="chat.js?v=20261112-call-fix"></script>
+<script src="chat.js?v=20261112-theme-unified"></script>
 </body>
 </html>
 

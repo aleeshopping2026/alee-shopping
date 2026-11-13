@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ff6900">
+  <title>Banner Ad Pricing Manager | aleeshopping</title>
+  <link rel="icon" href="assets/alee-app-icon-192.png">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f5f7;color:#172033;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(760px,calc(100% - 28px));margin:22px auto}.top,.card{padding:18px;background:#fff;border:1px solid #e4e7ec;border-radius:16px;box-shadow:0 6px 20px #1018280a}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.top a{color:#e85d04;text-decoration:none;font-weight:800}.top h1{margin:0;font-size:20px}.signed-in{color:#667085;font-size:12px;overflow-wrap:anywhere}.intro{margin:0 0 18px;color:#667085}.form{display:grid;gap:12px}.rate-row{display:grid;grid-template-columns:minmax(0,1fr) 190px;align-items:center;gap:12px;padding:13px;border:1px solid #e5e7eb;border-radius:12px}.rate-row strong{display:block}.rate-row small{color:#667085}.rate-input{display:flex;align-items:center;gap:8px}.rate-input span{font-weight:800;color:#667085}.rate-input input{width:100%;min-width:0;padding:10px;border:1px solid #cfd5df;border-radius:9px;font:inherit}.save{min-height:46px;padding:11px 16px;border:0;border-radius:10px;background:#ff6900;color:#fff;font:700 15px inherit;cursor:pointer}.save:disabled{opacity:.55;cursor:wait}.status{min-height:22px;margin:2px 0 0;color:#667085;font-size:13px;white-space:pre-wrap}.note{margin:15px 0 0;padding:12px;border-radius:10px;background:#fff7ed;color:#854d0e;font-size:13px}.gate{margin-top:20px;padding:16px;border:1px solid #fed7aa;border-radius:12px;background:#fff7ed;color:#7c2d12}.gate a{color:#b54e00;font-weight:800}[hidden]{display:none!important}@media(max-width:560px){.wrap{margin:12px auto}.top{align-items:flex-start;flex-wrap:wrap}.top h1{order:3;flex-basis:100%}.rate-row{grid-template-columns:1fr}.rate-input{max-width:220px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top"><a href="manager-center.html">← Content Managers</a><h1>Banner Ad Pricing</h1><span class="signed-in" id="signedIn">Checking host access…</span></header>
+    <section class="card" id="workspace" hidden>
+      <p class="intro">Set the starting USD rates shown on the Banner Ads request page. New price estimates use your saved rates straight away. Existing requests are not changed.</p>
+      <form class="form" id="pricingForm">
+        <label class="rate-row"><span><strong>Country Ad</strong><small>Starting price per day</small></span><span class="rate-input"><span>$</span><input name="country" type="number" min="0" max="100000" step="0.01" inputmode="decimal" required></span></label>
+        <label class="rate-row"><span><strong>Popup Ad</strong><small>Starting price per day</small></span><span class="rate-input"><span>$</span><input name="popup" type="number" min="0" max="100000" step="0.01" inputmode="decimal" required></span></label>
+        <label class="rate-row"><span><strong>Banner</strong><small>Starting price per day</small></span><span class="rate-input"><span>$</span><input name="banner" type="number" min="0" max="100000" step="0.01" inputmode="decimal" required></span></label>
+        <label class="rate-row"><span><strong>Verified badge</strong><small>Starting price per month</small></span><span class="rate-input"><span>$</span><input name="verified" type="number" min="0" max="100000" step="0.01" inputmode="decimal" required></span></label>
+        <button class="save" id="savePrices" type="submit" disabled>Save prices</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </form>
+      <p class="note">The existing 10% monthly and 20% yearly discounts remain in place. Offer requests continue to be priced by the host after review.</p>
+    </section>
+    <section class="gate" id="gate" hidden><strong id="gateTitle">Host access only</strong><p id="gateMessage">Sign in with an approved aleeshopping host account.</p><a href="index.html">Return to aleeshopping</a></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backend-config.js"></script>
+  <script>
+    (() => {
+      const hostEmails = ['aleeshopping2026@gmail.com', 'aleeshopping@gmail.com'];
+      const form = document.getElementById('pricingForm');
+      const status = document.getElementById('status');
+      const gate = document.getElementById('gate');
+      const fieldNames = ['country', 'popup', 'banner', 'verified'];
+      let client;
+
+      function showGate(title, message) {
+        document.getElementById('gateTitle').textContent = title;
+        document.getElementById('gateMessage').textContent = message;
+        gate.hidden = false;
+      }
+
+      async function load() {
+        for (let attempt = 0; !client && attempt < 25; attempt++) {
+          client = window.aleeSupabase;
+          if (!client) await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        if (!client) throw new Error('Supabase could not be initialized. Check backend-config.js and reload.');
+        const { data, error } = await client.auth.getSession();
+        if (error) throw error;
+        const user = data?.session?.user;
+        const email = String(user?.email || '').trim().toLowerCase();
+        document.getElementById('signedIn').textContent = email || 'Not signed in';
+        if (!user) { showGate('Sign in required', 'Sign in to the site with an aleeshopping host Gmail account, then reopen this manager.'); return; }
+        if (!hostEmails.includes(email)) { showGate('Host access only', 'This pricing manager is available to aleeshopping2026@gmail.com and aleeshopping@gmail.com.'); return; }
+
+        const result = await client.from('banner_ad_pricing').select('ad_type,base_price_usd');
+        if (result.error) {
+          showGate('Pricing setup is needed', 'Run banner-pricing-schema.sql in the Supabase SQL Editor, then reload this manager.');
+          document.getElementById('gateMessage').textContent += ` Details: ${result.error.message}`;
+          return;
+        }
+        const values = { country: 6, popup: 4, banner: 12, verified: 10 };
+        (result.data || []).forEach(row => {
+          if (Object.hasOwn(values, row.ad_type)) values[row.ad_type] = Number(row.base_price_usd);
+        });
+        fieldNames.forEach(name => { form.elements[name].value = values[name].toFixed(2); });
+        document.getElementById('workspace').hidden = false;
+        document.getElementById('savePrices').disabled = false;
+      }
+
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const button = document.getElementById('savePrices');
+        const rows = fieldNames.map(adType => ({
+          ad_type: adType,
+          base_price_usd: Number(form.elements[adType].value),
+          updated_at: new Date().toISOString()
+        }));
+        if (rows.some(row => !Number.isFinite(row.base_price_usd) || row.base_price_usd < 0 || row.base_price_usd > 100000)) {
+          status.textContent = 'Enter a valid price from $0 to $100,000.';
+          return;
+        }
+        button.disabled = true;
+        status.textContent = 'Saving prices…';
+        try {
+          const { error } = await client.from('banner_ad_pricing').upsert(rows, { onConflict: 'ad_type' });
+          status.textContent = error ? `Could not save prices. Check the banner-pricing-schema.sql policies. ${error.message}` : 'Prices saved. New estimates will use these prices.';
+        } catch (error) {
+          status.textContent = `Could not save prices. Check your connection and the banner-pricing-schema.sql policies. ${error?.message || ''}`;
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      load().catch(error => {
+        document.getElementById('signedIn').textContent = 'Access check failed';
+        showGate('Could not check host access', error?.message || 'Reload this page and try again.');
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -125,3 +125,84 @@ html[data-theme="dark"] #shopsSection #hubShopsPanel,
 html[data-theme="dark"] #hubContentPanel { border-color: #343a46; }
 html[data-theme="dark"] #shopsSection .hub-shortcut:hover,
 html[data-theme="dark"] #shopsSection .desktop-sidebar-action:hover { background: #202329; }
+
+/* Keep the main appearance control in the site header, away from search actions. */
+.header-theme-trigger { display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; padding: 0; color: #172033; background: #fff; border: 1px solid #e2e6ec; border-radius: 50%; cursor: pointer; }
+.header-theme-trigger:hover { background: #f3f4f6; }
+html[data-theme="dark"] .header-theme-trigger { color: #eef1f5; background: #202329; border-color: #454c57; }
+html[data-theme="dark"] .header-theme-trigger:hover { background: #2a2f37; }
+
+/* Restore contrast in account rows and search surfaces in dark mode. */
+html[data-theme="dark"] #buyerDashboard .account-menu-grid button {
+  color: #eef1f5 !important;
+  background: #17191d !important;
+  border-bottom-color: #343a46 !important;
+}
+html[data-theme="dark"] #buyerDashboard .account-menu-grid button:hover,
+html[data-theme="dark"] #buyerDashboard .account-menu-grid button:focus-visible { background: #202329 !important; }
+html[data-theme="dark"] #buyerDashboard .account-menu-grid button i { color: #aab2bf !important; }
+html[data-theme="dark"] #buyerDashboard .account-menu-grid button small { color: #aab2bf !important; }
+
+html[data-theme="dark"] .search-discovery-overlay,
+html[data-theme="dark"] .search-discovery-header,
+html[data-theme="dark"] .search-discovery-search { background: #101216; color: #eef1f5; }
+html[data-theme="dark"] .search-discovery-header,
+html[data-theme="dark"] .search-discovery-search { border-color: #343a46; }
+html[data-theme="dark"] .discovery-section-heading h2,
+html[data-theme="dark"] #discoverySearchTitle,
+html[data-theme="dark"] .search-result-status,
+html[data-theme="dark"] .search-brand-title { color: #eef1f5 !important; }
+html[data-theme="dark"] .discovery-list-button,
+html[data-theme="dark"] .discovery-more { color: #e5e7eb; border-color: #343a46; }
+html[data-theme="dark"] .discovery-list-button:hover,
+html[data-theme="dark"] .discovery-more:hover { background: #202329; }
+html[data-theme="dark"] #searchHistoryGrid > .card,
+html[data-theme="dark"] #discoverySearchResults > .card,
+html[data-theme="dark"] .recommendation-shelf > .card,
+html[data-theme="dark"] #productList.products > .card {
+  color: #eef1f5 !important;
+  background: #14171b !important;
+  border-color: #343a46 !important;
+  box-shadow: 0 2px 8px #0005 !important;
+}
+html[data-theme="dark"] #searchHistoryGrid > .card h3,
+html[data-theme="dark"] #discoverySearchResults > .card h3,
+html[data-theme="dark"] .recommendation-shelf > .card h3,
+html[data-theme="dark"] #productList.products > .card h3 { color: #eef1f5 !important; }
+html[data-theme="dark"] #searchHistoryGrid > .card .product-shop-meta,
+html[data-theme="dark"] #discoverySearchResults > .card .product-shop-meta,
+html[data-theme="dark"] .recommendation-shelf > .card .product-shop-meta,
+html[data-theme="dark"] #productList.products > .card .product-shop-meta { color: #d8dee8 !important; }
+html[data-theme="dark"] .search-filter-panel,
+html[data-theme="dark"] .search-brand-all-panel { color: #eef1f5; background: #17191d; border-color: #343a46; }
+
+/* Keep product details and the fixed purchase bar readable in dark mode. */
+html[data-theme="dark"] #productPopup .detail-section,
+html[data-theme="dark"] #productPopup .reviews-section { color: #eef1f5; background: #14171b; border-color: #343a46; }
+html[data-theme="dark"] #productPopup .detail-section h3,
+html[data-theme="dark"] #productPopup .popup-recommendations h3,
+html[data-theme="dark"] #productPopup .reviews-section h3 { color: #ff9a57 !important; }
+html[data-theme="dark"] #productPopup .detail-section p,
+html[data-theme="dark"] #productPopup .feature-item,
+html[data-theme="dark"] #productPopup .review-card,
+html[data-theme="dark"] #productPopup .review-card p { color: #e5e7eb !important; }
+html[data-theme="dark"] #productPopup .feature-item i { color: #ff9a57 !important; }
+html[data-theme="dark"] .popup-sticky-action {
+  background: linear-gradient(180deg, rgb(17 19 23 / 0%), #111318 24%) !important;
+  border-top: 1px solid #343a46;
+}
+html[data-theme="dark"] .popup-sticky-action .popup-quantity,
+html[data-theme="dark"] .popup-sticky-action .popup-message-shop-btn {
+  color: #eef1f5 !important;
+  background: #202329 !important;
+  border-color: #454c57 !important;
+}
+html[data-theme="dark"] .popup-sticky-action .buy-now-btn { color: #172033 !important; }
+html[data-theme="dark"] #productPopup .review-gallery-button,
+html[data-theme="dark"] #productPopup .review-photo-choice {
+  color: #eef1f5 !important;
+  background: #202329 !important;
+  border-color: #454c57 !important;
+}
+html[data-theme="dark"] .review-photo-chooser h3 { color: #eef1f5 !important; }
+html[data-theme="dark"] .review-photo-chooser p { color: #cbd5e1 !important; }
