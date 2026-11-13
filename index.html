@@ -946,7 +946,6 @@
     #productList.products>.card{min-height:276px!important;box-sizing:border-box!important;gap:1px!important;padding:5px!important;}
     #productList.products>.card>.card-image-wrap{height:clamp(158px,13vw,166px)!important;aspect-ratio:auto!important;flex:none!important;}
     #productList.products>.card>.product-shop-meta{gap:4px!important;min-height:16px!important;margin:2px 0 1px!important;color:#111827!important;font-size:10px!important;flex:none!important;}
-    #productList.products>.card>.product-shop-meta::before{content:"\f0d1";display:inline-block;flex:0 0 auto;color:#111827;font:900 9px/1 "Font Awesome 6 Free";}
     #productList.products>.card>.product-shop-meta>img:first-child{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;flex:0 0 16px!important;border-radius:0!important;}
     #productList.products>.card>h3{height:33px!important;min-height:33px!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;}
     #productList.products>.card>.price-block{min-height:41px!important;margin:0!important;}
@@ -2817,7 +2816,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const image = product.images?.[0] || 'assets/alee-logo.png';
       const shop = getShopForProduct(product);
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
-      return `<div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div>`;
+      return `<div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${product.freeShipping ? '<span class="free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div>`;
     }
     function renderRecommendationShelf(elementId, items, emptyText) {
       const shelf = document.getElementById(elementId);
@@ -3197,7 +3196,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
         cards.push(`
           <div class="card" onclick="openProductPopup(${p.id})">
-            <div class="card-image-wrap"><img loading="${cards.length < 4 ? 'eager' : 'lazy'}" decoding="async" ${cards.length < 4 ? 'fetchpriority="high"' : ''} src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(p.name)}">${p.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : ''}</div>
+            <div class="card-image-wrap"><img loading="${cards.length < 4 ? 'eager' : 'lazy'}" decoding="async" ${cards.length < 4 ? 'fetchpriority="high"' : ''} src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(p.name)}">${p.freeShipping ? '<span class="free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>' : ''}</div>
             <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a>
             <h3>${escapeHTML(p.name)}</h3>
             <div class="price-block">${productPriceMarkup(p)}</div>
@@ -3900,7 +3899,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       document.getElementById('popupShopMeta').style.setProperty('--shop-accent', shopAccent);
       const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
       document.getElementById('popupShopMeta').innerHTML = `<a href="${shopUrl}" aria-label="Visit the ${escapeHTML(shop.name)} shop"><img src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified ? '<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">' : ''}</a>`;
-      document.getElementById('popupShippingStatus').innerHTML = product.freeShipping ? '<span class="free-shipping-badge">FREE SHIPPING</span>' : 'Island-wide';
+      document.getElementById('popupShippingStatus').innerHTML = product.freeShipping ? '<span class="free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>' : 'Island-wide';
       document.getElementById('popupSoldCount').textContent=`${Number(product.soldCount||0).toLocaleString()} sold`;
       document.getElementById("popupPrice").innerHTML = productPriceMarkup(product);
       document.getElementById("popupDesc").innerText = product.desc;
