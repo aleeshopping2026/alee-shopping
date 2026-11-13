@@ -1532,9 +1532,13 @@
     function pushAppUiLayer(key,close,restore){if(appUiHistoryLayers.at(-1)?.key===key&&history.state?.aleeUiLayer===key)return;history.pushState({...history.state,aleeUiLayer:key},'',location.href);appUiHistoryLayers.push({key,close,restore});}
     function closeAppUiLayer(key,fromHistory=false,preserveHistory=false){if(fromHistory||preserveHistory)return;const top=appUiHistoryLayers.at(-1);if(top?.key===key&&history.state?.aleeUiLayer===key)history.back();}
     window.addEventListener('popstate',event=>{const destination=event.state?.aleeUiLayer||null;while(appUiHistoryLayers.length&&appUiHistoryLayers.at(-1).key!==destination){const layer=appUiHistoryLayers.pop();try{layer.close?.(true);}catch(error){console.warn('Could not close previous view',layer.key,error);}}const current=appUiHistoryLayers.at(-1);if(current?.key===destination)try{current.restore?.();}catch(error){console.warn('Could not restore previous view',current.key,error);}});
-    // Keep the home page as an in-app back stop; ask before the browser exits the site.
-    if(!history.state?.aleeRootBackStop){history.replaceState({...history.state,aleeRootBackStop:true,aleeRootBackTop:false},'',location.href);history.pushState({...history.state,aleeRootBackStop:true,aleeRootBackTop:true},'',location.href);}
-    window.addEventListener('popstate',event=>{if(event.state?.aleeRootBackStop&&!event.state?.aleeRootBackTop){if(sessionStorage.getItem('aleeExitConfirmedOnce')==='1'){sessionStorage.removeItem('aleeExitConfirmedOnce');history.pushState({...event.state,aleeRootBackTop:true},'',location.href);return;}if(confirm('Exit aleeshopping?')){sessionStorage.setItem('aleeExitConfirmedOnce','1');history.back();}else history.pushState({...event.state,aleeRootBackTop:true},'',location.href);}});
+    const cameFromSameOriginPage=(()=>{try{return Boolean(document.referrer)&&new URL(document.referrer).origin===location.origin;}catch(_){return false;}})();
+    // Add the exit prompt only at an external/direct entry. Internal page visits
+    // must keep their real previous page at the top of browser history.
+    if(!cameFromSameOriginPage){
+      if(!history.state?.aleeRootBackStop){history.replaceState({...history.state,aleeRootBackStop:true,aleeRootBackTop:false},'',location.href);history.pushState({...history.state,aleeRootBackStop:true,aleeRootBackTop:true},'',location.href);}
+      window.addEventListener('popstate',event=>{if(event.state?.aleeRootBackStop&&!event.state?.aleeRootBackTop){if(sessionStorage.getItem('aleeExitConfirmedOnce')==='1'){sessionStorage.removeItem('aleeExitConfirmedOnce');history.pushState({...event.state,aleeRootBackTop:true},'',location.href);return;}if(confirm('Exit aleeshopping?')){sessionStorage.setItem('aleeExitConfirmedOnce','1');history.back();}else history.pushState({...event.state,aleeRootBackTop:true},'',location.href);}});
+    }
     function showAccountProfileSetup(){const overlay=document.getElementById('accountProfileSetup');overlay.classList.add('show');pushAppUiLayer('accountProfileSetup',fromHistory=>closeAccountProfileSetup(fromHistory),()=>overlay.classList.add('show'));}
     function closeAccountProfileSetup(fromHistory=false,preserveHistory=false){document.getElementById('accountProfileSetup').classList.remove('show');closeAppUiLayer('accountProfileSetup',fromHistory,preserveHistory);}
 
@@ -2333,7 +2337,7 @@
       if(new URLSearchParams(location.search).has('reel'))openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));
       await loadSellerCatalog();
       const requestedProduct = new URLSearchParams(location.search).get('product');
-      if (requestedProduct) openProductPopup(Number(requestedProduct));
+      if (requestedProduct) openProductPopup(Number(requestedProduct),{skipHistory:cameFromSameOriginPage});
       const requestedJob = new URLSearchParams(location.search).get('job');
       if(requestedJob){openHubSection('jobs',document.querySelector('.hub-shortcut[onclick*="jobs"]'));const sharedJob=(await getHubJobs()).find(item=>String(item.id)===requestedJob);if(sharedJob)showHubJobDetails(sharedJob);}
       hideSiteLoader();
@@ -2996,6 +3000,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     let activeGalleryProduct = null;
     let activeGalleryIndex = 0;
     let productPopupHistoryOpen = false;
+    let productPopupRouteEntry = false;
     let imageZoomHistoryOpen = false;
     let hubHistoryOpen = false;
     let hubJobDetailsHistoryOpen = false;
@@ -3877,7 +3882,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       if(digits){window.open(`https://wa.me/${digits}?text=${encodeURIComponent(context)}`,'_blank','noopener');return;}
       alert('This shop has not enabled chat yet. Please open the shop profile to see its contact details.');
     }
-    function openProductPopup(id) {
+    function openProductPopup(id,{skipHistory=false}={}) {
       const product = products.find(p => p.id === id);
       if (!product) return;
       closeSearchDiscovery(false,true);
@@ -3909,7 +3914,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       document.getElementById("popupBuyBtn").onclick = () => { buyNow(id); };
       document.getElementById('popupMessageShopBtn').onclick=()=>messageProductShop(product);
       const popup=document.getElementById("productPopup");
-      if(popup.style.display!=='block'){history.pushState({...history.state,aleeProductPopup:true},'',location.href);productPopupHistoryOpen=true;}
+      if(popup.style.display!=='block'){productPopupRouteEntry=skipHistory;if(!skipHistory){history.pushState({...history.state,aleeProductPopup:true},'',location.href);productPopupHistoryOpen=true;}}
       startProductPopupAds();
       const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions){if(stickyActions.parentElement!==document.body)document.body.appendChild(stickyActions);stickyActions.style.display='grid';}
       popup.style.display = "block";
@@ -4042,7 +4047,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       }
     });
 
-    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();} }
+    function closeProductPopup(fromHistory=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){productPopupRouteEntry=false;const params=new URLSearchParams(location.search);if(params.has('product')){params.delete('product');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);}} }
     window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
