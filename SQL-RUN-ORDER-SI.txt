@@ -1,0 +1,45 @@
+ALEE SHOPPING — Supabase SQL ගොනු ධාවනය කරන පිළිවෙළ
+
+මෙම site folder එකේ ඇති SQL files 25ක් පළමු වරට අලුත් Supabase project එකකට දාන විට පහත අනුපිළිවෙළට ධාවනය කරන්න. සෑම file එකක්ම SQL Editor එකේ වෙනම query එකක් ලෙස Run කරන්න. Files සියල්ල එකට paste කර Run කරන්න එපා.
+
+1. database-schema.sql — Product reviews/comments සඳහා මූලික table එක.
+2. seller-marketplace-schema.sql — Shops, seller products, shop profile, seller photo storage.
+3. account-profile-schema.sql — Private buyer details සහ shop deletion function. Seller marketplace එකට පසුව.
+4. country-marketplace-migration.sql — Buyer/shop country හා currency fields. 2 සහ 3ට පසුව.
+5. platform-posts-schema.sql — Apps, games, ads සහ jobs. Seller marketplace එකට පසුව.
+6. account-country-ads-schema.sql — Country-targeted ads සහ host ad controls. Platform posts එකට පසුව.
+7. account-favorites-schema.sql — Signed-in users සඳහා favorites.
+8. seller-chat-schema.sql — Buyer/seller conversations, messages සහ chat storage.
+9. seller-group-chat-schema.sql — Group chat support. Seller chat එකට පසුව.
+10. seller-chat-enhancements-schema.sql — Mute, expiry සහ reports. Seller chat එකට පසුව.
+11. seller-call-signaling-schema.sql — Call signaling policies. Seller chat එකට පසුව; chat schema එකේ call table දැනටමත් තිබුණත් මෙය නැවත ධාවනය කළ හැක.
+12. seller-orders-schema.sql — Store orders සහ order chat delivery. Seller chat/group chat පසුව.
+13. product-listing-options-schema.sql — Free shipping සහ public sold totals. Seller orders පසුව.
+14. product-comments-schema.sql — Comment photos/moderation. database-schema.sql පසුව.
+15. product-recommendations-schema.sql — Product ratings, ranking, sponsored requests. Seller marketplace, orders, listing options, product reviews පසුව.
+16. seller-analytics-schema.sql — Shop/product views. Seller marketplace පසුව.
+17. seller-profile-social-schema.sql — Follows, followers, shop bio/social fields. Seller marketplace පසුව.
+18. shop-profile-tabs-schema.sql — Follower avatar RPC. Seller profile social පසුව.
+19. verified-badges-schema.sql — Host-managed verified badges. Seller marketplace සහ country migration පසුව.
+20. seller-dashboard-profile-schema.sql — Dashboard banner, profile views සහ follower avatars. Seller analytics, profile social, shop profile tabs සහ verified badges පසුව. Dashboard එකට අදාළ අලුත්ම migration එක මෙයයි.
+21. seller-community-schema.sql — Seller video reels, likes, comments සහ saves. Seller marketplace පසුව.
+22. search-trending-schema.sql — Shared trending terms, product-search counts සහ signed-in search/view history.
+23. shop-directory-order-schema.sql — Shop directory order manager.
+24. banner-pricing-schema.sql — Host-managed banner ad prices.
+25. alee-push-schema.sql — OneSignal subscriptions සහ chat push dispatch. Seller chat සහ group chat පසුව.
+
+දැනටමත් භාවිත කරන Supabase project එකක් නම්
+
+සියලු files 25ම අනිවාර්යයෙන් නැවත run කරන්න එපා. දැනටමත් ඇති tables/policies/functions නැවත හදන්න අවශ්‍ය නැති අතර, වැඩ කරන production project එකක අදාළ නැති migrations ධාවනය කිරීමෙන් වළකින්න. අලුත් Seller Dashboard වෙනස්කම් සඳහා අවශ්‍ය අලුත් file එක `seller-dashboard-profile-schema.sql` යි; එය 2, 16, 17, 18 සහ 19 files දැනටමත් run කර ඇති පසු තනිව run කරන්න. Site එකේ වෙනත් අංගයක් SQL error පෙන්වන්නේ නම් ඒ feature එකට අදාළ file එක සහ ඊට පෙර ඇති dependency files පමණක් බලන්න.
+
+Search database එක ගැන
+
+`index.html` හි product/category/shop search එක browser එකේ loaded catalog එක මත ක්‍රියා කරනවා. එහි 300 ms autocomplete, fuzzy typo matching, Sinhala/English synonyms, filters සහ closest-product suggestions තියෙනවා. මේ text matching සඳහා වෙනම database එකක් හෝ Meilisearch account එකක් දැනට අවශ්‍ය නැහැ.
+
+`search-trending-schema.sql` එකෙන් search matching/index එක හදන්නේ නැහැ. එය public trending search terms, product search counts සහ signed-in account වල recommendation/history sync සඳහා tables/RPC හදනවා. Trending/history backend එක අවශ්‍ය නම් 22 වන file එක run කරන්න. Product catalog එක විශාල වී server-side PostgreSQL full-text/trigram search අවශ්‍ය වුණොත්, index එකක් පමණක් run කිරීම ප්‍රමාණවත් නැහැ; site search එක Supabase search RPC එකට සම්බන්ධ කරන වෙනම migration/code update එකක්ද අවශ්‍යයි.
+
+Product ranking hourly update
+
+`product-recommendations-schema.sql` එක දැන් ranking refresh එකක් කරයි. Supabase තුළ `pg_cron` extension එක enable කර තිබේ නම් hourly refresh එක schedule කරයි; extension එක නැත්නම් SQL Editor notice එක පෙන්වයි. එවිට Supabase Dashboard → Database → Extensions තුළ `pg_cron` enable කර `product-recommendations-schema.sql` නැවත වෙනම run කරන්න.
+
+මෙම site files static website hosting එකට upload කළාට Supabase SQL ස්වයංක්‍රීයව ධාවනය වෙන්නේ නැහැ. SQL Editor එකේ ඔබ වෙනම run කළ යුතුයි. Site ZIP එකේ `.sql` files සහ මේ guide එක ඇතුළත්.

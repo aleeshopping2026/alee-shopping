@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ff6900">
+  <title>Sponsored products · aleeshopping</title>
+  <link rel="stylesheet" href="site-theme.css">
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f6f8}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f4f6f8}.top{background:#fff;border-bottom:1px solid #e2e6ea;padding:16px max(18px,calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px}.top a{color:#e85f00;text-decoration:none;font-weight:800}.top strong{font-size:18px}.wrap{width:min(1100px,100%);margin:0 auto;padding:24px 18px 48px}.intro,.campaign{background:#fff;border:1px solid #e0e5ea;border-radius:18px;box-shadow:0 8px 24px #1520330a}.intro{padding:22px;margin-bottom:16px}.intro h1{font-size:26px;margin:0 0 8px}.intro p{margin:0;color:#647084;line-height:1.55}.status{margin-top:12px;color:#566273;font-size:14px}.list{display:grid;gap:12px}.campaign{padding:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,360px);gap:18px;align-items:start}.campaign h2{font-size:18px;margin:0 0 8px}.campaign p{color:#647084;margin:5px 0;overflow-wrap:anywhere}.tag{display:inline-flex;border-radius:999px;background:#fff1e6;color:#b94b00;padding:4px 9px;font-size:12px;font-weight:800;margin-top:8px}.fields{display:grid;gap:10px}.fields label{font-size:13px;font-weight:700;color:#445064}.fields input{display:block;width:100%;height:42px;margin-top:5px;padding:9px 11px;border:1px solid #ccd3dc;border-radius:10px;color:#172033;background:#fff;font:inherit;font-weight:500}.check{display:flex;gap:9px;align-items:center;font-size:13px;color:#344054}.check input{width:17px;height:17px;margin:0;accent-color:#ff6900}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button{border:1px solid #d5dae2;border-radius:10px;background:#fff;color:#172033;padding:10px 13px;font:inherit;font-size:13px;font-weight:800;cursor:pointer}.actions button.primary{background:#ff6900;border-color:#ff6900;color:#fff}.actions button.reject{color:#b42318}.empty{padding:26px;text-align:center;background:#fff;border:1px dashed #cbd2db;border-radius:14px;color:#667085}.hidden{display:none!important}@media(max-width:680px){.top{padding:14px 16px}.top strong{font-size:16px}.wrap{padding:16px 12px 36px}.campaign{grid-template-columns:1fr;padding:15px}.intro h1{font-size:22px}}
+  </style>
+</head>
+<body>
+  <header class="top"><a href="index.html">← aleeshopping</a><strong>Sponsored Products Manager</strong></header>
+  <main class="wrap">
+    <section class="intro"><h1>Sponsored product requests</h1><p>Set a campaign price first. Activate a request only after you confirm payment. Active products enter homepage recommendation shelves with a clear “Sponsored” label.</p><div class="status" id="managerStatus" role="status" aria-live="polite">Checking host access…</div></section>
+    <section class="list" id="campaignList" aria-live="polite"></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backend-config.js"></script>
+  <script>
+    const hostEmails=['aleeshopping2026@gmail.com','aleeshopping@gmail.com'];
+    const statusNode=document.getElementById('managerStatus'),listNode=document.getElementById('campaignList');
+    const safe=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const money=value=>new Intl.NumberFormat(undefined,{style:'currency',currency:'LKR',maximumFractionDigits:2}).format(Number(value)||0);
+    async function loadRequests(){
+      if(!window.aleeSupabase){statusNode.textContent='Supabase is not configured for this site.';return;}
+      const {data:userData,error:userError}=await window.aleeSupabase.auth.getUser();
+      const email=String(userData?.user?.email||'').trim().toLowerCase();
+      if(userError||!hostEmails.includes(email)){statusNode.textContent='Sign in with an ALEE host account to manage sponsored products.';listNode.innerHTML='<div class="empty">Host access is required.</div>';return;}
+      statusNode.textContent='Loading requests…';
+      const {data,error}=await window.aleeSupabase.rpc('get_sponsored_product_requests_for_host');
+      if(error){statusNode.textContent='Could not load requests. Run product-recommendations-schema.sql in Supabase.';listNode.innerHTML='<div class="empty">'+safe(error.message)+'</div>';return;}
+      const rows=data||[];statusNode.textContent=rows.length?`${rows.length} request(s) · Payment is confirmed manually by the host.`:'No sponsored-product requests yet.';
+      if(!rows.length){listNode.innerHTML='<div class="empty">New seller requests will appear here.</div>';return;}
+      listNode.innerHTML=rows.map(row=>`<article class="campaign" data-campaign="${safe(row.id)}"><div><h2>${safe(row.product_name)}</h2><p><strong>Shop:</strong> ${safe(row.shop_name)}</p><p><strong>Seller:</strong> ${safe(row.owner_email)}</p><p><strong>Requested period:</strong> ${Number(row.requested_days)} day(s)</p><p><strong>Submitted:</strong> ${row.created_at?new Date(row.created_at).toLocaleString():'—'}</p><p><strong>Current price:</strong> ${row.amount==null?'Not set':money(row.amount)}</p><p><strong>Payment reference:</strong> ${safe(row.payment_reference||'—')}</p><span class="tag">${safe(row.status.replaceAll('_',' '))}${row.ends_at?' · ends '+new Date(row.ends_at).toLocaleDateString():''}</span></div><div class="fields"><label>Campaign price (LKR)<input type="number" min="1" step="0.01" data-amount value="${row.amount==null?'':Number(row.amount)}" placeholder="Enter agreed price"></label><label>Payment reference<input type="text" maxlength="120" data-reference value="${safe(row.payment_reference||'')}" placeholder="Optional receipt / reference"></label><label class="check"><input type="checkbox" data-paid ${row.paid_at?'checked':''}> I have confirmed payment</label><div class="actions"><button class="primary" type="button" data-save>${row.paid_at?'Update campaign':'Save price / activate'}</button><button class="reject" type="button" data-reject>Reject</button></div><div class="status" data-row-status role="status" aria-live="polite"></div></div></article>`).join('');
+      listNode.querySelectorAll('[data-campaign]').forEach(card=>{
+        card.querySelector('[data-save]').addEventListener('click',()=>saveCampaign(card,false));
+        card.querySelector('[data-reject]').addEventListener('click',()=>saveCampaign(card,true));
+      });
+    }
+    async function saveCampaign(card,reject){
+      const rowStatus=card.querySelector('[data-row-status]'),button=card.querySelector(reject?'[data-reject]':'[data-save]');
+      if(reject&&!confirm('Reject this sponsored product request?'))return;
+      const amount=Number(card.querySelector('[data-amount]').value),paid=card.querySelector('[data-paid]').checked,reference=card.querySelector('[data-reference]').value.trim();
+      if(!reject&&(!Number.isFinite(amount)||amount<=0)){rowStatus.textContent='Enter a price greater than zero.';return;}
+      if(!reject&&paid&&!confirm('Confirm the seller has paid and activate this campaign now?'))return;
+      button.disabled=true;rowStatus.textContent=reject?'Rejecting request…':'Saving campaign…';
+      const {error}=await window.aleeSupabase.rpc('review_sponsored_product_request',{p_campaign_id:card.dataset.campaign,p_amount:amount||null,p_paid:paid,p_payment_reference:reference||null,p_reject:reject});
+      button.disabled=false;if(error){rowStatus.textContent=error.message||'Could not update this request.';return;}
+      rowStatus.textContent=reject?'Request rejected.':paid?'Payment recorded; Sponsored placement is active.':'Price saved. The request remains pending until payment is confirmed.';await loadRequests();
+    }
+    loadRequests();
+  </script>
+</body>
+</html>

@@ -98,6 +98,7 @@ as $$
     from public.product_user_search_events as event
     where event.user_id = auth.uid()
       and event.event_type = 'view'
+      and event.searched_at >= now() - interval '90 days'
     order by event.product_id, event.searched_at desc
   ) as recent
   order by recent.viewed_at desc

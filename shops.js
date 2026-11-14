@@ -3,6 +3,7 @@ window.aleeShops = [
     "id": "alee-shopping",
     "name": "aleeshopping",
     "logo": "assets/alee-logo.png",
+    "shopCategory": "Marketplace",
     "rank": 1,
     "rating": 5,
     "accentColor": "#FF6900"
@@ -11,6 +12,7 @@ window.aleeShops = [
     "id": "klevora-fashion",
     "name": "klevora fashion",
     "logo": "images/shop-klevora.jpeg",
+    "shopCategory": "Fashion",
     "rank": 2,
     "rating": 4,
     "phone": "077 627 3453",

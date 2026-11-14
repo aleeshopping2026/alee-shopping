@@ -1,0 +1,35 @@
+ALEE Home Page Recommendation System — Setup Guide
+==================================================
+
+මෙම feature එකට code files:
+- index.html: Home Page shelves, user event tracking, ratings, seller delivery days, Sponsored badge/cadence.
+- product-recommendations-schema.sql: Supabase tables, secure RPC functions, order trigger සහ hourly ranking schedule.
+- sponsored-products-manager.html: ALEE hostට seller Sponsored requests මිල නියම කර payment confirm කර activate කරන පිටුව.
+
+ස්ථාපනය
+---------
+1. Supabase SQL Editor එකේ දැනට site එක භාවිත කරන schema files දැනටමත් run කර තිබෙන බව බලන්න: seller-marketplace-schema.sql, product-listing-options-schema.sql, seller-orders-schema.sql, product-comments-schema.sql.
+2. product-recommendations-schema.sql එක තනි query එකක් ලෙස SQL Editor එකට paste කර Run කරන්න. මෙය safe rerun සඳහා ලියා ඇත. එය product rating, delivery_days, event/exposure tables, scores, Sponsored campaigns, RPC functions සහ store_orders trigger එක සකසයි.
+3. SQL අවසානයේ pg_cron සක්‍රිය නැති බව Notice එකක් ආවොත් Supabase Dashboard → Database → Extensions තුළ pg_cron enable කර product-recommendations-schema.sql නැවත Run කරන්න. මෙය `refresh_product_recommendation_rankings()`-ව පැයකට වරක් schedule කරයි. SQL එක මුලින්ම ranking එකත් refresh කරයි.
+4. index.html, sponsored-products-manager.html, product-recommendations-schema.sql සහ මෙම guide එක site ZIP එකට ඇතුළත් කර host එකට publish කරන්න. backend-config.js එකේ public Supabase config එකම භාවිතා වේ; වෙනම API secret එකක් හෝ Node server එකක් අවශ්‍ය නැහැ.
+
+වැඩ කරන ආකාරය
+--------------
+- Login වුණු අයගේ view, product card click, search-result match සහ cart actions Supabase තුළ user_id සමඟ සුරකියි. Browser එකේ guest actions local history එකකත් තබයි. Login වුන පසු ඒ device එකේ guest history account history එකට එකතු වේ.
+- Order එකක් සාර්ථකව store_orders තුළ save වූ විට database trigger එක buy event එක ලියයි. Cancelled orders විකුණුම් ලකුණු වලින් ඉවත් වේ.
+- Rating එකක් post කරන විට comment form එකේ optional 1–5 rating එක තෝරන්න පුළුවන්. 4.5 ට වඩා වැඩි average rating ඇති items Top Rated වලට යයි.
+- Seller කෙනා item එක edit/add කරන විට Typical delivery time (days) ඇතුළත් කළ හැක. දින 1–3 අතර delivery එකට fast-delivery ලකුණු ලැබේ. Buyerගේ profile/checkout address සහ shop address දෙකේම Colombo වැනි එකම ප්‍රදේශයක් හඳුනාගතහොත් browser එකේම ඒ shop එකට locality priority එකක් දෙයි; ලිපිනය ranking API එකට යවන්නේ නැහැ.
+- New Arrivals තුළ පසුගිය දින 7 ඇතුළත sellerලා එක් කළ items පෙන්වයි. Recommendation shelf එකක item එකක් සැබැවින්ම පෙනෙන විට එක් signed-in account එකකට හෝ guest browser එකකට එක් product එකකට එක් exposure එකක් ලෙස සටහන් වේ. මුල් distinct visitors 100 අතර boost ලැබේ. exposure 100 පසු CTR 5% ඉක්මවා, order එකක් තිබේ නම් තවත් දින 30ක් boost පවතී; ඒ ප්‍රතිඵල නොලැබුණොත් boost එක නවතී.
+- Ranking පැයකට වරක් පමණක් refresh වේ. Score එකේ සෑම කොටසක්ම 0–1 අතර normalize කර 100ට ආසන්න සීමාවක තබයි:
+  `30 × 30-day sales score + 25 × rating/5 + 20 × 30-day click score + 15 × new-item boost + 10 × delivery-in-3-days boost`
+  Sales: `min(1, ln(1+sales)/ln(101))`; clicks: `min(1, ln(1+clicks)/ln(1001))`. මේ නිසා විකුණුම් ගණන පමණක් rating/delivery ලකුණු යටපත් කරන්නේ නැහැ.
+- Home එකේ For You, Best Sellers (පසුගිය දින 30), Trending Now (පසුගිය පැය 24 search/click), New Arrivals (දින 7), Top Rated (>4.5) shelves ඇත. History නැති අයට overall ranking, sales සහ trending අනුව For You සකස් වේ.
+- Sponsor කිරීමට seller My Shop → My Items තුළ Promote තෝරා 1–30 දින ඉල්ලයි. Hostගේ Account → Sponsored Products පිටුවෙන් මිලක් දමා ගෙවීම ලැබුණු බව confirm කළ පසු පමණක් item එක active වේ. Recommendation shelves වල Sponsored item 2ක්, organic item 8ක් ලෙස නැවත නැවත පෙන්වයි; Sponsored ලකුණ card එකේ පෙනේ.
+
+සීමා සහ සටහන්
+--------------
+- දැනට site එක GitHub Pages static frontend + Supabase backend එකක් නිසා ranking logic එක Postgres/Supabase functions වල දාලා ඇත. වෙනම Node.js/Python server අවශ්‍ය නැතිව static site එකට සම්බන්ධ වේ.
+- Sponsored placement සඳහා දැනට payment gateway එකක් site එකේ නැහැ. Host එක agreed price එක දමා, payment එක site එකෙන් පිටත ලැබුණු පසු checkbox එකෙන් confirm කළ යුතුයි. Gateway එකක් සම්බන්ධ කළොත් මේ manual confirmation වෙනුවට gateway webhook එක යොදාගන්න පුළුවන්.
+- City matching සඳහා buyer profile හෝ checkout address එකේ සහ shop public address එකේ location නම පැහැදිලිව තිබිය යුතුයි. Delivery-days estimate එක seller ඇතුළත් කරන සාමාන්‍ය estimate එකක්.
+- Best seller sales ගණන් ගන්නේ පසුගිය දින 30 තුළ cancelled නොවූ orders. New Arrivals සඳහා created_at ඇති seller products යොදාගනී; පැරණි static catalog products වල listing date නැති නිසා ඒවා New Arrivals වෙත නොදමයි.
+
