@@ -1,0 +1,9 @@
+ALEE Shopping cart and checkout update
+
+- The cart opens as a full-screen view on desktop and mobile.
+- Each cart item shows its photo, shop, selected options, quantity, and line price.
+- Buyers can select items, select or deselect all, remove individual items, and review totals for the selected products.
+- Checkout is a separate step and restores the buyer's saved delivery details and note.
+- Successful orders show an animated confirmation. Cart items stay saved until the buyer removes them.
+- Orders continue to use the existing Supabase store_orders flow. For signed-in buyers, the seller-orders-schema.sql trigger copies the order to the shop owner's and ALEE's Messages inboxes when those inbox tables are configured.
+- WhatsApp opens with a prefilled order to the shop. WhatsApp requires the buyer to tap Send; the website cannot send a WhatsApp message silently. For orders across several shops, the success screen shows a separate WhatsApp button for each shop.
