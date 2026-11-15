@@ -5,18 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ff6900">
   <script>try{document.documentElement.dataset.theme=localStorage.getItem('alee-theme')==='dark'?'dark':'light';}catch(_){document.documentElement.dataset.theme='light';}</script>
-  <title>Shops — aleeshopping</title>
+  <title>Browse Sri Lankan Shops | ALEE Shopping</title>
+  <meta name="description" content="Explore shops and independent sellers on ALEE Shopping in Sri Lanka. Browse fashion, gadgets, beauty, home goods and more.">
+  <link rel="canonical" href="https://www.aleeshopping.com/shops.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ALEE Shopping">
+  <meta property="og:title" content="Browse Sri Lankan Shops | ALEE Shopping">
+  <meta property="og:description" content="Explore shops and independent sellers on ALEE Shopping in Sri Lanka. Browse fashion, gadgets, beauty, home goods and more.">
+  <meta property="og:url" content="https://www.aleeshopping.com/shops.html">
+  <meta property="og:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Browse Sri Lankan Shops | ALEE Shopping">
+  <meta name="twitter:description" content="Explore shops and independent sellers on ALEE Shopping in Sri Lanka. Browse fashion, gadgets, beauty, home goods and more.">
+  <meta name="twitter:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="site-theme.css?v=20261112-theme-unified">
+  <link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme">
   <style>
     :root{--orange:#ff6900;--ink:#172033;--muted:#64748b;--line:#e5e7eb;--surface:#fff;--page:#f7f8fa}
     *{box-sizing:border-box}html{scrollbar-gutter:stable}body{margin:0;background:var(--page);color:var(--ink);font-family:'Plus Jakarta Sans',Arial,sans-serif}
     .top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;min-height:62px;padding:9px max(16px,calc((100vw - 1180px)/2));background:var(--orange);color:#fff;box-shadow:0 3px 12px #a744001e}
     .brand{display:flex;align-items:center;gap:10px;min-width:0;color:#fff;text-decoration:none}.brand img{width:40px;height:40px;flex:0 0 40px;object-fit:cover;border:2px solid #ffffffb8;border-radius:50%}.brand-copy{min-width:0}.brand strong{display:block;font-size:17px;line-height:1.2;font-weight:800}.brand small{display:block;margin-top:2px;color:#fff9;font-size:11px}
-    .theme-trigger{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;margin-left:auto;border:1px solid #ffffff88;border-radius:50%;background:#ffffff20;color:#fff;font-size:17px;cursor:pointer}.theme-trigger:hover{background:#ffffff33}
+
     .search-bar{position:sticky;top:62px;z-index:4;padding:10px max(16px,calc((100vw - 1180px)/2));background:var(--surface);border-bottom:1px solid var(--line)}
     .search-wrap{position:relative;max-width:1180px;margin:auto}.search{width:100%;height:48px;padding:0 48px 0 44px;border:1px solid #d8dee7;border-radius:16px;background:var(--page);color:var(--ink);font:inherit;font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s}.search:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff690020}.search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#7a8492;font-size:17px;pointer-events:none}.clear-search{position:absolute;right:9px;top:50%;display:none;place-items:center;width:32px;height:32px;transform:translateY(-50%);border:0;border-radius:50%;background:transparent;color:#667085;font-size:15px;cursor:pointer}.clear-search.visible{display:grid}.clear-search:hover{background:#eef0f3}
     main{width:min(1180px,100%);margin:0 auto;padding:22px 16px 50px}.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 17px}.intro h1{margin:0;font-size:clamp(22px,4vw,30px);letter-spacing:-.04em}.intro p{margin:5px 0 0;color:var(--muted);font-size:13px}.result-count{flex:0 0 auto;color:var(--muted);font-size:12px}
@@ -25,13 +37,13 @@
     html[data-theme="dark"]{--ink:#eef1f5;--muted:#aab2bf;--line:#343a46;--surface:#17191d;--page:#101216;color-scheme:dark}html[data-theme="dark"] .search{border-color:#454c57;background:#202329}html[data-theme="dark"] .shop-card{box-shadow:none}html[data-theme="dark"] .shop-card:hover{border-color:#a95722;box-shadow:0 9px 22px #0004}html[data-theme="dark"] .logo-ring{border-color:#343a46;background:#fff}html[data-theme="dark"] .shop-category{background:#382417;color:#ffb27d}html[data-theme="dark"] .clear-search:hover{background:#2a2f37}
     @media(min-width:760px){.grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:15px}.shop-card{min-height:176px;padding:16px 10px 13px}.copy small{font-size:11px}}
     @media(min-width:1050px){.grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:16px}.intro{margin-bottom:20px}}
-    @media(max-width:420px){.top{min-height:58px;padding:8px 13px}.brand img{width:36px;height:36px;flex-basis:36px}.brand strong{font-size:15px}.brand small{font-size:10px}.theme-trigger{width:38px;height:38px;flex-basis:38px}.search-bar{top:58px;padding:9px 12px}.search{height:46px;border-radius:15px;font-size:13px}main{padding:17px 12px 32px}.intro{align-items:center}.intro p{font-size:11px}.result-count{font-size:10px}.grid{gap:8px}.shop-card{min-height:137px;padding:9px 4px;border-radius:13px}.copy strong{font-size:10px}.copy small{font-size:9px}.shop-category{font-size:8px;padding:3px 5px}}
+    @media(max-width:420px){.top{min-height:58px;padding:8px 13px}.brand img{width:36px;height:36px;flex-basis:36px}.brand strong{font-size:15px}.brand small{font-size:10px}.search-bar{top:58px;padding:9px 12px}.search{height:46px;border-radius:15px;font-size:13px}main{padding:17px 12px 32px}.intro{align-items:center}.intro p{font-size:11px}.result-count{font-size:10px}.grid{gap:8px}.shop-card{min-height:137px;padding:9px 4px;border-radius:13px}.copy strong{font-size:10px}.copy small{font-size:9px}.shop-category{font-size:8px;padding:3px 5px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading shops…</span></div>
-  <header class="top"><div class="brand"><img src="assets/alee-logo.png" alt=""><span class="brand-copy"><strong>Shops</strong><small>Browse sellers on aleeshopping</small></span></div><button class="theme-trigger" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" aria-hidden="true"></i></button></header>
+  <header class="top"><div class="brand"><img src="assets/alee-logo.png" alt=""><span class="brand-copy"><strong>Shops</strong><small>Browse sellers on aleeshopping</small></span></div></header>
   <div class="search-bar"><div class="search-wrap"><i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i><input id="shopSearch" class="search" type="search" placeholder="Search shop name or category…" aria-label="Search shop name or category" autocomplete="off"><button id="clearSearch" class="clear-search" type="button" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div></div>
   <main><div class="intro"><div><h1>All shops</h1><p>Find a shop by name or what it sells.</p></div><span id="resultCount" class="result-count" aria-live="polite"></span></div><section class="grid" id="shopGrid" aria-label="All shops"></section></main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="backend-config.js"></script><script src="shops.js?v=20261113-shop-categories-order"></script><script src="products.js"></script>
@@ -53,7 +65,7 @@
     window.setTimeout(()=>document.getElementById('siteLoader').classList.add('hidden'),8000);
     loadDirectory().catch(error=>{console.warn('Could not load online shops; showing shops saved in the site.',error);shopEntries=makeEntries([],[]);paint();document.getElementById('siteLoader').classList.add('hidden');});
   </script>
-  <script src="site-theme.js?v=20261111"></script>
+  <script src="site-theme.js?v=20261114-account-only-theme"></script>
   <script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
 </body>
 </html>

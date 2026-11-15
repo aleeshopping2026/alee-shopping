@@ -78,7 +78,7 @@
 
   window.openThemeSettings = openThemeSettings;
   window.setSiteTheme = setSiteTheme;
-  window.toggleTheme = () => openThemeSettings(document.getElementById('themeToggleBtn'));
+  window.toggleTheme = () => openThemeSettings(document.getElementById('accountThemeToggleBtn'));
   root.dataset.theme = readTheme();
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta && root.dataset.theme === 'dark') meta.setAttribute('content', '#111111');

@@ -28,6 +28,20 @@ html[data-theme="dark"] .site-theme-menu button { color: #f2f4f7; }
 html[data-theme="dark"] .site-theme-menu button:hover,html[data-theme="dark"] .site-theme-menu button:focus-visible { background: #252a31; }
 html[data-theme="dark"] .site-theme-menu button.selected { color: #ff9a57; background: #382417; }
 
+/* Let the Account appearance choice carry through the site's utility pages too. */
+html[data-theme="dark"] body[data-shared-theme] { color-scheme: dark; background: #101216 !important; color: #eef1f5 !important; }
+html[data-theme="dark"] body[data-shared-theme] :is(header, main, section, article, aside, nav, footer, .wrap, .top, .card, .panel, .notice, .order, .entry, .empty, .box, .table-wrap, .manager-card, .dashboard-card, .modal, .dialog, .toolbar, .sidebar, .row, .tile) { color: #eef1f5 !important; background-color: #17191d !important; border-color: #343a46 !important; }
+html[data-theme="dark"] body[data-shared-theme] :is(h1, h2, h3, h4, p, label, th, td, strong, small, .muted, .intro, .description) { color: #eef1f5 !important; }
+html[data-theme="dark"] body[data-shared-theme] :is(.muted, .intro, .description) { color: #aab2bf !important; }
+html[data-theme="dark"] body[data-shared-theme] a:not(.primary):not(.button):not(.btn) { color: #ff9a57; }
+html[data-theme="dark"] body[data-shared-theme] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+html[data-theme="dark"] body[data-shared-theme] textarea,
+html[data-theme="dark"] body[data-shared-theme] select { color-scheme: dark; color: #eef1f5 !important; background-color: #202329 !important; border-color: #454c57 !important; }
+html[data-theme="dark"] body[data-shared-theme] button:not(.primary):not(.save):not(.danger):not(.delete):not(.accent):not(.active):not(.selected):not(.success) { color: #eef1f5 !important; background-color: #202329 !important; border-color: #454c57 !important; }
+html[data-theme="dark"] body[data-shared-theme] .status:not(.success):not(.error) { color: #f4be64 !important; }
+html[data-theme="dark"] body[data-shared-theme] .success { color: #4ade80 !important; }
+html[data-theme="dark"] body[data-shared-theme] .error, html[data-theme="dark"] body[data-shared-theme] .danger { color: #ff8b8b !important; }
+
 html[data-theme="dark"] { --glass-border: #343a46; }
 html[data-theme="dark"] body { background-color: var(--bg-dark); color: var(--text-white); }
 html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
@@ -125,12 +139,6 @@ html[data-theme="dark"] #shopsSection #hubShopsPanel,
 html[data-theme="dark"] #hubContentPanel { border-color: #343a46; }
 html[data-theme="dark"] #shopsSection .hub-shortcut:hover,
 html[data-theme="dark"] #shopsSection .desktop-sidebar-action:hover { background: #202329; }
-
-/* Keep the main appearance control in the site header, away from search actions. */
-.header-theme-trigger { display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; padding: 0; color: #172033; background: #fff; border: 1px solid #e2e6ec; border-radius: 50%; cursor: pointer; }
-.header-theme-trigger:hover { background: #f3f4f6; }
-html[data-theme="dark"] .header-theme-trigger { color: #eef1f5; background: #202329; border-color: #454c57; }
-html[data-theme="dark"] .header-theme-trigger:hover { background: #2a2f37; }
 
 /* Restore contrast in account rows and search surfaces in dark mode. */
 html[data-theme="dark"] #buyerDashboard .account-menu-grid button {

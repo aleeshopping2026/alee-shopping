@@ -9,7 +9,22 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/alee-app-icon-192.png">
   <link rel="apple-touch-icon" href="assets/alee-app-icon-180.png">
-  <title>aleeshopping — Fast & Safe Delivery</title>
+  <title>ALEE Shopping Sri Lanka | Gadgets, Fashion &amp; More</title>
+  <meta name="description" content="Shop gadgets, smart watches, fashion, beauty and more on ALEE Shopping. Discover products from independent sellers in Sri Lanka.">
+  <link rel="canonical" href="https://www.aleeshopping.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ALEE Shopping">
+  <meta property="og:title" content="ALEE Shopping Sri Lanka | Gadgets, Fashion &amp; More">
+  <meta property="og:description" content="Shop gadgets, smart watches, fashion, beauty and more on ALEE Shopping. Discover products from independent sellers in Sri Lanka.">
+  <meta property="og:url" content="https://www.aleeshopping.com/">
+  <meta property="og:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ALEE Shopping Sri Lanka | Gadgets, Fashion &amp; More">
+  <meta name="twitter:description" content="Shop gadgets, smart watches, fashion, beauty and more on ALEE Shopping. Discover products from independent sellers in Sri Lanka.">
+  <meta name="twitter:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Organization","name":"ALEE Shopping","url":"https://www.aleeshopping.com/","logo":"https://www.aleeshopping.com/assets/alee-app-icon-512.png","sameAs":["https://www.facebook.com/profile.php?id=61594937084284","https://www.instagram.com/alee_shoppingnew/","https://www.tiktok.com/@aleeshoppingnew3"]}
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1041,8 +1056,14 @@
     .seller-product-detail-dialog{position:fixed;width:min(620px,calc(100vw - 24px));max-height:88dvh;margin:auto;padding:18px;overflow:auto;border:1px solid #e1e6ed;border-radius:20px;background:#fff;color:#172033;box-shadow:0 24px 80px #10182845}.seller-product-detail-dialog::backdrop{background:#10182899;backdrop-filter:blur(3px)}.seller-product-detail-close{position:sticky;top:0;float:right;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:#f3f4f6;color:#172033;font-size:25px;cursor:pointer}.seller-product-detail-hero{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center}.seller-product-detail-hero img{width:120px;height:120px;border-radius:13px;object-fit:cover;background:#f3f5f7}.seller-product-detail-hero h2{margin:0 0 6px;font-size:20px}.seller-product-detail-hero p{margin:4px 0;color:#667085}.seller-product-detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.seller-product-detail-reviews{display:grid;gap:8px}.seller-product-review{padding:11px;border:1px solid #e6e9ee;border-radius:11px}.seller-product-review p{margin:6px 0;line-height:1.5}.seller-product-review small{color:#667085}
     @media(max-width:700px){#sellerDashboard .seller-card{width:100%!important;padding-bottom:calc(24px + env(safe-area-inset-bottom))!important}.seller-profile-cover{height:205px}.seller-profile-stats{gap:clamp(24px,12vw,64px)}.seller-dashboard-tabs{top:60px}.seller-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.seller-dashboard-product-add{min-height:115px}.seller-job-card{grid-template-columns:48px minmax(0,1fr)}.seller-job-card img{width:48px;height:48px}.seller-job-actions{grid-column:2}.seller-product-detail-hero{grid-template-columns:88px minmax(0,1fr)}.seller-product-detail-hero img{width:88px;height:88px}}
     @media(min-width:701px){#sellerDashboard .seller-card{min-height:100dvh}.seller-profile-cover{height:270px}.seller-dashboard-tabs{top:61px}.seller-dashboard-product-card>img{aspect-ratio:1.14/1}}
+    /* Full-screen shop dashboard; keep its section tabs below the pinned header. */
+    #sellerDashboard{align-items:stretch!important;justify-content:stretch!important;overflow:hidden!important;padding:0!important;background:#fff!important;backdrop-filter:none!important}
+    #sellerDashboard .seller-card{position:relative!important;width:100%!important;max-width:none!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;margin:0!important;padding:0 0 calc(20px + env(safe-area-inset-bottom))!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;border:0!important;border-radius:0!important;box-shadow:none!important}
+    #sellerDashboard .seller-dashboard-header{position:sticky!important;top:0!important;z-index:40!important;background:#fff!important}
+    #sellerDashboard #sellerShopProfile{position:static!important}
+    #sellerDashboard .seller-dashboard-tabs{position:sticky!important;top:62px!important;z-index:35!important;background:#fff!important}
   </style>
-  <link rel="stylesheet" href="site-theme.css?v=20261112-theme-unified">
+  <link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -1094,7 +1115,6 @@
         <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
         <button type="button" class="support-button" onclick="toggleSupportDropdown(event)" aria-expanded="false" aria-controls="supportDropdown">Help &amp; Support</button>
-        <button type="button" class="site-theme-trigger header-theme-trigger" id="themeToggleBtn" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" title="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" aria-hidden="true"></i></button>
         <div class="support-dropdown" id="supportDropdown" role="menu">
           <div class="dropdown-item" role="menuitem" onclick="contactSupport('Help Center')"><i class="fa-solid fa-headset"></i> Help Center</div>
           <div class="dropdown-item" role="menuitem" onclick="contactSupport('Contact Customer Care')"><i class="fa-solid fa-comment-dots"></i> Contact Customer Care</div>
@@ -1435,7 +1455,7 @@
 
   <div class="seller-overlay" id="buyerDashboard" onclick="if(event.target===this)closeBuyerAccount()" role="dialog" aria-modal="true" aria-labelledby="buyerDashboardTitle">
     <div class="seller-card account-hub-card">
-      <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
+      <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close account-theme-trigger" id="accountThemeToggleBtn" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" title="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
         <button type="button" id="accountBannerAdsButton" style="display:none" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
@@ -1472,7 +1492,7 @@
         <div class="seller-profile-identity"><div class="seller-profile-avatar-wrap"><img class="seller-logo-preview" id="sellerShopLogo" src="assets/alee-logo.png" alt="Shop profile picture"><button class="seller-logo-camera" type="button" onclick="chooseSellerShopLogo()" aria-label="Change shop logo"><i class="fa-solid fa-camera"></i></button></div><h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div><div class="seller-social-links" id="sellerShopSocials"></div></div>
         <div class="seller-profile-stats"><button type="button" onclick="showSellerSocialList('following')"><strong id="sellerFollowingCount">—</strong><span>following</span></button><button type="button" onclick="showSellerSocialList('followers')"><strong id="sellerFollowerCount">—</strong><span>followers</span></button><button type="button" onclick="sellerDashboardTab('products')"><strong id="sellerAdsCount">0</strong><span>ads</span></button></div>
         <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
-        <nav class="seller-dashboard-tabs" aria-label="Shop dashboard sections"><button type="button" data-seller-tab="products" class="active" onclick="sellerDashboardTab('products')">Products</button><button type="button" data-seller-tab="jobs" onclick="sellerDashboardTab('jobs')">Jobs</button><button type="button" data-seller-tab="feed" onclick="sellerDashboardTab('feed')">Feed</button><button type="button" data-seller-tab="analytics" onclick="sellerDashboardTab('analytics')">Analytics</button></nav>
+        <nav class="seller-dashboard-tabs" aria-label="Shop dashboard sections" hidden><button type="button" data-seller-tab="products" class="active" onclick="sellerDashboardTab('products')">Products</button><button type="button" data-seller-tab="jobs" onclick="sellerDashboardTab('jobs')">Jobs</button><button type="button" data-seller-tab="feed" onclick="sellerDashboardTab('feed')">Feed</button><button type="button" data-seller-tab="analytics" onclick="sellerDashboardTab('analytics')">Analytics</button></nav>
         <section class="seller-social-list-panel" id="sellerSocialListPanel" hidden><div class="seller-tab-panel-heading"><button type="button" onclick="closeSellerSocialList()" aria-label="Back to shop"><i class="fa-solid fa-arrow-left"></i></button><h3 id="sellerSocialListTitle">Followers</h3></div><div id="sellerSocialList" class="seller-viewer-list"></div></section>
         <section class="seller-social-list-panel" id="sellerProfileViewsPanel" hidden><div class="seller-tab-panel-heading"><button type="button" onclick="closeSellerProfileViews()" aria-label="Back to shop"><i class="fa-solid fa-arrow-left"></i></button><h3>Profile views</h3></div><p class="seller-muted">People who viewed your profile in the past 30 days.</p><div id="sellerProfileViewers" class="seller-viewer-list"></div></section>
       </section>
@@ -1563,6 +1583,33 @@
   <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
   <script>
     const products = window.aleeProducts || [];
+     const seoHomeTitle = document.title;
+     const seoHomeDescription = document.querySelector('meta[name="description"]')?.content || '';
+     const seoCanonical = document.querySelector('link[rel="canonical"]');
+     function setSeoMeta(selector,value){const node=document.querySelector(selector);if(node)node.setAttribute('content',value);}
+     function setProductSeo(product,shop){
+       const requestedProduct=new URLSearchParams(location.search).get('product');
+       if(String(requestedProduct)!==String(product.id))return;
+       const productUrl=new URL('https://www.aleeshopping.com/index.html');productUrl.searchParams.set('product',String(product.id));
+       const plainDescription=String(product.desc||`Shop ${product.name} on ALEE Shopping.`).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+       const description=`${product.name}. ${plainDescription} Shop from ${shop.name} on ALEE Shopping.`.replace(/\s+/g,' ').slice(0,160);
+       const title=`${product.name} | ${shop.name} | ALEE Shopping`;
+       const imageUrls=(Array.isArray(product.images)?product.images:[]).filter(Boolean).slice(0,8).map(image=>new URL(image,'https://www.aleeshopping.com/').href);
+       document.title=title;
+       if(seoCanonical)seoCanonical.href=productUrl.href;
+       setSeoMeta('meta[name="description"]',description);
+       setSeoMeta('meta[property="og:type"]','product');setSeoMeta('meta[property="og:title"]',title);setSeoMeta('meta[property="og:description"]',description);setSeoMeta('meta[property="og:url"]',productUrl.href);setSeoMeta('meta[property="og:image"]',imageUrls[0]||'https://www.aleeshopping.com/assets/alee-app-icon-512.png');
+       setSeoMeta('meta[name="twitter:title"]',title);setSeoMeta('meta[name="twitter:description"]',description);setSeoMeta('meta[name="twitter:image"]',imageUrls[0]||'https://www.aleeshopping.com/assets/alee-app-icon-512.png');
+       let schema=document.getElementById('productSeoSchema');if(!schema){schema=document.createElement('script');schema.id='productSeoSchema';schema.type='application/ld+json';document.head.appendChild(schema);}
+       const stock=Number(product.stock),offer={"@type":"Offer","url":productUrl.href,"priceCurrency":/^[A-Z]{3}$/.test(String(product.currencyCode||shop.currencyCode||'LKR').toUpperCase())?String(product.currencyCode||shop.currencyCode||'LKR').toUpperCase():'LKR',"price":Number(product.price||0).toFixed(2),"seller":{"@type":"Organization","name":shop.name}};
+       if(Number.isFinite(stock))offer.availability=stock>0?'https://schema.org/InStock':'https://schema.org/OutOfStock';
+       schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"Product","name":product.name,"description":plainDescription,"image":imageUrls.length?imageUrls:['https://www.aleeshopping.com/assets/alee-app-icon-512.png'],"url":productUrl.href,"offers":offer});
+     }
+     function resetProductSeo(){
+       document.title=seoHomeTitle;if(seoCanonical)seoCanonical.href='https://www.aleeshopping.com/';
+       setSeoMeta('meta[name="description"]',seoHomeDescription);setSeoMeta('meta[property="og:type"]','website');setSeoMeta('meta[property="og:title"]',seoHomeTitle);setSeoMeta('meta[property="og:description"]',seoHomeDescription);setSeoMeta('meta[property="og:url"]','https://www.aleeshopping.com/');setSeoMeta('meta[property="og:image"]','https://www.aleeshopping.com/assets/alee-app-icon-512.png');setSeoMeta('meta[name="twitter:title"]',seoHomeTitle);setSeoMeta('meta[name="twitter:description"]',seoHomeDescription);setSeoMeta('meta[name="twitter:image"]','https://www.aleeshopping.com/assets/alee-app-icon-512.png');
+       document.getElementById('productSeoSchema')?.remove();
+     }
     const productPopupAds = Array.isArray(window.aleeProductDetailAds) ? window.aleeProductDetailAds.slice(0,2000) : [];
     const categories = Array.isArray(window.aleeCategories) ? window.aleeCategories : [];
     const categoryGroups = Array.isArray(window.aleeCategoryGroups) ? window.aleeCategoryGroups : [];
@@ -2093,7 +2140,7 @@
         const profile=document.getElementById('sellerShopProfile'), formPanel=document.getElementById('sellerShopFormPanel');
         const productPanel=document.getElementById('sellerProductPanel'),listPanel=document.getElementById('sellerProductListPanel');
         if(currentSellerShop){
-          profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;document.getElementById('sellerDashboard').classList.add('seller-has-shop');document.querySelector('.seller-dashboard-tabs').hidden=false;document.getElementById('sellerReelPanel')?.removeAttribute('hidden');
+          profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;document.getElementById('sellerDashboard').classList.add('seller-has-shop');const sellerTabs=document.querySelector('.seller-dashboard-tabs');if(sellerTabs&&sellerTabs.parentElement===profile)profile.after(sellerTabs);sellerTabs.hidden=false;document.getElementById('sellerReelPanel')?.removeAttribute('hidden');
           resetSellerShopLogoSelection(currentSellerShop.logo_url||'assets/alee-logo.png');
           document.getElementById('sellerShopName').innerHTML=escapeHTML(currentSellerShop.shop_name)+(currentSellerShop.is_verified?'<img class="seller-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':'');
           document.getElementById('sellerShopLogo').src=currentSellerShop.logo_url||'assets/alee-logo.png';
@@ -4400,6 +4447,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const favoriteButton=document.getElementById('popupFavoriteBtn'),alreadySaved=readFavorites().some(row=>row.type==='product'&&String(row.id)===String(product.id));updateFavoriteHeart(favoriteButton,alreadySaved,'product');
       document.getElementById('popupStockStatus')?.replaceChildren(document.createTextNode(product.stock===undefined?'':product.stock>0?`In stock: ${product.stock}`:'Out of stock'));
       const shop = getShopForProduct(product);
+      setProductSeo(product,shop);
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
       document.getElementById('popupShopMeta').style.setProperty('--shop-accent', shopAccent);
       const shopUrl = `shop.html?shop=${encodeURIComponent(shop.id)}`;
@@ -4553,7 +4601,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       }
     });
 
-    function closeProductPopup(fromHistory=false,returnToShop=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){const shopId=productPopupReturnShopId;productPopupRouteEntry=false;productPopupReturnShopId='';if(returnToShop&&shopId&&!fromHistory){if(history.length>1){history.back();return;}const destination=new URL('shop.html',location.href);destination.searchParams.set('shop',shopId);location.replace(destination.href);return;}const params=new URLSearchParams(location.search);params.delete('product');params.delete('shopReturn');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);} }
+    function closeProductPopup(fromHistory=false,returnToShop=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";resetProductSeo();stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){const shopId=productPopupReturnShopId;productPopupRouteEntry=false;productPopupReturnShopId='';if(returnToShop&&shopId&&!fromHistory){if(history.length>1){history.back();return;}const destination=new URL('shop.html',location.href);destination.searchParams.set('shop',shopId);location.replace(destination.href);return;}const params=new URLSearchParams(location.search);params.delete('product');params.delete('shopReturn');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);} }
     window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
@@ -4722,7 +4770,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       } else if (status) status.textContent = 'Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';
     }
   </script>
-<script src="site-theme.js?v=20261111"></script>
+<script src="site-theme.js?v=20261114-account-only-theme"></script>
 <script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
 <script src="chat.js?v=20261112-theme-unified"></script>
 </body>

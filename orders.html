@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script>try{document.documentElement.dataset.theme=localStorage.getItem('alee-theme')==='dark'?'dark':'light';}catch(_){document.documentElement.dataset.theme='light';}</script>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Orders · aleeshopping</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,8 +9,8 @@
   <style>
     *{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font-family:'Plus Jakarta Sans',Arial,sans-serif}.top{display:flex;align-items:center;gap:14px;padding:12px max(16px,calc((100vw - 1120px)/2));background:#fff;border-bottom:1px solid #fed7aa}.top a{color:#e85d04;text-decoration:none;font-weight:800}.top strong{font-size:17px}.wrap{max-width:1120px;margin:28px auto;padding:0 16px}.title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.title h1{margin:0;font-size:26px}.title-actions{display:flex;gap:8px}.title button,.sign-in{border:0;border-radius:11px;padding:11px 15px;background:#e85d04;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}.title button:disabled{opacity:.55}.notice{padding:18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;color:#7c2d12;line-height:1.6}.order-list{display:grid;gap:14px}.order{padding:18px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 4px 14px #17203308}.order-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.order-head h2{margin:0 0 4px;font-size:17px}.muted{color:#64748b;font-size:12px}.status{padding:6px 10px;border-radius:999px;background:#fff7ed;color:#9a3412;font-size:11px;font-weight:800}.body{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.body h3{margin:0 0 6px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.05em}.body p{margin:4px 0;font-size:13px;overflow-wrap:anywhere}.items{margin:7px 0 0;padding-left:18px}.items li{margin:6px 0;font-size:13px}.total{margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;font-weight:800}.order-actions{display:flex;align-items:center;gap:8px;margin-top:14px}.order-actions select{max-width:230px;padding:9px 10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;font:inherit;font-size:12px}.order-actions a{display:inline-flex;gap:6px;align-items:center;color:#15803d;font-size:12px;font-weight:800;text-decoration:none}.hidden{display:none!important}@media(max-width:620px){.top{padding:10px 12px}.wrap{margin:18px auto;padding:0 11px}.title h1{font-size:21px}.body{grid-template-columns:1fr}.order{padding:14px}.title button{padding:9px 11px}.title-actions{gap:5px}}
   </style>
-</head>
-<body>
+<link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme"></head>
+<body data-shared-theme="site">
   <header class="top"><a href="index.html">← aleeshopping</a><strong>Orders</strong></header>
   <main class="wrap">
     <div class="title"><h1>Order inbox</h1><div class="title-actions"><button id="export" type="button" disabled><i class="fa-solid fa-file-excel"></i> Excel</button><button id="refresh" type="button"><i class="fa-solid fa-rotate"></i> Refresh</button></div></div>
@@ -28,5 +28,5 @@
     function exportExcel(){if(!loadedRows.length)return;const columns=['Order ID','Date','Shop','Customer Name','Address','Phone 1','Phone 2','Items','Currency','Total','Payment','Status','Note'];const cell=value=>{let text=String(value??'');if(/^[=+\-@\t\r]/.test(text))text="'"+text;return `"${text.replace(/"/g,'""')}"`;};const lines=[columns,...loadedRows.map(row=>[row.id,new Date(row.created_at).toLocaleString(),shopNames[row.shop_id]||'aleeshopping',row.customer_name,row.customer_address,row.customer_phone,row.customer_phone2,(row.items||[]).map(item=>`${item.name} x${item.quantity}${item.color?` ${item.color}`:''}${item.size?` ${item.size}`:''}`).join('; '),row.currency_code||'LKR',row.total,row.payment_method,labels[row.status]||row.status,row.customer_note])].map(row=>row.map(cell).join(',')).join('\r\n');const blob=new Blob(['\ufeff',lines],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`alee-shopping-orders-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(url);}
     document.getElementById('refresh').addEventListener('click',load);document.getElementById('export').addEventListener('click',exportExcel);document.getElementById('signIn').addEventListener('click',async()=>{const {error}=await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0]}});if(error)notice.textContent=error.message;});db?.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'||event==='SIGNED_OUT'){currentUser=session?.user||null;if(currentUser)init();}});init();
   </script>
-</body>
+<script src="site-theme.js?v=20261114-account-only-theme"></script></body>
 </html>

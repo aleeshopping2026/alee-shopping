@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script>try{document.documentElement.dataset.theme=localStorage.getItem('alee-theme')==='dark'?'dark':'light';}catch(_){document.documentElement.dataset.theme='light';}</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Add Products — aleeshopping</title>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -10,8 +10,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font:16px Arial,sans-serif}.wrap{max-width:760px;margin:28px auto;padding:24px;background:white;border:1px solid #fed7aa;border-radius:18px;box-shadow:0 12px 35px #0001}h1{color:#ff6900;margin-top:0}p{line-height:1.6}.help{background:#fff7ed;border-radius:10px;padding:12px 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:6px;font-weight:700;margin:12px 0}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}textarea{min-height:78px}button{background:#ff6900;color:white;border:0;border-radius:9px;padding:13px 18px;font-weight:800;font-size:16px;cursor:pointer}.status{margin-top:12px;color:#166534}.muted{color:#64748b;font-size:13px}@media(max-width:600px){.wrap{margin:10px;padding:16px}.grid{grid-template-columns:1fr}}
 </style>
-</head>
-<body><main class="wrap">
+<link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme"></head>
+<body data-shared-theme="site"><main class="wrap">
 <h1>aleeshopping — Add a product</h1>
 <p class="help">Enter the details and choose photos. Select “Create ZIP” and extract the downloaded ZIP into the folder containing your website files. Then publish the website again. No coding is required.</p>
 <p><a href="shop-manager.html">Click here to add a shop</a></p>
@@ -88,5 +88,5 @@ document.getElementById('productForm').addEventListener('submit', async event =>
   status.textContent = 'ZIP downloaded. Extract it into the website root folder and publish the site again.';
  } catch (error) { console.error(error); status.textContent = 'Could not create the ZIP. Please try again.'; }
 });
-</script></body></html>
+</script><script src="site-theme.js?v=20261114-account-only-theme"></script></body></html>
 

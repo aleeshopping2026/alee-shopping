@@ -261,7 +261,25 @@
       document.getElementById('products').innerHTML = ''; return;
     }
     document.documentElement.style.setProperty('--shop-accent', /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#ff6900');
-    document.title = `${shop.name} — aleeshopping`;
+    const shopUrl = new URL('https://www.aleeshopping.com/shop.html');
+    shopUrl.searchParams.set('shop', String(shop.id));
+    const shopDescription = String(shop.bio || `${shop.shopCategory || 'Independent'} shop in Sri Lanka. Explore products from ${shop.name} on ALEE Shopping.`).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160);
+    const shopImage = shop.banner || shop.logo || 'assets/alee-app-icon-512.png';
+    let shopImageUrl = 'https://www.aleeshopping.com/assets/alee-app-icon-512.png';
+    try { shopImageUrl = new URL(shopImage, 'https://www.aleeshopping.com/').href; } catch (_) {}
+    document.title = `${shop.name} | Shop in Sri Lanka | ALEE Shopping`;
+    const seoDescription = document.querySelector('meta[name="description"]');
+    if (seoDescription) seoDescription.content = shopDescription;
+    const seoCanonical = document.querySelector('link[rel="canonical"]');
+    if (seoCanonical) seoCanonical.href = shopUrl.href;
+    const setShopMeta = (selector, value) => { const node = document.querySelector(selector); if (node) node.setAttribute('content', value); };
+    setShopMeta('meta[property="og:title"]', document.title);
+    setShopMeta('meta[property="og:description"]', shopDescription);
+    setShopMeta('meta[property="og:url"]', shopUrl.href);
+    setShopMeta('meta[property="og:image"]', shopImageUrl);
+    setShopMeta('meta[name="twitter:title"]', document.title);
+    setShopMeta('meta[name="twitter:description"]', shopDescription);
+    setShopMeta('meta[name="twitter:image"]', shopImageUrl);
     document.getElementById('headerShopName').textContent = shop.name;
     document.getElementById('headerShopLogo').src = shop.logo || 'assets/alee-logo.png';
     shopBlocked = localShopFlag('blocked'); shopOnHold = localShopFlag('hold');

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script>try{document.documentElement.dataset.theme=localStorage.getItem('alee-theme')==='dark'?'dark':'light';}catch(_){document.documentElement.dataset.theme='light';}</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shop Details — aleeshopping</title>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -8,8 +8,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#172033;font:16px Arial,sans-serif}.wrap{max-width:760px;margin:28px auto;padding:24px;background:#fff;border:1px solid #fed7aa;border-radius:18px;box-shadow:0 12px 35px #0001}h1{color:#ff6900;margin-top:0}p{line-height:1.6}.help{background:#fff7ed;border-radius:10px;padding:12px 14px}label{display:grid;gap:7px;font-weight:700;margin:14px 0}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}textarea{min-height:76px;resize:vertical}button{background:#ff6900;color:#fff;border:0;border-radius:9px;padding:13px 18px;font-weight:800;font-size:16px;cursor:pointer}.muted{color:#64748b;font-size:13px}.status{margin-top:12px;color:#166534}.shop-preview{display:flex;align-items:center;gap:12px;margin:15px 0}.shop-preview img{width:60px;height:60px;object-fit:cover;border-radius:50%;border:0;background:white}@media(max-width:600px){.wrap{margin:10px;padding:16px}}
 </style>
-</head>
-<body><main class="wrap">
+<link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme"></head>
+<body data-shared-theme="site"><main class="wrap">
 <h1>Add a Shop or Edit Shop Details</h1>
 <p class="help">Select an existing shop to edit its phone number, address, and Facebook, Instagram, or TikTok links. For a new shop, enter its name and logo too. Include the +94 country code in phone numbers. Extract the ZIP into the website root folder and publish the site again.</p>
 <p id="shopCount" class="muted"></p>
@@ -84,4 +84,4 @@ document.getElementById('shopForm').addEventListener('submit', async event => {
   status.textContent=`${existing?'Shop details updated':'New shop added'}. ZIP downloaded. Extract it into the website root folder and publish the site again.`;
  }catch(error){console.error(error);status.textContent='Could not create the ZIP. Please try again.';}
 });
-</script></body></html>
+</script><script src="site-theme.js?v=20261114-account-only-theme"></script></body></html>
