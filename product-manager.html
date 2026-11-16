@@ -17,8 +17,8 @@
 <p><a href="shop-manager.html">Click here to add a shop</a></p>
 <p id="catalogCount" class="muted"></p>
 <form id="productForm">
-<div class="grid"><label>Product name<input name="name" required></label><label>Price (LKR)<input name="price" type="number" min="1" required></label></div>
-<label>Category<select name="category" id="categorySelect" required></select><span class="muted">Open a main category and choose a matching subcategory.</span></label>
+<div class="grid"><label>Product name<input name="name" id="productNameInput" required></label><label>Price (LKR)<input name="price" type="number" min="1" required></label></div>
+<label>Category<select name="category" id="categorySelect" required></select><span class="muted" id="categorySuggestion" aria-live="polite">Start typing the product name for a category suggestion. You can still choose any category manually.</span></label>
 <label>Shop selling this product<select name="shopId" id="shopSelect"></select><span class="muted">To add a new shop, use shop-manager.html.</span></label>
 <label>Old price, if applicable<input name="oldPrice" type="number" min="0"></label>
 <label>Product description<textarea name="desc"></textarea></label>
@@ -38,6 +38,30 @@ const shops = Array.isArray(window.aleeShops) ? [...window.aleeShops] : [];
 const categorySelect = document.getElementById('categorySelect');
 categorySelect.appendChild(new Option('Select a category',''));
 categoryGroups.forEach(group => { const optionGroup=document.createElement('optgroup'); optionGroup.label=group.label; categories.filter(category=>category.parent===group.id).forEach(category=>optionGroup.appendChild(new Option(category.label,category.id))); categorySelect.appendChild(optionGroup); });
+const productNameInput = document.getElementById('productNameInput');
+const categorySuggestion = document.getElementById('categorySuggestion');
+let categoryManuallySelected = false;
+let suggestedCategoryId = '';
+productNameInput.addEventListener('input', () => {
+ if (categoryManuallySelected) return;
+ const categoryId = window.aleeSuggestProductCategory(productNameInput.value);
+ const category = categories.find(item => item.id === categoryId);
+ if (category) {
+  categorySelect.value = category.id;
+  suggestedCategoryId = category.id;
+  categorySuggestion.textContent = `Suggested: ${category.label}. You can change it manually.`;
+ } else if (suggestedCategoryId) {
+  categorySelect.value = '';
+  suggestedCategoryId = '';
+  categorySuggestion.textContent = 'No category match yet. You can choose a category manually.';
+ }
+});
+categorySelect.addEventListener('change', () => {
+ categoryManuallySelected = true;
+ suggestedCategoryId = '';
+ const category = categories.find(item => item.id === categorySelect.value);
+ categorySuggestion.textContent = category ? `Selected: ${category.label}. You can change it manually.` : 'Choose a category manually.';
+});
 const shopSelect = document.getElementById('shopSelect');
 shops.forEach(shop => { const option=document.createElement('option'); option.value=shop.id; option.textContent=shop.name; shopSelect.appendChild(option); });
 document.getElementById('catalogCount').textContent = `${catalog.length} products are currently in the file.`;
@@ -85,6 +109,9 @@ document.getElementById('productForm').addEventListener('submit', async event =>
   catalog.push(product);
   document.getElementById('catalogCount').textContent = `${catalog.length} products are now in the file.`;
   form.reset();
+  categoryManuallySelected = false;
+  suggestedCategoryId = '';
+  categorySuggestion.textContent = 'Start typing the product name for a category suggestion. You can still choose any category manually.';
   status.textContent = 'ZIP downloaded. Extract it into the website root folder and publish the site again.';
  } catch (error) { console.error(error); status.textContent = 'Could not create the ZIP. Please try again.'; }
 });

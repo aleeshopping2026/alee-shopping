@@ -158,6 +158,10 @@
     .mobile-category-group { padding:10px; border:1px solid var(--glass-border); border-radius:13px; background:var(--bg-dark); }
     .mobile-category-group h3 { margin:0 0 8px; color:var(--light-leaf); font-size:12px; letter-spacing:.04em; }
     .mobile-category-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+    .mobile-category-back { margin:0 0 12px; padding:8px 11px; border:1px solid var(--glass-border); border-radius:9px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
+    .mobile-category-option.category-tile { display:grid; justify-items:center; gap:7px; min-height:112px; padding:10px 6px; text-align:center; font-size:12px; }
+    .mobile-category-option.category-tile img { width:64px; height:64px; object-fit:cover; border-radius:50%; background:#f2f4f7; }
+    .mobile-category-option.category-tile span { line-height:1.25; }
     .mobile-shop-search { width:100%; margin:0 0 12px; padding:12px 13px; border:1px solid var(--glass-border); border-radius:11px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
     .mobile-category-option { width:100%; text-align:left; padding:13px 14px; border:1px solid var(--glass-border); border-radius:10px; color:var(--text-white); background:var(--bg-dark); font:inherit; }
     .mobile-category-option.active { border-color:var(--light-leaf); background:var(--light-leaf); color:#fff; }
@@ -1053,6 +1057,17 @@
     .cat-btn:hover{background:transparent!important;color:#e65f00!important;border:0!important;}
     .cat-btn.active{background:transparent!important;color:#e65f00!important;border:0!important;font-weight:700!important;}
     .cat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px 3px 0 0;background:#111827;}
+    .category-browse-panel{margin:0 3% 18px;padding:18px 20px;background:var(--card-bg);border:1px solid #e5e7eb;border-top:0;border-radius:0 0 14px 14px;}
+    .category-browse-heading{margin:0 0 14px;color:#172033;font-size:17px;font-weight:700;}
+    .category-browse-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:16px 12px;}
+    .category-browse-tile{display:grid;justify-items:center;align-content:start;gap:8px;min-width:0;padding:8px 5px;border:1px solid transparent;border-radius:12px;background:transparent;color:#344054;text-align:center;font:inherit;cursor:pointer;}
+    .category-browse-tile:hover,.category-browse-tile.active{border-color:#f2a36a;background:#fff8f2;color:#d95f00;}
+    .category-browse-tile img{width:76px;height:76px;object-fit:cover;border-radius:50%;background:#f2f4f7;}
+    .category-browse-tile span{font-size:12px;line-height:1.3;}
+    .category-browse-tile small{color:#667085;font-size:10px;}
+    .category-browse-section{grid-column:1/-1;margin:7px 0 -7px;color:#667085;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+    .category-browse-panel[hidden]{display:none!important;}
+    @media(max-width:767px){.category-browse-panel{margin:0 0 14px;padding:14px 10px;border-left:0;border-right:0;border-radius:0}.category-browse-heading{margin:0 0 10px;font-size:15px}.category-browse-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px}.category-browse-tile{gap:6px;padding:7px 3px}.category-browse-tile img{width:62px;height:62px}.category-browse-tile span{font-size:11px}.category-browse-tile small{font-size:9px}}
 @media (max-width:767px){
     /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
     #productList.products{display:block!important;column-count:2!important;column-gap:10px!important;}
@@ -1381,6 +1396,10 @@
 
     <!-- Categories Bar: directly below the promotional banners -->
     <div class="categories-bar" id="categoryBar" aria-label="Product categories"></div>
+    <section class="category-browse-panel" id="categoryBrowsePanel" aria-label="Subcategories" hidden>
+      <h2 class="category-browse-heading" id="categoryBrowseHeading"></h2>
+      <div class="category-browse-grid" id="categoryBrowseGrid"></div>
+    </section>
 
     <section class="hub-content-panel" id="hubContentPanel" hidden aria-live="polite"><h2 class="hub-content-heading"><span id="hubContentTitle"></span><button type="button" onclick="closeHubSection()" aria-label="Close section">✕</button></h2><div id="hubContentBody"></div></section>
     <dialog class="hub-job-dialog" id="hubJobDialog"><button class="job-dialog-close" type="button" onclick="closeHubJobDetails()" aria-label="Close">×</button><div id="hubJobDialogBody"></div></dialog>
@@ -1388,6 +1407,7 @@
     <div class="mobile-sheet-backdrop" id="mobileCategorySheet" onclick="if(event.target===this)closeMobileSheet('mobileCategorySheet')">
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileCategoryTitle">
         <h2 id="mobileCategoryTitle">Categories</h2>
+        <button type="button" class="mobile-category-back" id="mobileCategoryBack" onclick="showMobileCategoryGroups()" hidden>← All categories</button>
         <div class="mobile-category-list" id="mobileCategoryList"></div>
       </section>
     </div>
@@ -1682,7 +1702,7 @@
           <label class="seller-free-shipping-option"><span>Delivery option</span><span><input name="freeShipping" type="checkbox"> Free shipping</span></label>
           <label>Condition<select name="condition" required><option value="New">New</option><option value="Used - Like New">Used - Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
           <label>Available colors<input name="colors" maxlength="250" placeholder="e.g. Black, Blue, Rose Gold"></label>
-          <label>Category<select name="category" id="sellerProductCategory" required><option value="" disabled selected hidden>Choose a category</option></select></label>
+          <label>Category<select name="category" id="sellerProductCategory" required><option value="" disabled selected hidden>Choose a category</option></select><small class="seller-muted" id="sellerProductCategorySuggestion" aria-live="polite">Start typing the item name for a category suggestion. You can still choose any category manually.</small></label>
           <label>Size options<input name="sizes" maxlength="250" placeholder="e.g. S, M, L, XL"></label>
         </div>
         <label>Description<textarea name="description" maxlength="2000" required></textarea></label>
@@ -2216,7 +2236,7 @@
         products.push(...mappedProducts);
         markProductSearchIndexDirty();
         const knownCategories=new Set(categories.map(category=>String(category.id)));
-        mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
+        mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))&&!window.aleeLegacyCategoryMap?.[String(product.category)]){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
         renderCategoryBar();
         renderShopDirectory();
         displayProducts(products);
@@ -2560,6 +2580,7 @@
       form.hidden=!form.hidden;
       document.getElementById('sellerAddItemToggle').hidden=!form.hidden;
       document.getElementById('sellerProductCancel').hidden=form.hidden;
+      if(!form.hidden&&!editingSellerProductId&&!form.elements.name.value){sellerProductCategoryManuallyChosen=false;sellerSuggestedCategoryId='';}
       if(!form.hidden)form.scrollIntoView({behavior:'smooth',block:'start'});
     }
 
@@ -2567,6 +2588,7 @@
       const item=sellerProducts.find(product=>Number(product.id)===Number(id));
       if(!item)return;
       editingSellerProductId=Number(item.id);
+      sellerProductCategoryManuallyChosen=true;sellerSuggestedCategoryId='';
       const form=document.getElementById('sellerProductForm');
       form.elements.name.value=item.name||'';form.elements.price.value=item.price||'';form.elements.wholesalePrice.value=item.wholesale_price||'';form.elements.offerPrice.value=item.offer_price||'';form.elements.stock.value=item.stock??1;form.elements.deliveryDays.value=item.delivery_days||'';form.elements.freeShipping.checked=Boolean(item.free_shipping);form.elements.condition.value=item.condition||'New';form.elements.colors.value=Array.isArray(item.colors)?item.colors.join(', '):'';populateSellerProductCategories(getProductCategoryId({category:item.category,categoryLabel:item.category_label,name:item.name,description:item.description,features:item.features}));
       form.elements.sizes.value=Array.isArray(item.sizes)?item.sizes.join(', '):'';form.elements.description.value=item.description||'';form.elements.features.value=Array.isArray(item.features)?item.features.join('\n'):'';
@@ -2579,9 +2601,11 @@
 
     function cancelEditSellerProduct() {
       editingSellerProductId=null;
+      sellerProductCategoryManuallyChosen=false;sellerSuggestedCategoryId='';
       const form=document.getElementById('sellerProductForm');form.reset();form.elements.photos.required=false;clearSellerProductPhotoPreview();populateSellerProductCategories();
       document.getElementById('sellerProductFormTitle').textContent='Add Item';document.getElementById('sellerProductSubmit').textContent='Add Item';
       document.getElementById('sellerProductPhotoHelp').textContent='Choose up to 10 photos. Previews will appear here.';
+      document.getElementById('sellerProductCategorySuggestion').textContent='Start typing the item name for a category suggestion. You can still choose any category manually.';
       document.getElementById('sellerProductCancel').hidden=true;document.getElementById('sellerProductStatus').textContent='';form.hidden=true;document.getElementById('sellerAddItemToggle').hidden=false;
     }
 
@@ -3700,7 +3724,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       allButton.textContent = 'All Products';
       allButton.onclick = () => filterCategory('all', allButton);
       bar.replaceChildren(allButton);
-      catalogTabs.forEach(category => {
+      categoryGroups.forEach(category => {
         const button = document.createElement('button');
         button.className = 'cat-btn';
         button.dataset.category = category.id;
@@ -3708,30 +3732,109 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         button.onclick = () => filterCategory(category.id, button);
         bar.appendChild(button);
       });
+      showMobileCategoryGroups();
+    }
+
+    function categoryPlaceholderImage(group) {
+      const icon = group?.icon || '🛍️';
+      return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="#f2f4f7"/><text x="80" y="101" text-anchor="middle" font-size="66">${icon}</text></svg>`)}`;
+    }
+
+    function categoryImageSource(category) {
+      const group = categoryGroups.find(item => item.id === (category.parent || category.id));
+      const matches = (products || []).filter(product => {
+        const categoryId = getProductCategoryId(product);
+        const info = categories.find(item => item.id === categoryId);
+        return category.parent ? categoryId === category.id || info?.parent === category.parent : categoryId === category.id || info?.parent === category.id;
+      });
+      const product = matches.find(item => Array.isArray(item.images || item.image_urls) && (item.images || item.image_urls).length);
+      return product ? (product.images || product.image_urls)[0] : categoryPlaceholderImage(group);
+    }
+
+    function createCategoryTile(category, { mobile=false, selected=false, onClick } = {}) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = mobile ? 'mobile-category-option category-tile' : 'category-browse-tile';
+      if (selected) button.classList.add('active');
+      const image = document.createElement('img');
+      image.src = categoryImageSource(category);
+      image.alt = '';
+      image.loading = 'lazy';
+      image.onerror = () => { image.onerror = null; image.src = categoryPlaceholderImage(categoryGroups.find(group => group.id === (category.parent || category.id))); };
+      const label = document.createElement('span');
+      label.textContent = category.label;
+      button.append(image, label);
+      if (onClick) button.onclick = onClick;
+      return button;
+    }
+
+    function renderCategoryBrowse(groupId, selectedCategoryId='') {
+      const panel = document.getElementById('categoryBrowsePanel');
+      const heading = document.getElementById('categoryBrowseHeading');
+      const grid = document.getElementById('categoryBrowseGrid');
+      const group = categoryGroups.find(item => item.id === groupId);
+      if (!group) { panel.hidden = true; grid.replaceChildren(); return; }
+      panel.hidden = false;
+      heading.textContent = `${group.label} · Subcategories`;
+      const items = categories.filter(category => category.parent === group.id);
+      const nodes = [];
+      let section = '';
+      items.forEach(category => {
+        if (category.section && category.section !== section) {
+          section = category.section;
+          const label = document.createElement('h3');
+          label.className = 'category-browse-section';
+          label.textContent = section;
+          nodes.push(label);
+        }
+        const count = (products || []).filter(product => getProductCategoryId(product) === category.id).length;
+        const tile = createCategoryTile(category, {
+          selected:category.id === selectedCategoryId,
+          onClick:() => {
+            const groupButton = document.querySelector(`#categoryBar .cat-btn[data-category="${group.id}"]`);
+            filterCategory(category.id, groupButton);
+          }
+        });
+        const countLabel = document.createElement('small');
+        countLabel.textContent = `${count} item${count === 1 ? '' : 's'}`;
+        tile.appendChild(countLabel);
+        nodes.push(tile);
+      });
+      grid.replaceChildren(...nodes);
+    }
+
+    let mobileCategoryGroupId = '';
+    function renderMobileCategoryList() {
+      const list = document.getElementById('mobileCategoryList');
+      const grid = document.createElement('div');
+      grid.className = 'mobile-category-options';
+      if (!mobileCategoryGroupId) {
+        const allButton = document.createElement('button');
+        allButton.type = 'button'; allButton.className = 'mobile-category-option'; allButton.textContent = 'All Products';
+        allButton.onclick = () => selectMobileCategory('all', allButton);
+        grid.appendChild(allButton);
+        categoryGroups.forEach(group => grid.appendChild(createCategoryTile(group, { mobile:true, onClick:() => openMobileCategoryGroup(group.id) })));
+      } else {
+        const group = categoryGroups.find(item => item.id === mobileCategoryGroupId);
+        categories.filter(category => category.parent === mobileCategoryGroupId).forEach(category => {
+          grid.appendChild(createCategoryTile(category, { mobile:true, onClick:() => selectMobileCategory(category.id, null) }));
+        });
+        document.getElementById('mobileCategoryTitle').textContent = group?.label || 'Categories';
+        document.getElementById('mobileCategoryBack').hidden = false;
+      }
+      list.replaceChildren(grid);
+    }
+
+    function showMobileCategoryGroups() {
+      mobileCategoryGroupId = '';
+      document.getElementById('mobileCategoryTitle').textContent = 'Categories';
+      document.getElementById('mobileCategoryBack').hidden = true;
       renderMobileCategoryList();
     }
 
-    function renderMobileCategoryList() {
-      const list = document.getElementById('mobileCategoryList');
-      const allButton = document.createElement('button');
-      allButton.type = 'button'; allButton.className = 'mobile-category-option'; allButton.textContent = 'All Products';
-      allButton.onclick = () => selectMobileCategory('all', allButton);
-      const nodes = [allButton];
-      categoryGroups.forEach(group => {
-        const section = document.createElement('section'); section.className = 'mobile-category-group';
-        const heading = document.createElement('h3'); heading.textContent = group.label; section.appendChild(heading);
-        const options = document.createElement('div'); options.className = 'mobile-category-options';
-        categories.filter(category => category.parent === group.id).forEach(category => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'mobile-category-option';
-        button.textContent = category.label;
-        button.onclick = () => selectMobileCategory(category.id, button);
-        options.appendChild(button);
-        });
-        section.append(heading, options); nodes.push(section);
-      });
-      list.replaceChildren(...nodes);
+    function openMobileCategoryGroup(groupId) {
+      mobileCategoryGroupId = groupId;
+      renderMobileCategoryList();
     }
 
     function populateSellerProductCategories(selected='') {
@@ -3747,27 +3850,58 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       select.value=selected||'';
     }
 
+    let sellerProductCategoryManuallyChosen=false;
+    let sellerSuggestedCategoryId='';
+    function setupSellerProductCategorySuggestions() {
+      const form=document.getElementById('sellerProductForm');
+      const nameInput=form?.elements.name;
+      const categorySelect=document.getElementById('sellerProductCategory');
+      const suggestion=document.getElementById('sellerProductCategorySuggestion');
+      if(!nameInput||!categorySelect||nameInput.dataset.categorySuggestionReady)return;
+      nameInput.dataset.categorySuggestionReady='1';
+      nameInput.addEventListener('input',()=>{
+        if(sellerProductCategoryManuallyChosen||editingSellerProductId)return;
+        const categoryId=window.aleeSuggestProductCategory(nameInput.value);
+        const category=categories.find(item=>item.id===categoryId);
+        if(category){
+          categorySelect.value=category.id;
+          sellerSuggestedCategoryId=category.id;
+          suggestion.textContent=`Suggested: ${category.label}. You can change it manually.`;
+        }else if(sellerSuggestedCategoryId){
+          categorySelect.value='';
+          sellerSuggestedCategoryId='';
+          suggestion.textContent='No category match yet. You can choose a category manually.';
+        }
+      });
+      categorySelect.addEventListener('change',()=>{
+        sellerProductCategoryManuallyChosen=true;
+        sellerSuggestedCategoryId='';
+        const category=categories.find(item=>item.id===categorySelect.value);
+        suggestion.textContent=category?`Selected: ${category.label}. You can change it manually.`:'Choose the category that best matches this item.';
+      });
+    }
+
     function getProductCategoryId(product) {
       const raw=String(product.category||'').trim().toLowerCase();
-      const label=String(product.categoryLabel||product.category_label||'').trim().toLowerCase();
-      const direct=categories.find(category=>category.id===raw||category.label.toLowerCase()===raw||category.label.toLowerCase()===label);
+      const direct=categories.find(category=>category.id===raw);
       if(direct)return direct.id;
       const corpus=`${product.name||''} ${product.desc||product.description||''} ${product.categoryLabel||product.category_label||''} ${(product.features||[]).join(' ')}`.toLowerCase();
-      const keywordMatches=categories.flatMap(category=>(category.keywords||[]).filter(keyword=>corpus.includes(keyword)).map(keyword=>({id:category.id,length:keyword.length}))).sort((a,b)=>b.length-a.length);
-      if(keywordMatches.length)return keywordMatches[0].id;
-      const legacy={beauty:'personal-care',health:'personal-care',gadgets:'headphones-earbuds',gadget:'headphones-earbuds',audio:'headphones-earbuds',watches:'smart-watches',smartwatch:'smart-watches',phone:'mobile-phones-accessories',power:'outdoor-gear',tool:'outdoor-gear',sport:'gym-fitness',toys:'toys',fashion:'womens-fashion','t-shirt':'mens-fashion'};
-      return legacy[raw]||'';
+      const suggested=window.aleeSuggestProductCategory(`${product.name||''} ${product.desc||product.description||''} ${product.categoryLabel||product.category_label||''} ${(product.features||[]).join(' ')}`);
+      if(suggested)return suggested;
+      return window.aleeLegacyCategoryMap?.[raw]||'';
     }
 
     function selectMobileCategory(categoryId, button) {
+      if (categoryGroups.some(group => group.id === categoryId)) { openMobileCategoryGroup(categoryId); return; }
       const topButton = [...document.querySelectorAll('#categoryBar .cat-btn')].find(item => item.dataset.category === categoryId || (categoryId === 'all' && item.textContent === 'All Products'));
-      filterCategory(categoryId, topButton || button);
+      filterCategory(categoryId, topButton || button || document.querySelector('#categoryBar .cat-btn'));
       closeMobileSheet('mobileCategorySheet');
       document.querySelectorAll('.mobile-nav-button').forEach(nav => nav.classList.toggle('active', nav.textContent.includes('Categories')));
       scrollToFilteredProducts();
     }
 
     function openMobileCategories() {
+      showMobileCategoryGroups();
       document.getElementById('mobileCategorySheet').classList.add('show');
       pushAppUiLayer('mobileCategorySheet',fromHistory=>closeMobileSheet('mobileCategorySheet',fromHistory),()=>document.getElementById('mobileCategorySheet').classList.add('show'));
     }
@@ -4196,6 +4330,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       }catch(_){}
     }
 
+    setupSellerProductCategorySuggestions();
     renderCategoryBar();
     displayProducts(products);
     loadProductSearchTrends();
@@ -4597,16 +4732,24 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       syncSearchClearButton();
       document.querySelectorAll('#categoryBar .cat-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('#mobileCategoryList .mobile-category-option').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const group = categoryGroups.find(item => item.id === category);
+      const selectedCategory = categories.find(item => item.id === category);
+      const group = categoryGroups.find(item => item.id === category || item.id === selectedCategory?.parent);
+      const groupButton = group ? document.querySelector(`#categoryBar .cat-btn[data-category="${group.id}"]`) : null;
+      const activeButton = category === 'all' ? document.querySelector('#categoryBar .cat-btn[data-category="all"]') : groupButton || btn;
+      activeButton?.classList.add('active');
+      renderCategoryBrowse(group?.id || '', selectedCategory?.id || '');
       const leafIds = group ? categories.filter(item => item.parent === group.id).map(item => item.id) : [];
       const legacyTabs={gadgets:['headphones-earbuds','laptops-computers'],watches:['smart-watches'],beauty:['makeup','skin-care','hair-care','perfumes','personal-care'],power:['home-decor','kitchen-appliances','outdoor-gear','furniture'],phone:['mobile-phones-accessories'],sport:['gym-fitness','travel-luggage','outdoor-gear'],'t-shirt':['mens-fashion']};
       const legacyLeafIds=legacyTabs[category]||[];
       displayProducts(category === 'all' ? products : products.filter(product => {
         const productCategory = getProductCategoryId(product);
-        return group ? leafIds.includes(productCategory) : legacyTabs[category] ? legacyLeafIds.includes(productCategory) : productCategory === category;
+        return group && !selectedCategory && category === group.id ? leafIds.includes(productCategory) : legacyTabs[category] ? legacyLeafIds.includes(productCategory) : productCategory === category;
       }));
-      scrollToFilteredProducts();
+      if (group && !selectedCategory && category === group.id) {
+        requestAnimationFrame(() => document.getElementById('categoryBrowsePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
+      } else {
+        scrollToFilteredProducts();
+      }
     }
 
     function syncSearchClearButton() {
@@ -4768,8 +4911,9 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       return { color, size };
     }
 
-    function renderRecommendations(product, selectedCategory = product.category) {
-      const recommendationCategories = [{ id: 'all', label: 'All Products' }, ...categories];
+    function renderRecommendations(product, selectedCategory = getProductCategoryId(product)) {
+      const availableCategories = categories.filter(category => category.parent && products.some(item => getProductCategoryId(item) === category.id));
+      const recommendationCategories = [{ id: 'all', label: 'All Products' }, ...availableCategories];
       const categoryBar = document.getElementById('recommendationCategories');
       categoryBar.replaceChildren(...recommendationCategories.map(category => {
         const button = document.createElement('button');
@@ -4780,7 +4924,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         return button;
       }));
       const related = [...new Map(products
-        .filter(item => item.id !== product.id && (selectedCategory === 'all' || item.category === selectedCategory))
+        .filter(item => item.id !== product.id && (selectedCategory === 'all' || getProductCategoryId(item) === selectedCategory))
         .map(item => [item.id, item])).values()];
       document.getElementById('recommendationList').innerHTML = related.map(item => `
         <button class="recommendation-card" type="button" onclick="openProductPopup(${item.id})" aria-label="View ${item.name}">
