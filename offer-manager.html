@@ -46,4 +46,4 @@
     async function remove(row){if(!row||!confirm(`Delete “${row.title}”? This removes the offer from the site.`))return;const result=await client.from('platform_posts').delete().eq('id',row.id);if(result.error){status.textContent=`Could not delete: ${result.error.message}`;return;}await removeOldFile(row.media_url);status.textContent='Offer deleted.';await load();}
   })();
   </script>
-<script src="site-theme.js?v=20261114-account-only-theme"></script></body></html>
+<script src="manager-navigation.js?v=20260620"></script><script src="site-theme.js?v=20261114-account-only-theme"></script></body></html>
