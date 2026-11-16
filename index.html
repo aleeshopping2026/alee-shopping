@@ -201,6 +201,7 @@
       color: var(--text-white); font-size: 13px; outline: none; transition: 0.3s;
     }
     .search-container input:focus { border-color: var(--light-leaf); box-shadow: 0 0 10px rgba(249, 115, 22, 0.2); }
+    .search-rotating-placeholder { position:absolute; z-index:1; left:15px; right:120px; overflow:hidden; color:#7b8088; font-size:13px; text-overflow:ellipsis; white-space:nowrap; pointer-events:none; }
     .top-searches { display:flex; align-items:center; gap:8px; margin-top:8px; min-width:0; color:var(--text-white); font-size:11px; }
     .top-search-label { display:inline-flex; align-items:center; gap:5px; flex:0 0 auto; color:var(--light-leaf); font-weight:800; white-space:nowrap; }
     .top-search-list { display:flex; align-items:center; gap:6px; min-width:0; overflow-x:auto; scrollbar-width:none; }
@@ -3979,12 +3980,38 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     const searchContainer = document.querySelector('.search-container');
     const searchInput = document.getElementById('searchInput');
     const defaultSearchHint='🔍 Search products...';
-    const rotatingSearchHints=[...new Set((products||[]).map(item=>String(item.name||'').trim()).filter(Boolean))].slice(0,12);
+    const rotatingSearchHints=[...new Set(categoryGroups.map(category=>String(category.label||'').trim()).filter(Boolean))];
     let rotatingSearchHintIndex=0;
-    searchInput.addEventListener('focus',()=>{searchInput.placeholder=defaultSearchHint;});
-    searchInput.addEventListener('input',()=>{if(searchInput.value.trim())searchInput.placeholder=defaultSearchHint;});
-    searchInput.addEventListener('blur',()=>{if(!searchInput.value.trim()&&rotatingSearchHints.length)searchInput.placeholder=`🔍 Search ${rotatingSearchHints[rotatingSearchHintIndex%rotatingSearchHints.length]}...`;});
-    if(rotatingSearchHints.length){searchInput.placeholder=`🔍 Search ${rotatingSearchHints[0]}...`;setInterval(()=>{const discovery=document.getElementById('searchDiscoveryOverlay'),isHome=!document.body.classList.contains('hub-section-open')&&!discovery?.classList.contains('show')&&searchInput.isConnected;if(!isHome||document.activeElement===searchInput||searchInput.value.trim())return;searchInput.placeholder=`🔍 Search ${rotatingSearchHints[rotatingSearchHintIndex%rotatingSearchHints.length]}...`;rotatingSearchHintIndex=(rotatingSearchHintIndex+1)%rotatingSearchHints.length;},3200);}
+    const rotatingPlaceholder=document.createElement('span');
+    rotatingPlaceholder.className='search-rotating-placeholder';
+    rotatingPlaceholder.setAttribute('aria-hidden','true');
+    searchContainer.appendChild(rotatingPlaceholder);
+    const searchHintText=category=>`🔍 Search ${category}...`;
+    const canRotateSearchHint=()=>rotatingSearchHints.length>0&&searchInput.isConnected&&!searchInput.value.trim()&&document.activeElement!==searchInput&&!document.body.classList.contains('hub-section-open')&&!document.getElementById('searchDiscoveryOverlay')?.classList.contains('show');
+    function syncRotatingSearchHint(){
+      const visible=canRotateSearchHint();
+      rotatingPlaceholder.hidden=!visible;
+      searchInput.placeholder=visible?'':defaultSearchHint;
+    }
+    if(rotatingSearchHints.length){
+      rotatingPlaceholder.textContent=searchHintText(rotatingSearchHints[0]);
+      rotatingSearchHintIndex=1%rotatingSearchHints.length;
+      syncRotatingSearchHint();
+      searchInput.addEventListener('focus',syncRotatingSearchHint);
+      searchInput.addEventListener('input',syncRotatingSearchHint);
+      searchInput.addEventListener('blur',syncRotatingSearchHint);
+      setInterval(()=>{
+        if(!canRotateSearchHint())return;
+        const next=rotatingSearchHints[rotatingSearchHintIndex];
+        rotatingSearchHintIndex=(rotatingSearchHintIndex+1)%rotatingSearchHints.length;
+        if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){rotatingPlaceholder.textContent=searchHintText(next);return;}
+        const out=rotatingPlaceholder.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-60%)'}],{duration:180,easing:'ease-in',fill:'forwards'});
+        out.onfinish=()=>{
+          rotatingPlaceholder.textContent=searchHintText(next);
+          rotatingPlaceholder.animate([{opacity:0,transform:'translateY(60%)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'});
+        };
+      },1800);
+    }
     const searchSuggestionBox=document.createElement('div');searchSuggestionBox.id='searchSuggestions';searchSuggestionBox.className='search-suggestions';searchSuggestionBox.setAttribute('role','listbox');searchInput.closest('.search-container').appendChild(searchSuggestionBox);let activeSuggestionIndex=-1;let suggestionRows=[];
     const searchDiscoveryOverlay = document.getElementById('searchDiscoveryOverlay');
     const searchDiscoveryMount = document.getElementById('searchDiscoveryMount');
