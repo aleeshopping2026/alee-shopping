@@ -346,9 +346,6 @@
     .hero-track { display:flex; width:100%; transition:opacity .35s ease; will-change:opacity; }
     .hero-slide { display:block; flex:0 0 100%; aspect-ratio:2.3 / 1; background:#ef7919; overflow:hidden; }
     .hero-slide img, .hero-slide video { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
-    .hero-nav { position:absolute; top:50%; transform:translateY(-50%); z-index:2; width:38px; height:38px; border:0; border-radius:50%; color:#fff; background:rgba(0,0,0,.42); font-size:20px; cursor:pointer; }
-    .hero-nav:hover { background:rgba(0,0,0,.7); }
-    .hero-nav.prev { left:12px; } .hero-nav.next { right:12px; }
     .hero-dots { position:absolute; bottom:10px; left:0; right:0; z-index:2; display:flex; justify-content:center; gap:7px; }
     .hero-dot { width:9px; height:9px; border:0; border-radius:50%; background:rgba(255,255,255,.55); cursor:pointer; }
     .hero-dot.active { background:#fff; transform:scale(1.2); }
@@ -514,8 +511,6 @@
       .mobile-sheet-backdrop { display:none; }
       .mobile-sheet-backdrop.show { display:flex; }
       .hero-slide { aspect-ratio:1.8 / 1; }
-      .hero-nav { width:30px; height:30px; font-size:16px; }
-      .hero-nav.prev { left:6px; } .hero-nav.next { right:6px; }
     }
 
     .container { max-width: 1400px; margin: 15px auto; padding: 0 2%; }
@@ -550,10 +545,15 @@
     .recommendation-title-row { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 2px 10px; }
     .recommendation-title-row h2 { margin:0; color:var(--text-white); font-size:18px; }
     .recommendation-title-row p { margin:0; color:#858b95; font-size:12px; }
-    .recommendation-shelf { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:2px 2px 8px; align-items:start; }
-    .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; align-items:start; }
-    .recommendation-shelf .recommendation-card-wrap { min-width:0; align-self:start; }
+    .recommendation-shelf { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:2px 2px 8px; align-items:stretch; }
+    .recommendation-shelf:not(.is-horizontal) { display:block; column-count:2; column-gap:8px; }
+    .recommendation-shelf:not(.is-horizontal)>.recommendation-card-wrap { display:inline-block; width:100%; margin:0 0 8px; break-inside:avoid; vertical-align:top; }
+    .recommendation-shelf:not(.is-horizontal)>.recommendation-empty { column-span:all; }
+    .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; align-items:stretch; }
+    .recommendation-shelf .recommendation-card-wrap { min-width:0; align-self:stretch; }
+    .recommendation-shelf.is-horizontal .recommendation-card-wrap { display:flex; height:100%; }
     .recommendation-shelf .recommendation-card-wrap>.card { height:auto; min-height:0; justify-content:flex-start; gap:2px; padding:5px; border-radius:8px; }
+    .recommendation-shelf.is-horizontal .recommendation-card-wrap>.card { width:100%; height:100%; }
     .recommendation-shelf .recommendation-card-wrap>.card h3 { height:auto; min-height:0; max-height:2.4em; margin:1px 0; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; line-height:1.2; }
     .recommendation-shelf .recommendation-card-wrap>.card .price-block { min-height:0; margin:0; }
     .recommendation-shelf .recommendation-card-wrap>.card .product-shop-meta { min-height:0; margin:2px 0 1px; gap:4px; }
@@ -562,6 +562,8 @@
     .recommendation-shelf .card img { height:100%; }
     .recommendation-shelf .card .card-image-wrap { width:calc(100% + 10px); margin:-5px -5px 0; border-radius:8px 8px 6px 6px; }
     .recommendation-shelf .card .card-image-wrap > img { width:100%; height:100%; object-fit:cover; padding:0; border:0; border-radius:inherit; }
+    .recommendation-shelf:not(.is-horizontal) .card .card-image-wrap { height:auto; aspect-ratio:auto; }
+    .recommendation-shelf:not(.is-horizontal) .card .card-image-wrap > img { position:static; display:block; width:100%; height:auto; max-height:none; aspect-ratio:auto; object-fit:contain; }
     .recommendation-shelf .card .product-shop-meta img { width:22px; height:22px; min-width:22px; min-height:22px; max-width:22px; max-height:22px; flex:0 0 22px; aspect-ratio:1; padding:0; object-fit:cover; border-radius:50%; }
     .recommendation-card-wrap { position:relative; }
     .recommendation-sponsored-badge { position:absolute; z-index:2; top:8px; left:8px; border-radius:999px; padding:4px 8px; background:#172033e8; color:#fff; font-size:10px; font-weight:800; letter-spacing:.02em; box-shadow:0 2px 8px #0003; }
@@ -584,7 +586,8 @@
     .product-rating-row small { color:var(--detail-copy); font-size:10px; line-height:1.1; }
     .recommendation-section[data-recommendation-kind="new"] .recommendation-title-row p { color:#15803d; }
     .recommendation-section[data-recommendation-kind="sponsored"] .recommendation-title-row p { color:#667085; }
-    @media (min-width:768px) { .recommendation-shelf { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:10px; } .recommendation-shelf .card img { height:100%; } }
+    @media (min-width:768px) { .recommendation-shelf:not(.is-horizontal) { column-count:3; column-gap:10px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:10px; } .recommendation-shelf .card img { height:100%; } }
+    @media (min-width:1024px) { .recommendation-shelf:not(.is-horizontal) { column-count:5; } }
     .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
@@ -1228,7 +1231,7 @@
     .category-browse-panel[hidden]{display:none!important;}
     @media(max-width:767px){.category-browse-panel{margin:0 0 14px;padding:14px 10px;border-left:0;border-right:0;border-radius:0}.category-browse-heading{margin:0 0 10px;font-size:15px}.category-browse-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px}.category-browse-tile{gap:6px;padding:7px 3px}.category-browse-tile img{width:62px;height:62px}.category-browse-tile span{font-size:11px}.category-browse-tile small{font-size:9px}}
 @media (max-width:767px){
-    /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
+    /* Two-column masonry for the main product list on phones. */
     #productList.products{display:block!important;column-count:2!important;column-gap:6px!important;}
     #productList.products>.card{display:inline-flex!important;width:100%!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 6px!important;gap:2px!important;padding:4px!important;border-radius:8px!important;}
     #productList.products>.card>h3{height:auto!important;min-height:0!important;max-height:2.4em!important;margin:0!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;}
@@ -1236,19 +1239,20 @@
     #productList.products>.card>.card-image-wrap{width:calc(100% + 8px)!important;height:auto!important;aspect-ratio:auto!important;margin:-4px -4px 0!important;border-radius:8px 8px 6px 6px!important;}
     #productList.products>.card>.card-image-wrap>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;border-radius:inherit!important;}
 }
-@media (min-width:1024px){
-    #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
-}
-/* Desktop and tablet product cards: taller product photos, compact spacing, unchanged card footprint. */
+/* Desktop product cards use masonry columns; wide scrolling shelves remain equal-height. */
 @media (min-width:768px){
-    #productList.products{gap:8px!important;}
-    #productList.products>.card{min-height:276px!important;box-sizing:border-box!important;gap:1px!important;padding:5px!important;border-radius:8px!important;}
-    #productList.products>.card>.card-image-wrap{height:clamp(158px,13vw,166px)!important;aspect-ratio:auto!important;flex:none!important;}
+    #productList.products{display:block!important;column-count:3!important;column-gap:8px!important;}
+    #productList.products>.card{display:inline-flex!important;width:100%!important;min-height:0!important;box-sizing:border-box!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 8px!important;gap:2px!important;padding:5px!important;border-radius:8px!important;}
+    #productList.products>.card>.card-image-wrap{width:100%!important;height:auto!important;aspect-ratio:auto!important;margin:0!important;flex:none!important;}
+    #productList.products>.card>.card-image-wrap>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;}
     #productList.products>.card>.product-shop-meta{gap:4px!important;min-height:16px!important;margin:2px 0 1px!important;color:#111827!important;font-size:10px!important;flex:none!important;}
     #productList.products>.card>.product-shop-meta>img:first-child{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;flex:0 0 16px!important;border-radius:0!important;}
-    #productList.products>.card>h3{height:33px!important;min-height:33px!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;}
+    #productList.products>.card>h3{height:auto!important;min-height:0!important;max-height:2.4em!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;}
     #productList.products>.card>.price-block{min-height:0!important;margin:0!important;}
     #productList.products .free-shipping-badge{z-index:2;padding:4px 7px;font-size:10px;white-space:nowrap;}
+}
+@media (min-width:1024px){
+    #productList.products{display:block!important;column-count:5!important;column-gap:8px!important;grid-template-columns:none!important;}
 }
     .slider img { border-color:#111827!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
@@ -1612,9 +1616,7 @@
     </div>
 
     <div class="hero-banner" id="heroBanner" aria-label="ALEE promotional banner">
-      <button class="hero-nav prev" type="button" onclick="changeBanner(-1)" aria-label="Previous banner">&#10094;</button>
       <div class="hero-track" id="heroTrack"></div>
-      <button class="hero-nav next" type="button" onclick="changeBanner(1)" aria-label="Next banner">&#10095;</button>
       <div class="hero-dots" id="heroDots" aria-label="Choose banner"></div>
     </div>
 
@@ -1687,15 +1689,15 @@
     <div class="container">
       <div class="photo-search-notice" id="photoSearchNotice" role="status" aria-live="polite"><span id="photoSearchMessage"></span><button type="button" class="photo-search-clear" onclick="clearPhotoSearch()">Clear</button></div>
       <section class="recommendation-section" id="forYouSection" aria-labelledby="forYouTitle" hidden>
-        <div class="recommendation-title-row"><h2 id="forYouTitle"><i class="fa-solid fa-wand-magic-sparkles"></i> For You</h2><p>Based on products you search for</p></div>
+        <div class="recommendation-title-row"><h2 id="forYouTitle"><i class="fa-solid fa-wand-magic-sparkles"></i> For You</h2></div>
         <div class="recommendation-shelf is-horizontal" id="forYouProducts" aria-live="polite"></div>
       </section>
       <section class="recommendation-section" id="bestSellersSection" data-recommendation-kind="best" aria-labelledby="bestSellersTitle">
-        <div class="recommendation-title-row"><h2 id="bestSellersTitle"><i class="fa-solid fa-trophy"></i> Best Sellers</h2><p>Most ordered in the last 30 days</p></div>
+        <div class="recommendation-title-row"><h2 id="bestSellersTitle"><i class="fa-solid fa-trophy"></i> Best Sellers</h2></div>
         <div class="recommendation-shelf" id="bestSellersProducts" aria-live="polite"></div>
       </section>
       <section class="recommendation-section" id="trendingSection" data-recommendation-kind="trending" aria-labelledby="trendingTitle">
-        <div class="recommendation-title-row"><h2 id="trendingTitle"><i class="fa-solid fa-fire"></i> Trending Now</h2><p>Most searched and opened in the last 24 hours</p></div>
+        <div class="recommendation-title-row"><h2 id="trendingTitle"><i class="fa-solid fa-fire"></i> Trending Now</h2></div>
         <div class="recommendation-shelf is-horizontal" id="trendingProducts" aria-live="polite"><p class="recommendation-empty">Trending products will appear as shoppers search.</p></div>
       </section>
       <section class="recommendation-section" id="newArrivalsSection" data-recommendation-kind="new" aria-labelledby="newArrivalsTitle">
@@ -3774,10 +3776,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
     renderActiveBanner();
     chooseUnseenBannerFor(activeUser);
-    if (bannerList.length < 2) {
-      document.querySelectorAll('.hero-nav').forEach(button => button.hidden = true);
-      heroDots.hidden = true;
-    }
+    if (bannerList.length < 2) heroDots.hidden = true;
     let bannerChangePending = false;
     function showBanner(index) {
       if (!bannerList.length) return;
@@ -3793,7 +3792,6 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       preload.src = next.image;
       if (preload.complete) commit();
     }
-    function changeBanner(direction) { showBanner(activeBannerIndex + direction); }
     if (bannerList.length > 1) setInterval(() => showBanner(activeBannerIndex + 1), 5000);
 
     // --- SHOP PRODUCTS & CATEGORY LOGIC ---
@@ -3921,9 +3919,11 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         links.push({url,label});return true;
       };
 
+      const hasSellerShopOrder=orderGroups.some(group=>group.shop_id&&String(group.shop_id)!=='alee-shopping');
       for(const group of orderGroups){
         const shop=group.shop_id?shops.find(item=>String(item.id)===String(group.shop_id)):null;
         const isAleeShop=!group.shop_id||String(group.shop_id)==='alee-shopping';
+        if(isAleeShop&&hasSellerShopOrder)continue;
         const recipient=normalizeWhatsappNumber(shop?.phone)||(isAleeShop?adminPhone:'');
         const label=shop?.name||'aleeshopping';
         if(recipient)addLink(recipient,label,buildMessage(group));
@@ -4523,7 +4523,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const cutoff=Date.now()-7*86400000;
       const arrivals=ordered(available.filter(product=>product._sellerManaged&&new Date(product.created_at||0).getTime()>=cutoff),(a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
       const topRatedShelf=document.getElementById('topRatedProducts');
-      const topRatedColumns=topRatedShelf?getComputedStyle(topRatedShelf).gridTemplateColumns.split(/\s+/).filter(track=>track&&track!=='none').length:0;
+      const topRatedColumns=topRatedShelf?Number.parseInt(getComputedStyle(topRatedShelf).columnCount,10):0;
       const rated=ordered(available.filter(product=>Number(stats(product.id).rating_average||0)>0),(a,b)=>Number(stats(b.id).rating_average||0)-Number(stats(a.id).rating_average||0)||Number(stats(b.id).rating_count||0)-Number(stats(a.id).rating_count||0)).slice(0,8*Math.max(1,topRatedColumns||2));
       const sponsoredIds=new Set(sponsored.map(product=>String(product.id)));
       const organicArrivals=arrivals.filter(product=>!sponsoredIds.has(String(product.id)));
