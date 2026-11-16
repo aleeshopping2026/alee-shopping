@@ -195,7 +195,7 @@
     .search-sort-select,.search-rating-select { width:100%; min-height:40px; padding:8px 10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; font-size:12px; }
     .search-no-exact { grid-column:1/-1; padding:11px 12px; border:1px solid var(--glass-border); border-radius:11px; background:var(--bg-dark); color:var(--detail-copy,#667085); font-size:13px; }
     .search-container input {
-      width: 100%; padding: 10px 48px 10px 15px; border-radius: 20px;
+      width: 100%; padding: 10px 120px 10px 15px; border-radius: 20px;
       border: 1px solid var(--glass-border); background: var(--bg-dark);
       color: var(--text-white); font-size: 13px; outline: none; transition: 0.3s;
     }
@@ -230,9 +230,16 @@
     .finder-result small { margin-top:3px; color:var(--detail-copy,#777); }
     .finder-price { color:var(--light-leaf); font-weight:800; white-space:nowrap; }
 
-    .search-clear-btn { position:absolute; right:8px; width:36px; height:36px; display:none; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--detail-copy,#777); cursor:pointer; font-size:14px; }
+    .photo-search-input { display:none !important; }
+    .photo-search-btn,.search-submit-btn,.search-clear-btn { position:absolute; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; cursor:pointer; font-size:14px; }
+    .photo-search-btn { right:80px; color:var(--text-white); }
+    .search-submit-btn { right:44px; color:var(--light-leaf); }
+    .photo-search-btn:hover,.search-submit-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
+    .search-clear-btn { right:8px; display:none; color:var(--detail-copy,#777); }
     .search-clear-btn.show { display:flex; }
     .search-clear-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
+    .recommendation-more-btn { display:block; margin:12px auto 0; padding:8px 14px; border:1px solid var(--glass-border); border-radius:18px; background:var(--bg-dark); color:var(--text-white); cursor:pointer; }
+    .recommendation-more-btn:hover { border-color:var(--light-leaf); color:var(--light-leaf); }
     .search-discovery-overlay { display:none; position:fixed; inset:0; z-index:20000; height:100dvh; overflow-y:auto; overscroll-behavior:contain; background:var(--card-bg); color:var(--text-white); }
     .search-discovery-overlay.show { display:block; }
     .search-discovery-overlay.results-mode .search-discovery-tabs { display:none; }
@@ -1286,6 +1293,9 @@
     <div class="search-bar">
       <div class="search-container">
         <input type="text" id="searchInput" placeholder="🔍 Search products...">
+        <input type="file" id="photoSearchInput" class="photo-search-input" accept="image/*" onchange="searchProductsByPhoto(this.files[0]);this.value=''">
+        <button type="button" class="photo-search-btn" onclick="document.getElementById('photoSearchInput').click()" title="Search with a photo" aria-label="Search with a photo"><i class="fa-solid fa-camera" aria-hidden="true"></i></button>
+        <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       </div>
       <div class="search-extras" id="searchExtras">
@@ -1512,6 +1522,7 @@
           <h3>More products in this category</h3>
           <div class="recommendation-categories" id="recommendationCategories" aria-label="Choose a product category"></div>
           <div id="recommendationList" class="recommendation-grid"></div>
+          <button type="button" class="recommendation-more-btn" id="recommendationMoreBtn" hidden>Show more products</button>
         </section>
         <section class="reviews-section">
           <h3>Customer comments</h3>
@@ -1775,6 +1786,7 @@
      }
     const productPopupAds = Array.isArray(window.aleeProductDetailAds) ? window.aleeProductDetailAds.slice(0,2000) : [];
     const categories = Array.isArray(window.aleeCategories) ? window.aleeCategories : [];
+    const categoryById = new Map(categories.map(category => [String(category.id), category]));
     const categoryGroups = Array.isArray(window.aleeCategoryGroups) ? window.aleeCategoryGroups : [];
     const catalogTabs = Array.isArray(window.aleeCatalogTabs) ? window.aleeCatalogTabs : [];
     const shops = Array.isArray(window.aleeShops) ? window.aleeShops : [];
@@ -2234,7 +2246,7 @@
         products.push(...mappedProducts);
         markProductSearchIndexDirty();
         const knownCategories=new Set(categories.map(category=>String(category.id)));
-        mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))&&!window.aleeLegacyCategoryMap?.[String(product.category)]){categories.push({id:String(product.category),label:product.categoryLabel||String(product.category)});knownCategories.add(String(product.category));}});
+        mappedProducts.forEach(product=>{if(product.category&&!knownCategories.has(String(product.category))&&!window.aleeLegacyCategoryMap?.[String(product.category)]){const category={id:String(product.category),label:product.categoryLabel||String(product.category)};categories.push(category);categoryById.set(category.id,category);knownCategories.add(category.id);}});
         renderCategoryBar();
         renderShopDirectory();
         displayProducts(products);
@@ -3697,6 +3709,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     let activeGalleryProduct = null;
     let activeGalleryIndex = 0;
+    let productPopupRenderToken = 0;
     let productPopupHistoryOpen = false;
     let productPopupRouteEntry = false;
     let productPopupReturnShopId = '';
@@ -3886,7 +3899,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     function getProductCategoryId(product) {
       const raw=String(product.category||'').trim().toLowerCase();
-      const direct=categories.find(category=>category.id===raw);
+      const direct=categoryById.get(raw);
       if(direct)return direct.id;
       const suggested=window.aleeSuggestProductCategory(`${product.name||''} ${product.desc||product.description||''} ${product.categoryLabel||product.category_label||''} ${(product.features||[]).join(' ')}`);
       if(suggested)return suggested;
