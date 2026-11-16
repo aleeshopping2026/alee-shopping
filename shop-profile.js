@@ -150,6 +150,26 @@
     if (following) following.textContent = String(followingCount);
     if (followButton) { followButton.textContent = isFollowing ? 'Following' : 'Follow'; followButton.classList.toggle('is-following', isFollowing); }
   }
+  function refreshShopAccountControls() {
+    const ratingLink=document.getElementById('ratingToolLink');
+    if(ratingLink)ratingLink.hidden=currentUserEmail.toLowerCase()!=='aleeshopping2026@gmail.com';
+    const button=document.getElementById('favoriteShopButton');
+    if(!button||!shop)return;
+    let rows=[];
+    try{rows=JSON.parse(localStorage.getItem('alee-favorites:'+(currentUser?.id||'guest'))||'[]');}catch(_){}
+    const saved=Array.isArray(rows)&&rows.some(row=>row.type==='shop'&&String(row.id)===String(shop.id));
+    button.innerHTML=saved?'<i class="fa-solid fa-heart"></i>':'<i class="fa-regular fa-heart"></i>';
+    button.classList.toggle('is-saved',saved);
+    button.setAttribute('aria-label',saved?'Remove shop from favorites':'Add shop to favorites');
+    button.title=saved?'Remove from favorites':'Add to favorites';
+    button.setAttribute('aria-pressed',String(saved));
+  }
+  function refreshShopRating() {
+    const stars=document.querySelector('.profile-stars');
+    if(!stars)return;
+    stars.setAttribute('aria-label',`${shopRating} out of 5 stars`);
+    stars.innerHTML=[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('');
+  }
 
   function renderContact() {
     const parts = [];
@@ -307,7 +327,7 @@
     document.getElementById('followingStat').addEventListener('click', showFollowing);
     document.getElementById('adsStat').addEventListener('click', () => document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'}));
     document.getElementById('followButton').addEventListener('click', toggleFollow);
-    const savedKey=currentUser?.id||'guest';let savedRows=[];try{savedRows=JSON.parse(localStorage.getItem('alee-favorites:'+savedKey)||'[]');}catch(_){}if(savedRows.some(row=>row.type==='shop'&&String(row.id)===String(shop.id))){const favorite=document.getElementById('favoriteShopButton');favorite.innerHTML='<i class="fa-solid fa-heart"></i>';favorite.classList.add('is-saved');favorite.setAttribute('aria-label','Remove shop from favorites');favorite.title='Remove from favorites';favorite.setAttribute('aria-pressed','true');}
+    refreshShopAccountControls();
     document.getElementById('favoriteShopButton').addEventListener('click', toggleFavoriteShop);
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
@@ -317,20 +337,38 @@
   }
 
   async function loadShop() {
+    let profileRendered=false;
+    let remoteProductsPromise=null;
     if (!shop && supabase && shopId && isUuid(shopId)) {
+      remoteProductsPromise=supabase.from('seller_products_profile_public').select('*').eq('shop_id',shopId);
       const {data:row,error} = await supabase.from('seller_shops_profile_public').select('*').eq('id',shopId).maybeSingle();
       if (!error && row) {
         shop = {id:String(row.id), name:row.shop_name, logo:row.logo_url||'assets/alee-logo.png', banner:row.banner_url||'', phone:row.phone||'', phone2:row.phone2||'', address:row.address||'', externalLink:row.external_link||'', shopCategory:row.shop_category||'Other', bio:row.bio||'', facebook:row.facebook_url||'', instagram:row.instagram_url||'', youtube:row.youtube_url||'', tiktok:row.tiktok_url||'', currency_code:row.currency_code||'LKR', isVerified:Boolean(row.is_verified), rank:9999, rating:5};
-        const {data:items} = await supabase.from('seller_products_profile_public').select('*').eq('shop_id',shopId);
-        (items||[]).forEach(item=>{const price=Number(item.offer_price)||Number(item.price);products.push({id:1000000000+Number(item.id),name:item.name,price,originalPrice:Number(item.offer_price)?Number(item.price):null,discountPercent:Number(item.offer_price)&&Number(item.price)>Number(item.offer_price)?Math.round((Number(item.price)-price)*100/Number(item.price)):0,stock:Number(item.stock??1),soldCount:Number(item.sold_count||0),freeShipping:Boolean(item.free_shipping),createdAt:item.created_at||'',currencyCode:item.currency_code||row.currency_code||'LKR',colors:item.colors||[],category:item.category,shopId:String(item.shop_id),desc:item.description||'',features:item.features||[],sizes:item.sizes||[],images:item.image_urls||[]});});
         shops.push(shop);
+        renderProfile();
+        profileRendered=true;
+        hideLoader();
+        const {data:items,error:productsError}=await remoteProductsPromise;
+        if(productsError)console.warn('Could not load shop products.',productsError.message);
+        (items||[]).forEach(item=>{const price=Number(item.offer_price)||Number(item.price);products.push({id:1000000000+Number(item.id),name:item.name,price,originalPrice:Number(item.offer_price)?Number(item.price):null,discountPercent:Number(item.offer_price)&&Number(item.price)>Number(item.offer_price)?Math.round((Number(item.price)-price)*100/Number(item.price)):0,stock:Number(item.stock??1),soldCount:Number(item.sold_count||0),freeShipping:Boolean(item.free_shipping),createdAt:item.created_at||'',currencyCode:item.currency_code||row.currency_code||'LKR',colors:item.colors||[],category:item.category,shopId:String(item.shop_id),desc:item.description||'',features:item.features||[],sizes:item.sizes||[],images:item.image_urls||[]});});
+        if(!productsError){shopProducts=products.filter(item=>String(item.shopId||shops[0]?.id||'alee-shopping')===String(shop.id));renderShopContent();}
       }
     }
-    if (supabase) {
-      try { const {data}=await supabase.auth.getUser(); currentUser=data?.user||null; currentUserEmail=currentUser?.email||''; } catch (_) {}
+    if(!shop){renderProfile();hideLoader();return;}
+    if(!profileRendered){renderProfile();profileRendered=true;}
+    hideLoader();
+    if(supabase){
+      const [authResult,ratingResult]=await Promise.all([
+        supabase.auth.getUser().catch(error=>({data:null,error})),
+        supabase.from('shop_profile_ratings').select('stars').eq('shop_key',String(shop.id)).maybeSingle()
+      ]);
+      currentUser=authResult?.data?.user||null;
+      currentUserEmail=currentUser?.email||'';
+      if(ratingResult?.data)shopRating=Math.max(0,Math.min(5,Number(ratingResult.data.stars)||0));
+      else shopRating=Number(shop.rating||5);
+      refreshShopAccountControls();
+      refreshShopRating();
     }
-    if (shop && supabase) { const {data}=await supabase.from('shop_profile_ratings').select('stars').eq('shop_key',String(shop.id)).maybeSingle(); if(data) shopRating=Math.max(0,Math.min(5,Number(data.stars)||0)); else shopRating=Number(shop.rating||5); }
-    renderProfile();
     if (shop && supabase) {
       const key='alee-shop-view:'+shop.id,now=Date.now();
       try { if(now-Number(sessionStorage.getItem(key)||0)>1800000){sessionStorage.setItem(key,String(now));await supabase.rpc('track_seller_shop_view',{p_shop_id:shop.id});} } catch(_) {}
