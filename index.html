@@ -373,7 +373,7 @@
     .shops-section.hub-nav-pinned { position:sticky; top:112px; z-index:97; background:var(--card-bg); box-shadow:0 4px 10px #10182810; }
     .hub-shortcuts { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; padding:4px 0 2px; }
     #shopsSection>.shops-heading { color:var(--text-white); }
-    .hub-shortcut { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; padding:2px; border:0; background:transparent; color:var(--text-white); font:inherit; cursor:pointer; }
+    .hub-shortcut { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; padding:2px; border:0; background:transparent; color:var(--text-white); font:inherit; text-decoration:none; cursor:pointer; }
     .hub-shortcut-icon { width:62px; height:62px; display:grid; place-items:center; border-radius:50%; background:#ff6900; color:#fff; box-shadow:0 3px 9px #ff690044; font-size:25px; }
     .hub-shortcut[onclick*="offers"] .hub-shortcut-icon { background:#159447; }
     .hub-shortcut[onclick*="jobs"] .hub-shortcut-icon { background:#f28a17; }
@@ -507,7 +507,7 @@
       .cart-btn { display:inline-flex; align-items:center; gap:3px; padding:6px 5px; font-size:9px; white-space:nowrap; }
       .categories-bar { display:flex; top:112px; }
       .mobile-bottom-nav { position:fixed; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); left:0; right:0; bottom:0; z-index:1100; min-height:62px; padding:5px 5px calc(5px + env(safe-area-inset-bottom)); background:var(--card-bg); border-top:1px solid var(--glass-border); box-shadow:0 -4px 16px rgba(0,0,0,.08); }
-      .mobile-nav-button { min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:3px; padding:4px 2px; border:0; background:transparent; color:var(--text-white); font:inherit; cursor:pointer; }
+      .mobile-nav-button { min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:3px; padding:4px 2px; border:0; background:transparent; color:var(--text-white); font:inherit; text-decoration:none; cursor:pointer; }
       .mobile-nav-button i { font-size:18px; color:var(--light-leaf); }
       .mobile-nav-button span { display:block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; line-height:1.2; }
       .mobile-nav-button.active span { color:var(--light-leaf); font-weight:800; }
@@ -520,8 +520,8 @@
 
     .container { max-width: 1400px; margin: 15px auto; padding: 0 2%; }
     
-    .products { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:10px; } .products .card { min-width:0; justify-content:flex-start; gap:2px; padding:7px; } .products .card h3 { height:auto; min-height:2.4em; font-size:13px; line-height:1.25; margin:5px 0; } .products .card .price { font-size:15px; } .products .card .price-block { min-height:30px; }
-    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } .products .card h3 { font-size:14px; min-height:40px; } .products .card .price { font-size:18px; } }
+    .products { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:8px; } .products .card { min-width:0; justify-content:flex-start; gap:2px; padding:7px; } .products .card h3 { height:auto; min-height:2.4em; font-size:13px; line-height:1.25; margin:5px 0; } .products .card .price { font-size:15px; } .products .card .price-block { min-height:30px; }
+    @media (min-width: 768px) { .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; } .products .card h3 { font-size:14px; min-height:40px; } .products .card .price { font-size:18px; } }
 
     .card {
       background: var(--card-bg); border-radius: 12px; padding: 6px; border: 1px solid #e3e5e8;
@@ -550,26 +550,41 @@
     .recommendation-title-row { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:0 2px 10px; }
     .recommendation-title-row h2 { margin:0; color:var(--text-white); font-size:18px; }
     .recommendation-title-row p { margin:0; color:#858b95; font-size:12px; }
-    .recommendation-shelf { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:2px 2px 8px; }
-    .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; }
-    .recommendation-shelf .card { min-width:0; }
+    .recommendation-shelf { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:2px 2px 8px; align-items:start; }
+    .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; align-items:start; }
+    .recommendation-shelf .recommendation-card-wrap { min-width:0; align-self:start; }
+    .recommendation-shelf .recommendation-card-wrap>.card { height:auto; min-height:0; justify-content:flex-start; gap:2px; padding:5px; border-radius:8px; }
+    .recommendation-shelf .recommendation-card-wrap>.card h3 { height:auto; min-height:0; max-height:2.4em; margin:1px 0; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; line-height:1.2; }
+    .recommendation-shelf .recommendation-card-wrap>.card .price-block { min-height:0; margin:0; }
+    .recommendation-shelf .recommendation-card-wrap>.card .product-shop-meta { min-height:0; margin:2px 0 1px; gap:4px; }
+    .recommendation-shelf .recommendation-card-wrap>.card .product-rating-row { min-height:0; margin:0 0 1px; }
     .recommendation-shelf.is-horizontal .card { scroll-snap-align:start; }
     .recommendation-shelf .card img { height:100%; }
-    .recommendation-shelf .card .card-image-wrap { width:calc(100% + 12px); margin:-6px -6px 0; border-radius:11px 11px 8px 8px; }
+    .recommendation-shelf .card .card-image-wrap { width:calc(100% + 10px); margin:-5px -5px 0; border-radius:8px 8px 6px 6px; }
     .recommendation-shelf .card .card-image-wrap > img { width:100%; height:100%; object-fit:cover; padding:0; border:0; border-radius:inherit; }
     .recommendation-shelf .card .product-shop-meta img { width:22px; height:22px; min-width:22px; min-height:22px; max-width:22px; max-height:22px; flex:0 0 22px; aspect-ratio:1; padding:0; object-fit:cover; border-radius:50%; }
     .recommendation-card-wrap { position:relative; }
     .recommendation-sponsored-badge { position:absolute; z-index:2; top:8px; left:8px; border-radius:999px; padding:4px 8px; background:#172033e8; color:#fff; font-size:10px; font-weight:800; letter-spacing:.02em; box-shadow:0 2px 8px #0003; }
     .recommendation-card-wrap .card-image-wrap .recommendation-sponsored-badge { top:7px; right:7px; left:auto; }
     .recommendation-section .recommendation-empty { grid-column:1/-1; }
-    .review-rating-row { display:flex; align-items:center; gap:10px; margin:0 0 10px; }
-    .review-rating-row label { color:var(--text-main); font-size:13px; font-weight:700; }
-    .review-rating-row select { color-scheme:light; min-height:38px; padding:7px 11px; border:1px solid #d0d5dd; border-radius:10px; background:#fff; color:#172033; }
-    .review-rating-row select option { background:#fff; color:#172033; }
+    .popup-rating-row { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:3px 0 2px; padding-right:42px; }
+    .popup-rating-label { color:var(--detail-copy); font-size:11px; font-weight:700; white-space:nowrap; }
+    .popup-rating-stars { display:flex; align-items:center; gap:1px; }
+    .popup-rating-star { display:grid; place-items:center; width:24px; height:28px; padding:0; border:0; background:transparent; color:#fff; font:26px/1 Arial,sans-serif; -webkit-text-stroke:1px #172033; cursor:pointer; }
+    .popup-rating-star.is-selected,.popup-rating-star:hover { color:#f5bf24; -webkit-text-stroke-color:#b77900; }
+    .popup-rating-star:focus-visible { border-radius:4px; outline:2px solid #ff6900; outline-offset:1px; }
+    .popup-rating-value { min-width:24px; color:var(--detail-copy); font-size:11px; text-align:right; }
     .review-product-rating { display:block; margin-top:6px; color:#f59e0b; letter-spacing:.08em; }
+    .recommendation-rating { display:flex; align-items:center; gap:5px; margin:1px 0 3px; color:#d99400; font-size:11px; line-height:1.2; }
+    .recommendation-rating .stars { letter-spacing:-1px; white-space:nowrap; }
+    .recommendation-rating small { color:var(--detail-copy); font-size:10px; }
+    .product-rating-row { display:flex; align-items:center; gap:4px; min-height:15px; margin:0; color:#d99400; font-size:10px; line-height:1; }
+    .product-rating-row .stars { position:relative; display:inline-block; color:#c7cdd5; white-space:nowrap; letter-spacing:-1px; }
+    .product-rating-row .stars::before { position:absolute; top:0; left:0; width:var(--rating-fill); overflow:hidden; color:#f5bf24; content:'★★★★★'; }
+    .product-rating-row small { color:var(--detail-copy); font-size:10px; line-height:1.1; }
     .recommendation-section[data-recommendation-kind="new"] .recommendation-title-row p { color:#15803d; }
     .recommendation-section[data-recommendation-kind="sponsored"] .recommendation-title-row p { color:#667085; }
-    @media (min-width:768px) { .recommendation-shelf { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:14px; } .recommendation-shelf .card img { height:100%; } }
+    @media (min-width:768px) { .recommendation-shelf { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:10px; } .recommendation-shelf .card img { height:100%; } }
     .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
@@ -636,7 +651,7 @@
     .recommendation-price .discount-badge { font-size:9px; padding:2px 4px; }
     .reviews-section { margin-top:18px; padding:16px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); }
     .review-form { display:grid; gap:8px; margin-bottom:14px; }
-    .review-form textarea { min-height:82px; resize:vertical; }
+    .review-form textarea { height:74px; min-height:74px; padding:10px 12px 42px; resize:vertical; }
     .review-status { color:#999; font-size:12px; min-height:18px; }
     .review-list { display:grid; gap:10px; }
     .review-card { padding:10px; background:var(--card-bg); border:1px solid var(--glass-border); border-radius:9px; }
@@ -648,8 +663,9 @@
     .review-photo-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
     .review-actions { display:flex; gap:8px; margin-top:9px; }
     .review-actions button { padding:5px 9px; border:1px solid #d6dbe2; border-radius:7px; background:#fff; color:#172033; font-family:inherit; font-size:11px; font-weight:600; line-height:1.3; cursor:pointer; }
-    .review-photo-input { display:grid; gap:6px; font-size:12px; color:var(--detail-copy); }
-.review-gallery-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;width:max-content;padding:10px 15px;border:1px solid #d6dbe2;border-radius:12px;background:#fff;color:#172033;font:inherit;font-weight:700;cursor:pointer}.review-gallery-button i{font-size:20px;color:#ff6900}.review-photo-chooser{width:min(360px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:calc(100dvh - 32px);overflow:auto;padding:18px;border:1px solid #e5e7eb;border-radius:18px;background:#fff;color:#111827;box-shadow:0 20px 60px #10182830}.review-photo-chooser::backdrop{background:#101010b8;backdrop-filter:blur(3px)}.review-photo-chooser-content{display:grid;gap:10px}.review-photo-chooser h3{margin:0 0 2px;color:#111827;font-size:18px;font-weight:800}.review-photo-choice{display:flex;align-items:center;gap:12px;width:100%;min-height:50px;padding:10px 12px;border:1px solid #d8dde5;border-radius:11px;background:#fff;color:#111827;font:inherit;font-size:14px;font-weight:700;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .15s}.review-photo-choice:hover{background:#f5f6f8;border-color:#aeb6c2;color:#111827;transform:translateY(-1px)}.review-photo-choice i{display:grid;place-items:center;width:24px;color:#344054;font-size:17px}.review-photo-chooser .review-photo-cancel{justify-content:center;min-height:44px;margin-top:1px;border-color:#e5e7eb;background:#f8fafc;color:#475467}.review-photo-chooser .review-photo-cancel:hover{background:#eef0f3;border-color:#d0d5dd;color:#111827}
+    .review-comment-composer { position:relative; }
+    .review-photo-input { position:absolute; bottom:7px; left:8px; display:block; color:var(--detail-copy); }
+    .review-gallery-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:30px;width:max-content;padding:5px 9px;border:1px solid #d6dbe2;border-radius:8px;background:#fff;color:#172033;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.review-gallery-button i{font-size:15px;color:#ff6900}.review-photo-chooser{width:min(360px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:calc(100dvh - 32px);overflow:auto;padding:18px;border:1px solid #e5e7eb;border-radius:18px;background:#fff;color:#111827;box-shadow:0 20px 60px #10182830}.review-photo-chooser::backdrop{background:#101010b8;backdrop-filter:blur(3px)}.review-photo-chooser-content{display:grid;gap:10px}.review-photo-chooser h3{margin:0 0 2px;color:#111827;font-size:18px;font-weight:800}.review-photo-choice{display:flex;align-items:center;gap:12px;width:100%;min-height:50px;padding:10px 12px;border:1px solid #d8dde5;border-radius:11px;background:#fff;color:#111827;font:inherit;font-size:14px;font-weight:700;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .15s}.review-photo-choice:hover{background:#f5f6f8;border-color:#aeb6c2;color:#111827;transform:translateY(-1px)}.review-photo-choice i{display:grid;place-items:center;width:24px;color:#344054;font-size:17px}.review-photo-chooser .review-photo-cancel{justify-content:center;min-height:44px;margin-top:1px;border-color:#e5e7eb;background:#f8fafc;color:#475467}.review-photo-chooser .review-photo-cancel:hover{background:#eef0f3;border-color:#d0d5dd;color:#111827}
     .review-photo-preview { display:flex; flex-wrap:wrap; gap:8px; }
     .review-photo-preview img { width:58px; height:58px; object-fit:cover; border-radius:8px; border:1px solid #d6dbe2; }
     .review-image-viewer { position:fixed; inset:0; z-index:10010; display:none; align-items:center; justify-content:center; padding:20px; background:#000d; }
@@ -1166,7 +1182,7 @@
     .products .card { border-color:#e3e5e8!important;box-shadow:0 1px 3px rgba(16,24,40,.045)!important; }
     .products .card:hover { border-color:#d7dbe1!important;box-shadow:0 5px 14px rgba(16,24,40,.10)!important; }
 /* Mobile product cards: larger photos and no enclosing card outline. */
-    .products .card{border:1px solid #e2e6ec!important;border-radius:12px!important;box-shadow:0 1px 4px rgba(16,24,40,.08)!important;background:#fff!important;padding:6px!important;justify-content:flex-start!important;gap:3px!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;}
+    .products .card{border:1px solid #e2e6ec!important;border-radius:8px!important;box-shadow:0 1px 4px rgba(16,24,40,.08)!important;background:#fff!important;padding:6px!important;justify-content:flex-start!important;gap:3px!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;}
     .products .card:hover{border-color:#d4d9e0!important;box-shadow:0 7px 18px rgba(16,24,40,.14)!important;transform:translateY(-3px)!important;}
     .products .card-image-wrap{aspect-ratio:1.28/1;border-radius:9px;background:#fff;}
     .products .card-image-wrap>img{object-fit:cover!important;width:100%;height:100%;padding:0!important;border:0!important;border-radius:9px!important;background:#fff;}
@@ -1213,23 +1229,25 @@
     @media(max-width:767px){.category-browse-panel{margin:0 0 14px;padding:14px 10px;border-left:0;border-right:0;border-radius:0}.category-browse-heading{margin:0 0 10px;font-size:15px}.category-browse-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px}.category-browse-tile{gap:6px;padding:7px 3px}.category-browse-tile img{width:62px;height:62px}.category-browse-tile span{font-size:11px}.category-browse-tile small{font-size:9px}}
 @media (max-width:767px){
     /* Masonry order for the main product list on phones; recommendation shelves stay as they are. */
-    #productList.products{display:block!important;column-count:2!important;column-gap:10px!important;}
-    #productList.products>.card{display:inline-flex!important;width:100%!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 10px!important;}
-    #productList.products>.card>.card-image-wrap{width:calc(100% + 12px)!important;margin:-6px -6px 0!important;border-radius:11px 11px 8px 8px!important;}
-    #productList.products>.card>.card-image-wrap>img{border-radius:inherit!important;}
+    #productList.products{display:block!important;column-count:2!important;column-gap:6px!important;}
+    #productList.products>.card{display:inline-flex!important;width:100%!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 6px!important;gap:2px!important;padding:4px!important;border-radius:8px!important;}
+    #productList.products>.card>h3{height:auto!important;min-height:0!important;max-height:2.4em!important;margin:0!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;}
+    #productList.products>.card>.price-block{min-height:0!important;margin:0!important;}
+    #productList.products>.card>.card-image-wrap{width:calc(100% + 8px)!important;height:auto!important;aspect-ratio:auto!important;margin:-4px -4px 0!important;border-radius:8px 8px 6px 6px!important;}
+    #productList.products>.card>.card-image-wrap>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;border-radius:inherit!important;}
 }
 @media (min-width:1024px){
     #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
 }
 /* Desktop and tablet product cards: taller product photos, compact spacing, unchanged card footprint. */
 @media (min-width:768px){
-    #productList.products{gap:10px!important;}
-    #productList.products>.card{min-height:276px!important;box-sizing:border-box!important;gap:1px!important;padding:5px!important;}
+    #productList.products{gap:8px!important;}
+    #productList.products>.card{min-height:276px!important;box-sizing:border-box!important;gap:1px!important;padding:5px!important;border-radius:8px!important;}
     #productList.products>.card>.card-image-wrap{height:clamp(158px,13vw,166px)!important;aspect-ratio:auto!important;flex:none!important;}
     #productList.products>.card>.product-shop-meta{gap:4px!important;min-height:16px!important;margin:2px 0 1px!important;color:#111827!important;font-size:10px!important;flex:none!important;}
     #productList.products>.card>.product-shop-meta>img:first-child{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;flex:0 0 16px!important;border-radius:0!important;}
     #productList.products>.card>h3{height:33px!important;min-height:33px!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;}
-    #productList.products>.card>.price-block{min-height:41px!important;margin:0!important;}
+    #productList.products>.card>.price-block{min-height:0!important;margin:0!important;}
     #productList.products .free-shipping-badge{z-index:2;padding:4px 7px;font-size:10px;white-space:nowrap;}
 }
     .slider img { border-color:#111827!important; }
@@ -1422,6 +1440,7 @@
             <i class="fa-solid fa-right-to-bracket"></i> Sign In / Create Account
           </div>
         <div class="dropdown-item" onclick="location.href='orders.html'"><i class="fa-solid fa-box-open"></i> Orders</div>
+        <div class="dropdown-item" onclick="openPoliciesPage()"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</div>
           <div class="dropdown-item" onclick="logoutUser()" style="color: #ef4444;">
             <i class="fa-solid fa-right-from-bracket"></i> Log Out
           </div>
@@ -1603,7 +1622,7 @@
       
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut desktop-sidebar-only" type="button" onclick="showDesktopHome(this)" aria-label="Items and home"><span class="hub-shortcut-icon"><i class="fa-solid fa-grip"></i></span><span class="hub-shortcut-label">Items</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
+        <a class="hub-shortcut" href="shops.html" target="_blank" rel="noopener"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></a>
         <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Offers</span><span class="desktop-hub-label">Offer</span></span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('feed',this)"><span class="hub-shortcut-icon"><i class="fa-regular fa-images"></i></span><span class="hub-shortcut-label">Feed</span></button>
@@ -1616,7 +1635,7 @@
         <button class="desktop-sidebar-action" type="button" data-view="cart" onclick="openDesktopSidebarView('cart')"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></button>
       </div>
       <div id="hubShopsPanel" hidden>
-        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <button type="button" onclick="openAllShops()" style="margin-left:8px;padding:0;border:0;background:transparent;color:var(--light-leaf);font:inherit;font-size:11px;font-weight:800;cursor:pointer">Search all →</button></span></h2>
+        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" target="_blank" rel="noopener" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800;text-decoration:none">Search all →</a></span></h2>
         <div class="shops-strip-wrap"><button class="shops-strip-control" type="button" onclick="scrollShopStrip(-1)" aria-label="Scroll shops left"><i class="fa-solid fa-chevron-left"></i></button><div class="shops-strip" id="shopsStrip" tabindex="0" aria-label="Shop list; swipe or scroll horizontally"></div><button class="shops-strip-control" type="button" onclick="scrollShopStrip(1)" aria-label="Scroll shops right"><i class="fa-solid fa-chevron-right"></i></button></div>
       </div>
     </section>
@@ -1660,6 +1679,7 @@
         <button type="button" class="mobile-sheet-action" id="mobileSellerAccount" onclick="closeMobileSheet('mobileAccountSheet',false,true);switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</button>
         <button type="button" class="mobile-sheet-action" id="mobileDeleteShopMenu" onclick="closeMobileSheet('mobileAccountSheet',false,true);deleteSellerShop()" hidden><i class="fa-solid fa-trash"></i> Delete Shop</button>
         <button type="button" class="mobile-sheet-action" id="mobileAccountSignIn" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountModal()">Sign In / Create Account</button>
+        <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet');openPoliciesPage()"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</button>
         <button type="button" class="mobile-sheet-action" id="mobileAccountLogout" onclick="logoutUser()">Log Out</button>
       </section>
     </div>
@@ -1683,7 +1703,7 @@
         <div class="recommendation-shelf" id="newArrivalsProducts" aria-live="polite"></div>
       </section>
       <section class="recommendation-section" id="topRatedSection" data-recommendation-kind="rated" aria-labelledby="topRatedTitle">
-        <div class="recommendation-title-row"><h2 id="topRatedTitle"><i class="fa-solid fa-star"></i> Top Rated</h2><p>Rated above 4.5 stars</p></div>
+        <div class="recommendation-title-row"><h2 id="topRatedTitle"><i class="fa-solid fa-star"></i> Top Rated</h2><p>Sorted by average customer rating</p></div>
         <div class="recommendation-shelf" id="topRatedProducts" aria-live="polite"></div>
       </section>
       <div class="products" id="productList"></div>
@@ -1692,7 +1712,7 @@
     <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
       <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9.5 20v-6h5v6"/></svg><span>Home</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categories</span></button>
-      <button type="button" class="mobile-nav-button" onclick="openMobileShops()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-1.5-6h-15L3 10ZM5 10v10h14V10M9 20v-6h6v6M3 10c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0"/></svg><span>Shops</span></button>
+      <a class="mobile-nav-button" href="shops.html" target="_blank" rel="noopener" aria-label="Open shops in a new tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-1.5-6h-15L3 10ZM5 10v10h14V10M9 20v-6h6v6M3 10c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0"/></svg><span>Shops</span></a>
       <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
       <button type="button" class="mobile-nav-button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
@@ -1716,7 +1736,15 @@
           <div class="popup-title-row">
           <h2 id="popupName"></h2><small id="popupStockStatus" class="popup-stock-status"></small>
             <div class="popup-product-meta"><span id="popupSoldCount">0 sold</span><button class="popup-product-share" id="popupShareBtn" type="button" onclick="shareProductFromPopup()" aria-label="Share product"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share</button></div>
-            <div class="price-block popup-price-block" id="popupPrice"></div><button class="favorite-action favorite-heart-button" id="popupFavoriteBtn" data-favorite-icon="heart" type="button" onclick="toggleFavoriteProduct()" aria-label="Add product to favorites" title="Add to favorites" aria-pressed="false"><i class="fa-regular fa-heart"></i></button>
+            <div class="price-block popup-price-block" id="popupPrice"></div>
+            <div class="popup-rating-row" aria-label="Product rating">
+              <span class="popup-rating-label">Rate</span>
+              <div class="popup-rating-stars" id="productRatingStars" role="group" aria-label="Rate this product from 1 to 5 stars">
+                <button class="popup-rating-star" type="button" data-rating="1" aria-label="Rate 1 star" aria-pressed="false">★</button><button class="popup-rating-star" type="button" data-rating="2" aria-label="Rate 2 stars" aria-pressed="false">★</button><button class="popup-rating-star" type="button" data-rating="3" aria-label="Rate 3 stars" aria-pressed="false">★</button><button class="popup-rating-star" type="button" data-rating="4" aria-label="Rate 4 stars" aria-pressed="false">★</button><button class="popup-rating-star" type="button" data-rating="5" aria-label="Rate 5 stars" aria-pressed="false">★</button>
+              </div>
+              <span class="popup-rating-value" id="productRatingValue" aria-live="polite"></span>
+            </div>
+            <button class="favorite-action favorite-heart-button" id="popupFavoriteBtn" data-favorite-icon="heart" type="button" onclick="toggleFavoriteProduct()" aria-label="Add product to favorites" title="Add to favorites" aria-pressed="false"><i class="fa-regular fa-heart"></i></button>
           </div>
           <section class="detail-section">
             <h3>Product Description</h3>
@@ -1754,9 +1782,12 @@
         <section class="reviews-section">
           <h3>Customer comments</h3>
           <form class="review-form" onsubmit="submitProductReview(event)">
-            <div class="review-rating-row"><label for="reviewRating">Product rating (optional)</label><select id="reviewRating" name="rating"><option value="">No rating</option><option value="5">★★★★★ · 5</option><option value="4">★★★★☆ · 4</option><option value="3">★★★☆☆ · 3</option><option value="2">★★☆☆☆ · 2</option><option value="1">★☆☆☆☆ · 1</option></select></div>
-            <textarea id="reviewText" class="input-field" maxlength="1000" placeholder="Share your experience with this product…" required></textarea>
-            <div class="review-photo-input"><span>Add up to 2 photos</span><input id="reviewPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden><input id="reviewCameraPhotos" type="file" accept="image/*" capture="environment" hidden><button class="review-gallery-button" type="button" onclick="openReviewPhotoChooser()" aria-label="Choose a photo from camera or gallery"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Camera or gallery</span></button><span id="reviewPhotoHint">Photos are optional. Tap a thumbnail to view it larger.</span><dialog id="reviewPhotoChooser" class="review-photo-chooser" aria-labelledby="reviewPhotoChooserTitle"><div class="review-photo-chooser-content"><h3 id="reviewPhotoChooserTitle">Add a photo</h3><button class="review-photo-choice" type="button" onclick="chooseReviewPhotoSource('camera')"><i class="fa-solid fa-camera" aria-hidden="true"></i><span>Take a photo</span></button><button class="review-photo-choice" type="button" onclick="chooseReviewPhotoSource('gallery')"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Choose from gallery</span></button><button class="review-photo-choice review-photo-cancel" type="button" onclick="closeReviewPhotoChooser()">Cancel</button></div></dialog></div>
+            <input id="reviewRating" name="rating" type="hidden">
+            <div class="review-comment-composer">
+              <textarea id="reviewText" class="input-field" maxlength="1000" placeholder="Share your experience with this product…" required></textarea>
+              <div class="review-photo-input"><input id="reviewPhotos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden><input id="reviewCameraPhotos" type="file" accept="image/*" capture="environment" hidden><button class="review-gallery-button" type="button" onclick="openReviewPhotoChooser()" aria-label="Add up to two photos from camera or gallery"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Gallery</span></button><dialog id="reviewPhotoChooser" class="review-photo-chooser" aria-labelledby="reviewPhotoChooserTitle"><div class="review-photo-chooser-content"><h3 id="reviewPhotoChooserTitle">Add a photo</h3><button class="review-photo-choice" type="button" onclick="chooseReviewPhotoSource('camera')"><i class="fa-solid fa-camera" aria-hidden="true"></i><span>Take a photo</span></button><button class="review-photo-choice" type="button" onclick="chooseReviewPhotoSource('gallery')"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Choose from gallery</span></button><button class="review-photo-choice review-photo-cancel" type="button" onclick="closeReviewPhotoChooser()">Cancel</button></div></dialog></div>
+            </div>
+            <span class="review-photo-hint" id="reviewPhotoHint">Photos are optional. Tap a thumbnail to view it larger.</span>
             <div class="review-photo-preview" id="reviewPhotoPreview" aria-live="polite"></div>
             <button class="btn" id="reviewSubmitBtn" type="submit" style="margin-top:0">Post comment</button>
             <div class="review-status" id="reviewStatus"></div>
@@ -1851,6 +1882,7 @@
         <button type="button" onclick="editAccountDetails();setTimeout(()=>document.getElementById('buyerMobile')?.focus(),100)"><i class="fa-solid fa-phone"></i><span>Phone Numbers</span><small>Private contact details</small></button>
         <button type="button" onclick="editAccountDetails()"><i class="fa-solid fa-user"></i><span>My Profile</span><small>View or edit your private details</small></button>
         <button type="button" id="accountNotificationsMenu" style="display:none" onclick="window.aleePush?.toggleNotifications?.()"><i class="fa-solid fa-bell"></i><span>Notifications: Off</span><small>Turn notifications on or off on this device</small></button>
+        <button type="button" onclick="openPoliciesPage()"><i class="fa-solid fa-shield-halved"></i><span>Privacy Policy</span><small>Read aleeshopping privacy and terms</small></button>
         <button type="button" onclick="logoutUser()" style="color:#c62828"><i class="fa-solid fa-right-from-bracket"></i><span>Log out</span><small>Sign out of aleeshopping</small></button>
       </div></section>
       <section class="seller-panel" id="accountProfilePanel" hidden><h3>My Profile</h3><div class="seller-logo-wrap"><img class="seller-logo-preview" id="buyerProfileImage" src="assets/alee-logo.png" alt="Your profile picture"></div><h3 id="buyerProfileName">Your profile</h3><div class="buyer-profile-email" id="buyerProfileEmail"></div>
@@ -1869,7 +1901,7 @@
     <div class="seller-card">
       <div class="seller-header seller-dashboard-header"><button class="seller-close seller-dashboard-close" type="button" onclick="sellerDashboardBack()" aria-label="Back to aleeshopping"><i class="fa-solid fa-arrow-left"></i></button><div class="seller-dashboard-title"><h2 id="sellerDashboardTitle">Shop profile</h2><div class="seller-subtitle" id="sellerAccountEmail"></div></div><button class="seller-action-button primary seller-dashboard-post" type="button" onclick="openPlatformPostForm()"><i class="fa-solid fa-bullhorn"></i> Post Ad / Job</button></div>
       <section class="seller-panel" id="sellerShopProfile" hidden>
-        <div class="seller-profile-cover" id="sellerProfileCover"><img id="sellerShopBanner" alt="Shop banner" hidden><button class="seller-profile-edit-button" type="button" onclick="editSellerShop()" aria-label="Edit shop profile"><i class="fa-solid fa-pencil"></i></button><div class="seller-profile-cover-actions"><button type="button" onclick="openSellerShopShare()" aria-label="Share shop and QR code"><i class="fa-solid fa-share-nodes"></i></button><button type="button" onclick="showSellerProfileViews()" aria-label="See profile viewers"><i class="fa-regular fa-eye"></i><span id="sellerProfileViewCount">—</span></button><button type="button" onclick="toggleSellerProfileMenu(event)" aria-label="Shop profile menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button></div><label class="seller-banner-camera" for="sellerShopBannerFile" aria-label="Change shop banner"><i class="fa-solid fa-camera"></i></label><input id="sellerShopBannerFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><div class="seller-profile-menu" id="sellerProfileMenu" hidden><button type="button" onclick="switchAccountRole('buyer');closeSellerProfileMenu()"><i class="fa-solid fa-right-left"></i> Switch account</button><button type="button" onclick="window.location.href='banner-ads.html?kind=verified'"><i class="fa-solid fa-circle-check"></i> Verified shop</button><button type="button" onclick="logoutUser();closeSellerProfileMenu()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button></div></div>
+        <div class="seller-profile-cover" id="sellerProfileCover"><img id="sellerShopBanner" alt="Shop banner" hidden><button class="seller-profile-edit-button" type="button" onclick="editSellerShop()" aria-label="Edit shop profile"><i class="fa-solid fa-pencil"></i></button><div class="seller-profile-cover-actions"><button type="button" onclick="openSellerShopShare()" aria-label="Share shop and QR code"><i class="fa-solid fa-share-nodes"></i></button><button type="button" onclick="showSellerProfileViews()" aria-label="See profile viewers"><i class="fa-regular fa-eye"></i><span id="sellerProfileViewCount">—</span></button><button type="button" onclick="toggleSellerProfileMenu(event)" aria-label="Shop profile menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button></div><label class="seller-banner-camera" for="sellerShopBannerFile" aria-label="Change shop banner"><i class="fa-solid fa-camera"></i></label><input id="sellerShopBannerFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><div class="seller-profile-menu" id="sellerProfileMenu" hidden><button type="button" onclick="switchAccountRole('buyer');closeSellerProfileMenu()"><i class="fa-solid fa-right-left"></i> Switch account</button><button type="button" onclick="window.location.href='banner-ads.html?kind=verified'"><i class="fa-solid fa-circle-check"></i> Verified shop</button><button type="button" onclick="openPoliciesPage()"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</button><button type="button" onclick="logoutUser();closeSellerProfileMenu()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button></div></div>
         <div class="seller-profile-identity"><div class="seller-profile-avatar-wrap"><img class="seller-logo-preview" id="sellerShopLogo" src="assets/alee-logo.png" alt="Shop profile picture"><button class="seller-logo-camera" type="button" onclick="chooseSellerShopLogo()" aria-label="Change shop logo"><i class="fa-solid fa-camera"></i></button></div><h3 id="sellerShopName"></h3><div id="sellerShopDetails" class="seller-muted"></div><div class="seller-social-links" id="sellerShopSocials"></div></div>
         <div class="seller-profile-stats"><button type="button" onclick="showSellerSocialList('following')"><strong id="sellerFollowingCount">—</strong><span>following</span></button><button type="button" onclick="showSellerSocialList('followers')"><strong id="sellerFollowerCount">—</strong><span>followers</span></button><button type="button" onclick="sellerDashboardTab('products')"><strong id="sellerAdsCount">0</strong><span>ads</span></button></div>
         <a id="sellerShopLink" class="seller-shop-link" target="_blank" rel="noopener"></a>
@@ -3078,6 +3110,9 @@
       else {const menu=document.getElementById('profileDropdown');menu.classList.toggle('show');if(menu.classList.contains('show'))refreshAccountShopActions();}
     }
 
+    function openPoliciesPage() {
+      location.href=location.protocol==='file:'?'policies/index.html':'policies/';
+    }
     async function logoutUser() {
       if (!confirm('Are you sure you want to log out?')) return;
       closeMobileSheet('mobileAccountSheet',false,true);
@@ -3569,10 +3604,28 @@
     const productReviewBucket = 'product-comment-images';
     const reviewHostEmails = ['aleeshopping2026@gmail.com','aleeshopping@gmail.com'];
     function isReviewHost() { return reviewHostEmails.includes(String(activeUser?.email || '').toLowerCase()); }
+    function syncProductRatingStars() {
+      const selected=Number(document.getElementById('reviewRating').value)||0;
+      document.querySelectorAll('#productRatingStars [data-rating]').forEach(star=>{
+        const value=Number(star.dataset.rating);
+        star.classList.toggle('is-selected',value<=selected);
+        star.setAttribute('aria-pressed',String(value===selected));
+        star.setAttribute('aria-label',value===selected?`Clear ${value}-star rating`:`Rate ${value} ${value===1?'star':'stars'}`);
+      });
+      document.getElementById('productRatingValue').textContent=selected?`${selected}/5`:'';
+    }
+    function setProductRating(value) {
+      document.getElementById('reviewRating').value=value?String(value):'';
+      syncProductRatingStars();
+    }
+    document.querySelectorAll('#productRatingStars [data-rating]').forEach(star=>star.addEventListener('click',()=>{
+      const value=Number(star.dataset.rating),current=Number(document.getElementById('reviewRating').value)||0;
+      setProductRating(current===value?'':value);
+    }));
     function resetProductReviewForm() {
       editingProductReview = null;
       document.getElementById('reviewText').value = '';
-      document.getElementById('reviewRating').value = '';
+      setProductRating('');
       document.getElementById('reviewPhotos').value = ''; document.getElementById('reviewCameraPhotos').value=''; document.getElementById('reviewPhotos')._selectedFiles=[]; document.getElementById('reviewCameraPhotos')._selectedFiles=[];
       document.getElementById('reviewPhotoPreview').replaceChildren();
       document.getElementById('reviewPhotoHint').textContent = 'Photos are optional. Tap a thumbnail to view it larger.';
@@ -3640,7 +3693,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     function startEditProductReview(review) {
       editingProductReview={id:review.id,images:Array.isArray(review.images)?review.images:[]};
       document.getElementById('reviewText').value=review.body||'';
-      document.getElementById('reviewRating').value=review.rating?String(review.rating):'';
+      setProductRating(review.rating?String(review.rating):'');
       document.getElementById('reviewPhotos').value='';document.getElementById('reviewCameraPhotos').value='';document.getElementById('reviewPhotos')._selectedFiles=[];document.getElementById('reviewCameraPhotos')._selectedFiles=[];
       const preview=document.getElementById('reviewPhotoPreview');preview.replaceChildren();
       editingProductReview.images.forEach(url=>{const img=document.createElement('img');img.alt='Attached comment photo';img.src=url;preview.appendChild(img);});
@@ -3769,11 +3822,21 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     let serverRecommendationSignals = [];
     let recommendationSponsored = [];
     const recommendationImpressionObservers = new WeakMap();
-    function recommendationCardMarkup(product, index=0, sponsored=false) {
+    function productRatingMarkup(product) {
+      const row=recommendationRankings.get(String(product.id))||{};
+      const ratingValue=Number(row.rating_average??product.rating_average??product.ratingAverage??0);
+      const rating=Number.isFinite(ratingValue)?Math.max(0,Math.min(5,ratingValue)):0;
+      const countValue=Number(row.rating_count??product.rating_count??product.reviewCount??0);
+      const count=Number.isFinite(countValue)?Math.max(0,countValue):0;
+      if(!count||!rating)return '';
+      return `<div class="product-rating-row" role="img" aria-label="${rating.toFixed(1)} out of 5 stars from ${count} ratings"><span class="stars" style="--rating-fill:${rating/5*100}%" aria-hidden="true">★★★★★</span><small>${rating.toFixed(1)} (${count})</small></div>`;
+    }
+    function recommendationCardMarkup(product, index=0, sponsored=false, showRating=false) {
       const image = product.images?.[0] || 'assets/alee-logo.png';
       const shop = getShopForProduct(product);
       const shopAccent = /^#[0-9a-f]{6}$/i.test(shop.accentColor || '') ? shop.accentColor : '#FF6900';
-      return `<div class="recommendation-card-wrap" data-recommendation-product="${Number(product.id)}"><div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${sponsored?'<span class="recommendation-sponsored-badge">Sponsored</span>':''}${product.freeShipping ? '<span class="free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div></div></div>`;
+      const ratingRow=showRating?productRatingMarkup(product):'';
+      return `<div class="recommendation-card-wrap" data-recommendation-product="${Number(product.id)}"><div class="card" onclick="openProductPopup(${Number(product.id)})"><div class="card-image-wrap"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}">${sponsored?'<span class="recommendation-sponsored-badge">Sponsored</span>':''}${product.freeShipping ? '<span class="free-shipping-badge"><i class="fa-solid fa-truck" aria-hidden="true"></i> FREE SHIPPING</span>' : ''}</div><a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="shop.html?shop=${encodeURIComponent(shop.id)}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a><h3>${escapeHTML(product.name)}</h3><div class="price-block">${productPriceMarkup(product)}</div>${ratingRow}</div></div>`;
     }
     function observeRecommendationImpressions(shelf) {
       if (!shelf) return;
@@ -3792,10 +3855,10 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       recommendationImpressionObservers.set(shelf,observer);
       shelf.querySelectorAll('[data-recommendation-product]').forEach(node=>observer.observe(node));
     }
-    function renderRecommendationShelf(elementId, items, emptyText, sponsoredIds=new Set()) {
+    function renderRecommendationShelf(elementId, items, emptyText, sponsoredIds=new Set(), showRating=false) {
       const shelf = document.getElementById(elementId);
       if (!shelf) return;
-      shelf.innerHTML = items.length ? items.map((item,index)=>recommendationCardMarkup(item,index,sponsoredIds.has(String(item.id)))).join('') : `<p class="recommendation-empty">${escapeHTML(emptyText)}</p>`;
+      shelf.innerHTML = items.length ? items.map((item,index)=>recommendationCardMarkup(item,index,sponsoredIds.has(String(item.id)),showRating)).join('') : `<p class="recommendation-empty">${escapeHTML(emptyText)}</p>`;
       observeRecommendationImpressions(shelf);
     }
     function recommendationVisitorId(){try{let id=localStorage.getItem('alee-recommendation-visitor');if(!id){id=window.crypto?.randomUUID?.()||'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});localStorage.setItem('alee-recommendation-visitor',id);}return id;}catch(_){return null;}}
@@ -4366,6 +4429,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
             <a class="product-shop-meta" style="--shop-accent:${shopAccent}" href="${shopUrl}" rel="noopener" onclick="event.stopPropagation()"><img loading="lazy" decoding="async" src="${escapeHTML(shop.logo || 'assets/alee-logo.png')}" alt=""><span>${escapeHTML(shop.name)}</span>${shop.isVerified?'<img class="verified-badge" src="assets/verified-badge.svg" alt="Verified">':''}</a>
             <h3>${escapeHTML(p.name)}</h3>
             <div class="price-block">${productPriceMarkup(p)}</div>
+            ${productRatingMarkup(p)}
           </div>`);
       });
       productList.innerHTML = cards.join('');
@@ -4452,21 +4516,22 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const sponsored=available.filter(product=>recommendationRankings.get(String(product.id))?.is_sponsored)
         .sort((a,b)=>score(b)-score(a));
       const organic=available.filter(product=>!recommendationRankings.get(String(product.id))?.is_sponsored);
-      const render=(id,items,empty,sponsorPool=sponsored)=>renderRecommendationShelf(id,sponsoredCadence(items,sponsorPool,20),empty,new Set(sponsorPool.map(item=>String(item.id))));
+      const render=(id,items,empty,sponsorPool=sponsored)=>renderRecommendationShelf(id,sponsoredCadence(items,sponsorPool,20),empty,new Set(sponsorPool.map(item=>String(item.id))),true);
       const best=ordered(organic,(a,b)=>Number(stats(b.id).sales_30d??(b._sellerManaged?0:b.soldCount||0))-Number(stats(a.id).sales_30d??(a._sellerManaged?0:a.soldCount||0))||score(b)-score(a));
       const trendCount=product=>{const row=stats(product.id),ranked=Number(row.searches_24h||0)+Number(row.clicks_24h||0);if(ranked)return ranked;const cutoff=Date.now()-86400000;return recommendationSignals.filter(signal=>String(signal.product_id)===String(product.id)&&['search','click'].includes(signal.action)&&new Date(signal.event_at||0).getTime()>=cutoff).length;};
       const trending=ordered(organic,(a,b)=>trendCount(b)-trendCount(a)||score(b)-score(a));
       const cutoff=Date.now()-7*86400000;
       const arrivals=ordered(available.filter(product=>product._sellerManaged&&new Date(product.created_at||0).getTime()>=cutoff),(a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
-      const rated=ordered(available.filter(product=>Number(stats(product.id).rating_average||0)>4.5),(a,b)=>Number(stats(b.id).rating_average||0)-Number(stats(a.id).rating_average||0)||Number(stats(b.id).rating_count||0)-Number(stats(a.id).rating_count||0));
+      const topRatedShelf=document.getElementById('topRatedProducts');
+      const topRatedColumns=topRatedShelf?getComputedStyle(topRatedShelf).gridTemplateColumns.split(/\s+/).filter(track=>track&&track!=='none').length:0;
+      const rated=ordered(available.filter(product=>Number(stats(product.id).rating_average||0)>0),(a,b)=>Number(stats(b.id).rating_average||0)-Number(stats(a.id).rating_average||0)||Number(stats(b.id).rating_count||0)-Number(stats(a.id).rating_count||0)).slice(0,8*Math.max(1,topRatedColumns||2));
       const sponsoredIds=new Set(sponsored.map(product=>String(product.id)));
       const organicArrivals=arrivals.filter(product=>!sponsoredIds.has(String(product.id)));
-      const organicRated=rated.filter(product=>!sponsoredIds.has(String(product.id)));
       render('forYouProducts',ordered(organic),'Recommended products will improve as you browse and shop.');
       render('bestSellersProducts',best,'Best sellers will appear as more orders come in.');
       render('trendingProducts',trending,'Trending products will appear as shoppers search and browse.');
       render('newArrivalsProducts',organicArrivals,'New shop products will appear here during their first week.',sponsored.filter(product=>arrivals.some(item=>String(item.id)===String(product.id))));
-      render('topRatedProducts',organicRated,'Products with ratings above 4.5 stars will appear here.',sponsored.filter(product=>rated.some(item=>String(item.id)===String(product.id))));
+      renderRecommendationShelf('topRatedProducts',rated,'Products with customer ratings will appear here.',new Set(),true);
       document.getElementById('forYouSection').hidden=false;
     }
     async function loadHomeRecommendationData(){
@@ -4480,7 +4545,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         if(!rankResult.error&&Array.isArray(rankResult.data))recommendationRankings=new Map(rankResult.data.map(row=>[String(row.product_id),row]));
         serverRecommendationSignals=Array.isArray(results[1]?.data)?results[1].data:[];
       }catch(error){console.info('Showing locally ranked recommendations until the recommendation schema is installed.',error);}
-      localRecommendationEvents();renderHomeRecommendations();
+      localRecommendationEvents();renderHomeRecommendations();displayProducts(activeProductArray,preserveProductOrder);
       if(searchDiscoveryOverlay.classList.contains('show')&&searchInput.value.trim())renderDiscoverySearchResults(searchInput.value.trim(),getProductSearchMatches(searchInput.value.trim()));
     }
     async function loadForYouRecommendations(userId) {
@@ -5085,9 +5150,8 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
     function searchResultCardMarkup(product){
       const id=Number(product.id),image=product.images?.[0]||product.image_urls?.[0]||'assets/alee-logo.png';
-      const rating=searchProductRating(product),stars=Math.max(0,Math.min(5,Math.round(rating))),sold=searchProductSales(product);
-      const ratingLabel=rating>0?`${rating.toFixed(1)} (${Number(product.rating_count||product.reviewCount||0).toLocaleString('en-LK')})`:'No ratings yet';
-      return `<article class="search-result-card" data-search-result-product="${id}" onclick="openProductPopup(${id})"><div class="search-result-photo"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}"></div><div class="search-result-copy"><h3>${escapeHTML(product.name)}</h3><div class="search-result-price-row"><strong class="search-result-price">${escapeHTML(searchProductMoney(product))}</strong><span class="search-result-sold">${sold.toLocaleString('en-LK')} sold</span></div><div class="search-result-card-footer"><span class="search-result-rating"><span class="stars" aria-hidden="true">${'★'.repeat(stars)}${'☆'.repeat(5-stars)}</span> ${escapeHTML(ratingLabel)}</span><button class="search-result-cart" type="button" aria-label="Add ${escapeHTML(product.name)} to cart" onclick="event.stopPropagation();addSearchResultToCart(${id})"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i></button></div></div></article>`;
+      const sold=searchProductSales(product),ratingRow=productRatingMarkup(product);
+      return `<article class="search-result-card" data-search-result-product="${id}" onclick="openProductPopup(${id})"><div class="search-result-photo"><img loading="lazy" decoding="async" src="${escapeHTML(image)}" onerror="this.onerror=null;this.src='assets/alee-logo.png'" alt="${escapeHTML(product.name)}"></div><div class="search-result-copy"><h3>${escapeHTML(product.name)}</h3><div class="search-result-price-row"><strong class="search-result-price">${escapeHTML(searchProductMoney(product))}</strong><span class="search-result-sold">${sold.toLocaleString('en-LK')} sold</span></div><div class="search-result-card-footer">${ratingRow}<button class="search-result-cart" type="button" aria-label="Add ${escapeHTML(product.name)} to cart" onclick="event.stopPropagation();addSearchResultToCart(${id})"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i></button></div></div></article>`;
     }
     function scheduleSearchProducts() {
       clearTimeout(searchExecutionTimer);const sequence=++searchExecutionSequence,query=searchInput.value.trim();
@@ -5318,7 +5382,9 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       if (!product) return;
       closeSearchDiscovery(false,true);
       const renderToken = ++productPopupRenderToken;
+      const previousProductId=activeGalleryProduct?.id;
       activeGalleryProduct = product;
+      if(String(previousProductId??'')!==String(product.id))setProductRating('');
       activeGalleryIndex = 0;
       document.getElementById("popupName").innerText = product.name;
       const favoriteButton=document.getElementById('popupFavoriteBtn'),alreadySaved=readFavorites().some(row=>row.type==='product'&&String(row.id)===String(product.id));updateFavoriteHeart(favoriteButton,alreadySaved,'product');
