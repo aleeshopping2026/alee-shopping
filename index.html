@@ -377,7 +377,7 @@
     .hub-shortcut-icon { width:62px; height:62px; display:grid; place-items:center; border-radius:50%; background:#ff6900; color:#fff; box-shadow:0 3px 9px #ff690044; font-size:25px; }
     .hub-shortcut[onclick*="offers"] .hub-shortcut-icon { background:#159447; }
     .hub-shortcut[onclick*="jobs"] .hub-shortcut-icon { background:#f28a17; }
-    .hub-shortcut[onclick*="reels"] .hub-shortcut-icon { background:#fb5c32; }
+    .hub-shortcut[onclick*="feed"] .hub-shortcut-icon { background:#fb5c32; }
     .hub-shortcut[onclick*="games"] .hub-shortcut-icon { background:#f28a17; }
     .hub-shortcut.active .hub-shortcut-icon { outline:3px solid #ffd7b8; outline-offset:2px; }
     .hub-shortcut-label { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:700; }
@@ -423,15 +423,54 @@
     .hub-job-dialog .favorite-job-button.is-saved { border-color:#d6a900; background:linear-gradient(135deg,#f9d94a,#f0bd19); color:#503b00; }
     .hub-job-dialog .job-dialog-status { flex-basis:100%; min-height:18px; margin:0!important; color:#888; font-size:12px; }
     .hub-empty { padding:18px; border:1px dashed var(--glass-border); border-radius:12px; color:#888; text-align:center; }
-    .hub-reel-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; }
-    .hub-reel-card { overflow:hidden; border:1px solid var(--glass-border); border-radius:15px; background:var(--bg-dark); color:var(--text-white); }
-    .hub-reel-card video { display:block; width:100%; max-height:420px; background:#111; object-fit:contain; }
-    .hub-reel-actions { display:flex; flex-wrap:wrap; gap:7px; padding:9px; }
-    .hub-reel-actions button,.hub-reel-actions a { padding:7px 9px; border:1px solid var(--glass-border); border-radius:9px; background:var(--card-bg); color:var(--text-white); font:inherit; font-size:11px; text-decoration:none; cursor:pointer; }
-    .hub-reel-caption { padding:9px 10px 0; font-size:12px; }
-    .hub-reel-comments { padding:0 10px 10px; }
-    .hub-reel-comments input { width:100%; padding:8px; border:1px solid var(--glass-border); border-radius:8px; background:var(--card-bg); color:var(--text-white); }
-    .hub-reel-comments-list { max-height:100px; overflow:auto; color:#888; font-size:11px; }
+    .feed-page{width:min(100%,620px);margin:0 auto;padding:10px 12px 28px;background:#fff;color:#111;font-family:Inter,Poppins,Arial,sans-serif}
+    .feed-page *{box-sizing:border-box}
+    .feed-post,.feed-create-card{margin:0 0 16px;overflow:hidden;border:1px solid #e8e8e8;border-radius:12px;background:#fff;box-shadow:none}
+    .feed-create-card{padding:14px}
+    .feed-create-heading{margin:0 0 10px;font-size:16px;font-weight:800}
+    .feed-photo-button,.feed-view-product{display:inline-flex;min-height:40px;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:0;border-radius:9px;background:#ff6b00;color:#fff;font:700 13px Inter,Poppins,Arial,sans-serif;text-decoration:none;cursor:pointer}
+    .feed-create-preview{display:block;width:min(100%,320px);max-height:360px;margin:12px auto;object-fit:contain;border:1px solid #eee;border-radius:8px}
+    .feed-create-fields{display:grid;gap:9px;margin-top:12px}
+    .feed-create-fields textarea,.feed-create-fields select{width:100%;min-height:42px;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#111;font:13px Inter,Poppins,Arial,sans-serif}
+    .feed-create-fields textarea{min-height:76px;resize:vertical}
+    .feed-post-head{display:flex;align-items:center;gap:10px;padding:11px 12px}
+    .feed-shop-avatar{width:40px;height:40px;flex:0 0 40px;border-radius:50%;object-fit:cover;background:#f3f3f3}
+    .feed-shop-copy{min-width:0;flex:1}
+    .feed-shop-name{display:block;color:#111;font-size:13px;font-weight:800;line-height:1.35}
+    .feed-shop-location{display:block;margin-top:2px;color:#8a8a8a;font-size:11px}
+    .feed-message-button,.feed-more-button{min-height:34px;padding:6px 9px;border:1px solid #e3e3e3;border-radius:8px;background:#fff;color:#333;font:700 11px Inter,Poppins,Arial,sans-serif;cursor:pointer}
+    .feed-post-menu{position:relative}
+    .feed-post-menu summary{list-style:none;padding:6px 8px;color:#555;cursor:pointer}
+    .feed-post-menu summary::-webkit-details-marker{display:none}
+    .feed-post-badge{display:inline-flex;margin:0 12px 8px;padding:4px 8px;border-radius:99px;background:#fff1e8;color:#ff6b00;font-size:10px;font-weight:800}
+    .feed-post-badge.offer{background:#fff0f2;color:#ff2d55}
+    .feed-photo-wrap{position:relative;display:grid;place-items:center;overflow:hidden;width:100%;aspect-ratio:4/5;background:#fafafa;cursor:pointer}
+    .feed-photo{display:block;width:100%;height:100%;object-fit:contain}
+    .feed-double-heart{position:absolute;top:50%;left:50%;color:#ff2d55;font-size:76px;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.3)}
+    .feed-double-heart.show{animation:feed-heart-pop .75s ease-out}
+    @keyframes feed-heart-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:.95;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+    .feed-post-actions{display:flex;align-items:center;gap:15px;padding:9px 12px 4px}
+    .feed-action-button{display:inline-flex;align-items:center;gap:5px;padding:3px;border:0;background:transparent;color:#111;font:22px Inter,Poppins,Arial,sans-serif;cursor:pointer}
+    .feed-action-button small{font-size:12px}
+    .feed-action-button.is-liked{color:#ff2d55}
+    .feed-action-button.is-saved{color:#ff6b00}
+    .feed-post-details{padding:3px 12px 12px;font-size:12px;line-height:1.5}
+    .feed-likes-count{font-weight:800}
+    .feed-caption{margin-top:5px;overflow-wrap:anywhere;white-space:pre-line}
+    .feed-comment-link{display:block;margin-top:5px;padding:0;border:0;background:transparent;color:#8a8a8a;font:12px Inter,Poppins,Arial,sans-serif;text-align:left;cursor:pointer}
+    .feed-comments-list{display:grid;gap:4px;margin-top:7px}
+    .feed-comment{overflow-wrap:anywhere;color:#333}
+    .feed-comment button{margin-left:7px;padding:0;border:0;background:transparent;color:#8a8a8a;font-size:10px;cursor:pointer}
+    .feed-comment-form{display:flex;align-items:center;gap:8px;margin-top:9px}
+    .feed-comment-form input{min-width:0;flex:1;padding:8px 0;border:0;border-bottom:1px solid #eee;outline:0;color:#111;font:12px Inter,Poppins,Arial,sans-serif}
+    .feed-comment-form button{padding:7px 10px;border:0;border-radius:7px;background:#ff6b00;color:#fff;font-weight:700;cursor:pointer}
+    .feed-share-options{display:flex;flex-wrap:wrap;gap:7px;padding:0 12px 10px}
+    .feed-share-options[hidden]{display:none}
+    .feed-share-options button{padding:6px 9px;border:1px solid #eee;border-radius:8px;background:#fff;color:#333;font:11px Inter,Poppins,Arial,sans-serif;cursor:pointer}
+    .feed-view-product{width:calc(100% - 24px);margin:0 12px 12px}
+    .feed-status{min-height:16px;margin:7px 0 0;color:#777;font-size:11px}
+    .feed-empty{padding:24px;border:1px solid #eee;border-radius:12px;color:#8a8a8a;text-align:center;background:#fff}
+    .feed-load-error{color:#b42318}
     .container.hub-content-open { display:none; }
     .site-loader { position:fixed; inset:0; z-index:50000; display:grid; place-content:center; justify-items:center; gap:12px; background:#fff; transition:opacity .2s,visibility .2s; }
     .site-loader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
@@ -886,15 +925,13 @@
     .seller-panel textarea { min-height:75px; resize:vertical; }
     .seller-panel input[type=file] { font-size:12px; }
     .seller-notice { min-height:20px; margin-top:8px; color:#fbbf24; font-size:13px; overflow-wrap:anywhere; }
-    .seller-reel-manager-list { display:grid; gap:12px; margin-top:14px; }
-    .seller-reel-manager-card { display:grid; grid-template-columns:minmax(0,180px) minmax(0,1fr); gap:12px; padding:12px; border:1px solid var(--glass-border); border-radius:14px; background:var(--card-bg); }
-    .seller-reel-manager-card video { width:100%; max-height:250px; aspect-ratio:9/16; object-fit:cover; border-radius:10px; background:#111; }
-    .seller-reel-manager-card label { display:grid; gap:7px; margin:0; color:var(--text-white); font-size:12px; font-weight:800; }
-    .seller-reel-manager-card textarea { min-height:95px; padding:10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; resize:vertical; }
-    .seller-reel-manager-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-    .seller-reel-manager-actions .delete { color:#dc2626; border-color:#fecaca; }
+    .seller-feed-manager-list { display:grid; gap:12px; margin-top:14px; }
+    .seller-feed-manager-card { display:grid; grid-template-columns:minmax(0,180px) minmax(0,1fr); gap:12px; padding:12px; border:1px solid var(--glass-border); border-radius:14px; background:var(--card-bg); }
+    .seller-feed-manager-card img { width:100%; max-height:250px; aspect-ratio:4/5; object-fit:contain; border-radius:10px; background:#fff; }
+    .seller-feed-manager-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .seller-feed-manager-actions .delete { color:#dc2626; border-color:#fecaca; }
     @media(max-width:700px){#buyerDashboard .account-hub-card{width:100%;min-height:100vh;margin:0;border:0;border-radius:0}.account-ads-filter{grid-template-columns:1fr}#buyerDashboard .seller-panel{margin:12px;padding:13px}.account-menu-grid{grid-template-columns:1fr}.account-menu-grid button{min-height:54px;padding:10px 4px}.account-country-card{flex-basis:205px;min-height:120px;grid-template-columns:52px minmax(0,1fr);padding:11px}.account-country-card img{width:52px;height:52px}.account-country-heading{align-items:flex-start;flex-direction:column}.account-country-hint{font-size:11px}.account-favorites-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:560px){.seller-reel-manager-card{grid-template-columns:1fr 1.2fr;gap:9px;padding:9px}.seller-reel-manager-card video{max-height:210px}.seller-reel-manager-actions .seller-action-button{min-height:36px;padding:7px 9px;font-size:11px}}
+    @media(max-width:560px){.seller-feed-manager-card{grid-template-columns:1fr 1.2fr;gap:9px;padding:9px}.seller-feed-manager-card img{max-height:210px}.seller-feed-manager-actions .seller-action-button{min-height:36px;padding:7px 9px;font-size:11px}}
     .seller-shop-link { display:block; margin:8px 0; color:#93c5fd; overflow-wrap:anywhere; }
     .seller-logo-wrap { position:relative; width:88px; margin:4px 0 12px; }
     .seller-logo-preview { display:block; width:88px; height:88px; object-fit:cover; border:0; border-radius:50%; background:#fff; box-shadow:none; }
@@ -1070,9 +1107,7 @@
     #sellerDashboard .seller-analytics-card span{color:#667085;font-size:13px}
     #sellerDashboard .seller-analytics-card strong{font-size:30px;color:#172033!important}
     #sellerDashboard .seller-analytics-event{background:#fff}
-    #sellerDashboard .seller-reel-panel{border:1px dashed #cbd5e1;background:#f9fafb}
-    #sellerDashboard .seller-reel-dropzone{display:grid;place-items:center;min-height:132px;padding:20px;border:1px dashed #f36b00;border-radius:15px;background:#fff7ed;text-align:center;cursor:pointer}
-    #sellerDashboard .seller-reel-dropzone.drag-over{background:#ffedd5;border-color:#c2410c}
+    #sellerDashboard .seller-feed-panel{border:1px dashed #cbd5e1;background:#f9fafb}
     #sellerDashboard .seller-reel-dropzone input{max-width:100%}
     #sellerDashboard .seller-analytics-subheading{color:#172033}
     @media(min-width:1024px){
@@ -1081,7 +1116,7 @@
       #sellerDashboard .seller-dashboard-header,#sellerDashboard #sellerDashboardStatus,#sellerDashboard #sellerShopFormPanel:not([hidden]){grid-column:1/-1}
       #sellerDashboard #sellerShopProfile{grid-column:1;grid-row:2;position:sticky;top:8px;background:#fff}
       #sellerDashboard #sellerAnalyticsPanel:not([hidden]){grid-column:2;grid-row:2;background:#fff}
-      #sellerDashboard #sellerReelPanel:not([hidden]){grid-column:2;grid-row:3;background:#fff}
+      #sellerDashboard #sellerFeedPanel:not([hidden]){grid-column:2;grid-row:3;background:#fff}
       #sellerDashboard #sellerProductListPanel:not([hidden]){grid-column:1;grid-row:3;background:#fff}
       #sellerDashboard #sellerProductPanel:not([hidden]):has(#sellerProductForm:not([hidden])){grid-column:2;grid-row:4;background:#fff}
       #sellerDashboard .seller-dashboard-quick-actions{margin-top:22px}
@@ -1090,7 +1125,7 @@
     }
     @media(max-width:700px){
       #sellerDashboard .seller-card{display:flex;flex-direction:column;gap:12px;background:#f6f7f9}
-      #sellerDashboard #sellerShopProfile{order:1}#sellerDashboard #sellerAnalyticsPanel{order:2}#sellerDashboard #sellerReelPanel{order:3}#sellerDashboard #sellerProductListPanel{order:4}#sellerDashboard #sellerProductPanel{order:5}
+      #sellerDashboard #sellerShopProfile{order:1}#sellerDashboard #sellerAnalyticsPanel{order:2}#sellerDashboard #sellerFeedPanel{order:3}#sellerDashboard #sellerProductListPanel{order:4}#sellerDashboard #sellerProductPanel{order:5}
       #sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       #sellerDashboard .seller-analytics-card:last-child{grid-column:1/-1}
       #sellerDashboard #sellerShopProfile{display:block}
@@ -1101,7 +1136,7 @@
       #sellerDashboard .seller-reel-dropzone{min-height:118px}
     }
     @media(min-width:1024px){#sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-    #sellerDashboard .seller-analytics-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.seller-analytics-summary span,.seller-analytics-summary strong{padding:12px;background:#f5f6f8;border-radius:10px;text-align:center}.seller-analytics-summary strong{font-size:22px;color:#172033}.seller-analytics-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.seller-analytics-controls #sellerAnalyticsCustom{display:flex;gap:6px}.seller-analytics-controls button{padding:9px 12px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:#172033;cursor:pointer}#sellerAnalyticsChart{width:100%;max-height:220px;margin:8px 0 16px;background:#fff;border:1px solid #e5e7eb;border-radius:12px}.hub-reel-list{display:flex;flex-direction:column;align-items:center;gap:18px}.hub-reel-card{width:min(100%,520px);border-radius:18px}.hub-reel-card video{width:100%;height:min(72vh,760px);aspect-ratio:9/16;object-fit:cover;border-radius:16px;background:#080808}@media(max-width:700px){.hub-reel-card{width:100%}.hub-reel-card video{height:70dvh}.seller-analytics-summary strong{font-size:18px}}
+    #sellerDashboard .seller-analytics-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.seller-analytics-summary span,.seller-analytics-summary strong{padding:12px;background:#f5f6f8;border-radius:10px;text-align:center}.seller-analytics-summary strong{font-size:22px;color:#172033}.seller-analytics-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.seller-analytics-controls #sellerAnalyticsCustom{display:flex;gap:6px}.seller-analytics-controls button{padding:9px 12px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:#172033;cursor:pointer}#sellerAnalyticsChart{width:100%;max-height:220px;margin:8px 0 16px;background:#fff;border:1px solid #e5e7eb;border-radius:12px}    @media(max-width:700px){.seller-analytics-summary strong{font-size:18px}}
       /* Keep the home search and category bars pinned without creating an overflow scroll container. */
     .header { position:static!important; }
     .search-bar { position:sticky!important; top:0!important; z-index:120!important; }
@@ -1241,7 +1276,7 @@
     .seller-dashboard-tabs button.active{color:#172033}.seller-dashboard-tabs button.active:after{position:absolute;right:12px;bottom:0;left:12px;height:3px;border-radius:3px 3px 0 0;background:#f36b00;content:""}
     #sellerDashboard>.seller-card>.seller-panel:not(#sellerShopProfile){margin:14px 16px!important;padding:15px!important;border:1px solid #e7ebf0!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 18px #10182808!important}
     #sellerDashboard #sellerProductPanel:not([hidden]):has(#sellerProductForm[hidden]){display:none!important}
-    #sellerDashboard #sellerProductListPanel h3,#sellerDashboard #sellerJobsPanel h3,#sellerDashboard #sellerReelPanel h3,#sellerDashboard #sellerAnalyticsPanel h3{margin:0;color:#172033!important;font-size:18px}
+    #sellerDashboard #sellerProductListPanel h3,#sellerDashboard #sellerJobsPanel h3,#sellerDashboard #sellerFeedPanel h3,#sellerDashboard #sellerAnalyticsPanel h3{margin:0;color:#172033!important;font-size:18px}
     .seller-tab-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}.seller-tab-panel-heading h3{margin:0!important}
     .seller-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
     .seller-dashboard-product-card{min-width:0;overflow:hidden;border:1px solid #e5e9ef;border-radius:13px;background:#fff;color:#172033;cursor:pointer;transition:transform .16s,box-shadow .16s}
@@ -1299,7 +1334,7 @@
     #sellerSocialList .seller-viewer-row small{flex:0 0 auto;color:#667085;font-size:12px}
     #sellerSocialList .seller-social-unfollow{min-height:36px;padding:5px 12px;border:1px solid #e4e7ec;border-radius:9px;background:#fff;color:#344054;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
     /* Editing the shop replaces the profile with a focused, full-screen form. */
-    #sellerDashboard.seller-editing-shop #sellerShopProfile,#sellerDashboard.seller-editing-shop .seller-dashboard-tabs,#sellerDashboard.seller-editing-shop #sellerProductListPanel,#sellerDashboard.seller-editing-shop #sellerProductPanel,#sellerDashboard.seller-editing-shop #sellerJobsPanel,#sellerDashboard.seller-editing-shop #sellerReelPanel,#sellerDashboard.seller-editing-shop #sellerAnalyticsPanel,#sellerDashboard.seller-editing-shop #sellerSocialListPanel,#sellerDashboard.seller-editing-shop #sellerProfileViewsPanel{display:none!important}
+    #sellerDashboard.seller-editing-shop #sellerShopProfile,#sellerDashboard.seller-editing-shop .seller-dashboard-tabs,#sellerDashboard.seller-editing-shop #sellerProductListPanel,#sellerDashboard.seller-editing-shop #sellerProductPanel,#sellerDashboard.seller-editing-shop #sellerJobsPanel,#sellerDashboard.seller-editing-shop #sellerFeedPanel,#sellerDashboard.seller-editing-shop #sellerAnalyticsPanel,#sellerDashboard.seller-editing-shop #sellerSocialListPanel,#sellerDashboard.seller-editing-shop #sellerProfileViewsPanel{display:none!important}
     #sellerDashboard.seller-editing-shop #sellerShopFormPanel:not([hidden]){display:block!important;width:min(760px,100%);min-height:calc(100dvh - 62px);margin:0 auto!important;padding:18px 22px calc(28px + env(safe-area-inset-bottom))!important;border:0!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
     #sellerDashboard.seller-editing-shop #sellerShopFormTitle{margin:0 0 20px!important;color:#172033!important;font-size:22px!important}
     #sellerDashboard.seller-editing-shop .seller-dashboard-header{position:sticky!important;top:0!important;z-index:40!important}
@@ -1567,7 +1602,7 @@
         <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Offers</span><span class="desktop-hub-label">Offer</span></span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('reels',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-video"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Reels</span><span class="desktop-hub-label">Feed</span></span></button>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('feed',this)"><span class="hub-shortcut-icon"><i class="fa-regular fa-images"></i></span><span class="hub-shortcut-label">Feed</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('games',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-gamepad"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Games</span><span class="desktop-hub-label">Game</span></span></button>
       </div>
       <hr class="desktop-sidebar-only desktop-sidebar-divider">
@@ -1890,7 +1925,7 @@
       </form></section>
       <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
       <section class="seller-panel" id="sellerJobsPanel" hidden><div class="seller-tab-panel-heading"><h3>Shop jobs</h3><button class="seller-action-button primary" type="button" onclick="openPlatformPostForm('job')"><i class="fa-solid fa-plus"></i> Add job</button></div><div id="sellerJobsList" class="seller-job-list"></div></section>
-      <section class="seller-panel seller-reel-panel" id="sellerReelPanel" hidden><div class="seller-tab-panel-heading"><h3>Shop feed</h3></div><form id="sellerReelForm" onsubmit="saveSellerReel(event)"><label>Video<input name="video" type="file" accept="video/mp4,video/webm,video/quicktime" required><span class="seller-muted">Upload a short MP4, WebM, or MOV video (up to 50 MB).</span></label><label>Caption<textarea name="caption" maxlength="500" placeholder="Show your products or shop"></textarea></label><div class="seller-action-row"><button class="seller-action-button primary" type="submit">Post video</button></div><div class="seller-notice" id="sellerReelStatus" role="status" aria-live="polite"></div></form><div class="seller-reel-manager-list" id="sellerReelList"><p class="seller-muted">Your reels will appear here.</p></div></section>
+      <section class="seller-panel seller-feed-panel" id="sellerFeedPanel" hidden><div class="seller-tab-panel-heading"><h3>Shop Feed</h3><button class="seller-action-button primary" type="button" onclick="openFeedFromSellerDashboard()"><i class="fa-regular fa-images"></i> Create a photo post</button></div><p class="seller-muted">Create photo posts, link products, and add announcements or offers from the Feed page.</p><div class="seller-feed-manager-list" id="sellerFeedList"><p class="seller-muted">Your photo posts will appear here.</p></div></section>
       <section class="seller-panel" id="sellerAnalyticsPanel" hidden><h3>Shop Analytics</h3><div class="seller-analytics-controls"><label for="sellerAnalyticsPeriod">Period</label><select id="sellerAnalyticsPeriod" onchange="toggleAnalyticsCustom();loadSellerAnalytics()"><option value="today">Today</option><option value="month">This month</option><option value="year">This year</option><option value="all" selected>Since shop opened</option><option value="custom">Custom range</option></select><div id="sellerAnalyticsCustom" hidden><input id="sellerAnalyticsStart" type="date" aria-label="Start date" onchange="loadSellerAnalytics()"><input id="sellerAnalyticsEnd" type="date" aria-label="End date" onchange="loadSellerAnalytics()"></div><button type="button" onclick="exportSellerAnalyticsPdf()">Download PDF</button></div><div class="seller-analytics-grid"><div class="seller-analytics-card"><span>Shop views</span><strong id="sellerAnalyticsShopViews">—</strong></div><div class="seller-analytics-card"><span>Product views</span><strong id="sellerAnalyticsProductViews">—</strong></div><div class="seller-analytics-card"><span>Orders</span><strong id="sellerAnalyticsOrders">—</strong></div><div class="seller-analytics-card"><span>Revenue</span><strong id="sellerAnalyticsValue">—</strong></div></div><canvas id="sellerAnalyticsChart" height="180" aria-label="Orders and revenue growth chart"></canvas><h4 class="seller-analytics-subheading">Product views</h4><div class="seller-analytics-products" id="sellerAnalyticsProducts"></div><h4 class="seller-analytics-subheading">Recent activity</h4><div class="seller-analytics-activity" id="sellerAnalyticsActivity"></div><div class="seller-notice" id="sellerAnalyticsStatus" role="status" aria-live="polite"></div></section>
       <div class="seller-notice" id="sellerDashboardStatus" role="status" aria-live="polite"></div>
     </div>
@@ -1914,7 +1949,7 @@
     </div>
   </div>
 
-  <div class="seller-overlay" id="accountLibraryOverlay" onclick="if(event.target===this)closeAccountLibrary()" role="dialog" aria-modal="true" aria-labelledby="accountLibraryTitle"><div class="seller-card account-library-card"><div class="seller-header"><div><h2 id="accountLibraryTitle">My Account</h2><div class="seller-subtitle" id="accountLibrarySubtitle">Your saved and posted content</div></div><button class="seller-close" type="button" onclick="closeAccountLibrary()" aria-label="Close">&times;</button></div><div class="account-library-tabs"><button class="active" type="button" data-library-tab="favorites" onclick="showAccountLibrary('favorites')">Favorites</button><button type="button" data-library-tab="ads" onclick="showAccountLibrary('ads')">My Ads</button><button type="button" data-library-tab="shop" onclick="showAccountLibrary('shop')">My Shop content</button></div><section class="seller-panel"><label id="accountAdsFilterWrap" class="account-ads-filter" hidden>Show<select id="accountAdsFilter" onchange="loadAccountMyAdsWithReels(this.value)"><option value="all">Everything</option><option value="ad">Advertisements</option><option value="job">Jobs</option><option value="reel">Shop reels / videos</option><option value="product">Shop products</option></select></label><div id="accountLibraryBody"><p class="seller-muted">Loading…</p></div></section></div></div>
+  <div class="seller-overlay" id="accountLibraryOverlay" onclick="if(event.target===this)closeAccountLibrary()" role="dialog" aria-modal="true" aria-labelledby="accountLibraryTitle"><div class="seller-card account-library-card"><div class="seller-header"><div><h2 id="accountLibraryTitle">My Account</h2><div class="seller-subtitle" id="accountLibrarySubtitle">Your saved and posted content</div></div><button class="seller-close" type="button" onclick="closeAccountLibrary()" aria-label="Close">&times;</button></div><div class="account-library-tabs"><button class="active" type="button" data-library-tab="favorites" onclick="showAccountLibrary('favorites')">Favorites</button><button type="button" data-library-tab="saved-posts" onclick="showAccountLibrary('saved-posts')">Saved Posts</button><button type="button" data-library-tab="ads" onclick="showAccountLibrary('ads')">My Ads</button><button type="button" data-library-tab="shop" onclick="showAccountLibrary('shop')">My Shop content</button></div><section class="seller-panel"><label id="accountAdsFilterWrap" class="account-ads-filter" hidden>Show<select id="accountAdsFilter" onchange="loadAccountMyAdsWithFeed(this.value)"><option value="all">Everything</option><option value="ad">Advertisements</option><option value="job">Jobs</option><option value="product">Shop products</option></select></label><div id="accountLibraryBody"><p class="seller-muted">Loading…</p></div></section></div></div>
 
   <div class="seller-overlay" id="sellerShopShareOverlay" onclick="if(event.target===this)closeSellerShopShare()" role="dialog" aria-modal="true" aria-labelledby="sellerShopShareTitle" style="z-index:14000"><div class="seller-card" style="width:min(100%,440px);text-align:center"><button class="seller-close" type="button" onclick="closeSellerShopShare()" aria-label="Close">&times;</button><h2 id="sellerShopShareTitle">Share your shop</h2><p id="sellerShopShareName" class="seller-muted"></p><div class="shop-share-qr-frame" id="sellerShopShareQr" aria-label="Shop QR code"></div><button class="seller-action-button primary" id="downloadSellerShopQr" type="button" onclick="downloadSellerShopQr()" disabled><i class="fa-solid fa-download"></i> Download QR</button><a id="sellerShopShareLink" class="seller-shop-link" target="_blank" rel="noopener"></a><div class="seller-action-row" style="justify-content:center"><button class="seller-action-button primary" type="button" onclick="copySellerShopLink()"><i class="fa-regular fa-copy"></i> Copy link</button><button class="seller-action-button" type="button" onclick="nativeShareSellerShop()"><i class="fa-solid fa-share-nodes"></i> Share</button></div><div class="seller-notice" id="sellerShopShareStatus" role="status" aria-live="polite"></div></div></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2430,11 +2465,7 @@
       try { await request; } finally { if(sellerCatalogLoadPromise===request)sellerCatalogLoadPromise=null; }
     }
 
-    function arrangeSellerDashboard() {
-      const reelForm=document.getElementById('sellerReelForm'),reelPanel=reelForm?.closest('.seller-panel');if(reelPanel&&reelPanel.id!=='sellerReelPanel')reelPanel.id='sellerReelPanel';
-      const videoLabel=reelForm?.querySelector('label:first-of-type'),videoInput=reelForm?.elements.video;
-      if(videoLabel&&videoInput&&!videoLabel.dataset.dropReady){videoLabel.dataset.dropReady='1';videoLabel.classList.add('seller-reel-dropzone');videoLabel.addEventListener('dragover',event=>{event.preventDefault();videoLabel.classList.add('drag-over');});videoLabel.addEventListener('dragleave',()=>videoLabel.classList.remove('drag-over'));videoLabel.addEventListener('drop',event=>{event.preventDefault();videoLabel.classList.remove('drag-over');const file=event.dataTransfer.files?.[0];if(file&&file.type.startsWith('video/')){const transfer=new DataTransfer();transfer.items.add(file);videoInput.files=transfer.files;videoInput.dispatchEvent(new Event('change',{bubbles:true}));}});}
-    }
+    function arrangeSellerDashboard() {}
     function showSellerItems(){sellerDashboardTab('products');}
     let activeSellerDashboardTab='products';
     let activeSellerSocialKind='followers';
@@ -2450,11 +2481,11 @@
       document.getElementById('sellerProductListPanel').hidden=activeSellerDashboardTab!=='products';
       document.getElementById('sellerProductPanel').hidden=activeSellerDashboardTab!=='products';
       document.getElementById('sellerJobsPanel').hidden=activeSellerDashboardTab!=='jobs';
-      document.getElementById('sellerReelPanel').hidden=activeSellerDashboardTab!=='feed';
+      document.getElementById('sellerFeedPanel').hidden=activeSellerDashboardTab!=='feed';
       document.getElementById('sellerAnalyticsPanel').hidden=activeSellerDashboardTab!=='analytics';
       if(activeSellerDashboardTab==='products')renderSellerProductList();
       if(activeSellerDashboardTab==='jobs')loadSellerJobs();
-      if(activeSellerDashboardTab==='feed')loadSellerReels();
+      if(activeSellerDashboardTab==='feed')loadSellerFeedManager();
       if(activeSellerDashboardTab==='analytics')loadSellerAnalytics();
     }
     function toggleSellerProfileMenu(event){event?.stopPropagation();const menu=document.getElementById('sellerProfileMenu'),button=document.querySelector('.seller-profile-cover-actions button[aria-label="Shop profile menu"]');menu.hidden=!menu.hidden;button?.setAttribute('aria-expanded',String(!menu.hidden));}
