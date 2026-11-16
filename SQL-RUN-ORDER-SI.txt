@@ -1,6 +1,6 @@
 ALEE SHOPPING — Supabase SQL ගොනු ධාවනය කරන පිළිවෙළ
 
-මෙම site folder එකේ ඇති SQL files 25ක් පළමු වරට අලුත් Supabase project එකකට දාන විට පහත අනුපිළිවෙළට ධාවනය කරන්න. සෑම file එකක්ම SQL Editor එකේ වෙනම query එකක් ලෙස Run කරන්න. Files සියල්ල එකට paste කර Run කරන්න එපා.
+මෙම site folder එකේ ඇති SQL files පළමු වරට අලුත් Supabase project එකකට දාන විට පහත අනුපිළිවෙළට ධාවනය කරන්න. සෑම file එකක්ම SQL Editor එකේ වෙනම query එකක් ලෙස Run කරන්න. Files සියල්ල එකට paste කර Run කරන්න එපා.
 
 1. database-schema.sql — Product reviews/comments සඳහා මූලික table එක.
 2. seller-marketplace-schema.sql — Shops, seller products, shop profile, seller photo storage.
@@ -22,15 +22,16 @@ ALEE SHOPPING — Supabase SQL ගොනු ධාවනය කරන පිළ�
 18. shop-profile-tabs-schema.sql — Follower avatar RPC. Seller profile social පසුව.
 19. verified-badges-schema.sql — Host-managed verified badges. Seller marketplace සහ country migration පසුව.
 20. seller-dashboard-profile-schema.sql — Dashboard banner, profile views සහ follower avatars. Seller analytics, profile social, shop profile tabs සහ verified badges පසුව. Dashboard එකට අදාළ අලුත්ම migration එක මෙයයි.
-21. seller-community-schema.sql — Seller video reels, likes, comments සහ saves. Seller marketplace පසුව.
-22. search-trending-schema.sql — Shared trending terms, product-search counts සහ signed-in search/view history.
-23. shop-directory-order-schema.sql — Shop directory order manager.
-24. banner-pricing-schema.sql — Host-managed banner ad prices.
-25. alee-push-schema.sql — OneSignal subscriptions සහ chat push dispatch. Seller chat සහ group chat පසුව.
+21. seller-community-schema.sql — පැරණි video Feed schema එක; අලුත් setup එකකදී skip කරන්න. Photo Feed එකට භාවිතා නොවේ.
+22. feed-posts-schema.sql — Photo-only shop Feed posts, likes, comments, Saved Posts සහ image storage. Seller marketplace එකට පසුව.
+23. search-trending-schema.sql — Shared trending terms, product-search counts සහ signed-in search/view history.
+24. shop-directory-order-schema.sql — Shop directory order manager.
+25. banner-pricing-schema.sql — Host-managed banner ad prices.
+26. alee-push-schema.sql — OneSignal subscriptions සහ chat push dispatch. Seller chat සහ group chat පසුව.
 
 දැනටමත් භාවිත කරන Supabase project එකක් නම්
 
-සියලු files 25ම අනිවාර්යයෙන් නැවත run කරන්න එපා. දැනටමත් ඇති tables/policies/functions නැවත හදන්න අවශ්‍ය නැති අතර, වැඩ කරන production project එකක අදාළ නැති migrations ධාවනය කිරීමෙන් වළකින්න. අලුත් Seller Dashboard වෙනස්කම් සඳහා අවශ්‍ය අලුත් file එක `seller-dashboard-profile-schema.sql` යි; එය 2, 16, 17, 18 සහ 19 files දැනටමත් run කර ඇති පසු තනිව run කරන්න. Site එකේ වෙනත් අංගයක් SQL error පෙන්වන්නේ නම් ඒ feature එකට අදාළ file එක සහ ඊට පෙර ඇති dependency files පමණක් බලන්න.
+සියලු files අනිවාර්යයෙන් නැවත run කරන්න එපා. දැනටමත් ඇති tables/policies/functions නැවත හදන්න අවශ්‍ය නැති අතර, වැඩ කරන production project එකක අදාළ නැති migrations ධාවනය කිරීමෙන් වළකින්න. අලුත් photo Feed එක සඳහා අවශ්‍ය file එක `feed-posts-schema.sql` යි; එය `seller-marketplace-schema.sql` ධාවනය කළ පසු වෙනම run කරන්න. `seller-community-schema.sql` යනු පැරණි video Feed එකේ schema එකක් වන අතර නව photo Feed එකට භාවිතා නොවේ. අලුත් Seller Dashboard වෙනස්කම් සඳහා අවශ්‍ය file එක `seller-dashboard-profile-schema.sql` යි; එය 2, 16, 17, 18 සහ 19 files දැනටමත් run කර ඇති පසු තනිව run කරන්න. Site එකේ වෙනත් අංගයක් SQL error පෙන්වන්නේ නම් ඒ feature එකට අදාළ file එක සහ ඊට පෙර ඇති dependency files පමණක් බලන්න.
 
 Search database එක ගැන
 

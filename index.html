@@ -430,6 +430,7 @@
     .feed-create-heading{margin:0 0 10px;font-size:16px;font-weight:800}
     .feed-photo-button,.feed-view-product{display:inline-flex;min-height:40px;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:0;border-radius:9px;background:#ff6b00;color:#fff;font:700 13px Inter,Poppins,Arial,sans-serif;text-decoration:none;cursor:pointer}
     .feed-create-preview{display:block;width:min(100%,320px);max-height:360px;margin:12px auto;object-fit:contain;border:1px solid #eee;border-radius:8px}
+    .feed-create-preview[hidden],.feed-create-fields[hidden]{display:none!important}
     .feed-create-fields{display:grid;gap:9px;margin-top:12px}
     .feed-create-fields textarea,.feed-create-fields select{width:100%;min-height:42px;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#111;font:13px Inter,Poppins,Arial,sans-serif}
     .feed-create-fields textarea{min-height:76px;resize:vertical}
@@ -437,11 +438,12 @@
     .feed-shop-avatar{width:40px;height:40px;flex:0 0 40px;border-radius:50%;object-fit:cover;background:#f3f3f3}
     .feed-shop-copy{min-width:0;flex:1}
     .feed-shop-name{display:block;color:#111;font-size:13px;font-weight:800;line-height:1.35}
-    .feed-shop-location{display:block;margin-top:2px;color:#8a8a8a;font-size:11px}
+    .feed-shop-location{display:block;max-width:100%;margin-top:2px;overflow:hidden;color:#8a8a8a;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
     .feed-message-button,.feed-more-button{min-height:34px;padding:6px 9px;border:1px solid #e3e3e3;border-radius:8px;background:#fff;color:#333;font:700 11px Inter,Poppins,Arial,sans-serif;cursor:pointer}
     .feed-post-menu{position:relative}
     .feed-post-menu summary{list-style:none;padding:6px 8px;color:#555;cursor:pointer}
     .feed-post-menu summary::-webkit-details-marker{display:none}
+    .feed-post-menu[open] .feed-more-button{position:absolute;top:calc(100% + 2px);right:0;z-index:3;white-space:nowrap}
     .feed-post-badge{display:inline-flex;margin:0 12px 8px;padding:4px 8px;border-radius:99px;background:#fff1e8;color:#ff6b00;font-size:10px;font-weight:800}
     .feed-post-badge.offer{background:#fff0f2;color:#ff2d55}
     .feed-photo-wrap{position:relative;display:grid;place-items:center;overflow:hidden;width:100%;aspect-ratio:4/5;background:#fafafa;cursor:pointer}
@@ -464,6 +466,7 @@
     .feed-comment-form{display:flex;align-items:center;gap:8px;margin-top:9px}
     .feed-comment-form input{min-width:0;flex:1;padding:8px 0;border:0;border-bottom:1px solid #eee;outline:0;color:#111;font:12px Inter,Poppins,Arial,sans-serif}
     .feed-comment-form button{padding:7px 10px;border:0;border-radius:7px;background:#ff6b00;color:#fff;font-weight:700;cursor:pointer}
+    .feed-comment-form .feed-emoji-button{padding:3px;border:0;background:transparent;color:#8a8a8a;font-size:19px;cursor:pointer}
     .feed-share-options{display:flex;flex-wrap:wrap;gap:7px;padding:0 12px 10px}
     .feed-share-options[hidden]{display:none}
     .feed-share-options button{padding:6px 9px;border:1px solid #eee;border-radius:8px;background:#fff;color:#333;font:11px Inter,Poppins,Arial,sans-serif;cursor:pointer}
@@ -471,6 +474,9 @@
     .feed-status{min-height:16px;margin:7px 0 0;color:#777;font-size:11px}
     .feed-empty{padding:24px;border:1px solid #eee;border-radius:12px;color:#8a8a8a;text-align:center;background:#fff}
     .feed-load-error{color:#b42318}
+    body.feed-section-open #hubContentPanel,body.feed-section-open #hubContentBody{background:#fff;color:#111}
+    body.feed-section-open #hubContentPanel{border-color:#e8e8e8}
+    body.feed-section-open .hub-content-heading{color:#111;border-bottom:1px solid #eee}
     .container.hub-content-open { display:none; }
     .site-loader { position:fixed; inset:0; z-index:50000; display:grid; place-content:center; justify-items:center; gap:12px; background:#fff; transition:opacity .2s,visibility .2s; }
     .site-loader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
@@ -1108,7 +1114,6 @@
     #sellerDashboard .seller-analytics-card strong{font-size:30px;color:#172033!important}
     #sellerDashboard .seller-analytics-event{background:#fff}
     #sellerDashboard .seller-feed-panel{border:1px dashed #cbd5e1;background:#f9fafb}
-    #sellerDashboard .seller-reel-dropzone input{max-width:100%}
     #sellerDashboard .seller-analytics-subheading{color:#172033}
     @media(min-width:1024px){
       #sellerDashboard{align-items:flex-start;overflow-y:auto;padding:2vh 2vw}
@@ -1133,7 +1138,6 @@
       #sellerDashboard .seller-dashboard-quick-actions .seller-dashboard-post{grid-column:1/-1}
       #sellerDashboard .seller-action-row{display:flex;flex-wrap:wrap}
       #sellerDashboard .seller-action-row button{flex:1 1 145px}
-      #sellerDashboard .seller-reel-dropzone{min-height:118px}
     }
     @media(min-width:1024px){#sellerDashboard .seller-analytics-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
     #sellerDashboard .seller-analytics-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.seller-analytics-summary span,.seller-analytics-summary strong{padding:12px;background:#f5f6f8;border-radius:10px;text-align:center}.seller-analytics-summary strong{font-size:22px;color:#172033}.seller-analytics-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.seller-analytics-controls #sellerAnalyticsCustom{display:flex;gap:6px}.seller-analytics-controls button{padding:9px 12px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:#172033;cursor:pointer}#sellerAnalyticsChart{width:100%;max-height:220px;margin:8px 0 16px;background:#fff;border:1px solid #e5e7eb;border-radius:12px}    @media(max-width:700px){.seller-analytics-summary strong{font-size:18px}}
@@ -1838,7 +1842,7 @@
         <button type="button" id="accountBannerAdsButton" style="display:none" onclick="openAccountManagerPage('banner-ads.html')"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
          <button type="button" id="accountBannerPricingButton" hidden onclick="openAccountManagerPage('banner-pricing-manager.html')"><i class="fa-solid fa-tags"></i><span>Banner Ad Pricing</span><small>Change the prices shown to advertisers</small></button>
         <button type="button" id="accountSponsoredProductsManagerButton" hidden onclick="openAccountManagerPage('sponsored-products-manager.html')"><i class="fa-solid fa-rectangle-ad"></i><span>Sponsored Products</span><small>Review seller requests and activate paid placements</small></button>
-        <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
+        <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, jobs, apps and games</small></button>
         <button type="button" id="accountOfferManagerButton" onclick="openAccountManagerPage('offer-manager.html')" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
         <button type="button" id="accountContentManagersButton" onclick="openAccountManagerPage('manager-center.html')" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, banner pricing, country ads, offers and product popups</small></button>
         <button type="button" id="accountMyShopButton" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>Open Shop</span><small>Create or manage your shop</small></button>
@@ -2210,7 +2214,7 @@
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to create and manage your shop.';return;}
       if(!await ensurePrivateAccountProfile())return;
       try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'seller');}catch(error){}
-      closeBuyerAccount(false,true);arrangeSellerDashboard();document.getElementById('sellerDashboard').classList.add('show');
+      closeBuyerAccount(false,true);document.getElementById('sellerDashboard').classList.add('show');
       pushAppUiLayer('sellerDashboard',fromHistory=>closeSellerAccount(fromHistory),()=>document.getElementById('sellerDashboard').classList.add('show'));
       document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
       await loadSellerWorkspace();
@@ -2246,7 +2250,7 @@
       if(result.error){alert('Could not load your shop. Please try again.');return;}
       const shop=result.data;currentSellerShop=shop||null;
       if(!shop){document.getElementById('accountDeleteShopMenu').hidden=true;if(document.getElementById('mobileDeleteShopMenu'))document.getElementById('mobileDeleteShopMenu').hidden=true;alert('There is no shop to delete.');return;}
-      const confirmed=window.confirm(`Permanently delete “${shop.shop_name}” and all related shop data, including products, reels, chats, followers and order records? This cannot be undone.`);
+      const confirmed=window.confirm(`Permanently delete “${shop.shop_name}” and all related shop data, including products, Feed posts, chats, followers and order records? This cannot be undone.`);
       if(!confirmed)return;
       const sellerDashboardWasOpen=document.getElementById('sellerDashboard').classList.contains('show');
       const status=document.getElementById('sellerDashboardStatus'),buttons=[...document.querySelectorAll('#sellerDashboard [onclick="deleteSellerShop()"],#accountDeleteShopMenu,#mobileDeleteShopMenu')];
@@ -2254,10 +2258,13 @@
       try{
         const products=await supabaseClient.from('seller_products').select('image_urls').eq('shop_id',shop.id).eq('owner_id',activeUser.id);
         if(products.error)throw new Error(`Could not collect the shop's product photos: ${products.error.message}`);
-        let reels=[];
+        let reels=[],feedPosts=[];
         const reelResult=await supabaseClient.from('seller_reels').select('storage_path').eq('shop_id',shop.id).eq('owner_id',activeUser.id);
         if(!reelResult.error)reels=reelResult.data||[];
         else if(!['42P01','PGRST205'].includes(reelResult.error.code))throw new Error(`Could not collect the shop's reels: ${reelResult.error.message}`);
+        const feedResult=await supabaseClient.from('feed_posts').select('storage_path').eq('shop_id',shop.id).eq('owner_id',activeUser.id);
+        if(!feedResult.error)feedPosts=feedResult.data||[];
+        else if(!['42P01','PGRST205'].includes(feedResult.error.code))throw new Error(`Could not collect the shop's Feed photos: ${feedResult.error.message}`);
         const {error}=await supabaseClient.rpc('delete_my_shop',{p_shop_id:shop.id});
         if(error)throw new Error(`Could not delete the shop. Run the latest account-profile-schema.sql in Supabase, then try again. ${error.message}`);
         currentSellerShop=null;sellerProducts=[];
@@ -2266,6 +2273,8 @@
         catch(error){mediaWarning=' Some uploaded product/shop images could not be cleaned up automatically.';console.warn('Shop images were not fully removed from storage.',error);}
         const reelPaths=reels.map(row=>row.storage_path).filter(path=>path&&String(path).startsWith(`${activeUser.id}/`));
         if(reelPaths.length){const {error:mediaError}=await supabaseClient.storage.from('seller-reels').remove(reelPaths);if(mediaError){mediaWarning+=' Some reel videos could not be cleaned up automatically.';console.warn('Shop reel videos were not fully removed from storage.',mediaError);}}
+        const feedPaths=feedPosts.map(row=>row.storage_path).filter(path=>path&&String(path).startsWith(`${activeUser.id}/${shop.id}/`));
+        if(feedPaths.length){const {error:mediaError}=await supabaseClient.storage.from('feed-posts').remove(feedPaths);if(mediaError){mediaWarning+=' Some Feed photos could not be cleaned up automatically.';console.warn('Shop Feed photos were not fully removed from storage.',mediaError);}}
         document.getElementById('accountDeleteShopMenu').hidden=true;if(document.getElementById('mobileDeleteShopMenu'))document.getElementById('mobileDeleteShopMenu').hidden=true;
         await loadSellerCatalog();
         if(document.getElementById('sellerDashboard').classList.contains('show'))await loadSellerWorkspace();
@@ -2465,7 +2474,6 @@
       try { await request; } finally { if(sellerCatalogLoadPromise===request)sellerCatalogLoadPromise=null; }
     }
 
-    function arrangeSellerDashboard() {}
     function showSellerItems(){sellerDashboardTab('products');}
     let activeSellerDashboardTab='products';
     let activeSellerSocialKind='followers';
@@ -2521,7 +2529,7 @@
       if(!currentSellerShop)return;
       activeSellerSocialKind=kind==='following'?'following':'followers';sellerSocialManageMode=false;
       const root=document.getElementById('sellerSocialList'),panel=document.getElementById('sellerSocialListPanel'),status=document.getElementById('sellerSocialListStatus');
-      document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerReelPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=true;
+      document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerFeedPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=true;
       document.getElementById('sellerSocialShopName').textContent=currentSellerShop.shop_name||'Shop';document.getElementById('sellerSocialShopLogo').src=sellerSocialSafeImage(currentSellerShop.logo_url);panel.hidden=false;status.textContent='';sellerSocialListRows=[];renderSellerSocialList();root.innerHTML='<p class="seller-muted">Loading…</p>';
       const request=++sellerSocialListRequest;
       if(!supabaseClient){status.textContent='Follower and following information is not available right now.';root.replaceChildren();return;}
@@ -2545,7 +2553,7 @@
     function closeSellerSocialList(){sellerSocialListRequest++;document.getElementById('sellerSocialListPanel').hidden=true;sellerDashboardTab(activeSellerDashboardTab);}
     async function showSellerProfileViews(){
       if(!currentSellerShop)return;
-      document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerReelPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerSocialListPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=false;
+      document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerFeedPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerSocialListPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=false;
       const root=document.getElementById('sellerProfileViewers'),status=document.getElementById('sellerProfileViewsStatus'),panel=document.getElementById('sellerProfileViewsPanel'),request=++sellerProfileViewsRequest;
       root.replaceChildren();status.textContent='Loading profile views…';
       if(!supabaseClient){status.textContent='Profile views are unavailable right now.';return;}
@@ -2595,7 +2603,7 @@
         if(currentSellerShop){
           profile.hidden=false;formPanel.hidden=true;productPanel.hidden=false;listPanel.hidden=false;
           const dashboard=document.getElementById('sellerDashboard'),wasEditing=dashboard.classList.contains('seller-editing-shop');dashboard.classList.add('seller-has-shop');dashboard.classList.remove('seller-editing-shop');if(wasEditing){const card=dashboard.querySelector('.seller-card');if(card)card.scrollTop=0;}
-          document.querySelector('.seller-dashboard-close')?.setAttribute('aria-label','Back to aleeshopping');const sellerTabs=document.querySelector('.seller-dashboard-tabs');if(sellerTabs&&sellerTabs.parentElement===profile)profile.after(sellerTabs);sellerTabs.hidden=false;document.getElementById('sellerReelPanel')?.removeAttribute('hidden');
+          document.querySelector('.seller-dashboard-close')?.setAttribute('aria-label','Back to aleeshopping');const sellerTabs=document.querySelector('.seller-dashboard-tabs');if(sellerTabs&&sellerTabs.parentElement===profile)profile.after(sellerTabs);sellerTabs.hidden=false;document.getElementById('sellerFeedPanel')?.removeAttribute('hidden');
           resetSellerShopLogoSelection(currentSellerShop.logo_url||'assets/alee-logo.png');
           document.getElementById('sellerShopName').innerHTML=escapeHTML(currentSellerShop.shop_name)+(currentSellerShop.is_verified?'<img class="seller-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':'');
           document.getElementById('sellerShopLogo').src=currentSellerShop.logo_url||'assets/alee-logo.png';
@@ -2620,7 +2628,7 @@
           const period=document.getElementById('sellerAnalyticsPeriod');if(period)period.value='all';
           sellerDashboardTab(activeSellerDashboardTab);
         } else {
-          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerReelPanel')?.setAttribute('hidden','');document.getElementById('sellerDashboard').classList.remove('seller-has-shop');document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';
+          profile.hidden=true;formPanel.hidden=false;productPanel.hidden=true;listPanel.hidden=true;document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerFeedPanel')?.setAttribute('hidden','');document.getElementById('sellerDashboard').classList.remove('seller-has-shop');document.getElementById('sellerFeedList').innerHTML='<p class="seller-muted">Create a shop to publish photo posts.</p>';
           document.getElementById('sellerShopFormTitle').textContent='Create Shop';
           document.getElementById('sellerShopForm').reset();
           resetSellerShopLogoSelection();
@@ -2644,7 +2652,7 @@
       form.elements.facebook.value=currentSellerShop.facebook_url||'';form.elements.instagram.value=currentSellerShop.instagram_url||'';form.elements.tiktok.value=currentSellerShop.tiktok_url||'';form.elements.youtube.value=currentSellerShop.youtube_url||'';
       fillSellerShopCategories(currentSellerShop.shop_category||'Other');if(form.elements.countryCode)form.elements.countryCode.value=currentSellerShop.country_code||'LK';populateSellerCurrencies(currentSellerShop.currency_code||currencyForCountry(currentSellerShop.country_code));form.elements.logo.value='';form.elements.logo.required=false;resetSellerShopLogoSelection(currentSellerShop.logo_url||'assets/alee-logo.png');
       document.getElementById('sellerShopProfile').hidden=true;document.getElementById('sellerShopFormPanel').hidden=false;
-      const dashboard=document.getElementById('sellerDashboard');dashboard.classList.add('seller-editing-shop');document.querySelector('.seller-dashboard-close')?.setAttribute('aria-label','Back to shop profile');document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerReelPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerSocialListPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=true;
+      const dashboard=document.getElementById('sellerDashboard');dashboard.classList.add('seller-editing-shop');document.querySelector('.seller-dashboard-close')?.setAttribute('aria-label','Back to shop profile');document.querySelector('.seller-dashboard-tabs').hidden=true;document.getElementById('sellerProductListPanel').hidden=true;document.getElementById('sellerProductPanel').hidden=true;document.getElementById('sellerJobsPanel').hidden=true;document.getElementById('sellerFeedPanel').hidden=true;document.getElementById('sellerAnalyticsPanel').hidden=true;document.getElementById('sellerSocialListPanel').hidden=true;document.getElementById('sellerProfileViewsPanel').hidden=true;
       document.getElementById('sellerShopFormTitle').textContent='Edit Shop Profile';document.getElementById('sellerShopSubmit').textContent='Save Shop Profile';document.getElementById('sellerShopCancel').hidden=false;
       const card=dashboard.querySelector('.seller-card');if(card)card.scrollTop=0;form.elements.shopName.focus({preventScroll:true});
     }
@@ -2837,77 +2845,32 @@
       } catch(error) { console.error(error);status.textContent=`Could not delete the item. ${error.message||''}`; }
     }
 
-    async function uploadSellerReelResumable(file,path,status){
-      if(!window.tus?.Upload)throw new Error('The resumable upload library did not load. Refresh the page and try again.');
-      const {data,error}=await supabaseClient.auth.getSession();
-      if(error||!data?.session?.access_token)throw new Error('Your sign-in expired. Sign in again and retry the upload.');
-      const projectId=new URL(ALEE_SUPABASE_URL).hostname.split('.')[0];
-      return new Promise((resolve,reject)=>{
-        const upload=new window.tus.Upload(file,{
-          endpoint:`https://${projectId}.storage.supabase.co/storage/v1/upload/resumable`,
-          retryDelays:[0,3000,5000,10000,20000],
-          headers:{authorization:`Bearer ${data.session.access_token}`,'x-upsert':'false'},
-          uploadDataDuringCreation:true,
-          removeFingerprintOnSuccess:true,
-          chunkSize:6*1024*1024,
-          metadata:{bucketName:'seller-reels',objectName:path,contentType:file.type||'video/mp4',cacheControl:'3600'},
-          onError:reject,
-          onProgress:(uploaded,total)=>{status.textContent=`Uploading reel… ${Math.floor(uploaded/total*100)}%`;},
-          onSuccess:resolve
-        });
-        upload.start();
-      });
-    }
-
-    async function saveSellerReel(event) {
-      event.preventDefault();
-      if(!activeUser||!supabaseClient||!currentSellerShop){openAccountModal();return;}
-      const form=event.currentTarget,file=form.elements.video.files[0],status=document.getElementById('sellerReelStatus'),button=form.querySelector('button[type="submit"]');
-      if(!file||!file.type.startsWith('video/')){status.textContent='Choose a video file to post.';return;}
-      if(file.size>50*1024*1024){status.textContent='The video must be 50 MB or smaller. Compress it and retry.';return;}
-      button.disabled=true;status.textContent='Preparing a resumable upload…';
-      const ext=(file.name.match(/\.([a-z0-9]+)$/i)||[,'mp4'])[1].toLowerCase(),path=`${activeUser.id}/${currentSellerShop.id}/${newId()}.${ext}`;
-      let stage='video upload';
-      try{
-        await uploadSellerReelResumable(file,path,status);
-        stage='saving reel details';
-        const videoUrl=supabaseClient.storage.from('seller-reels').getPublicUrl(path).data.publicUrl;
-        const {error}=await supabaseClient.from('seller_reels').insert({owner_id:activeUser.id,shop_id:currentSellerShop.id,video_url:videoUrl,storage_path:path,caption:form.elements.caption.value.trim()});
-        if(error)throw error;
-        form.reset();status.textContent='Your reel is posted. You can edit its caption or delete it below.';await loadSellerReels({force:true});
-      }catch(error){
-        console.error('Reel '+stage+' failed:',error);
-        const message=String(error?.message||error||'Unknown error');
-        if(stage==='saving reel details')try{await supabaseClient.storage.from('seller-reels').remove([path]);}catch(cleanupError){console.warn('Could not clean up uploaded reel',cleanupError);}
-        status.textContent=message.includes('413')||message.toLowerCase().includes('too large')?'Upload limit reached. Keep the video under 50 MB and check Supabase Storage → Settings → Global file size limit.':message==='Failed to fetch'?'The video upload connection was interrupted. Try again on a stable Wi‑Fi connection; resumable upload will retry interrupted chunks.':'Could not finish '+stage+'. '+message;
-      }finally{button.disabled=false;}
-    }
-
-    async function loadSellerReels({force=false}={}){
-      const root=document.getElementById('sellerReelList');if(!root)return;if(!activeUser||!supabaseClient||!currentSellerShop){root.innerHTML='<p class="seller-muted">Open your shop to post and manage reels.</p>';return;}
+    async function loadSellerFeedManager({force=false}={}){
+      const root=document.getElementById('sellerFeedList');
+      if(!root)return;
+      if(!activeUser||!supabaseClient||!currentSellerShop){root.innerHTML='<p class="seller-muted">Create a shop to publish photo posts.</p>';return;}
       const shopId=String(currentSellerShop.id),now=Date.now();
       if(!force&&root.dataset.loadedFor===shopId&&now-Number(root.dataset.loadedAt||0)<30000)return;
-      if(root._sellerReelsLoadPromise&&root._sellerReelsLoadFor===shopId)return root._sellerReelsLoadPromise;
-      if(root.dataset.loadedFor!==shopId)root.innerHTML='<p class="seller-muted">Loading your reels…</p>';
-      const request=(async()=>{
-        const {data,error}=await supabaseClient.from('seller_reels').select('id,video_url,storage_path,caption,created_at').eq('owner_id',activeUser.id).eq('shop_id',shopId).order('created_at',{ascending:false}).limit(50);
-        if(String(currentSellerShop?.id)!==shopId)return;
-        if(error){root.innerHTML=`<p class="seller-muted">Could not load reels. Run the updated seller-community-schema.sql. ${escapeHTML(error.message||'')}</p>`;return;}
-        if(!data?.length){root.innerHTML='<p class="seller-muted">You have not posted any reels yet.</p>';root.dataset.loadedFor=shopId;root.dataset.loadedAt=String(Date.now());return;}
-        const ids=data.map(reel=>reel.id),[likes,comments,myLikes]=await Promise.all([supabaseClient.rpc('get_seller_reel_like_counts',{p_reel_ids:ids}),supabaseClient.from('seller_reel_comments').select('id,reel_id,display_name,body,created_at').in('reel_id',ids).order('created_at',{ascending:true}).limit(500),supabaseClient.from('seller_reel_likes').select('reel_id').in('reel_id',ids).eq('user_id',activeUser.id)]);
-        if(String(currentSellerShop?.id)!==shopId)return;
-        const likeCounts=new Map((likes.data||[]).map(row=>[String(row.reel_id),Number(row.like_count)||0])),likedIds=new Set((myLikes.data||[]).map(row=>String(row.reel_id))),commentRows=comments.data||[];
-        root.innerHTML=data.map(reel=>{const reelComments=commentRows.filter(row=>String(row.reel_id)===String(reel.id));return `<article class="seller-reel-manager-card" data-seller-reel="${escapeHTML(reel.id)}"><video src="${escapeHTML(reel.video_url)}" controls playsinline preload="none"></video><div><label>Caption<textarea maxlength="500" data-reel-caption>${escapeHTML(reel.caption||'')}</textarea></label><div class="seller-reel-manager-actions"><button class="seller-action-button primary" type="button" data-save-reel><i class="fa-solid fa-check"></i> Save</button><button class="seller-action-button" type="button" onclick="shareReel('${escapeHTML(reel.id)}')"><i class="fa-solid fa-share-nodes"></i> Share</button><button class="seller-action-button delete" type="button" data-delete-reel><i class="fa-solid fa-trash"></i> Delete</button></div><div class="seller-reel-manager-actions"><button class="seller-action-button" type="button" onclick="toggleSellerReelLike('${escapeHTML(reel.id)}')">${likedIds.has(String(reel.id))?'♥ Liked':'♡ Like'} · ${likeCounts.get(String(reel.id))||0}</button><span class="seller-muted">${reelComments.length} comments</span></div><div class="hub-reel-comments-list">${reelComments.map(row=>`<p><b>${escapeHTML(row.display_name||'Shopper')}:</b> ${escapeHTML(row.body)}</p>`).join('')||'<p class="seller-muted">No comments yet.</p>'}</div><form class="seller-reel-comment-form" onsubmit="postSellerReelComment(event,'${escapeHTML(reel.id)}')"><input name="comment" maxlength="500" placeholder="Comment on this video…" required><button type="submit">Comment</button></form><div class="seller-notice" data-reel-status role="status" aria-live="polite"></div></div></article>`;}).join('');
-        root.querySelectorAll('[data-seller-reel]').forEach(card=>{card.querySelector('[data-save-reel]').addEventListener('click',()=>saveSellerReelCaption(card));card.querySelector('[data-delete-reel]').addEventListener('click',()=>deleteSellerReel(card));});
-        root.dataset.loadedFor=shopId;root.dataset.loadedAt=String(Date.now());
-      })();
-      root._sellerReelsLoadFor=shopId;root._sellerReelsLoadPromise=request;
-      try{await request;}finally{if(root._sellerReelsLoadPromise===request){root._sellerReelsLoadPromise=null;root._sellerReelsLoadFor='';}}
+      root.innerHTML='<p class="seller-muted">Loading your photo posts…</p>';
+      const {data,error}=await supabaseClient.from('feed_posts').select('id,image_url,storage_path,caption,post_tag,created_at').eq('owner_id',activeUser.id).eq('shop_id',shopId).order('created_at',{ascending:false}).limit(50);
+      if(String(currentSellerShop?.id)!==shopId)return;
+      if(error){root.innerHTML=`<p class="seller-muted">Could not load photo posts. Run feed-posts-schema.sql in Supabase. ${escapeHTML(error.message||'')}</p>`;return;}
+      if(!data?.length){root.innerHTML='<p class="seller-muted">You have not published any photo posts yet.</p>';root.dataset.loadedFor=shopId;root.dataset.loadedAt=String(Date.now());return;}
+      root.innerHTML=data.map(post=>`<article class="seller-feed-manager-card"><img src="${escapeHTML(post.image_url)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div><strong>${escapeHTML(post.post_tag==='announcement'?'Announcement':post.post_tag==='offer'?'Offer':'Photo post')}</strong><p class="seller-muted">${escapeHTML(post.caption||'No caption')}<br>${escapeHTML(post.created_at?new Date(post.created_at).toLocaleDateString():'')}</p><div class="seller-feed-manager-actions"><button class="seller-action-button" type="button" onclick="openFeedPost('${escapeHTML(post.id)}')">View post</button><button class="seller-action-button delete" type="button" onclick="deleteSellerFeedPost(this,'${escapeHTML(post.id)}','${escapeHTML(post.storage_path||'')}')"><i class="fa-solid fa-trash"></i> Delete</button></div><div class="seller-notice" role="status" aria-live="polite"></div></div></article>`).join('');
+      root.dataset.loadedFor=shopId;root.dataset.loadedAt=String(Date.now());
     }
-    async function postSellerReelComment(event,id){event.preventDefault();if(!activeUser||!supabaseClient)return;const form=event.currentTarget,body=form.elements.comment.value.trim();if(!body)return;const {error}=await supabaseClient.from('seller_reel_comments').insert({reel_id:id,user_id:activeUser.id,display_name:activeUser.user_metadata?.full_name||activeUser.user_metadata?.name||'Shopper',body});if(error){alert(error.message||'Could not post this comment.');return;}await loadSellerReels({force:true});}
-    async function toggleSellerReelLike(id){if(!activeUser||!supabaseClient)return;const {data:existing}=await supabaseClient.from('seller_reel_likes').select('reel_id').eq('reel_id',id).eq('user_id',activeUser.id).maybeSingle();const result=existing?await supabaseClient.from('seller_reel_likes').delete().eq('reel_id',id).eq('user_id',activeUser.id):await supabaseClient.from('seller_reel_likes').insert({reel_id:id,user_id:activeUser.id});if(result.error){alert(result.error.message||'Could not update the like.');return;}await loadSellerReels({force:true});}
-    async function saveSellerReelCaption(card){const id=card.dataset.sellerReel,status=card.querySelector('[data-reel-status]'),caption=card.querySelector('[data-reel-caption]').value.trim(),button=card.querySelector('[data-save-reel]');button.disabled=true;status.textContent='Saving…';const {data,error}=await supabaseClient.from('seller_reels').update({caption}).eq('id',id).eq('owner_id',activeUser.id).select('id').maybeSingle();button.disabled=false;if(error||!data){status.textContent=`Could not save the caption. Run the updated seller-community-schema.sql. ${error?.message||''}`;return;}status.textContent='Caption saved.';}
-    async function deleteSellerReel(card){if(!confirm('Delete this reel permanently?'))return;const id=card.dataset.sellerReel,status=card.querySelector('[data-reel-status]'),path=card.querySelector('video').getAttribute('src'),button=card.querySelector('[data-delete-reel]');button.disabled=true;status.textContent='Deleting reel…';const {data,error}=await supabaseClient.from('seller_reels').delete().eq('id',id).eq('owner_id',activeUser.id).select('storage_path').maybeSingle();if(error||!data){button.disabled=false;status.textContent=`Could not delete the reel. ${error?.message||''}`;return;}try{const storagePath=data.storage_path||path.split('/seller-reels/')[1];if(storagePath)await supabaseClient.storage.from('seller-reels').remove([storagePath]);}catch(cleanupError){console.warn('Deleted reel video file could not be cleaned up.',cleanupError);}card.remove();if(!document.querySelector('#sellerReelList [data-seller-reel]'))document.getElementById('sellerReelList').innerHTML='<p class="seller-muted">You have not posted any reels yet.</p>';}
+    async function deleteSellerFeedPost(button,id,storagePath){
+      if(!activeUser||!supabaseClient||!confirm('Delete this photo post permanently?'))return;
+      const status=button.closest('.seller-feed-manager-card')?.querySelector('.seller-notice');button.disabled=true;if(status)status.textContent='Deleting post…';
+      const {data,error}=await supabaseClient.from('feed_posts').delete().eq('id',id).eq('owner_id',activeUser.id).select('id').maybeSingle();
+      if(error||!data){button.disabled=false;if(status)status.textContent=`Could not delete this post. ${error?.message||''}`;return;}
+      if(storagePath){const {error:cleanupError}=await supabaseClient.storage.from('feed-posts').remove([storagePath]);if(cleanupError)console.warn('Deleted Feed photo could not be removed from storage.',cleanupError);}
+      const root=document.getElementById('sellerFeedList');if(root)delete root.dataset.loadedAt;await loadSellerFeedManager({force:true});
+    }
+    function openFeedFromSellerDashboard(){
+      closeSellerAccount(false,true);
+      openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));
+    }
 
     async function saveSellerProduct(event) {
       event.preventDefault();
@@ -3155,13 +3118,13 @@
       if(new URLSearchParams(location.search).has('chatShop')&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to message this shop. After signing in, your chat will open here.';}
       if (!supabaseClient) document.getElementById('reviewStatus').textContent = 'Customer comments will be available after the online database is configured.';
       renderShopDirectory();
-      if(new URLSearchParams(location.search).has('reel'))openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));
+      const feedParams=new URLSearchParams(location.search);if(feedParams.has('feed')||feedParams.has('feedPost'))openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));
       await loadSellerCatalog();
       const requestedProduct = new URLSearchParams(location.search).get('product');
       if (requestedProduct) openProductPopup(Number(requestedProduct),{skipHistory:cameFromSameOriginPage});
       const requestedJob = new URLSearchParams(location.search).get('job');
       if(requestedJob){openHubSection('jobs',document.querySelector('.hub-shortcut[onclick*="jobs"]'));const sharedJob=(await getHubJobs()).find(item=>String(item.id)===requestedJob);if(sharedJob)showHubJobDetails(sharedJob);}
-      const initialHubSection=typeof history.state?.aleeHubSection==='string'?history.state.aleeHubSection:null;
+      const storedHubSection=typeof history.state?.aleeHubSection==='string'?history.state.aleeHubSection:null,initialHubSection=storedHubSection==='reels'?'feed':storedHubSection;
       if(initialHubSection){const button=Array.from(document.querySelectorAll('.hub-shortcut')).find(item=>item.getAttribute('onclick')?.includes(`'${initialHubSection}'`));openHubSection(initialHubSection,button,true);if(history.state?.aleeMobileNavActive)document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.trim()===history.state.aleeMobileNavActive));if(Number.isFinite(history.state?.aleeScrollY))requestAnimationFrame(()=>window.scrollTo(0,history.state.aleeScrollY));}
       if(history.state?.aleeUiLayer==='mobileShopsSheet'){
         const shopsSheet=document.getElementById('mobileShopsSheet');
@@ -3272,7 +3235,7 @@
 
     function openHubSection(section,button,fromHistory=false) {
       if(!fromHistory&&activeHubSection!==section){saveHistoryScrollPosition();history.pushState({...history.state,aleeHubSection:section,aleeScrollY:window.scrollY,aleeMobileNavActive:section==='shops'?'Shops':'Home'},'',location.href);}
-      activeHubSection=section;hubHistoryOpen=true;
+      activeHubSection=section;hubHistoryOpen=true;document.body.classList.toggle('feed-section-open',section==='feed');
       if(!fromHistory)document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.trim()===(section==='shops'?'Shops':'Home')));
       document.getElementById('shopsSection')?.classList.add('hub-nav-pinned');document.body.classList.add('hub-section-open');
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
@@ -3286,16 +3249,16 @@
         if(!fromHistory&&!window.matchMedia('(min-width:701px)').matches)document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
       }
       shopsPanel.hidden=true;panel.hidden=false;
-      const desktopNav=window.matchMedia('(min-width:701px)').matches,titles={apps:'Apps',offers:desktopNav?'Offer':'Offers',games:desktopNav?'Game':'Games',jobs:'Jobs',reels:desktopNav?'Feed':'Reels'};title.textContent=titles[section]||'';
+      const desktopNav=window.matchMedia('(min-width:701px)').matches,titles={apps:'Apps',offers:desktopNav?'Offer':'Offers',games:desktopNav?'Game':'Games',jobs:'Jobs',feed:'Feed'};title.textContent=titles[section]||'';
       if(section==='apps'||section==='games'||section==='offers')renderHubApps(section,body);
       else if(section==='jobs')renderHubJobs(body);
-      else if(section==='reels')loadHubReels(body);
+      else if(section==='feed')loadHubFeed(body);
       if(!fromHistory&&!window.matchMedia('(min-width:701px)').matches)document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
     }
 
     function showDesktopHome(button){
       if(hubHistoryOpen)navigateHubHome();
-      else{document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;document.querySelector('.container')?.classList.remove('hub-content-open');document.body.classList.remove('hub-section-open');}
+      else{document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;document.querySelector('.container')?.classList.remove('hub-content-open');document.body.classList.remove('hub-section-open','feed-section-open');}
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
       window.scrollTo({top:0,behavior:'smooth'});
     }
@@ -3311,7 +3274,7 @@
       document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;
       document.querySelector('.container')?.classList.remove('hub-content-open');document.getElementById('shopsSection')?.classList.remove('hub-nav-pinned');document.body.classList.remove('hub-section-open');
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.remove('active'));
-      hubHistoryOpen=false;activeHubSection=null;
+      hubHistoryOpen=false;activeHubSection=null;document.body.classList.remove('feed-section-open');
       document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.includes('Home')));
     }
 
@@ -3420,31 +3383,148 @@
     function closeHubJobDetails(fromHistory=false){const dialog=document.getElementById('hubJobDialog');if(dialog.open)dialog.close();if(hubJobDetailsHistoryOpen){hubJobDetailsHistoryOpen=false;if(!fromHistory)history.back();}}
     document.getElementById('hubJobDialog')?.addEventListener('click',event=>{if(event.target===event.currentTarget)closeHubJobDetails();});
 
-    async function loadHubReels(body) {
-      body.innerHTML='<div class="hub-empty">Loading reels…</div>';
-      if(!supabaseClient){body.innerHTML='<div class="hub-empty">Reels need the Supabase setup in seller-community-schema.sql. Shop owners can then add videos from My Account → My Shop & Items.</div>';return;}
-      try{
-        const {data:reels,error}=await supabaseClient.from('seller_reels').select('id,shop_id,video_url,caption,created_at').order('created_at',{ascending:false}).limit(50);
-        if(error)throw error;
-        if(!reels?.length){body.innerHTML='<div class="hub-empty">No reels yet. Shop owners can add videos from My Account → My Shop & Items.</div>';return;}
-        const ids=reels.map(item=>item.id);
-        const {data:userData}=await supabaseClient.auth.getUser(),userId=userData?.user?.id;
-        const [countsResult,myLikesResult,mySavesResult,commentsResult]=await Promise.all([
-          supabaseClient.rpc('get_seller_reel_like_counts',{p_reel_ids:ids}),
-          userId?supabaseClient.from('seller_reel_likes').select('reel_id').in('reel_id',ids).eq('user_id',userId):Promise.resolve({data:[]}),
-          userId?supabaseClient.from('seller_reel_saves').select('reel_id').in('reel_id',ids).eq('user_id',userId):Promise.resolve({data:[]}),
-          supabaseClient.from('seller_reel_comments').select('reel_id,display_name,body,created_at').in('reel_id',ids).order('created_at',{ascending:true})
-        ]);
-        if(countsResult.error)throw countsResult.error;
-        const counts=new Map((countsResult.data||[]).map(item=>[item.reel_id,Number(item.like_count)||0])),likedIds=new Set((myLikesResult.data||[]).map(item=>item.reel_id)),savedIds=new Set((mySavesResult.data||[]).map(item=>item.reel_id));
-        body.innerHTML=`<div class="hub-reel-list">${reels.map(reel=>{const reelComments=(commentsResult.data||[]).filter(item=>item.reel_id===reel.id);return `<article class="hub-reel-card"><video src="${escapeHTML(reel.video_url)}" controls playsinline preload="metadata"></video><div class="hub-reel-caption">${escapeHTML(reel.caption||'')}</div><div class="hub-reel-actions"><button type="button" onclick="toggleReelLike('${escapeHTML(reel.id)}')">${likedIds.has(reel.id)?'♥ Liked':'♡ Like'} ${counts.get(reel.id)||0}</button><button type="button" onclick="toggleReelSave('${escapeHTML(reel.id)}')">${savedIds.has(reel.id)?'★ Saved':'☆ Save'}</button><button type="button" onclick="shareReel('${escapeHTML(reel.id)}')">↗ Share</button><a href="shop.html?shop=${encodeURIComponent(reel.shop_id)}">Contact shop</a></div><div class="hub-reel-comments"><div class="hub-reel-comments-list">${reelComments.map(comment=>`<p><b>${escapeHTML(comment.display_name||'Shopper')}:</b> ${escapeHTML(comment.body)}</p>`).join('')}</div><form onsubmit="postReelComment(event,'${escapeHTML(reel.id)}')"><input name="comment" maxlength="500" placeholder="Write a comment…" required><button type="submit">Send</button></form></div></article>`;}).join('')}</div>`;
-      }catch(error){console.warn('Could not load reels',error);body.innerHTML='<div class="hub-empty">Reels are unavailable. Run seller-community-schema.sql in Supabase and try again.</div>';}
+    let activeFeedShop=null;
+    function feedTimeLabel(value){
+      const date=new Date(value||''),seconds=Math.max(0,Math.floor((Date.now()-date.getTime())/1000));
+      if(!Number.isFinite(date.getTime()))return '';
+      if(seconds<60)return 'Just now';
+      if(seconds<3600)return `${Math.floor(seconds/60)}m`;
+      if(seconds<86400)return `${Math.floor(seconds/3600)}h`;
+      if(seconds<604800)return `${Math.floor(seconds/86400)}d`;
+      return date.toLocaleDateString();
     }
-
-    async function toggleReelLike(id){if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const {data:existing}=await supabaseClient.from('seller_reel_likes').select('reel_id').eq('reel_id',id).eq('user_id',data.user.id).maybeSingle();const result=existing?await supabaseClient.from('seller_reel_likes').delete().eq('reel_id',id).eq('user_id',data.user.id):await supabaseClient.from('seller_reel_likes').insert({reel_id:id,user_id:data.user.id});if(result.error)alert(result.error.message);else openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));}
-    async function toggleReelSave(id){if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const {data:existing}=await supabaseClient.from('seller_reel_saves').select('reel_id').eq('reel_id',id).eq('user_id',data.user.id).maybeSingle();const result=existing?await supabaseClient.from('seller_reel_saves').delete().eq('reel_id',id).eq('user_id',data.user.id):await supabaseClient.from('seller_reel_saves').insert({reel_id:id,user_id:data.user.id});if(result.error)alert(result.error.message);else openHubSection('reels',document.querySelector('.hub-shortcut[onclick*="reels"]'));}
-    async function postReelComment(event,id){event.preventDefault();if(!supabaseClient){openAccountModal();return;}const {data}=await supabaseClient.auth.getUser();if(!data.user){openAccountModal();return;}const form=event.currentTarget,body=form.elements.comment.value.trim();if(!body)return;const {error}=await supabaseClient.from('seller_reel_comments').insert({reel_id:id,user_id:data.user.id,display_name:data.user.user_metadata?.full_name||data.user.user_metadata?.name||'Shopper',body});if(error)alert(error.message);else loadHubReels(document.getElementById('hubContentBody'));}
-    async function shareReel(id){const url=new URL(location.href);url.searchParams.set('reel',id);try{if(navigator.share)await navigator.share({title:'aleeshopping Reel',url:url.href});else{await navigator.clipboard.writeText(url.href);alert('Reel link copied.');}}catch(error){if(error.name!=='AbortError')alert('Could not share this reel.');}}
+    function feedPostUrl(id){const url=new URL('index.html',location.href);url.searchParams.set('feedPost',id);return url.href;}
+    function renderFeedCreateCard(shop,items){
+      const options=(items||[]).map(item=>`<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)} · LKR ${Number(item.price||0).toLocaleString()}</option>`).join('');
+      return `<section class="feed-create-card"><h3 class="feed-create-heading">Create Post</h3><form id="feedCreateForm" onsubmit="submitFeedPost(event)"><input id="feedPhotoInput" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><button class="feed-photo-button" type="button" onclick="document.getElementById('feedPhotoInput').click()"><i class="fa-regular fa-image" aria-hidden="true"></i> Photo එකක් දාන්න</button><img id="feedPhotoPreview" class="feed-create-preview" alt="Photo preview" hidden><div class="feed-create-fields" id="feedCreateFields" hidden><textarea name="caption" maxlength="1000" placeholder="Write a caption…"></textarea><select name="productId" aria-label="Link a product"><option value="">Link a product (optional)</option>${options}</select><select name="postTag" aria-label="Post type"><option value="standard">Standard post</option><option value="announcement">Announcement</option><option value="offer">Offer</option></select><button class="feed-photo-button" type="submit">Post</button></div><p class="feed-status" id="feedCreateStatus" role="status" aria-live="polite"></p></form></section>`;
+    }
+    function renderFeedCard(post,shop,comments,likeCount,liked,saved,userId){
+      const shopName=shop?.shop_name||'Shop',avatar=shop?.logo_url||'assets/alee-logo.png',locationText=shop?.address||shop?.country_code||'ALEE Shopping';
+      const badge=post.post_tag==='announcement'?'<span class="feed-post-badge">Announcement</span>':post.post_tag==='offer'?'<span class="feed-post-badge offer">Offer</span>':'';
+      const commentRows=comments.map(row=>`<p class="feed-comment"><strong>${escapeHTML(row.display_name||'Shopper')}</strong> ${escapeHTML(row.body)}${userId&&String(row.user_id)===String(userId)?`<button type="button" onclick="deleteFeedComment('${escapeHTML(row.id)}','${escapeHTML(post.id)}')" aria-label="Delete your comment">Delete</button>`:''}</p>`).join('');
+      const hasProduct=post.product_id!==null&&post.product_id!==undefined;
+      return `<article class="feed-post" id="feed-post-${escapeHTML(post.id)}"><header class="feed-post-head"><img class="feed-shop-avatar" src="${escapeHTML(avatar)}" alt="" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="feed-shop-copy"><strong class="feed-shop-name">${escapeHTML(shopName)}</strong><span class="feed-shop-location">${escapeHTML(locationText)} · ${escapeHTML(feedTimeLabel(post.created_at))}</span></div><button class="feed-message-button" type="button" onclick="messageFeedShop('${escapeHTML(post.shop_id)}','${escapeHTML(shopName)}')">Message</button><details class="feed-post-menu"><summary aria-label="Post options">•••</summary><button class="feed-more-button" type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy link</button></details></header>${badge}<div class="feed-photo-wrap" ondblclick="toggleFeedLike('${escapeHTML(post.id)}',true)"><img class="feed-photo" src="${escapeHTML(post.image_url)}" alt="${escapeHTML(post.caption||shopName)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><span class="feed-double-heart" data-feed-heart aria-hidden="true">♥</span></div><div class="feed-post-actions"><button class="feed-action-button${liked?' is-liked':''}" type="button" onclick="toggleFeedLike('${escapeHTML(post.id)}')" aria-label="${liked?'Unlike':'Like'}"><i class="${liked?'fa-solid':'fa-regular'} fa-heart"></i></button><button class="feed-action-button" type="button" onclick="focusFeedComment('${escapeHTML(post.id)}')" aria-label="Comment"><i class="fa-regular fa-comment"></i></button><button class="feed-action-button" type="button" onclick="toggleFeedShare('${escapeHTML(post.id)}')" aria-label="Share"><i class="fa-regular fa-paper-plane"></i></button><button class="feed-action-button${saved?' is-saved':''}" style="margin-left:auto" type="button" onclick="toggleFeedSave('${escapeHTML(post.id)}')" aria-label="${saved?'Unsave post':'Save post'}"><i class="${saved?'fa-solid':'fa-regular'} fa-bookmark"></i></button></div><div class="feed-post-details"><strong class="feed-likes-count">${Number(likeCount||0).toLocaleString()} Likes</strong>${post.caption?`<div class="feed-caption"><strong>${escapeHTML(shopName)}</strong> ${escapeHTML(post.caption)}</div>`:''}<button class="feed-comment-link" type="button" onclick="focusFeedComment('${escapeHTML(post.id)}')">View all ${comments.length} comments</button><div class="feed-comments-list">${commentRows}</div><form class="feed-comment-form" onsubmit="postFeedComment(event,'${escapeHTML(post.id)}')"><button class="feed-emoji-button" type="button" onclick="insertFeedEmoji(this)" aria-label="Add emoji">☺</button><input name="comment" maxlength="500" placeholder="Add a comment…" aria-label="Add a comment" required><button type="submit">Post</button></form><div class="feed-status" data-feed-status role="status" aria-live="polite"></div></div><div class="feed-share-options" data-feed-share hidden><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','whatsapp')">WhatsApp</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','facebook')">Facebook</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy Link</button></div><button class="feed-view-product" type="button" onclick="openFeedProduct('${escapeHTML(hasProduct?post.product_id:'')}','${escapeHTML(post.shop_id)}')">View Product</button></article>`;
+    }
+    async function loadHubFeed(body){
+      body.innerHTML='<div class="feed-page"><div class="feed-empty">Loading Feed…</div></div>';
+      if(!supabaseClient){body.innerHTML='<div class="feed-page"><div class="feed-empty feed-load-error">Feed needs Supabase. Run feed-posts-schema.sql after seller-marketplace-schema.sql.</div></div>';return;}
+      try{
+        const sessionResult=await supabaseClient.auth.getSession();if(sessionResult.error)throw sessionResult.error;
+        const user=activeUser||sessionResult.data?.session?.user||null,userId=user?.id||null;
+        let ownedShop=null,shopProducts=[];
+        if(userId){
+          const ownerResult=await supabaseClient.from('seller_shops').select('id,shop_name,logo_url').eq('owner_id',userId).maybeSingle();
+          if(ownerResult.error)throw ownerResult.error;
+          ownedShop=ownerResult.data||null;
+          if(ownedShop){const productResult=await supabaseClient.from('seller_products').select('id,name,price').eq('shop_id',ownedShop.id).eq('owner_id',userId).order('created_at',{ascending:false}).limit(200);if(productResult.error)throw productResult.error;shopProducts=productResult.data||[];}
+        }
+        activeFeedShop=ownedShop;
+        const {data:posts,error}=await supabaseClient.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,created_at').order('created_at',{ascending:false}).limit(50);
+        if(error)throw error;
+        const rows=posts||[],postIds=rows.map(post=>post.id),shopIds=[...new Set(rows.map(post=>String(post.shop_id)))];
+        let shopRows=[],commentRows=[],countRows=[],myLikes=[],mySaved=[];
+        if(postIds.length){
+          const requests=[
+            supabaseClient.from('seller_shops_profile_public').select('id,shop_name,logo_url,address,country_code').in('id',shopIds),
+            supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at').in('post_id',postIds).order('created_at',{ascending:true}).limit(500),
+            supabaseClient.rpc('get_feed_like_counts',{p_post_ids:postIds}),
+            userId?supabaseClient.from('feed_likes').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
+            userId?supabaseClient.from('feed_saved').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null})
+          ];
+          const [shopsResult,commentsResult,countsResult,likesResult,savedResult]=await Promise.all(requests);
+          for(const result of [shopsResult,commentsResult,countsResult,likesResult,savedResult])if(result.error)throw result.error;
+          shopRows=shopsResult.data||[];commentRows=commentsResult.data||[];countRows=countsResult.data||[];myLikes=likesResult.data||[];mySaved=savedResult.data||[];
+        }
+        const shopMap=new Map(shopRows.map(shop=>[String(shop.id),shop])),likeMap=new Map(countRows.map(row=>[String(row.post_id),Number(row.like_count)||0])),likedIds=new Set(myLikes.map(row=>String(row.post_id))),savedIds=new Set(mySaved.map(row=>String(row.post_id)));
+        const createCard=ownedShop?renderFeedCreateCard(ownedShop,shopProducts):'';
+        body.innerHTML=`<div class="feed-page" data-feed-page>${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentRows.filter(row=>String(row.post_id)===String(post.id)),likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId)).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
+        if(ownedShop)wireFeedCreateForm();
+        const targetId=new URLSearchParams(location.search).get('feedPost');
+        if(targetId&&rows.some(post=>String(post.id)===targetId))requestAnimationFrame(()=>document.getElementById(`feed-post-${targetId}`)?.scrollIntoView({block:'start'}));
+      }catch(error){console.error('Could not load photo Feed:',error);body.innerHTML=`<div class="feed-page"><div class="feed-empty feed-load-error">Feed could not load. Check feed-posts-schema.sql in Supabase. ${escapeHTML(error.message||'')}</div></div>`;}
+    }
+    function wireFeedCreateForm(){
+      const form=document.getElementById('feedCreateForm'),input=document.getElementById('feedPhotoInput'),preview=document.getElementById('feedPhotoPreview'),fields=document.getElementById('feedCreateFields');
+      if(!form||!input)return;
+      input.addEventListener('change',()=>{const file=input.files?.[0];if(!file)return;if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);preview.dataset.objectUrl=URL.createObjectURL(file);preview.src=preview.dataset.objectUrl;preview.hidden=false;fields.hidden=false;document.getElementById('feedCreateStatus').textContent='';});
+    }
+    async function submitFeedPost(event){
+      event.preventDefault();
+      const form=event.currentTarget,file=form.elements.photo.files?.[0],status=document.getElementById('feedCreateStatus'),button=form.querySelector('button[type="submit"]');
+      if(!activeUser||!supabaseClient||!activeFeedShop){status.textContent='Sign in with a shop account to publish a post.';return;}
+      if(!file||!file.type.startsWith('image/')){status.textContent='Choose a photo to post.';return;}
+      if(file.size>10*1024*1024){status.textContent='Choose a photo under 10 MB.';return;}
+      button.disabled=true;status.textContent='Uploading photo…';
+      const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif','image/avif':'avif' })[file.type];
+      if(!ext){status.textContent='Choose a JPEG, PNG, WebP, GIF, or AVIF photo.';button.disabled=false;return;}
+      const path=`${activeUser.id}/${activeFeedShop.id}/${newId()}.${ext}`;
+      let uploaded=false;
+      try{
+        const upload=await supabaseClient.storage.from('feed-posts').upload(path,file,{contentType:file.type,cacheControl:'3600',upsert:false});
+        if(upload.error)throw upload.error;uploaded=true;
+        const imageUrl=supabaseClient.storage.from('feed-posts').getPublicUrl(path).data.publicUrl;
+        const {error}=await supabaseClient.from('feed_posts').insert({owner_id:activeUser.id,shop_id:activeFeedShop.id,product_id:form.elements.productId.value||null,image_url:imageUrl,storage_path:path,caption:form.elements.caption.value.trim(),post_tag:form.elements.postTag.value});
+        if(error)throw error;
+        const preview=document.getElementById('feedPhotoPreview');if(preview?.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);
+        form.reset();document.getElementById('feedPhotoPreview').hidden=true;document.getElementById('feedCreateFields').hidden=true;status.textContent='Your post is published.';await loadHubFeed(document.getElementById('hubContentBody'));
+      }catch(error){if(uploaded){const cleanup=await supabaseClient.storage.from('feed-posts').remove([path]);if(cleanup.error)console.warn('Failed to clean up an unpublished Feed photo.',cleanup.error);}status.textContent=`Could not publish the post. Check feed-posts-schema.sql and the feed-posts storage bucket. ${error.message||''}`;}
+      finally{button.disabled=false;}
+    }
+    async function feedCurrentUser(){
+      if(!supabaseClient){openAccountModal();return null;}
+      const result=await supabaseClient.auth.getSession();if(result.error)throw result.error;
+      const user=activeUser||result.data?.session?.user;if(!user){openAccountModal();return null;}return user;
+    }
+    async function toggleFeedLike(id,forceLike=false){
+      try{
+        const user=await feedCurrentUser();if(!user)return;
+        const query=supabaseClient.from('feed_likes').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle(),{data:existing,error:queryError}=await query;if(queryError)throw queryError;
+        if(forceLike&&existing){feedAnimateHeart(id);return;}
+        const result=existing?await supabaseClient.from('feed_likes').delete().eq('post_id',id).eq('user_id',user.id):await supabaseClient.from('feed_likes').insert({post_id:id,user_id:user.id});
+        if(result.error)throw result.error;
+        await loadHubFeed(document.getElementById('hubContentBody'));
+        if(forceLike)feedAnimateHeart(id);
+      }catch(error){alert(`Could not update the like. ${error.message||''}`);}
+    }
+    async function postFeedComment(event,id){
+      event.preventDefault();const form=event.currentTarget,body=form.elements.comment.value.trim();if(!body)return;
+      try{const user=await feedCurrentUser();if(!user)return;const name=String(user.user_metadata?.full_name||user.user_metadata?.name||user.email?.split('@')[0]||'Shopper').slice(0,80);const {error}=await supabaseClient.from('feed_comments').insert({post_id:id,user_id:user.id,display_name:name,body});if(error)throw error;await loadHubFeed(document.getElementById('hubContentBody'));document.getElementById(`feed-post-${id}`)?.querySelector('.feed-comment-form input')?.focus();}
+      catch(error){alert(`Could not post your comment. ${error.message||''}`);}
+    }
+    async function deleteFeedComment(commentId,postId){
+      try{const user=await feedCurrentUser();if(!user)return;const {error}=await supabaseClient.from('feed_comments').delete().eq('id',commentId).eq('user_id',user.id);if(error)throw error;await loadHubFeed(document.getElementById('hubContentBody'));}
+      catch(error){alert(`Could not delete the comment. ${error.message||''}`);}
+    }
+    async function toggleFeedSave(id){
+      try{const user=await feedCurrentUser();if(!user)return;const {data:existing,error:findError}=await supabaseClient.from('feed_saved').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();if(findError)throw findError;const result=existing?await supabaseClient.from('feed_saved').delete().eq('post_id',id).eq('user_id',user.id):await supabaseClient.from('feed_saved').insert({post_id:id,user_id:user.id});if(result.error)throw result.error;await loadHubFeed(document.getElementById('hubContentBody'));}
+      catch(error){alert(`Could not save this post. ${error.message||''}`);}
+    }
+    function feedAnimateHeart(id){const heart=document.getElementById(`feed-post-${id}`)?.querySelector('[data-feed-heart]');if(heart){heart.classList.remove('show');void heart.offsetWidth;heart.classList.add('show');}}
+    function focusFeedComment(id){document.getElementById(`feed-post-${id}`)?.querySelector('.feed-comment-form input')?.focus();}
+    function insertFeedEmoji(button){const input=button.closest('.feed-comment-form')?.elements.comment;if(input){input.value+=' 😊';input.focus();}}
+    function toggleFeedShare(id){const panel=document.getElementById(`feed-post-${id}`)?.querySelector('[data-feed-share]');if(panel)panel.hidden=!panel.hidden;}
+    async function shareFeedPost(id,method){
+      const url=feedPostUrl(id),card=document.getElementById(`feed-post-${id}`),status=card?.querySelector('[data-feed-status]');
+      try{
+        if(method==='whatsapp')window.open(`https://wa.me/?text=${encodeURIComponent(url)}`,'_blank','noopener');
+        else if(method==='facebook')window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank','noopener');
+        else if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);if(status)status.textContent='Post link copied.';}
+        else{const input=document.createElement('textarea');input.value=url;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();if(!document.execCommand('copy'))throw new Error('Copy is not available in this browser.');input.remove();if(status)status.textContent='Post link copied.';}
+      }catch(error){if(status)status.textContent=`Could not share this post. ${error.message||''}`;}
+    }
+    function messageFeedShop(shopId,shopName){
+      if(window.aleeChat?.openShop){window.aleeChat.openShop(shopId,shopName);return;}
+      location.href=`index.html?chatShop=${encodeURIComponent(shopId)}`;
+    }
+    async function openFeedProduct(productId,shopId){
+      await loadSellerCatalog();
+      const product=products.find(item=>String(item.sellerProductId)===String(productId)||String(item.id)===String(productId)||Number(item.id)===1000000000+Number(productId));
+      if(product){openProductPopup(product.id);return;}
+      location.href=`shop.html?shop=${encodeURIComponent(shopId)}`;
+    }
+    function openFeedPost(id){
+      const url=new URL(feedPostUrl(id));location.href=url.href;
+    }
 
     function toggleProfileDropdown(e) {
       e.stopPropagation();
@@ -4186,36 +4266,66 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     async function syncFavorites(){if(!supabaseClient||!activeUser)return;try{const {data,error}=await supabaseClient.from('user_favorites').select('item_type,item_id,item_data').eq('user_id',activeUser.id).order('created_at',{ascending:false}).limit(300);if(error)return;const merged=new Map(readFavorites().map(row=>[row.type+':'+row.id,row]));(data||[]).forEach(row=>{const item=row.item_data||{};merged.set(row.item_type+':'+row.item_id,{...item,type:row.item_type,id:row.item_id});});localStorage.setItem(favoritesStorageKey(),JSON.stringify([...merged.values()].slice(0,300)));}catch(_){}}
     function toggleFavoriteProduct(){if(!activeGalleryProduct)return;const button=document.getElementById('popupFavoriteBtn');toggleFavorite('product',activeGalleryProduct.id,activeGalleryProduct,button);}
     function renderFavorites(){const root=document.getElementById('accountLibraryBody'),rows=readFavorites();if(!rows.length){root.innerHTML='<div class="seller-empty">No favorites saved yet. Save a product, job, or shop with the star button.</div>';return;}root.innerHTML='<div class="account-favorites-grid"></div>';const grid=root.firstElementChild;rows.forEach((row,index)=>{const card=document.createElement('article');card.className='account-favorite-card';const img=document.createElement('img');img.src=row.image||'assets/alee-logo.png';img.alt='';const title=document.createElement('strong');title.textContent=row.title||'Saved item';const info=document.createElement('small');info.textContent=row.type.toUpperCase()+(row.summary?' · '+row.summary:'');const actions=document.createElement('div');actions.className='account-library-actions';const open=document.createElement('button');open.type='button';open.textContent='Open';open.onclick=()=>{closeAccountLibrary(false,true);if(row.type==='product')openProductPopup(Number(row.id));else if(row.type==='job')showHubJobDetails({...row.data,title:row.data?.title||row.title,id:row.data?.id||row.id});else location.href=row.url;};const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.onclick=async()=>{await toggleFavorite(row.type,row.id,row);renderFavorites();};actions.append(open,remove);card.append(img,title,info,actions);grid.append(card);});}
-    let accountLibraryMode='favorites';function showAccountLibrary(mode){accountLibraryMode=mode;document.querySelectorAll('[data-library-tab]').forEach(button=>button.classList.toggle('active',button.dataset.libraryTab===mode));const root=document.getElementById('accountLibraryBody');document.getElementById('accountLibrarySubtitle').textContent=mode==='favorites'?'Saved products, jobs and shops':mode==='ads'?'Your ads, apps, games, jobs and product listings':'Manage your shop items and reels';document.getElementById('accountAdsFilterWrap').hidden=mode!=='ads';if(mode==='favorites'){renderFavorites();return;}if(mode==='shop'){root.innerHTML='<div class="seller-empty">Manage your shop products, profile and reels in your Shop dashboard.</div><button class="seller-action-button primary" type="button" onclick="closeAccountLibrary(false,true);openAccountMyShop()"><i class="fa-solid fa-store"></i> Open My Shop</button>';return;}loadAccountMyAdsWithReels();}
+    let accountLibraryMode='favorites';function showAccountLibrary(mode){accountLibraryMode=mode;document.querySelectorAll('[data-library-tab]').forEach(button=>button.classList.toggle('active',button.dataset.libraryTab===mode));const root=document.getElementById('accountLibraryBody');document.getElementById('accountLibrarySubtitle').textContent=mode==='favorites'?'Saved products, jobs and shops':mode==='saved-posts'?'Photo posts saved from Feed':mode==='ads'?'Your ads, apps, games, jobs and product listings':'Manage your shop products and photo posts';document.getElementById('accountAdsFilterWrap').hidden=mode!=='ads';if(mode==='favorites'){renderFavorites();return;}if(mode==='saved-posts'){loadAccountSavedFeedPosts();return;}if(mode==='shop'){root.innerHTML='<div class="seller-empty">Manage your shop products and Feed posts in your Shop dashboard.</div><button class="seller-action-button primary" type="button" onclick="closeAccountLibrary(false,true);openAccountMyShop()"><i class="fa-solid fa-store"></i> Open My Shop</button>';return;}loadAccountMyAdsWithFeed();}
     let accountLibraryReturnToHub=false;function openAccountLibraryLayer(){pushAppUiLayer('accountLibrary',fromHistory=>closeAccountLibrary(fromHistory),()=>document.getElementById('accountLibraryOverlay').classList.add('show'));document.getElementById('accountLibraryOverlay').classList.add('show');}async function openMyAds(){if(!activeUser){openAccountModal();return;}accountLibraryReturnToHub=document.getElementById('buyerDashboard').classList.contains('show');document.getElementById('buyerDashboard').classList.remove('show');openAccountLibraryLayer();showAccountLibrary('ads');}
-    function openAccountFavorites(){if(!activeUser){openAccountModal();return;}openAccountLibraryLayer();showAccountLibrary('favorites');syncFavorites().then(renderFavorites);}
+    function openAccountFavorites(){if(!activeUser){openAccountModal();return;}openAccountLibraryLayer();showAccountLibrary('favorites');syncFavorites().then(()=>{if(accountLibraryMode==='favorites')renderFavorites();});}
+    async function loadAccountSavedFeedPosts(){
+      const root=document.getElementById('accountLibraryBody'),token=++accountLibraryLoadToken;
+      const isCurrent=()=>token===accountLibraryLoadToken&&accountLibraryMode==='saved-posts';
+      root.innerHTML='<div class="account-library-status">Loading Saved Posts…</div>';
+      if(!activeUser||!supabaseClient){root.innerHTML='<div class="account-library-status">Sign in to view your Saved Posts.</div>';return;}
+      try{
+        const savedResult=await supabaseClient.from('feed_saved').select('post_id').eq('user_id',activeUser.id).order('created_at',{ascending:false}).limit(100);
+        if(!isCurrent())return;
+        if(savedResult.error)throw savedResult.error;
+        const ids=(savedResult.data||[]).map(row=>row.post_id);
+        if(!ids.length){root.innerHTML='<div class="seller-empty">You have not saved any Feed posts yet.</div>';return;}
+        const postsResult=await supabaseClient.from('feed_posts').select('id,shop_id,image_url,caption,post_tag,created_at').in('id',ids);
+        if(!isCurrent())return;
+        if(postsResult.error)throw postsResult.error;
+        const posts=postsResult.data||[],shopIds=[...new Set(posts.map(post=>String(post.shop_id)))];
+        const shopsResult=shopIds.length?await supabaseClient.from('seller_shops_profile_public').select('id,shop_name').in('id',shopIds):{data:[],error:null};
+        if(!isCurrent())return;
+        if(shopsResult.error)throw shopsResult.error;
+        const shopsById=new Map((shopsResult.data||[]).map(shop=>[String(shop.id),shop]));
+        root.innerHTML='';
+        posts.forEach(post=>{
+          const row=document.createElement('article');row.className='account-library-row';
+          const img=document.createElement('img');img.src=post.image_url||'assets/alee-logo.png';img.alt='';img.onerror=()=>{img.src='assets/alee-logo.png';};
+          const copy=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=shopsById.get(String(post.shop_id))?.shop_name||'Shop';small.textContent=[post.post_tag==='announcement'?'Announcement':post.post_tag==='offer'?'Offer':'Photo post',post.caption].filter(Boolean).join(' · ');copy.append(strong,small);
+          const actions=document.createElement('div');actions.className='account-library-actions';
+          const open=document.createElement('button');open.type='button';open.textContent='Open';open.onclick=()=>openSavedFeedPost(post.id);
+          const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.onclick=async()=>{const {error}=await supabaseClient.from('feed_saved').delete().eq('post_id',post.id).eq('user_id',activeUser.id);if(error){alert(`Could not remove the saved post. ${error.message||''}`);return;}await loadAccountSavedFeedPosts();};
+          actions.append(open,remove);row.append(img,copy,actions);root.append(row);
+        });
+      }catch(error){if(isCurrent())root.innerHTML=`<div class="account-library-status">Saved Posts could not load. Run feed-posts-schema.sql in Supabase. ${escapeHTML(error.message||'')}</div>`;}
+    }
+    function openSavedFeedPost(id){closeAccountLibrary(false,true);const url=new URL(location.href);url.searchParams.set('feedPost',id);history.replaceState(history.state,'',`${url.pathname}${url.search}${url.hash}`);openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));}
     function closeAccountLibrary(fromHistory=false,preserveHistory=false){document.getElementById('accountLibraryOverlay').classList.remove('show');if(accountLibraryReturnToHub){document.getElementById('buyerDashboard').classList.add('show');accountLibraryReturnToHub=false;}closeAppUiLayer('accountLibrary',fromHistory,preserveHistory);}
     async function openAccountMyShop(){if(!activeUser){openAccountModal();return;}if(!supabaseClient){openAccountModal();document.getElementById('accountStatus').textContent='Connect Supabase to manage your shop.';return;}const result=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();if(result.error){alert('Could not check your shop. Please try again or check the seller database setup.');return;}if(!result.data){openCreateShopPrompt();return;}if(document.getElementById('accountLibraryOverlay').classList.contains('show'))closeAccountLibrary(false,true);accountLibraryReturnToHub=false;await openSellerAccount();}
     function openCreateShopPrompt(){const overlay=document.getElementById('createShopPrompt');overlay.classList.add('show');pushAppUiLayer('createShopPrompt',fromHistory=>closeCreateShopPrompt(fromHistory),()=>overlay.classList.add('show'));}
     function closeCreateShopPrompt(fromHistory=false,preserveHistory=false){document.getElementById('createShopPrompt').classList.remove('show');closeAppUiLayer('createShopPrompt',fromHistory,preserveHistory);}
     async function createShopFromPrompt(){document.getElementById('createShopPrompt').classList.remove('show');if(appUiHistoryLayers.at(-1)?.key==='createShopPrompt'){appUiHistoryLayers.pop();history.replaceState({...history.state,aleeUiLayer:appUiHistoryLayers.at(-1)?.key||null},'',location.href);}await openSellerAccount();}
-    async function loadAccountMyAds(filter='all'){const root=document.getElementById('accountLibraryBody');root.innerHTML='<p class="seller-muted">Loading your posts…</p>';if(!supabaseClient){root.innerHTML='<div class="seller-empty">Connect Supabase to manage your posts.</div>';return;}const result=await supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);if(result.error){root.innerHTML='<div class="seller-empty">Could not load your posts. Check platform-posts-schema.sql in Supabase.</div>';return;}const productsResult=await supabaseClient.from('seller_products').select('id,name,category_label,price,image_urls').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100);const posts=(result.data||[]).filter(row=>filter==='all'||row.post_type===filter),items=filter==='all'||filter==='product'?(productsResult.data||[]):[];root.innerHTML='';posts.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.media_url||'assets/alee-app-icon-192.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.title;copy.querySelector('small').textContent=row.post_type.toUpperCase()+' · '+(row.category||'');const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editPlatformPost(row.id);const del=document.createElement('button');del.textContent='Delete';del.onclick=()=>deletePlatformPost(row.id,row.media_url||'');actions.append(edit,del);line.append(img,copy,actions);root.append(line);});items.forEach(row=>{const line=document.createElement('article');line.className='account-library-row';const img=document.createElement('img');img.src=row.image_urls?.[0]||'assets/alee-logo.png';const copy=document.createElement('div');copy.innerHTML='<strong></strong><small></small>';copy.querySelector('strong').textContent=row.name;copy.querySelector('small').textContent='PRODUCT · '+(row.category_label||'')+' · LKR '+Number(row.price||0).toLocaleString();const actions=document.createElement('div');actions.className='account-library-actions';const edit=document.createElement('button');edit.textContent='Edit in My Shop';edit.onclick=()=>{closeAccountLibrary(false,true);openAccountMyShop();};actions.append(edit);line.append(img,copy,actions);root.append(line);});if(!posts.length&&!items.length)root.innerHTML='<div class="seller-empty">You have not posted ads, apps, games, jobs, or products yet.</div>';const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='16px';const post=document.createElement('button');post.textContent='Post Ad / Job';post.onclick=()=>{closeAccountLibrary(false,true);openPlatformPostForm();};const shop=document.createElement('button');shop.textContent='Manage products and reels in My Shop';shop.onclick=()=>{closeAccountLibrary();openAccountMyShop();};manage.append(post,shop);root.append(manage);}
     let accountLibraryLoadToken=0;
-    async function loadAccountMyAdsWithReels(filter='all'){
+    async function loadAccountMyAdsWithFeed(filter='all'){
       const root=document.getElementById('accountLibraryBody'),token=++accountLibraryLoadToken;
       root.innerHTML='<div class="account-library-status"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading your content…</div>';
       if(!activeUser){root.innerHTML='<div class="account-library-status">Sign in to view your posts and items.</div>';return;}
       if(!supabaseClient){root.innerHTML='<div class="account-library-status">Supabase is not connected. Check backend-config.js.</div>';return;}
       const timed=async(label,query)=>Promise.race([query.then(result=>({label,...result})).catch(error=>({label,error})),new Promise(resolve=>setTimeout(()=>resolve({label,error:{message:'Request timed out'}}),12000))]);
       const jobs=[];
-      if(filter==='all'||!['product','reel'].includes(filter))jobs.push(timed('posts',supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url,created_at').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100)));
+      if(filter!=='product')jobs.push(timed('posts',supabaseClient.from('platform_posts').select('id,post_type,title,category,media_url,created_at').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100)));
       if(filter==='all'||filter==='product')jobs.push(timed('products',supabaseClient.from('seller_products').select('id,name,category_label,price,image_urls,created_at').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100)));
-      if(filter==='all'||filter==='reel')jobs.push(timed('reels',supabaseClient.from('seller_reels').select('id,video_url,caption,created_at').eq('owner_id',activeUser.id).order('created_at',{ascending:false}).limit(100)));
       const results=await Promise.all(jobs);if(token!==accountLibraryLoadToken||accountLibraryMode!=='ads')return;
       const data=Object.fromEntries(results.map(result=>[result.label,result.data||[]])),issues=results.filter(result=>result.error).map(result=>result.label);
       root.innerHTML='';
       const addRow=(image,title,subtitle,actionButtons=[])=>{const row=document.createElement('article');row.className='account-library-row';const img=document.createElement('img');img.src=image||'assets/alee-logo.png';img.alt='';img.onerror=()=>{img.src='assets/alee-logo.png';};const copy=document.createElement('div'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=title||'Untitled';small.textContent=subtitle;copy.append(strong,small);const actions=document.createElement('div');actions.className='account-library-actions';actionButtons.forEach(([label,handler])=>{const button=document.createElement('button');button.type='button';button.textContent=label;button.onclick=handler;actions.append(button);});row.append(img,copy,actions);root.append(row);};
       (data.posts||[]).filter(row=>filter==='all'||row.post_type===filter).forEach(row=>addRow(row.media_url,row.title,(row.post_type||'post').toUpperCase()+' · '+(row.category||''),[['Edit',()=>editPlatformPost(row.id)],['Delete',()=>deletePlatformPost(row.id,row.media_url||'')]]));
       (data.products||[]).forEach(row=>addRow(row.image_urls?.[0],row.name,'PRODUCT · '+(row.category_label||'')+' · LKR '+Number(row.price||0).toLocaleString(),[['Edit in My Shop',()=>{closeAccountLibrary(false,true);openAccountMyShop();}]]));
-      (data.reels||[]).forEach(row=>addRow(row.video_url,row.caption||'Shop reel','REEL · '+(row.created_at?new Date(row.created_at).toLocaleDateString():''),[['Manage in My Shop',()=>{closeAccountLibrary(false,true);openAccountMyShop();}]]));
-      if(!root.children.length)root.innerHTML='<div class="account-library-status">'+(issues.length?'Your content could not be loaded. Check '+issues.map(label=>label==='posts'?'platform-posts-schema.sql':label==='products'?'seller-marketplace-schema.sql':'seller-community-schema.sql').join(', ')+' in Supabase.':'You have not posted any content yet. Add an ad, job, item, or reel from your account.')+'</div>';
+      if(!root.children.length)root.innerHTML='<div class="account-library-status">'+(issues.length?'Your content could not be loaded. Check '+issues.map(label=>label==='posts'?'platform-posts-schema.sql':'seller-marketplace-schema.sql').join(', ')+' in Supabase.':'You have not posted any content yet. Add an ad, job, or item from your account.')+'</div>';
       else if(issues.length){const note=document.createElement('div');note.className='account-library-status';note.textContent='Some content could not load. Check the database setup for: '+issues.join(', ')+'.';root.append(note);}
-      const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='14px';const post=document.createElement('button');post.type='button';post.textContent='Post Ad / Job';post.onclick=()=>{closeAccountLibrary(false,true);openPlatformPostForm();};const shop=document.createElement('button');shop.type='button';shop.textContent='Open My Shop';shop.onclick=()=>{closeAccountLibrary(false,true);openAccountMyShop();};manage.append(post,shop);root.append(manage);
+      const manage=document.createElement('div');manage.className='account-library-actions';manage.style.marginTop='14px';const post=document.createElement('button');post.type='button';post.textContent='Post Ad / Job';post.onclick=()=>{closeAccountLibrary(false,true);openPlatformPostForm();};
+      const shop=document.createElement('button');shop.type='button';shop.textContent='Open My Shop';shop.onclick=()=>{closeAccountLibrary(false,true);openAccountMyShop();};manage.append(post,shop);root.append(manage);
     }
     let accountCountryFilter='';let accountCountryAds=[];
     function accountShopCountry(shop){if(shop?.countryCode&&countryCatalog.some(c=>c.code===String(shop.countryCode).toUpperCase()))return String(shop.countryCode).toUpperCase();const raw=String(shop?.phone||'').replace(/[^+\d]/g,'');const matches=countryCatalog.filter(c=>raw.startsWith(String(c.dialCode||'').replace(/[^+\d]/g,''))||raw.startsWith(String(c.dialCode||'').replace(/\D/g,''))).sort((a,b)=>String(b.dialCode).length-String(a.dialCode).length);return matches[0]?.code||'LK';}

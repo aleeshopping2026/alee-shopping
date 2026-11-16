@@ -231,10 +231,12 @@
     const link=safeJobLink(job.link_url);
     return `<article class="shop-job-card"><div class="shop-job-thumb">${image}</div><div class="shop-job-copy"><h3>${title}</h3><div class="shop-job-meta">${details.map(item=>`<span>${item}</span>`).join('')}</div>${job.description?`<p>${esc(job.description)}</p>`:''}${link?`<a class="shop-job-open" href="${esc(link)}" ${/^https?:/i.test(link)?'target="_blank" rel="noopener noreferrer"':''}>View job details</a>`:''}</div></article>`;
   }
-  function renderShopReel(reel) {
-    const video=safeJobLink(reel.video_url);
-    if(!video)return '<div class="empty">This video is unavailable.</div>';
-    return `<article class="shop-feed-card"><video src="${esc(video)}" controls playsinline preload="metadata"></video>${reel.caption?`<p class="shop-feed-caption">${esc(reel.caption)}</p>`:''}</article>`;
+  function renderShopFeedPost(post) {
+    const image=safeJobLink(post.image_url);
+    if(!image)return '<div class="empty">This photo is unavailable.</div>';
+    const badge=post.post_tag==='announcement'?'<span class="shop-feed-badge">Announcement</span>':post.post_tag==='offer'?'<span class="shop-feed-badge offer">Offer</span>':'';
+    const productLink=post.product_id?`<a class="shop-feed-product" href="index.html?product=${1000000000+Number(post.product_id)}&amp;shopReturn=${encodeURIComponent(shop.id)}">View Product</a>`:'';
+    return `<article class="shop-feed-card">${badge}<img class="shop-feed-photo" src="${esc(image)}" alt="${esc(post.caption||shop.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'">${post.caption?`<p class="shop-feed-caption"><strong>${esc(shop.name)}</strong> ${esc(post.caption)}</p>`:''}<small class="shop-feed-time">${esc(post.created_at?new Date(post.created_at).toLocaleDateString():'')}</small>${productLink}</article>`;
   }
   function renderShopContent() {
     const productsPanel=document.getElementById('shopProductsPanel'),jobsPanel=document.getElementById('shopJobsPanel'),feedPanel=document.getElementById('shopFeedPanel');
@@ -249,7 +251,7 @@
     }
     if(showFeed){
       if(shopBlocked||shopOnHold){feedEl.innerHTML=`<div class="empty">${shopBlocked?'You blocked this shop on this device.':'This shop is on hold on this device.'}</div>`;return;}
-      feedEl.innerHTML=shopFeedLoadError?'<div class="empty">Shop feed could not load. Check seller-community-schema.sql in Supabase.</div>':shopFeed.length?shopFeed.map(renderShopReel).join(''):'<div class="empty">This shop has no feed posts yet.</div>';
+      feedEl.innerHTML=shopFeedLoadError?'<div class="empty">Shop feed could not load. Check feed-posts-schema.sql in Supabase.</div>':shopFeed.length?shopFeed.map(renderShopFeedPost).join(''):'<div class="empty">This shop has no feed posts yet.</div>';
       return;
     }
     const labels={all:'All',new:'New arrivals',best:'Best selling'};heading.textContent=labels[activeShopTab]||'All';
@@ -333,7 +335,7 @@
       const key='alee-shop-view:'+shop.id,now=Date.now();
       try { if(now-Number(sessionStorage.getItem(key)||0)>1800000){sessionStorage.setItem(key,String(now));await supabase.rpc('track_seller_shop_view',{p_shop_id:shop.id});} } catch(_) {}
       const jobsPromise=isUuid(shop.id)?supabase.from('platform_posts').select('id,title,category,description,link_url,media_url,location,employment_type,salary,created_at').eq('shop_id',shop.id).eq('post_type','job').order('created_at',{ascending:false}).limit(100):null;
-      const feedPromise=isUuid(shop.id)?supabase.from('seller_reels').select('id,video_url,caption,created_at').eq('shop_id',shop.id).order('created_at',{ascending:false}).limit(50):null;
+      const feedPromise=isUuid(shop.id)?supabase.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,created_at').eq('shop_id',shop.id).order('created_at',{ascending:false}).limit(50):null;
       const [jobsResult,feedResult]=await Promise.all([jobsPromise,feedPromise,getBusinessStats()]);
       if(jobsResult){shopJobsLoadError=Boolean(jobsResult.error);shopJobs=jobsResult.error?[]:(jobsResult.data||[]);if(activeShopTab==='jobs')renderShopContent();}
       if(feedResult){shopFeedLoadError=Boolean(feedResult.error);shopFeed=feedResult.error?[]:(feedResult.data||[]);if(activeShopTab==='feed')renderShopContent();}
