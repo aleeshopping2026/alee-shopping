@@ -4436,9 +4436,12 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     async function searchProductsByPhoto(file) {
       if (!file) return;
+      const returnToDiscovery = searchDiscoveryOverlay.classList.contains('show');
+      if (returnToDiscovery) closeSearchDiscovery(false,true);
       if (!file.type.startsWith('image/')) {
         document.getElementById('photoSearchNotice').classList.add('show');
         document.getElementById('photoSearchMessage').textContent = 'Please choose an image.';
+        if (returnToDiscovery) renderPhotoSearchResultsInDiscovery([], 'Please choose an image file.');
         return;
       }
       const runId = ++photoSearchRunId;
@@ -4490,16 +4493,39 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         if (!matches.length) {
           message.textContent = 'Could not compare this photo. Try another image.';
           displayProducts([]);
+          if (returnToDiscovery) renderPhotoSearchResultsInDiscovery([], message.textContent);
           return;
         }
         message.textContent = 'Products with the closest-looking photos (results may not be exact):';
         displayProducts(matches.map(match => match.product), true);
-        document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
+        if (returnToDiscovery) renderPhotoSearchResultsInDiscovery(matches.map(match => match.product), message.textContent);
+        else document.querySelector('.container')?.scrollIntoView({ behavior:'smooth', block:'start' });
       } catch (_) {
         if (runId !== photoSearchRunId) return;
         message.textContent = 'Could not read this photo. Try another image.';
         displayProducts([]);
+        if (returnToDiscovery) renderPhotoSearchResultsInDiscovery([], message.textContent);
       }
+    }
+
+    function renderPhotoSearchResultsInDiscovery(items, statusText) {
+      activeSearchBrandId='';
+      showAllSearchBrandsView=false;
+      activeSearchCategoryFilters.clear();
+      searchPriceFilterEnabled=false;
+      searchMinimumRating=0;
+      searchSortMode='relevance';
+      document.getElementById('searchMinimumRating').value='0';
+      document.getElementById('searchSort').value='relevance';
+      openSearchDiscovery(false);
+      searchInput.value='Photo search';
+      syncSearchClearButton();
+      renderDiscoverySearchResults('Photo search',{items,corrected:false,fallback:false},0);
+      document.getElementById('discoverySearchTitle').textContent='Similar-looking products';
+      document.getElementById('searchResultStatusText').textContent=statusText;
+      const hint=document.getElementById('discoverySearchHint');
+      hint.textContent=items.length?'Products are ranked by visual similarity; results may not be exact.':statusText;
+      hint.hidden=false;
     }
 
     function clearPhotoSearch() {
