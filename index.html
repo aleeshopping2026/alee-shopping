@@ -447,7 +447,9 @@
     .popup-shop-meta a { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; cursor:pointer; }
     .popup-shop-meta a:hover span { text-decoration:underline; }
     .popup-shop-meta img { width:34px; height:34px; object-fit:cover; border:0; border-radius:50%; background:#fff; }
+    .mobile-shop-search { width:100%; margin:0 0 11px; padding:10px 12px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
     .mobile-sheet-shop-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    @media (min-width:701px) { #mobileShopsSheet { align-items:center; justify-content:center; } #mobileShopsSheet .mobile-sheet { width:min(760px,90vw); max-height:80vh; border-radius:18px; } }
     @media (max-width: 700px) {
       body { padding-bottom:calc(66px + env(safe-area-inset-bottom)); }
       .header { width:100%; min-width:0; min-height:56px; gap:6px; padding:8px 9px; }
@@ -535,25 +537,24 @@
     .btn { background: var(--light-leaf); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: 800; font-size: 15px; transition: 0.3s; }
     .btn:hover { box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
 
-    .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-x:hidden; overflow-y: auto; padding: 12px 8px 30px; backdrop-filter: blur(7px); }
+    .product-popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 10000; overflow-x:hidden; overflow-y: auto; padding:0; backdrop-filter: blur(7px); }
     .product-popup-ad-slot { display:none; position:sticky; top:0; z-index:21; width:min(100%,1500px); height:clamp(46px,7vh,68px); margin:0 auto 6px; overflow:hidden; border:1px solid rgba(255,255,255,.45); border-radius:10px; background:#fff; box-shadow:0 4px 14px #0003; }
     .product-popup-ad-slot.show { display:block; }
     .product-popup-ad-link { position:relative; display:flex; width:100%; height:100%; align-items:center; justify-content:center; overflow:hidden; color:#172033; text-decoration:none; background:#f1f5f9; }
     .product-popup-ad-link img,.product-popup-ad-link video { display:block; width:100%; height:100%; object-fit:cover; }
     .product-popup-ad-caption { position:absolute; left:8px; bottom:6px; max-width:calc(100% - 16px); padding:4px 8px; overflow:hidden; border-radius:7px; background:#111b; color:#fff; font-size:11px; font-weight:800; text-overflow:ellipsis; white-space:nowrap; }
     .popup-content {
-      background: var(--card-bg); width:min(100%,1040px); min-width:0; max-width:1040px; margin:10px auto; border-radius:16px;
-      padding:14px; position:relative; overflow:hidden; border:1px solid var(--glass-border); box-shadow:0 25px 70px rgba(0,0,0,0.7);
+      background: var(--card-bg); width:min(100%,1040px); min-width:0; max-width:1040px; margin:0 auto; border-radius:0;
+      padding:0 14px 82px; position:relative; overflow:visible; border:0; box-shadow:none;
     }
     .close-popup { position: absolute; top: 8px; right: 12px; z-index: 20; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(0,0,0,.55); font-size:25px; cursor:pointer; color:#fff; transition:0.3s; }
     .close-popup:hover { transform:scale(1.08); background:var(--light-leaf); }
 
-    .gallery-main-wrap { position:relative; }
-    .slider { display:flex; width:100%; min-width:0; overflow-x:auto; scroll-snap-type:x mandatory; gap:0; border-radius:12px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; background:#fff; }
-    .slider img { flex:0 0 100%; width:100%; min-width:0; height:360px; object-fit:contain; background:#fff; border-radius:12px; scroll-snap-align:start; border:1px solid rgba(255,105,0,.18); }
+    .gallery-main-wrap { position:relative; overflow:hidden; }
+    .slider { display:flex; width:100%; min-width:0; overflow-x:auto; scroll-snap-type:x mandatory; gap:0; border-radius:0; padding-bottom:0; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; background:transparent; }
+    .slider img { flex:0 0 100%; width:100%; min-width:0; height:auto; object-fit:contain; background:transparent; border-radius:0; scroll-snap-align:start; border:0; }
     .slider img { cursor:zoom-in; }
-    .slider::-webkit-scrollbar { height:7px; }
-    .slider::-webkit-scrollbar-thumb { background:var(--light-leaf); border-radius:10px; }
+    .slider::-webkit-scrollbar { display:none; height:0; }
     .gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border:0; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; cursor:pointer; z-index:5; font-size:18px; }
     .gallery-arrow:hover { background:var(--light-leaf); }
     .gallery-arrow.prev { left:8px; } .gallery-arrow.next { right:8px; }
@@ -574,8 +575,8 @@
     @media (max-width:700px) { .image-zoom { padding:54px 12px; } .image-zoom img { max-width:96vw; max-height:82vh; } .image-zoom-arrow { width:40px; height:40px; } .image-zoom-arrow.prev { left:5px; } .image-zoom-arrow.next { right:5px; } }
 
     .popup-details { display:flex; flex-direction:column; gap:12px; margin-top:12px; padding:0 2px 5px; }
-    .popup-main-grid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(300px, .9fr); gap:20px; align-items:start; }
-    .popup-media { position:sticky; top:0; }
+    .popup-main-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:20px; align-items:start; }
+    .popup-media { position:relative; top:auto; grid-column:1/-1; width:100vw; margin-left:calc(50% - 50vw); }
     .popup-recommendations { margin-top:18px; padding-top:16px; border-top:1px solid var(--glass-border); }
     .recommendation-categories { display:flex; gap:7px; overflow-x:auto; padding:3px 0 12px; -webkit-overflow-scrolling:touch; }
     .recommendation-categories::-webkit-scrollbar { display:none; }
@@ -653,10 +654,10 @@
     .popup-stock-status { display:block;min-height:16px;margin:4px 0 8px;color:#667085;font-weight:700; }
     @media (max-width: 700px) {
       .product-popup { padding:0; }
-      .popup-content { width:100%; min-width:0; max-width:none; min-height:100vh; min-height:100dvh; margin:0; border:0; border-radius:0; padding:max(10px,env(safe-area-inset-top)) 10px calc(88px + env(safe-area-inset-bottom)); box-shadow:none; }
+      .popup-content { width:100%; min-width:0; max-width:none; min-height:100vh; min-height:100dvh; margin:0; border:0; border-radius:0; padding:0 10px calc(88px + env(safe-area-inset-bottom)); box-shadow:none; }
       .popup-main-grid { grid-template-columns:minmax(0,1fr); min-width:0; gap:6px; }
-      .popup-media,.gallery-main-wrap { position:relative; width:100%; min-width:0; overflow:hidden; }
-      .slider img { height:min(68vw,320px); min-height:220px; }
+      .popup-media,.gallery-main-wrap { position:relative; min-width:0; overflow:hidden; }
+      .slider img { height:auto; min-height:0; }
       .card img { height:115px; padding:5px; }
       .popup-details h2 { font-size:18px; }
       .order-info { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -1394,7 +1395,7 @@
         <button class="desktop-sidebar-action" type="button" data-view="cart" onclick="openDesktopSidebarView('cart')"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></button>
       </div>
       <div id="hubShopsPanel" hidden>
-        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800">Search all →</a></span></h2>
+        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <button type="button" onclick="openAllShops()" style="margin-left:8px;padding:0;border:0;background:transparent;color:var(--light-leaf);font:inherit;font-size:11px;font-weight:800;cursor:pointer">Search all →</button></span></h2>
         <div class="shops-strip-wrap"><button class="shops-strip-control" type="button" onclick="scrollShopStrip(-1)" aria-label="Scroll shops left"><i class="fa-solid fa-chevron-left"></i></button><div class="shops-strip" id="shopsStrip" tabindex="0" aria-label="Shop list; swipe or scroll horizontally"></div><button class="shops-strip-control" type="button" onclick="scrollShopStrip(1)" aria-label="Scroll shops right"><i class="fa-solid fa-chevron-right"></i></button></div>
       </div>
     </section>
@@ -1419,6 +1420,8 @@
     <div class="mobile-sheet-backdrop" id="mobileShopsSheet" onclick="if(event.target===this)closeMobileSheet('mobileShopsSheet')">
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileShopsTitle">
         <h2 id="mobileShopsTitle">Shops</h2>
+        <button type="button" class="mobile-category-back" onclick="closeMobileSheet('mobileShopsSheet')">← Back to shops</button>
+        <input id="mobileShopSearch" class="mobile-shop-search" type="search" placeholder="Search shops…" aria-label="Search shops" autocomplete="off">
         <div class="mobile-sheet-shop-list" id="mobileShopList"></div>
       </section>
     </div>
@@ -1859,17 +1862,16 @@
       try{return localStorage.getItem(`alee-account-role:${activeUser.id}`)==='seller'?'seller':'buyer';}catch(error){return 'buyer';}
     }
 
+    if('scrollRestoration' in history)history.scrollRestoration='manual';
+    let historyScrollSaveTimer=0;
+    function saveHistoryScrollPosition(){const activeMobileNav=document.querySelector('.mobile-nav-button.active')?.textContent.trim();history.replaceState({...history.state,aleeScrollY:window.scrollY,aleeMobileNavActive:activeMobileNav||history.state?.aleeMobileNavActive},'',location.href);}
+    window.addEventListener('scroll',()=>{if(historyScrollSaveTimer)return;historyScrollSaveTimer=window.setTimeout(()=>{historyScrollSaveTimer=0;saveHistoryScrollPosition();},100);},{passive:true});
+    window.addEventListener('scrollend',saveHistoryScrollPosition,{passive:true});
+    window.addEventListener('pageshow',()=>{const savedScroll=history.state?.aleeScrollY;if(Number.isFinite(savedScroll))requestAnimationFrame(()=>window.scrollTo(0,savedScroll));});
     const appUiHistoryLayers=[];
     function pushAppUiLayer(key,close,restore){if(appUiHistoryLayers.at(-1)?.key===key&&history.state?.aleeUiLayer===key)return;history.pushState({...history.state,aleeUiLayer:key},'',location.href);appUiHistoryLayers.push({key,close,restore});}
     function closeAppUiLayer(key,fromHistory=false,preserveHistory=false){if(fromHistory||preserveHistory)return;const top=appUiHistoryLayers.at(-1);if(top?.key===key&&history.state?.aleeUiLayer===key)history.back();}
     window.addEventListener('popstate',event=>{const destination=event.state?.aleeUiLayer||null;while(appUiHistoryLayers.length&&appUiHistoryLayers.at(-1).key!==destination){const layer=appUiHistoryLayers.pop();try{layer.close?.(true);}catch(error){console.warn('Could not close previous view',layer.key,error);}}const current=appUiHistoryLayers.at(-1);if(current?.key===destination)try{current.restore?.();}catch(error){console.warn('Could not restore previous view',current.key,error);}});
-    const cameFromSameOriginPage=(()=>{if(new URLSearchParams(location.search).has('shopReturn'))return true;try{return Boolean(document.referrer)&&new URL(document.referrer).origin===location.origin;}catch(_){return false;}})();
-    // Add the exit prompt only at an external/direct entry. Internal page visits
-    // must keep their real previous page at the top of browser history.
-    if(!cameFromSameOriginPage){
-      if(!history.state?.aleeRootBackStop){history.replaceState({...history.state,aleeRootBackStop:true,aleeRootBackTop:false},'',location.href);history.pushState({...history.state,aleeRootBackStop:true,aleeRootBackTop:true},'',location.href);}
-      window.addEventListener('popstate',event=>{if(event.state?.aleeRootBackStop&&!event.state?.aleeRootBackTop){if(sessionStorage.getItem('aleeExitConfirmedOnce')==='1'){sessionStorage.removeItem('aleeExitConfirmedOnce');history.pushState({...event.state,aleeRootBackTop:true},'',location.href);return;}if(confirm('Exit aleeshopping?')){sessionStorage.setItem('aleeExitConfirmedOnce','1');history.back();}else history.pushState({...event.state,aleeRootBackTop:true},'',location.href);}});
-    }
     function showAccountProfileSetup(){const overlay=document.getElementById('accountProfileSetup');overlay.classList.add('show');pushAppUiLayer('accountProfileSetup',fromHistory=>closeAccountProfileSetup(fromHistory),()=>overlay.classList.add('show'));}
     function closeAccountProfileSetup(fromHistory=false,preserveHistory=false){document.getElementById('accountProfileSetup').classList.remove('show');closeAppUiLayer('accountProfileSetup',fromHistory,preserveHistory);}
 
@@ -2946,6 +2948,13 @@
       if (requestedProduct) openProductPopup(Number(requestedProduct),{skipHistory:cameFromSameOriginPage});
       const requestedJob = new URLSearchParams(location.search).get('job');
       if(requestedJob){openHubSection('jobs',document.querySelector('.hub-shortcut[onclick*="jobs"]'));const sharedJob=(await getHubJobs()).find(item=>String(item.id)===requestedJob);if(sharedJob)showHubJobDetails(sharedJob);}
+      const initialHubSection=typeof history.state?.aleeHubSection==='string'?history.state.aleeHubSection:null;
+      if(initialHubSection){const button=Array.from(document.querySelectorAll('.hub-shortcut')).find(item=>item.getAttribute('onclick')?.includes(`'${initialHubSection}'`));openHubSection(initialHubSection,button,true);if(history.state?.aleeMobileNavActive)document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.trim()===history.state.aleeMobileNavActive));if(Number.isFinite(history.state?.aleeScrollY))requestAnimationFrame(()=>window.scrollTo(0,history.state.aleeScrollY));}
+      if(history.state?.aleeUiLayer==='mobileShopsSheet'){
+        const shopsSheet=document.getElementById('mobileShopsSheet');
+        shopsSheet.classList.add('show');
+        appUiHistoryLayers.push({key:'mobileShopsSheet',close:fromHistory=>closeMobileSheet('mobileShopsSheet',fromHistory),restore:()=>shopsSheet.classList.add('show')});
+      }
       hideSiteLoader();
     });
 
@@ -3024,7 +3033,17 @@
     }
 
     function openMobileShops() {
-      location.href='shops.html';
+      openHubSection('shops',document.querySelector('.hub-shortcut[onclick*="shops"]'));
+    }
+
+    function openAllShops() {
+      const sheet=document.getElementById('mobileShopsSheet');
+      const search=document.getElementById('mobileShopSearch');
+      if(search)search.value='';
+      filterMobileShops();
+      sheet.classList.add('show');
+      pushAppUiLayer('mobileShopsSheet',fromHistory=>closeMobileSheet('mobileShopsSheet',fromHistory),()=>sheet.classList.add('show'));
+      search?.focus();
     }
 
     function shopNameMatches(name,query){if(!query)return true;const value=String(name||'').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' '),needle=String(query).toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();if(!needle)return true;if(value.includes(needle))return true;const a=value.replace(/\s/g,''),b=needle.replace(/\s/g,'');if(a.includes(b))return true;let previous=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const row=[i];for(let j=1;j<=b.length;j++)row[j]=Math.min(row[j-1]+1,previous[j]+1,previous[j-1]+(a[i-1]===b[j-1]?0:1));if(Math.min(...row)>2)return false;previous=row;}return previous[b.length]<=Math.max(1,Math.floor(b.length*.25));}
@@ -3038,9 +3057,10 @@
       document.querySelectorAll('#shopsStrip .shop-tile').forEach(tile=>{tile.hidden=!shopNameMatches(tile.textContent,query);});
     });
 
-    function openHubSection(section,button) {
-      if(section==='shops'){location.href='shops.html';return;}
-      if(!hubHistoryOpen){history.pushState({...history.state,aleeHubSection:true},'',location.href);hubHistoryOpen=true;}
+    function openHubSection(section,button,fromHistory=false) {
+      if(!fromHistory&&activeHubSection!==section){saveHistoryScrollPosition();history.pushState({...history.state,aleeHubSection:section,aleeScrollY:window.scrollY,aleeMobileNavActive:section==='shops'?'Shops':'Home'},'',location.href);}
+      activeHubSection=section;hubHistoryOpen=true;
+      if(!fromHistory)document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.trim()===(section==='shops'?'Shops':'Home')));
       document.getElementById('shopsSection')?.classList.add('hub-nav-pinned');document.body.classList.add('hub-section-open');
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
       const panel=document.getElementById('hubContentPanel'),body=document.getElementById('hubContentBody'),title=document.getElementById('hubContentTitle');
@@ -3050,35 +3070,40 @@
         panel.hidden=true;shopsPanel.hidden=false;
         const search=document.getElementById('hubShopSearch');if(search)search.value='';
         document.querySelectorAll('#shopsStrip .shop-tile').forEach(tile=>tile.hidden=false);
-        if(!window.matchMedia('(min-width:701px)').matches)document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
+        if(!fromHistory&&!window.matchMedia('(min-width:701px)').matches)document.getElementById('shopsSection').scrollIntoView({behavior:'smooth',block:'start'});return;
       }
       shopsPanel.hidden=true;panel.hidden=false;
       const desktopNav=window.matchMedia('(min-width:701px)').matches,titles={apps:'Apps',offers:desktopNav?'Offer':'Offers',games:desktopNav?'Game':'Games',jobs:'Jobs',reels:desktopNav?'Feed':'Reels'};title.textContent=titles[section]||'';
       if(section==='apps'||section==='games'||section==='offers')renderHubApps(section,body);
       else if(section==='jobs')renderHubJobs(body);
       else if(section==='reels')loadHubReels(body);
-      if(!window.matchMedia('(min-width:701px)').matches)document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
+      if(!fromHistory&&!window.matchMedia('(min-width:701px)').matches)document.getElementById('categoryBar').scrollIntoView({behavior:'smooth',block:'start'});
     }
 
     function showDesktopHome(button){
-      if(document.body.classList.contains('hub-section-open'))closeHubSection();
+      if(hubHistoryOpen)navigateHubHome();
       else{document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;document.querySelector('.container')?.classList.remove('hub-content-open');document.body.classList.remove('hub-section-open');}
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.toggle('active',item===button));
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
     function openDesktopSidebarView(view){
-      if(document.body.classList.contains('hub-section-open'))closeHubSection();
       if(view==='my-shop')openAccountMyShop();
       else if(view==='messages')openMessagesForCurrentRole();
       else if(view==='cart')openCart();
     }
 
     function closeHubSection(fromHistory=false) {
+      if(hubHistoryOpen&&!fromHistory){saveHistoryScrollPosition();history.back();return;}
       document.getElementById('hubContentPanel').hidden=true;document.getElementById('hubShopsPanel').hidden=true;
       document.querySelector('.container')?.classList.remove('hub-content-open');document.getElementById('shopsSection')?.classList.remove('hub-nav-pinned');document.body.classList.remove('hub-section-open');
       document.querySelectorAll('.hub-shortcut').forEach(item=>item.classList.remove('active'));
-      if(hubHistoryOpen){hubHistoryOpen=false;if(!fromHistory)history.back();}
+      hubHistoryOpen=false;activeHubSection=null;
+      document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.includes('Home')));
+    }
+
+    function navigateHubHome(){
+      if(hubHistoryOpen){saveHistoryScrollPosition();history.pushState({...history.state,aleeHubSection:null,aleeScrollY:0,aleeMobileNavActive:'Home'},'',location.href);closeHubSection(true);}
     }
 
     const platformPostCategories={
@@ -3704,6 +3729,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     let productPopupRouteEntry = false;
     let productPopupReturnShopId = '';
     let imageZoomHistoryOpen = false;
+    let activeHubSection = null;
     let hubHistoryOpen = false;
     let hubJobDetailsHistoryOpen = false;
     let hubJobsCache = null;
@@ -3917,7 +3943,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
 
     function mobileGoHome() {
-      closeHubSection();
+      if(hubHistoryOpen)navigateHubHome();
       document.getElementById('searchInput').value = '';
       syncSearchClearButton();
       const allButton = document.querySelector('#categoryBar .cat-btn');
@@ -5065,7 +5091,17 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     });
 
     function closeProductPopup(fromHistory=false,returnToShop=false) { productPopupRenderToken++;const popup=document.getElementById("productPopup");popup.style.display = "none";resetProductSeo();stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){const shopId=productPopupReturnShopId;productPopupRouteEntry=false;productPopupReturnShopId='';if(returnToShop&&shopId&&!fromHistory){if(history.length>1){history.back();return;}const destination=new URL('shop.html',location.href);destination.searchParams.set('shop',shopId);location.replace(destination.href);return;}const params=new URLSearchParams(location.search);params.delete('product');params.delete('shopReturn');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);} }
-    window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
+    window.addEventListener('popstate',event=>{
+      if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);
+      if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);
+      if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);
+      const section=typeof event.state?.aleeHubSection==='string'?event.state.aleeHubSection:null;
+      const sectionVisible=section==='shops'?!document.getElementById('hubShopsPanel').hidden:!document.getElementById('hubContentPanel').hidden;
+      if(section&&(activeHubSection!==section||!hubHistoryOpen||!sectionVisible)){const button=Array.from(document.querySelectorAll('.hub-shortcut')).find(item=>item.getAttribute('onclick')?.includes(`'${section}'`));openHubSection(section,button,true);}
+      else if(!section&&(hubHistoryOpen||document.body.classList.contains('hub-section-open')))closeHubSection(true);
+      if(event.state?.aleeMobileNavActive)document.querySelectorAll('.mobile-nav-button').forEach(nav=>nav.classList.toggle('active',nav.textContent.trim()===event.state.aleeMobileNavActive));
+      if(Number.isFinite(event.state?.aleeScrollY))requestAnimationFrame(()=>window.scrollTo(0,event.state.aleeScrollY));
+    });
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
         if (e.key === 'Escape') { if (document.getElementById('imageZoom').classList.contains('open')) closeImageZoom(); else closeProductPopup(false,true); }
