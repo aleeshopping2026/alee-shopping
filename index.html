@@ -195,7 +195,7 @@
     .search-sort-select,.search-rating-select { width:100%; min-height:40px; padding:8px 10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; font-size:12px; }
     .search-no-exact { grid-column:1/-1; padding:11px 12px; border:1px solid var(--glass-border); border-radius:11px; background:var(--bg-dark); color:var(--detail-copy,#667085); font-size:13px; }
     .search-container input {
-      width: 100%; padding: 10px 116px 10px 15px; border-radius: 20px;
+      width: 100%; padding: 10px 48px 10px 15px; border-radius: 20px;
       border: 1px solid var(--glass-border); background: var(--bg-dark);
       color: var(--text-white); font-size: 13px; outline: none; transition: 0.3s;
     }
@@ -230,11 +230,7 @@
     .finder-result small { margin-top:3px; color:var(--detail-copy,#777); }
     .finder-price { color:var(--light-leaf); font-weight:800; white-space:nowrap; }
 
-    .photo-search-btn { position:absolute; right:40px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--text-white); cursor:pointer; font-size:15px; }
-    .photo-search-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
-    .search-submit-btn { position:absolute; right:76px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--light-leaf); cursor:pointer; font-size:15px; }
-    .search-submit-btn:hover { background:rgba(249,115,22,.15); transform:scale(1.08); }
-    .search-clear-btn { position:absolute; right:112px; width:36px; height:36px; display:none; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--detail-copy,#777); cursor:pointer; font-size:14px; }
+    .search-clear-btn { position:absolute; right:8px; width:36px; height:36px; display:none; align-items:center; justify-content:center; border:0; border-radius:50%; background:transparent; color:var(--detail-copy,#777); cursor:pointer; font-size:14px; }
     .search-clear-btn.show { display:flex; }
     .search-clear-btn:hover { background:rgba(249,115,22,.15); color:var(--light-leaf); }
     .search-discovery-overlay { display:none; position:fixed; inset:0; z-index:20000; height:100dvh; overflow-y:auto; overscroll-behavior:contain; background:var(--card-bg); color:var(--text-white); }
@@ -319,7 +315,6 @@
     .discovery-search-hint { margin:4px 0 10px; color:#858b95; font-size:13px; }
     .discovery-ai-note { padding:12px; margin-bottom:12px; border:1px solid var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; line-height:1.5; }
     @media (min-width:600px) { .discovery-products-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
-    .photo-search-input { display:none !important; }
     .photo-search-notice { display:none; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font-size:13px; }
     .photo-search-notice.show { display:flex; }
     .photo-search-clear { padding:6px 10px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); cursor:pointer; white-space:nowrap; }
@@ -1291,10 +1286,7 @@
     <div class="search-bar">
       <div class="search-container">
         <input type="text" id="searchInput" placeholder="🔍 Search products...">
-        <input type="file" id="photoSearchInput" class="photo-search-input" accept="image/*" onchange="searchProductsByPhoto(this.files[0]);this.value=''">
         <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearProductSearch()" title="Clear search" aria-label="Clear search"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-        <button type="button" class="search-submit-btn" onclick="submitProductSearch()" title="Search products" aria-label="Search products"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
-        <button type="button" class="photo-search-btn" onclick="document.getElementById('photoSearchInput').click()" title="Search with a photo" aria-label="Search with a photo"><i class="fa-solid fa-camera"></i></button>
       </div>
       <div class="search-extras" id="searchExtras">
         <div class="top-searches" id="topSearches">
@@ -3653,9 +3645,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
-      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn')){
-        openSearchDiscovery(event.target.closest('#searchInput')!==null);
-      }
+      if(!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(event.target.closest('#searchInput')!==null);
     });
     function setSearchDiscoveryMode(mode) {
       searchDiscoveryMode=mode==='ai'?'ai':'products';
@@ -3758,7 +3748,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const matches = (products || []).filter(product => {
         const categoryId = getProductCategoryId(product);
         const info = categories.find(item => item.id === categoryId);
-        return category.parent ? categoryId === category.id || info?.parent === category.parent : categoryId === category.id || info?.parent === category.id;
+        return category.parent ? categoryId === category.id : categoryId === category.id || info?.parent === category.id;
       });
       const product = matches.find(item => Array.isArray(item.images || item.image_urls) && (item.images || item.image_urls).length);
       return product ? (product.images || product.image_urls)[0] : categoryPlaceholderImage(group);
