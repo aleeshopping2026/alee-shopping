@@ -7,16 +7,17 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="aleeshopping">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/alee-app-icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/alee-app-icon-512.png">
   <link rel="apple-touch-icon" href="/assets/alee-app-icon-180.png">
-  <title>Grow Your Business with ALEE Shopping</title>
-  <meta name="description" content="Shop and sell with ALEE Shopping. Discover gadgets, fashion, beauty and more, or grow your business by reaching customers across Sri Lanka.">
+  <title>Grow your business. | aleeshopping</title>
+  <meta name="description" content="Grow your business with aleeshopping and reach customers across Sri Lanka. Shop products from ALEE and local sellers.">
   <meta name="robots" content="max-image-preview:large">
   <link rel="canonical" href="https://www.aleeshopping.com/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="ALEE Shopping">
-  <meta property="og:title" content="Grow Your Business with ALEE Shopping">
-  <meta property="og:description" content="Shop and sell with ALEE Shopping. Discover gadgets, fashion, beauty and more, or grow your business by reaching customers across Sri Lanka.">
+  <meta property="og:site_name" content="aleeshopping">
+  <meta property="og:title" content="Grow your business. | aleeshopping">
+  <meta property="og:description" content="Grow your business with aleeshopping and reach customers across Sri Lanka. Shop products from ALEE and local sellers.">
   <meta property="og:url" content="https://www.aleeshopping.com/">
   <meta property="og:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
   <meta property="og:image:type" content="image/png">
@@ -24,12 +25,12 @@
   <meta property="og:image:height" content="512">
   <meta property="og:image:alt" content="ALEE Shopping orange logo with a white shopping cart">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Grow Your Business with ALEE Shopping">
-  <meta name="twitter:description" content="Shop and sell with ALEE Shopping. Discover gadgets, fashion, beauty and more, or grow your business by reaching customers across Sri Lanka.">
+  <meta name="twitter:title" content="Grow your business. | aleeshopping">
+  <meta name="twitter:description" content="Grow your business with aleeshopping and reach customers across Sri Lanka. Shop products from ALEE and local sellers.">
   <meta name="twitter:image" content="https://www.aleeshopping.com/assets/alee-app-icon-512.png">
   <meta name="twitter:image:alt" content="ALEE Shopping orange logo with a white shopping cart">
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.aleeshopping.com/#organization","name":"ALEE Shopping","url":"https://www.aleeshopping.com/","logo":{"@type":"ImageObject","url":"https://www.aleeshopping.com/assets/alee-app-icon-512.png","width":512,"height":512},"sameAs":["https://www.facebook.com/profile.php?id=61594937084284","https://www.instagram.com/alee_shoppingnew/","https://www.tiktok.com/@aleeshoppingnew3"]},{"@type":"WebSite","@id":"https://www.aleeshopping.com/#website","url":"https://www.aleeshopping.com/","name":"ALEE Shopping","alternateName":"aleeshopping.com","publisher":{"@id":"https://www.aleeshopping.com/#organization"}},{"@type":"WebPage","@id":"https://www.aleeshopping.com/#webpage","url":"https://www.aleeshopping.com/","name":"Grow Your Business with ALEE Shopping","isPartOf":{"@id":"https://www.aleeshopping.com/#website"},"primaryImageOfPage":{"@type":"ImageObject","url":"https://www.aleeshopping.com/assets/alee-app-icon-512.png","width":512,"height":512}}]}
+    {"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.aleeshopping.com/#organization","name":"aleeshopping","url":"https://www.aleeshopping.com/","logo":{"@type":"ImageObject","url":"https://www.aleeshopping.com/assets/alee-app-icon-512.png","width":512,"height":512},"sameAs":["https://www.facebook.com/profile.php?id=61594937084284","https://www.instagram.com/alee_shoppingnew/","https://www.tiktok.com/@aleeshoppingnew3"]},{"@type":"WebSite","@id":"https://www.aleeshopping.com/#website","url":"https://www.aleeshopping.com/","name":"aleeshopping","alternateName":"ALEE Shopping","publisher":{"@id":"https://www.aleeshopping.com/#organization"}},{"@type":"WebPage","@id":"https://www.aleeshopping.com/#webpage","url":"https://www.aleeshopping.com/","name":"Grow your business. | aleeshopping","isPartOf":{"@id":"https://www.aleeshopping.com/#website"},"primaryImageOfPage":{"@type":"ImageObject","url":"https://www.aleeshopping.com/assets/alee-app-icon-512.png","width":512,"height":512}}]}
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -549,6 +550,7 @@
     .recommendation-shelf:not(.is-horizontal) { display:block; column-count:2; column-gap:8px; }
     .recommendation-shelf:not(.is-horizontal)>.recommendation-card-wrap { display:inline-block; width:100%; margin:0 0 8px; break-inside:avoid; vertical-align:top; }
     .recommendation-shelf:not(.is-horizontal)>.recommendation-empty { column-span:all; }
+    #topRatedProducts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-count:initial; gap:8px; align-items:start; }
     .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; align-items:stretch; }
     .recommendation-shelf .recommendation-card-wrap { min-width:0; align-self:stretch; }
     .recommendation-shelf.is-horizontal .recommendation-card-wrap { display:flex; height:100%; }
@@ -586,8 +588,8 @@
     .product-rating-row small { color:var(--detail-copy); font-size:10px; line-height:1.1; }
     .recommendation-section[data-recommendation-kind="new"] .recommendation-title-row p { color:#15803d; }
     .recommendation-section[data-recommendation-kind="sponsored"] .recommendation-title-row p { color:#667085; }
-    @media (min-width:768px) { .recommendation-shelf:not(.is-horizontal) { column-count:3; column-gap:10px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:10px; } .recommendation-shelf .card img { height:100%; } }
-    @media (min-width:1024px) { .recommendation-shelf:not(.is-horizontal) { column-count:5; } }
+    @media (min-width:768px) { .recommendation-shelf:not(.is-horizontal) { column-count:3; column-gap:10px; } #topRatedProducts { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; } .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-columns:200px; gap:10px; } .recommendation-shelf .card img { height:100%; } }
+    @media (min-width:1024px) { .recommendation-shelf:not(.is-horizontal) { column-count:5; } #topRatedProducts { grid-template-columns:repeat(5,minmax(0,1fr)); } }
     .recommendation-empty { grid-column:1/-1; margin:0; padding:14px; border:1px dashed var(--glass-border); border-radius:12px; color:#858b95; font-size:13px; }
     .offer-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
     .old-price { color:#db2777; text-decoration:line-through; font-size:10px; line-height:1.2; font-weight:700; }
@@ -1239,20 +1241,21 @@
     #productList.products>.card>.card-image-wrap{width:calc(100% + 8px)!important;height:auto!important;aspect-ratio:auto!important;margin:-4px -4px 0!important;border-radius:8px 8px 6px 6px!important;}
     #productList.products>.card>.card-image-wrap>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;border-radius:inherit!important;}
 }
-/* Desktop product cards use masonry columns; wide scrolling shelves remain equal-height. */
+/* Desktop and tablet product cards use aligned grid rows; phone masonry remains unchanged. */
 @media (min-width:768px){
-    #productList.products{display:block!important;column-count:3!important;column-gap:8px!important;}
-    #productList.products>.card{display:inline-flex!important;width:100%!important;min-height:0!important;box-sizing:border-box!important;break-inside:avoid!important;vertical-align:top!important;margin:0 0 8px!important;gap:2px!important;padding:5px!important;border-radius:8px!important;}
-    #productList.products>.card>.card-image-wrap{width:100%!important;height:auto!important;aspect-ratio:auto!important;margin:0!important;flex:none!important;}
-    #productList.products>.card>.card-image-wrap>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;}
+    #productList.products{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;align-items:stretch!important;gap:8px!important;}
+    #productList.products>.card{display:flex!important;width:auto!important;height:100%!important;min-height:276px!important;box-sizing:border-box!important;margin:0!important;gap:1px!important;padding:5px!important;border-radius:8px!important;}
+    #productList.products>.card>.card-image-wrap{width:100%!important;height:clamp(158px,13vw,166px)!important;aspect-ratio:auto!important;margin:0!important;flex:none!important;}
+    #productList.products>.card>.card-image-wrap>img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-height:none!important;aspect-ratio:auto!important;object-fit:cover!important;}
     #productList.products>.card>.product-shop-meta{gap:4px!important;min-height:16px!important;margin:2px 0 1px!important;color:#111827!important;font-size:10px!important;flex:none!important;}
     #productList.products>.card>.product-shop-meta>img:first-child{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;flex:0 0 16px!important;border-radius:0!important;}
-    #productList.products>.card>h3{height:auto!important;min-height:0!important;max-height:2.4em!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;}
-    #productList.products>.card>.price-block{min-height:0!important;margin:0!important;}
+    #productList.products>.card>h3{height:33px!important;min-height:33px!important;max-height:33px!important;margin:1px 0!important;font-size:13px!important;line-height:1.2!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;}
+    #productList.products>.card>.price-block{min-height:30px!important;margin:0!important;}
+    #productList.products>.card>.price-block .price{font-size:14px!important;}
     #productList.products .free-shipping-badge{z-index:2;padding:4px 7px;font-size:10px;white-space:nowrap;}
 }
 @media (min-width:1024px){
-    #productList.products{display:block!important;column-count:5!important;column-gap:8px!important;grid-template-columns:none!important;}
+    #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
 }
     .slider img { border-color:#111827!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
@@ -1705,7 +1708,7 @@
         <div class="recommendation-shelf" id="newArrivalsProducts" aria-live="polite"></div>
       </section>
       <section class="recommendation-section" id="topRatedSection" data-recommendation-kind="rated" aria-labelledby="topRatedTitle">
-        <div class="recommendation-title-row"><h2 id="topRatedTitle"><i class="fa-solid fa-star"></i> Top Rated</h2><p>Sorted by average customer rating</p></div>
+        <div class="recommendation-title-row"><h2 id="topRatedTitle"><i class="fa-solid fa-star"></i> Top Rated</h2></div>
         <div class="recommendation-shelf" id="topRatedProducts" aria-live="polite"></div>
       </section>
       <div class="products" id="productList"></div>
@@ -3158,7 +3161,7 @@
       const feedParams=new URLSearchParams(location.search);if(feedParams.has('feed')||feedParams.has('feedPost'))openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));
       await loadSellerCatalog();
       const requestedProduct = new URLSearchParams(location.search).get('product');
-      if (requestedProduct) openProductPopup(Number(requestedProduct),{skipHistory:cameFromSameOriginPage});
+      if (requestedProduct) openProductPopup(Number(requestedProduct),{skipHistory:new URLSearchParams(location.search).has('shopReturn')});
       const requestedJob = new URLSearchParams(location.search).get('job');
       if(requestedJob){openHubSection('jobs',document.querySelector('.hub-shortcut[onclick*="jobs"]'));const sharedJob=(await getHubJobs()).find(item=>String(item.id)===requestedJob);if(sharedJob)showHubJobDetails(sharedJob);}
       const storedHubSection=typeof history.state?.aleeHubSection==='string'?history.state.aleeHubSection:null,initialHubSection=storedHubSection==='reels'?'feed':storedHubSection;
@@ -4523,7 +4526,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const cutoff=Date.now()-7*86400000;
       const arrivals=ordered(available.filter(product=>product._sellerManaged&&new Date(product.created_at||0).getTime()>=cutoff),(a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
       const topRatedShelf=document.getElementById('topRatedProducts');
-      const topRatedColumns=topRatedShelf?Number.parseInt(getComputedStyle(topRatedShelf).columnCount,10):0;
+      const topRatedColumns=topRatedShelf?getComputedStyle(topRatedShelf).gridTemplateColumns.split(/\s+/).filter(track=>track&&track!=='none').length:0;
       const rated=ordered(available.filter(product=>Number(stats(product.id).rating_average||0)>0),(a,b)=>Number(stats(b.id).rating_average||0)-Number(stats(a.id).rating_average||0)||Number(stats(b.id).rating_count||0)-Number(stats(a.id).rating_count||0)).slice(0,8*Math.max(1,topRatedColumns||2));
       const sponsoredIds=new Set(sponsored.map(product=>String(product.id)));
       const organicArrivals=arrivals.filter(product=>!sponsoredIds.has(String(product.id)));
@@ -5872,7 +5875,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     syncCartCount();
   </script>
 <script src="site-theme.js?v=20261114-account-only-theme"></script>
-<script src="alee-push-config.js?v=20261111"></script><script src="alee-push.js?v=20261111-profile-list"></script>
+<script src="alee-push-config.js?v=20261116-domain-fix"></script><script src="alee-push.js?v=20261116-domain-fix"></script>
 <script src="chat.js?v=20261112-theme-unified"></script>
 </body>
 </html>

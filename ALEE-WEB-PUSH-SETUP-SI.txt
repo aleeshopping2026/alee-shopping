@@ -8,9 +8,9 @@ ALEE වෙබ් දැනුම්දීම් සකස් කිරීම �
 • කතාබස් පණිවිඩයක් ලැබුණු විට “කඩෙන් Message එකක් ආවා” යන දැනුම්දීම යැවීම.
 
 ආරම්භ කිරීමට පෙර
-දැනට භාවිතා කරන වෙබ් ලිපිනය මෙම මාර්ගෝපදේශයේ උදාහරණයට යොදා ඇත:
-https://aleeshopping2026.github.io/alee-shopping/
-ඔබ වෙබ් අඩවිය වෙනත් ලිපිනයකට මාරු කර ඇත්නම්, එම ලිපිනය යොදාගන්න.
+දැනට භාවිතා කරන ප්‍රධාන වෙබ් ලිපිනය:
+https://www.aleeshopping.com/
+Notification ලියාපදිංචි කිරීමට සහ යැවීමට සෑම තැනකම මෙම එකම ලිපිනය භාවිතා කරන්න.
 
 පියවර 1 — OneSignal ගිණුම සහ යෙදුම හදන්න
 1. OneSignal වෙබ් අඩවිය විවෘත කර නොමිලේ ගිණුමක් සාදන්න.
@@ -18,16 +18,18 @@ https://aleeshopping2026.github.io/alee-shopping/
 3. “Web Push” තෝරන්න.
 4. “Custom Code” සම්බන්ධ කිරීම තෝරන්න.
 5. වෙබ් අඩවි නම “ALEE” ලෙස දෙන්න.
-6. වෙබ් අඩවි ලිපිනය ලෙස මුල් ලිපිනයේ ඩොමේන් කොටස පමණක් දෙන්න:
-   https://aleeshopping2026.github.io
-   මෙහි “/alee-shopping/” කොටස OneSignal ඩොමේන් ලිපිනයට එක් නොකරන්න.
+6. වෙබ් අඩවි ලිපිනය ලෙස මෙම origin එක දෙන්න:
+   https://www.aleeshopping.com
 7. පෙරනිමි දැනුම්දීම් ලකුණ සඳහා මෙම පොදු ලිපිනය දෙන්න:
-   https://aleeshopping2026.github.io/alee-shopping/assets/alee-app-icon-512.png
+   https://www.aleeshopping.com/assets/alee-app-icon-512.png
 8. සැකසුම සුරකින්න.
 
-සටහන: OneSignal හි වෙබ් ලිපිනයට ඩොමේනය පමණක් අවශ්‍යයි. Supabase රහස් සැකසුමේදී පමණක් අවසානයට “/alee-shopping/” කොටසත් ඇතුළත් කළ යුතුයි.
+සටහන: OneSignal හි වෙබ් ලිපිනයට `https://www.aleeshopping.com` පමණක් දෙන්න. `www` සහිත මෙම ලිපිනයම භාවිතා කරන්න; `www` නැති ලිපිනය වෙනම origin එකකි.
+
+GitHub Pages ලිපිනයෙන් `.com` වෙත මාරු වූ පසු පැරණි browser push subscriptions අලුත් domain එකට මාරු කළ නොහැක. OneSignal Web settings තුළ නව origin එක (`https://www.aleeshopping.com`) සකසන්න. පැරණි App එකේ Site URL වෙනස් කළ නොහැකි නම්, නව OneSignal Web Push App එකක් සාදා එහි App ID එක `alee-push-config.js` තුළත් Supabase `ONESIGNAL_APP_ID` secret එකේත් යාවත්කாலிනය කරන්න. පාරිභෝගිකයන්ට `.com` වෙබ් අඩවිය නැවත විවෘත කර notification අවසරය ලබා දිය යුතුයි.
 
 පියවර 2 — OneSignal App ID එක ගන්න
+නව OneSignal App එකක් සෑදුවොත්, එහි App ID එක `alee-push-config.js` තුළත් `ONESIGNAL_APP_ID` සහ එම App එකට අදාළ `ONESIGNAL_REST_API_KEY` Supabase secrets තුළත් යාවත්කාලීන කරන්න.
 1. OneSignal පාලකයේ “Settings” පසුව “Keys & IDs” විවෘත කරන්න.
 2. “App ID” එක පිටපත් කරන්න. මෙය මහජන යෙදුම් හඳුනාගැනීමේ අංකයයි.
 3. යාවත්කාලීන වෙබ් අඩවියේ “alee-push-config.js” ගොනුව විවෘත කරන්න.
@@ -50,7 +52,7 @@ https://aleeshopping2026.github.io/alee-shopping/
 3. පහත රහස් තුන එක් කරන්න:
    ONESIGNAL_APP_ID = OneSignal හි App ID
    ONESIGNAL_REST_API_KEY = OneSignal හි REST API Key
-   ALEE_SITE_URL = https://aleeshopping2026.github.io/alee-shopping/
+   ALEE_SITE_URL = https://www.aleeshopping.com/
 4. ඒවා සුරකින්න.
 5. “REST API Key” එක වෙබ් පිටුවට, “backend-config.js” ගොනුවට හෝ GitHub වෙත දාන්න එපා.
 
@@ -67,10 +69,10 @@ https://aleeshopping2026.github.io/alee-shopping/
 5. රහස් යතුරු “Supabase Edge Functions → Secrets” තුළ පමණක් තබන්න. ඉහත සේවා කේතය පරිපාලක නොවන අයට පණිවිඩ යැවීම අවහිර කරයි.
 
 පියවර 6 — වෙබ් අඩවිය යාවත්කාලීන කරන්න
-1. OneSignal “App ID” එක ඇතුළත් කළ යාවත්කාලීන වෙබ් ගොනු සියල්ල GitHub Pages වෙත යවන්න.
+1. OneSignal “App ID” එක ඇතුළත් කළ යාවත්කාලීන වෙබ් ගොනු සියල්ල `www.aleeshopping.com` වෙත publish කරන්න.
 2. “OneSignalSDKWorker.js” ගොනුව ප්‍රධාන වෙබ් අඩවි ගොනු අතරම තිබිය යුතුයි.
 3. මෙම ලිපිනය විවෘත කළ විට සේවා කේතයේ අන්තර්ගතය පෙනිය යුතුයි:
-   https://aleeshopping2026.github.io/alee-shopping/OneSignalSDKWorker.js
+   https://www.aleeshopping.com/OneSignalSDKWorker.js
 4. වෙබ් අඩවිය HTTPS හරහා විවෘත වන බව බලන්න.
 
 පියවර 7 — පරිශීලකයා අවසර දෙන හැටි

@@ -6,23 +6,23 @@
   const readyPromise = new Promise((resolve, reject) => {
     resolveReady = resolve;
     rejectReady = reject;
-    window.aleePush = {
-      ready: null,
-      sendChat(messageId) {
-        if (!messageId || !db || !config?.appId || config.appId === "PASTE_ONESIGNAL_APP_ID_HERE") return Promise.resolve(null);
-        return db.functions.invoke(config?.functionName || "alee-push", {
-          body: { action: "chat", messageId: String(messageId) },
-        }).then(({ data, error }) => {
-          if (error) throw error;
-          if (data?.error) throw new Error(data.error);
-          return data;
-        });
-      },
-    };
-    window.aleePush.ready = readyPromise;
   });
+  window.aleePush = {
+    ready: readyPromise,
+    sendChat(messageId) {
+      if (!messageId || !db || !config?.appId || config.appId === "PASTE_ONESIGNAL_APP_ID_HERE") return Promise.resolve(null);
+      return db.functions.invoke(config?.functionName || "alee-push", {
+        body: { action: "chat", messageId: String(messageId) },
+      }).then(({ data, error }) => {
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+        return data;
+      });
+    },
+  };
 
   if (!config?.appId || config.appId === "PASTE_ONESIGNAL_APP_ID_HERE") {
+    resolveReady(null);
     return;
   }
 
