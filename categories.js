@@ -162,24 +162,15 @@ window.aleeLegacyCategoryMap = {
   't-shirt':'apparel-mens-t-shirt'
 };
 
+const normalizeCategorySearchText = text => String(text || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean).join(' ');
+const categorySearchPhrases = window.aleeCategories.flatMap((category, categoryIndex) => [category.label, ...category.keywords].map((phrase, phraseIndex) => {
+  const normalized = normalizeCategorySearchText(phrase);
+  return { id:category.id, phrase:normalized, score:normalized.length, order:categoryIndex * 100 + phraseIndex };
+})).filter(item => item.phrase).sort((a,b) => b.score - a.score || a.order - b.order);
+
 window.aleeSuggestProductCategory = value => {
-  const normalize = text => String(text || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean);
-  const phraseMatches = (phrase, textWords) => {
-    const phraseWords = normalize(phrase);
-    if (!phraseWords.length || phraseWords.length > textWords.length) return false;
-    return textWords.some((_, index) => phraseWords.every((word, offset) => textWords[index + offset] === word));
-  };
-  const textWords = normalize(value);
-  if (!textWords.length) return '';
-  let bestMatch = null;
-  window.aleeCategories.forEach(category => {
-    const phrases = [category.label, ...category.keywords];
-    phrases.forEach(phrase => {
-      const phraseWords = normalize(phrase);
-      if (!phraseMatches(phrase, textWords)) return;
-      const score = phraseWords.join(' ').length;
-      if (!bestMatch || score > bestMatch.score) bestMatch = { id:category.id, score };
-    });
-  });
-  return bestMatch ? bestMatch.id : '';
+  const normalized = normalizeCategorySearchText(value);
+  if (!normalized) return '';
+  const searchable = ` ${normalized} `;
+  return categorySearchPhrases.find(item => searchable.includes(` ${item.phrase} `))?.id || '';
 };

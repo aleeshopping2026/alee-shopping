@@ -3657,7 +3657,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       closeAppUiLayer('searchDiscovery',fromHistory,preserveHistory);
     }
     searchContainer.addEventListener('click',event=>{
-      if(!searchDiscoveryOverlay.classList.contains('show'))openSearchDiscovery(event.target.closest('#searchInput')!==null);
+      if(!searchDiscoveryOverlay.classList.contains('show')&&!event.target.closest('.photo-search-btn'))openSearchDiscovery(event.target.closest('#searchInput')!==null);
     });
     function setSearchDiscoveryMode(mode) {
       searchDiscoveryMode=mode==='ai'?'ai':'products';
@@ -4381,6 +4381,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     let photoSearchRunId = 0;
     const productPhotoDescriptors = new Map();
+    const productPhotoDescriptorTasks = new Map();
 
     function loadImageForMatching(source) {
       return new Promise((resolve, reject) => {
@@ -4454,18 +4455,36 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         let queryDescriptor;
         try { queryDescriptor = describeImageForMatching(await loadImageForMatching(queryUrl)); }
         finally { URL.revokeObjectURL(queryUrl); }
-        const ranked = await Promise.all(products.map(async product => {
-          const imageUrl = product.images?.[0];
-          if (!imageUrl) return null;
-          try {
-            let descriptor = productPhotoDescriptors.get(imageUrl);
-            if (!descriptor) {
-              descriptor = describeImageForMatching(await loadImageForMatching(imageUrl));
-              productPhotoDescriptors.set(imageUrl, descriptor);
+        const candidates = products.filter(product => product.images?.[0]);
+        const ranked = [];
+        let nextCandidate = 0, compared = 0;
+        const compareNextImage = async () => {
+          while (runId === photoSearchRunId) {
+            const index = nextCandidate++;
+            if (index >= candidates.length) return;
+            const product = candidates[index], imageUrl = product.images[0];
+            try {
+              let descriptor = productPhotoDescriptors.get(imageUrl);
+              if (!descriptor) {
+                let task = productPhotoDescriptorTasks.get(imageUrl);
+                if (!task) {
+                  task = loadImageForMatching(imageUrl).then(describeImageForMatching).then(result => {
+                    productPhotoDescriptors.set(imageUrl, result);
+                    return result;
+                  }).finally(() => productPhotoDescriptorTasks.delete(imageUrl));
+                  productPhotoDescriptorTasks.set(imageUrl, task);
+                }
+                descriptor = await task;
+              }
+              ranked.push({ product, score:photoSimilarity(queryDescriptor, descriptor) });
+            } catch (_) {}
+            compared++;
+            if (compared % 12 === 0 || compared === candidates.length) {
+              if (runId === photoSearchRunId) message.textContent = `Comparing product photos… ${compared} / ${candidates.length}`;
             }
-            return { product, score:photoSimilarity(queryDescriptor, descriptor) };
-          } catch (_) { return null; }
-        }));
+          }
+        };
+        await Promise.all(Array.from({ length:Math.min(6,candidates.length) },compareNextImage));
         if (runId !== photoSearchRunId) return;
         const matches = ranked.filter(Boolean).sort((a,b) => b.score - a.score).slice(0, 8);
         if (!matches.length) {
@@ -4844,9 +4863,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const product = products.find(p => p.id === id);
       if (!product) return;
       closeSearchDiscovery(false,true);
-      recordPersonalProductView(product.id);
-      recordRecommendationEvent(product.id,'click');
-      trackSellerProductView(product);
+      const renderToken = ++productPopupRenderToken;
       activeGalleryProduct = product;
       activeGalleryIndex = 0;
       document.getElementById("popupName").innerText = product.name;
@@ -4865,7 +4882,9 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       document.getElementById("popupFeatures").innerHTML = [...(product.colors?.length?[`Available colors: ${product.colors.join(', ')}`]:[]),...(product.features||[])].map(f => `<div class="feature-item"><i class="fa-solid fa-circle-check"></i><span>${escapeHTML(f)}</span></div>`).join('');
       renderProductVariants(product);
       renderGallery();
-      renderRecommendations(product);
+      document.getElementById('recommendationCategories').replaceChildren();
+      document.getElementById('recommendationList').replaceChildren();
+      document.getElementById('recommendationMoreBtn').hidden = true;
       document.getElementById('reviewStatus').textContent = supabaseClient ? (activeUser ? '' : 'Sign in with your email to leave a comment.') : 'Customer comments will be available after the online database is configured.';
       document.getElementById('reviewList').innerHTML = '';
       loadProductReviews(product.id);
@@ -4879,6 +4898,17 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions){if(stickyActions.parentElement!==document.body)document.body.appendChild(stickyActions);stickyActions.style.display='grid';}
       popup.style.display = "block";
       document.body.style.overflow = 'hidden';
+      window.setTimeout(() => {
+        if (renderToken !== productPopupRenderToken) return;
+        renderRecommendations(product);
+      }, 50);
+      const recordProductActivity = () => {
+        recordPersonalProductView(product.id);
+        recordRecommendationEvent(product.id,'click');
+        trackSellerProductView(product);
+      };
+      if (window.requestIdleCallback) window.requestIdleCallback(recordProductActivity,{timeout:1500});
+      else window.setTimeout(recordProductActivity,100);
     }
 
     function renderProductVariants(product) {
@@ -4926,8 +4956,10 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       return { color, size };
     }
 
-    function renderRecommendations(product, selectedCategory = getProductCategoryId(product)) {
-      const availableCategories = categories.filter(category => category.parent && products.some(item => getProductCategoryId(item) === category.id));
+    function renderRecommendations(product, selectedCategory = getProductCategoryId(product), productCategoryIds = null, visibleLimit = 12) {
+      const categoryIds = productCategoryIds || new Map(products.map(item => [String(item.id), getProductCategoryId(item)]));
+      const availableCategoryIds = new Set(categoryIds.values());
+      const availableCategories = categories.filter(category => category.parent && availableCategoryIds.has(category.id));
       const recommendationCategories = [{ id: 'all', label: 'All Products' }, ...availableCategories];
       const categoryBar = document.getElementById('recommendationCategories');
       categoryBar.replaceChildren(...recommendationCategories.map(category => {
@@ -4935,17 +4967,25 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         button.className = `cat-btn ${category.id === selectedCategory ? 'active' : ''}`;
         button.type = 'button';
         button.textContent = category.label;
-        button.onclick = () => renderRecommendations(product, category.id);
+        button.onclick = () => renderRecommendations(product, category.id, categoryIds);
         return button;
       }));
-      const related = [...new Map(products
-        .filter(item => item.id !== product.id && (selectedCategory === 'all' || getProductCategoryId(item) === selectedCategory))
-        .map(item => [item.id, item])).values()];
-      document.getElementById('recommendationList').innerHTML = related.map(item => `
+      const seen = new Set();
+      const related = products.filter(item => {
+        const id = String(item.id);
+        if (id === String(product.id) || seen.has(id) || (selectedCategory !== 'all' && categoryIds.get(id) !== selectedCategory)) return false;
+        seen.add(id);
+        return true;
+      });
+      document.getElementById('recommendationList').innerHTML = related.slice(0, visibleLimit).map(item => `
         <button class="recommendation-card" type="button" onclick="openProductPopup(${item.id})" aria-label="View ${item.name}">
           <img loading="lazy" src="${item.images?.[0] || 'assets/alee-logo.png'}" alt="${item.name}">
           <strong>${item.name}</strong><div class="price-block recommendation-price">${productPriceMarkup(item)}</div>
         </button>`).join('');
+      const moreButton = document.getElementById('recommendationMoreBtn');
+      moreButton.hidden = related.length <= 12;
+      moreButton.textContent = visibleLimit >= related.length ? 'Show fewer products' : 'Show more products';
+      moreButton.onclick = () => renderRecommendations(product, selectedCategory, categoryIds, visibleLimit >= related.length ? 12 : Math.min(related.length, visibleLimit + 12));
     }
 
     function renderGallery() {
@@ -5008,7 +5048,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       }
     });
 
-    function closeProductPopup(fromHistory=false,returnToShop=false) { const popup=document.getElementById("productPopup");popup.style.display = "none";resetProductSeo();stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){const shopId=productPopupReturnShopId;productPopupRouteEntry=false;productPopupReturnShopId='';if(returnToShop&&shopId&&!fromHistory){if(history.length>1){history.back();return;}const destination=new URL('shop.html',location.href);destination.searchParams.set('shop',shopId);location.replace(destination.href);return;}const params=new URLSearchParams(location.search);params.delete('product');params.delete('shopReturn');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);} }
+    function closeProductPopup(fromHistory=false,returnToShop=false) { productPopupRenderToken++;const popup=document.getElementById("productPopup");popup.style.display = "none";resetProductSeo();stopProductPopupAds();const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions)stickyActions.style.display='none';document.body.style.overflow = '';if(productPopupHistoryOpen){productPopupHistoryOpen=false;if(!fromHistory)history.back();}if(productPopupRouteEntry){const shopId=productPopupReturnShopId;productPopupRouteEntry=false;productPopupReturnShopId='';if(returnToShop&&shopId&&!fromHistory){if(history.length>1){history.back();return;}const destination=new URL('shop.html',location.href);destination.searchParams.set('shop',shopId);location.replace(destination.href);return;}const params=new URLSearchParams(location.search);params.delete('product');params.delete('shopReturn');history.replaceState(history.state,'',`${location.pathname}${params.toString()?`?${params}`:''}${location.hash}`);} }
     window.addEventListener('popstate',event=>{if(imageZoomHistoryOpen&&!event.state?.aleeImageZoom)closeImageZoom(true);if(hubJobDetailsHistoryOpen&&!event.state?.aleeJobDetails)closeHubJobDetails(true);if(productPopupHistoryOpen&&!event.state?.aleeProductPopup)closeProductPopup(true);if(hubHistoryOpen&&!event.state?.aleeHubSection)closeHubSection(true);});
     document.addEventListener('keydown', e => {
       if (document.getElementById('productPopup').style.display === 'block') {
