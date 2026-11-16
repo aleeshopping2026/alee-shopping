@@ -100,7 +100,7 @@ document.getElementById('productForm').addEventListener('submit', async event =>
   const updated = [...catalog, product];
   const notice = { id:product.id, name:product.name, version:Date.now() };
   zip.file('products.js', `window.aleeProducts = ${JSON.stringify(updated, null, 2)};\nwindow.aleeLatestProductNotice = ${JSON.stringify(notice)};\n`);
-  zip.file('categories.js', `window.aleeCategoryGroups = ${JSON.stringify(categoryGroups, null, 2)};\nwindow.aleeCatalogTabs = ${JSON.stringify(catalogTabs, null, 2)};\nwindow.aleeCategories = ${JSON.stringify(categories, null, 2)};\n`);
+  zip.file('categories.js', `window.aleeCategoryGroups = ${JSON.stringify(categoryGroups, null, 2)};\nwindow.aleeCatalogTabs = ${JSON.stringify(catalogTabs, null, 2)};\nwindow.aleeCategories = ${JSON.stringify(categories, null, 2)};\nwindow.aleeLegacyCategoryMap = ${JSON.stringify(window.aleeLegacyCategoryMap || {}, null, 2)};\nwindow.aleeSuggestProductCategory = ${window.aleeSuggestProductCategory.toString()};\n`);
   zip.file('shops.js', `window.aleeShops = ${JSON.stringify(shops, null, 2)};\n`);
   const blob = await zip.generateAsync({type:'blob'});
   const url = URL.createObjectURL(blob);

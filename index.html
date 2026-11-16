@@ -1422,8 +1422,8 @@
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
-        <button type="button" class="mobile-sheet-action" id="mobileBannerAdsButton" style="display:none" onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
-        <button type="button" class="mobile-sheet-action" id="mobileSponsoredProductsManagerButton" hidden onclick="closeMobileSheet('mobileAccountSheet',false,true);location.href='sponsored-products-manager.html'"><i class="fa-solid fa-rectangle-ad"></i> Sponsored Products Manager</button>
+        <button type="button" class="mobile-sheet-action" id="mobileBannerAdsButton" style="display:none" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountManagerPage('banner-ads.html')"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
+        <button type="button" class="mobile-sheet-action" id="mobileSponsoredProductsManagerButton" hidden onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountManagerPage('sponsored-products-manager.html')"><i class="fa-solid fa-rectangle-ad"></i> Sponsored Products Manager</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountFavorites()"><i class="fa-solid fa-star"></i> Favorites</button>
         <button type="button" class="mobile-sheet-action" id="mobileMyShopButton" onclick="closeMobileSheet('mobileAccountSheet');setTimeout(openAccountMyShop,0)"><i class="fa-solid fa-store"></i> Open Shop</button>
@@ -1622,12 +1622,12 @@
       <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close account-theme-trigger" id="accountThemeToggleBtn" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" title="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
-        <button type="button" id="accountBannerAdsButton" style="display:none" onclick="window.location.href='banner-ads.html'"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
-         <button type="button" id="accountBannerPricingButton" hidden onclick="window.location.href='banner-pricing-manager.html'"><i class="fa-solid fa-tags"></i><span>Banner Ad Pricing</span><small>Change the prices shown to advertisers</small></button>
-        <button type="button" id="accountSponsoredProductsManagerButton" hidden onclick="window.location.href='sponsored-products-manager.html'"><i class="fa-solid fa-rectangle-ad"></i><span>Sponsored Products</span><small>Review seller requests and activate paid placements</small></button>
+        <button type="button" id="accountBannerAdsButton" style="display:none" onclick="openAccountManagerPage('banner-ads.html')"><i class="fa-solid fa-bullhorn"></i><span>Banner Ads</span><small>Request country, popup, banner, offer or verified badge</small></button>
+         <button type="button" id="accountBannerPricingButton" hidden onclick="openAccountManagerPage('banner-pricing-manager.html')"><i class="fa-solid fa-tags"></i><span>Banner Ad Pricing</span><small>Change the prices shown to advertisers</small></button>
+        <button type="button" id="accountSponsoredProductsManagerButton" hidden onclick="openAccountManagerPage('sponsored-products-manager.html')"><i class="fa-solid fa-rectangle-ad"></i><span>Sponsored Products</span><small>Review seller requests and activate paid placements</small></button>
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, reels, jobs, apps and games</small></button>
-        <button type="button" id="accountOfferManagerButton" onclick="window.location.href='offer-manager.html'" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
-        <button type="button" id="accountContentManagersButton" onclick="window.location.href='manager-center.html'" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, banner pricing, country ads, offers and product popups</small></button>
+        <button type="button" id="accountOfferManagerButton" onclick="openAccountManagerPage('offer-manager.html')" hidden><i class="fa-solid fa-tags"></i><span>Offer Manager</span><small>Add, edit, rank and remove offers</small></button>
+        <button type="button" id="accountContentManagersButton" onclick="openAccountManagerPage('manager-center.html')" hidden><i class="fa-solid fa-sliders"></i><span>Content Managers</span><small>Home banners, banner pricing, country ads, offers and product popups</small></button>
         <button type="button" id="accountMyShopButton" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>Open Shop</span><small>Create or manage your shop</small></button>
         <button type="button" onclick="openAccountFavorites()"><i class="fa-solid fa-star"></i><span>Favorites</span><small>Saved items, jobs and shops</small></button>
         <button type="button" onclick="closeBuyerAccount(false,true);openSearchDiscovery(false)"><i class="fa-solid fa-magnifying-glass"></i><span>Saved searches</span><small>Searches and product history</small></button>
@@ -1936,6 +1936,12 @@
     }
 
     function switchAccountSurface(){switchAccountRole(getAccountRole()==='seller'?'buyer':'seller');}
+
+    function openAccountManagerPage(page) {
+      const target=new URL(page,location.href);
+      target.searchParams.set('aleeReturnTo','account');
+      location.href=target.href;
+    }
 
     async function openBuyerAccount() {
       document.getElementById('profileDropdown')?.classList.remove('show');
@@ -2914,6 +2920,12 @@
     const hideSiteLoader=()=>siteLoader?.classList.add('hidden');
     window.setTimeout(hideSiteLoader,8000);
     window.addEventListener('DOMContentLoaded', async () => {
+      const accountReturnUrl=new URL(location.href);
+      const openAccountAfterReturn=accountReturnUrl.searchParams.get('aleeOpenAccount')==='1';
+      if(openAccountAfterReturn){
+        accountReturnUrl.searchParams.delete('aleeOpenAccount');
+        history.replaceState(history.state,'',`${accountReturnUrl.pathname}${accountReturnUrl.search}${accountReturnUrl.hash}`);
+      }
       const shop = document.getElementById('shopPageContent');
       shop.style.display = 'block';
       shop.style.opacity = 1;
@@ -2930,6 +2942,7 @@
           window.setTimeout(()=>loadSellerCatalog(),0);
         });
       } else setLoggedInUser(null);
+      if(openAccountAfterReturn)await openBuyerAccount();
       if(new URLSearchParams(location.search).has('chatShop')&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to message this shop. After signing in, your chat will open here.';}
       if (!supabaseClient) document.getElementById('reviewStatus').textContent = 'Customer comments will be available after the online database is configured.';
       renderShopDirectory();
@@ -3885,7 +3898,6 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const raw=String(product.category||'').trim().toLowerCase();
       const direct=categories.find(category=>category.id===raw);
       if(direct)return direct.id;
-      const corpus=`${product.name||''} ${product.desc||product.description||''} ${product.categoryLabel||product.category_label||''} ${(product.features||[]).join(' ')}`.toLowerCase();
       const suggested=window.aleeSuggestProductCategory(`${product.name||''} ${product.desc||product.description||''} ${product.categoryLabel||product.category_label||''} ${(product.features||[]).join(' ')}`);
       if(suggested)return suggested;
       return window.aleeLegacyCategoryMap?.[raw]||'';

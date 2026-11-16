@@ -107,6 +107,7 @@ const categoryAliases = {
   'machinery-tools-drill-machine':['drill','electric drill'],
   'electrical-lights-led-bulb':['led light bulb','light bulb'],
   'books-stationery-note-book':['notebook','exercise book'],
+  'health-medical-massage-machine':['massage gun','neck massager','facial massager'],
   'books-stationery-scissor':['scissors']
 };
 
@@ -145,25 +146,37 @@ window.aleeLegacyCategoryMap = {
   'travel-luggage':'bags-luggage-travel-bag',
   'outdoor-gear':'machinery-tools-drill-machine',
   'food-snacks':'food-grocery-biscuits',
-  stationery:'books-stationery-note-book'
-};
-
-const normalizeCategoryText = value => String(value || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean);
-const phraseMatchesCategoryText = (phrase, textWords) => {
-  const phraseWords = normalizeCategoryText(phrase);
-  if (!phraseWords.length || phraseWords.length > textWords.length) return false;
-  return textWords.some((_, index) => phraseWords.every((word, offset) => textWords[index + offset] === word));
+  stationery:'books-stationery-note-book',
+  beauty:'beauty-personal-care-lipstick',
+  health:'health-medical-vitamins',
+  gadgets:'mobile-accessories-earbuds',
+  gadget:'mobile-accessories-earbuds',
+  audio:'mobile-accessories-bluetooth-speaker',
+  watches:'jewellery-watches-smart-watch',
+  smartwatch:'jewellery-watches-smart-watch',
+  phone:'consumer-electronics-mobile-phone',
+  power:'machinery-tools-drill-machine',
+  tool:'machinery-tools-drill-machine',
+  sport:'sports-outdoors-gym-dumbbell',
+  fashion:'apparel-womens-frock',
+  't-shirt':'apparel-mens-t-shirt'
 };
 
 window.aleeSuggestProductCategory = value => {
-  const textWords = normalizeCategoryText(value);
+  const normalize = text => String(text || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+  const phraseMatches = (phrase, textWords) => {
+    const phraseWords = normalize(phrase);
+    if (!phraseWords.length || phraseWords.length > textWords.length) return false;
+    return textWords.some((_, index) => phraseWords.every((word, offset) => textWords[index + offset] === word));
+  };
+  const textWords = normalize(value);
   if (!textWords.length) return '';
   let bestMatch = null;
   window.aleeCategories.forEach(category => {
     const phrases = [category.label, ...category.keywords];
     phrases.forEach(phrase => {
-      const phraseWords = normalizeCategoryText(phrase);
-      if (!phraseMatchesCategoryText(phrase, textWords)) return;
+      const phraseWords = normalize(phrase);
+      if (!phraseMatches(phrase, textWords)) return;
       const score = phraseWords.join(' ').length;
       if (!bestMatch || score > bestMatch.score) bestMatch = { id:category.id, score };
     });
