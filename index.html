@@ -328,7 +328,16 @@
     .photo-search-notice.show { display:flex; }
     .photo-search-clear { padding:6px 10px; border:1px solid var(--glass-border); border-radius:8px; background:var(--bg-dark); color:var(--text-white); cursor:pointer; white-space:nowrap; }
 
-    /* Categories Bar */
+    /* Recommendation Tabs + Categories Bar */
+    .recommendation-tabs-bar {
+      display: flex; gap: 8px; padding: 10px 3% 0; background: var(--card-bg); overflow-x: auto; white-space: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch; position: sticky; top: 62px; z-index: 101;
+    }
+    .recommendation-tabs-bar::-webkit-scrollbar { display: none; }
+    .recommendation-tab-btn {
+      flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--bg-dark); color: var(--text-white); font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.25s ease;
+    }
+    .recommendation-tab-btn.active, .recommendation-tab-btn:hover { background: var(--light-leaf); border-color: var(--light-leaf); color: #fff; }
+    .recommendation-tab-btn:focus-visible { outline: 2px solid rgba(255,255,255,.7); outline-offset: 2px; }
     .categories-bar {
       display: flex; gap: 8px; padding: 10px 3%; background: var(--card-bg); overflow-x: auto; border-bottom: 1px solid var(--glass-border);
       -webkit-overflow-scrolling: touch; position: sticky; top: 112px; z-index: 98;
@@ -368,6 +377,7 @@
     .shop-tile strong .verified-badge { width:20px;height:20px;display:inline-block;vertical-align:middle;margin-left:3px;object-fit:contain;border:0;border-radius:0;background:transparent;box-shadow:none; }
     .shop-rating { display:flex; justify-content:center; gap:1px; color:#d1d5db; font-size:9px; line-height:1; white-space:nowrap; }
     .shop-rating .filled { color:#f59e0b; }
+    body.hub-section-open .recommendation-tabs-bar,
     body.hub-section-open .categories-bar { display:none!important; }
     .shops-section.hub-nav-pinned { position:sticky; top:112px; z-index:97; background:var(--card-bg); box-shadow:0 4px 10px #10182810; }
     .hub-shortcuts { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; padding:4px 0 2px; }
@@ -1646,6 +1656,14 @@
       </div>
     </section>
 
+    <div class="recommendation-tabs-bar" id="recommendationTabsBar" aria-label="Shop recommendation sections">
+      <button type="button" class="recommendation-tab-btn active" data-scroll-target="forYouSection">For You</button>
+      <button type="button" class="recommendation-tab-btn" data-scroll-target="trendingSection">Trending</button>
+      <button type="button" class="recommendation-tab-btn" data-scroll-target="bestSellersSection">Best Seller</button>
+      <button type="button" class="recommendation-tab-btn" data-scroll-target="newArrivalsSection">New Arrivals</button>
+      <button type="button" class="recommendation-tab-btn" data-scroll-target="topRatedSection">Top Rating</button>
+      <button type="button" class="recommendation-tab-btn" data-scroll-target="productList">Free Shipping</button>
+    </div>
     <!-- Categories Bar: directly below the promotional banners -->
     <div class="categories-bar" id="categoryBar" aria-label="Product categories"></div>
     <section class="category-browse-panel" id="categoryBrowsePanel" aria-label="Subcategories" hidden>
@@ -4157,6 +4175,22 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         bar.appendChild(button);
       });
       showMobileCategoryGroups();
+      bindRecommendationTabs();
+    }
+
+    function bindRecommendationTabs() {
+      const tabButtons = document.querySelectorAll('.recommendation-tab-btn');
+      if (!tabButtons.length) return;
+      tabButtons.forEach((button) => {
+        button.onclick = () => {
+          tabButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
+          const targetId = button.dataset.scrollTarget;
+          const target = targetId ? document.getElementById(targetId) : null;
+          if (!target) return;
+          const top = window.scrollY + target.getBoundingClientRect().top - 84;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        };
+      });
     }
 
     function categoryPlaceholderImage(group) {
