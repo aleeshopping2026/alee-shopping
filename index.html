@@ -1501,7 +1501,7 @@
       </div>
       
       <div class="header-actions">
-        <a class="header-shop-button" href="shops.html" target="_blank" rel="noopener"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
+        <a class="header-shop-button" href="shops.html" onclick="location.href=this.href;return false"><i class="fa-solid fa-store" style="margin-right:5px"></i>Shops</a>
         <button class="header-account-button" type="button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i> My Account</button>
         <button class="header-chat-button" type="button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i> Messages</button>
         <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
@@ -1708,7 +1708,7 @@
       
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut desktop-sidebar-only" type="button" onclick="showDesktopHome(this)" aria-label="Items and home"><span class="hub-shortcut-icon"><i class="fa-solid fa-grip"></i></span><span class="hub-shortcut-label">Items</span></button>
-        <a class="hub-shortcut" href="shops.html" target="_blank" rel="noopener"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></a>
+        <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Offers</span><span class="desktop-hub-label">Offer</span></span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('feed',this)"><span class="hub-shortcut-icon"><i class="fa-regular fa-images"></i></span><span class="hub-shortcut-label">Feed</span></button>
@@ -1721,7 +1721,7 @@
         <button class="desktop-sidebar-action" type="button" data-view="cart" onclick="openDesktopSidebarView('cart')"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></button>
       </div>
       <div id="hubShopsPanel" hidden>
-        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" target="_blank" rel="noopener" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800;text-decoration:none">Search all →</a></span></h2>
+        <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800;text-decoration:none">Search all →</a></span></h2>
         <div class="shops-strip-wrap"><button class="shops-strip-control" type="button" onclick="scrollShopStrip(-1)" aria-label="Scroll shops left"><i class="fa-solid fa-chevron-left"></i></button><div class="shops-strip" id="shopsStrip" tabindex="0" aria-label="Shop list; swipe or scroll horizontally"></div><button class="shops-strip-control" type="button" onclick="scrollShopStrip(1)" aria-label="Scroll shops right"><i class="fa-solid fa-chevron-right"></i></button></div>
       </div>
     </section>
@@ -1826,7 +1826,7 @@
     <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
       <button type="button" class="mobile-nav-button active" onclick="mobileGoHome()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9.5 20v-6h5v6"/></svg><span>Home</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMobileCategories()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categories</span></button>
-      <a class="mobile-nav-button" href="shops.html" target="_blank" rel="noopener" aria-label="Open shops in a new tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-1.5-6h-15L3 10ZM5 10v10h14V10M9 20v-6h6v6M3 10c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0"/></svg><span>Shops</span></a>
+      <button type="button" class="mobile-nav-button" onclick="openMobileShops()" aria-label="Open shops"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18l-1.5-6h-15L3 10ZM5 10v10h14V10M9 20v-6h6v6M3 10c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0"/></svg><span>Shops</span></button>
       <button type="button" class="mobile-nav-button" onclick="openMessagesForCurrentRole()"><i class="fa-regular fa-comments"></i><span>Messages</span></button>
       <button type="button" class="mobile-nav-button" onclick="openCurrentAccount()"><i class="fa-regular fa-user"></i><span id="mobileAccountNavLabel">My Account</span></button>
     </nav>
