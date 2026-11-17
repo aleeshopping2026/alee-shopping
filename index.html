@@ -802,6 +802,10 @@
     .detail-section h3 { font-size:15px; color:var(--light-leaf); margin-bottom:9px; }
     .detail-section p { color:var(--detail-copy); line-height:1.75; font-size:15px; font-weight:500; white-space:pre-line; }
     .feature-list { display:grid; gap:7px; }
+    #popupDesc,#popupFeatures { max-height:210px; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:var(--light-leaf) transparent; padding-right:7px; }
+    #popupDesc { overflow-wrap:anywhere; }
+    #popupDesc::-webkit-scrollbar,#popupFeatures::-webkit-scrollbar { width:6px; }
+    #popupDesc::-webkit-scrollbar-thumb,#popupFeatures::-webkit-scrollbar-thumb { border-radius:8px; background:var(--light-leaf); }
     .feature-item { display:flex; gap:9px; align-items:flex-start; color:var(--detail-copy); font-size:14px; font-weight:500; line-height:1.6; }
     .feature-item i { color:var(--light-leaf); margin-top:2px; }
     .variant-controls { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
