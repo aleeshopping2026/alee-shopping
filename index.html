@@ -107,6 +107,28 @@
     .account-form.active { display:block; }
     .account-close { position:absolute; right:15px; top:10px; font-size:28px; color:var(--light-leaf); cursor:pointer; }
     .account-status { min-height:18px; text-align:center; font-size:12px; margin-top:10px; color:#aaa; }
+    /* Clean black-and-white account dialog with a restrained orange accent. */
+    #accountModal{background:rgba(10,12,15,.72);backdrop-filter:blur(8px);padding:18px}
+    #accountModal .account-card{width:min(420px,100%);padding:30px 28px 26px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;color:#17191d;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+    #accountModal .account-card h2{margin:0 0 5px;color:#111827;font-size:24px;font-weight:800;letter-spacing:-.045em}
+    #accountModal .account-note{margin-bottom:20px;color:#747982;font-size:11px;line-height:1.5}
+    #accountModal .account-close{top:12px;right:16px;color:#5d626b;font-size:25px;line-height:1}
+    #accountModal .account-close:hover{color:#f36b00}
+    #accountModal .account-card>.btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;margin:0 0 16px;padding:10px 14px;border:1px solid #d8dce2;border-radius:8px;background:#fff;color:#191b20;font-size:13px;font-weight:700;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+    #accountModal .account-card>.btn i{color:#4285f4;font-size:16px}
+    #accountModal .account-card>.btn:hover{background:#f8f9fb;border-color:#b8bec8}
+    #accountModal .account-tabs{gap:4px;margin-bottom:16px;padding:4px;border:1px solid #e5e7eb;border-radius:9px;background:#f3f4f6}
+    #accountModal .account-tab{min-height:36px;padding:8px 6px;border:0;border-radius:6px;background:transparent;color:#555b65;font-size:11px;font-weight:700}
+    #accountModal .account-tab.active{background:#fff;color:#17191d;box-shadow:0 1px 3px rgba(16,24,40,.14)}
+    #accountModal .account-form input{min-height:44px;margin:0 0 10px;padding:11px 12px;border:1px solid #d6dae0;border-radius:7px;background:#fff;color:#17191d;font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s}
+    #accountModal .account-form input::placeholder{color:#9297a0}
+    #accountModal .account-form input:focus{border-color:#f36b00;box-shadow:0 0 0 3px rgba(243,107,0,.12)}
+    #accountModal .account-form .btn{min-height:44px;margin-top:4px;padding:10px 14px;border:1px solid #17191d;border-radius:7px;background:#17191d;color:#fff;font-size:13px;font-weight:700;box-shadow:none}
+    #accountModal .account-form .btn:hover{background:#30343b;border-color:#30343b}
+    #accountModal .phone-login-label{margin-bottom:7px;color:#343840;font-size:11px}
+    #accountModal .phone-change-button{color:#252932;font-size:11px}
+    #accountModal .account-status{color:#606671;font-size:11px}
+    @media(max-width:480px){#accountModal{padding:14px}#accountModal .account-card{padding:28px 20px 22px;border-radius:14px}}
 
     /* --- SHOP PAGE STYLES --- */
     #shopPageContent { display: none; opacity: 0; transition: opacity 0.5s ease; }
