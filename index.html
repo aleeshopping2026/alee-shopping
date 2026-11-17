@@ -864,6 +864,13 @@
       .popup-sticky-action .btn { font-size:11px; }
       .support-dropdown { width:min(260px,calc(100vw - 24px)); }
       .support-button { padding:6px 6px; font-size:9px; }
+      #recommendationList .recommendation-card-wrap>.card { overflow:hidden; padding:0 0 8px; gap:5px; }
+      #recommendationList .recommendation-card-wrap>.card .card-image-wrap { position:relative; width:100%; aspect-ratio:1/1; flex:none; overflow:hidden; border-radius:10px 10px 0 0; }
+      #recommendationList .recommendation-card-wrap>.card .card-image-wrap>img { position:absolute; inset:0; display:block; width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; padding:0; border:0; border-radius:inherit; }
+      #recommendationList .recommendation-card-wrap>.card .product-shop-meta,
+      #recommendationList .recommendation-card-wrap>.card h3,
+      #recommendationList .recommendation-card-wrap>.card .price-block,
+      #recommendationList .recommendation-card-wrap>.card .product-rating-row { margin-left:8px; margin-right:8px; }
     }
     /* Full-screen cart and checkout */
     .cart-overlay { display:none; position:fixed; inset:0; z-index:10000; width:100vw; height:100vh; height:100dvh; background:var(--card-bg); color:var(--text-white); }
