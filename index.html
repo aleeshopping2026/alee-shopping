@@ -558,6 +558,8 @@
     body.feed-section-open #hubContentBody{background:#fff;color:#111}
     body.feed-section-open #hubContentPanel{border-color:#e8e8e8}
     body.feed-section-open #shopsSection{display:none!important}
+    @media(min-width:701px){body.feed-section-open #shopsSection{display:block!important}body.feed-section-open #hubContentPanel{left:140px;width:auto}}
+    @media(min-width:701px) and (max-width:1023px){body.feed-section-open #hubContentPanel{left:112px}}
     body.feed-section-open .hub-content-heading{position:sticky;top:0;z-index:8;margin:0;padding:10px 14px;color:#111;border-bottom:1px solid #eee;background:#fff}
     body.feed-section-open #hubContentBody{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
     .container.hub-content-open { display:none; }
