@@ -801,9 +801,14 @@
     .feature-list { display:grid; gap:7px; }
     .feature-item { display:flex; gap:9px; align-items:flex-start; color:var(--detail-copy); font-size:14px; font-weight:500; line-height:1.6; }
     .feature-item i { color:var(--light-leaf); margin-top:2px; }
-    .variant-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-    .variant-controls label { display:grid; gap:5px; font-size:12px; font-weight:700; }
-    .variant-controls select { width:100%; padding:10px; border:1px solid var(--glass-border); border-radius:8px; background:var(--card-bg); color:var(--text-white); font:inherit; }
+    .variant-controls { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+    .variant-choice-group { min-width:0; margin:0; padding:0; border:0; }
+    .variant-choice-group legend { margin:0 0 7px; padding:0; color:var(--text-white); font-size:13px; font-weight:800; }
+    .variant-choice-list { display:flex; flex-wrap:wrap; gap:8px; }
+    .variant-choice { min-height:42px; padding:8px 14px; border:1px solid var(--glass-border); border-radius:10px; background:var(--card-bg); color:var(--text-white); font:inherit; font-size:13px; font-weight:650; cursor:pointer; }
+    .variant-choice:hover { border-color:var(--light-leaf); }
+    .variant-choice[aria-pressed="true"] { border-color:var(--light-leaf); background:rgba(255,105,0,.10); color:var(--light-leaf); box-shadow:0 0 0 2px rgba(255,105,0,.14); }
+    .variant-choice-group[aria-invalid="true"] legend { color:#b42318; }
     .order-info { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; width:100%; }
     .info-chip { display:flex; min-width:0; min-height:64px; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#fff4bf; border:1px solid #eab308; border-radius:12px; padding:10px 8px; font-size:12px; line-height:1.35; color:#493b10; }
     .info-chip strong { display:block; color:#a16207; font-size:13px; margin-bottom:3px; }
@@ -5809,39 +5814,51 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const controls = document.getElementById('variantControls');
       controls.replaceChildren();
       section.hidden = colors.length === 0 && sizes.length === 0;
-      const addSelect = (id, label, values, prompt) => {
+      const addChoiceGroup = (id, label, values) => {
         if (!values.length) return;
-        const wrapper = document.createElement('label');
-        wrapper.textContent = label;
-        const select = document.createElement('select');
-        select.id = id;
-        select.required = true;
-        const first = document.createElement('option');
-        first.value = '';
-        first.textContent = prompt;
-        select.appendChild(first);
+        const group = document.createElement('fieldset');
+        group.id = id;
+        group.className = 'variant-choice-group';
+        group.dataset.selected = '';
+        group.setAttribute('aria-required', 'true');
+        const legend = document.createElement('legend');
+        legend.textContent = `Choose ${label.toLowerCase()}`;
+        const choices = document.createElement('div');
+        choices.className = 'variant-choice-list';
+        choices.setAttribute('role', 'group');
+        choices.setAttribute('aria-label', legend.textContent);
         values.forEach(value => {
-          const option = document.createElement('option');
-          option.value = String(value);
-          option.textContent = String(value);
-          select.appendChild(option);
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'variant-choice';
+          button.dataset.variantValue = String(value);
+          button.textContent = String(value);
+          button.setAttribute('aria-pressed', 'false');
+          button.addEventListener('click', () => {
+            group.dataset.selected = button.dataset.variantValue;
+            group.setAttribute('aria-invalid', 'false');
+            choices.querySelectorAll('.variant-choice').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+          });
+          choices.appendChild(button);
         });
-        wrapper.appendChild(select);
-        controls.appendChild(wrapper);
+        group.append(legend, choices);
+        controls.appendChild(group);
       };
-      addSelect('popupColor', 'Color', colors, 'Choose color');
-      addSelect('popupSize', 'Size', sizes, 'Choose size');
+      addChoiceGroup('popupColor', 'Color', colors);
+      addChoiceGroup('popupSize', 'Size', sizes);
     }
 
     function selectedVariants() {
-      const colorSelect = document.getElementById('popupColor');
-      const sizeSelect = document.getElementById('popupSize');
-      const color = colorSelect ? colorSelect.value : '';
-      const size = sizeSelect ? sizeSelect.value : '';
-      if ((colorSelect && !color) || (sizeSelect && !size)) {
-        alert('Please choose the color and size first.');
-        if (colorSelect && !color) colorSelect.focus();
-        else if (sizeSelect) sizeSelect.focus();
+      const colorGroup = document.getElementById('popupColor');
+      const sizeGroup = document.getElementById('popupSize');
+      const color = colorGroup?.dataset.selected || '';
+      const size = sizeGroup?.dataset.selected || '';
+      const missing = [colorGroup&&!color?colorGroup:null,sizeGroup&&!size?sizeGroup:null].filter(Boolean);
+      if (missing.length) {
+        alert(`Please choose ${missing.map(group=>group.id==='popupColor'?'color':'size').join(' and ')} first.`);
+        missing[0].setAttribute('aria-invalid', 'true');
+        missing[0].querySelector('.variant-choice')?.focus({preventScroll:true});
+        missing[0].scrollIntoView({behavior:'smooth',block:'center'});
         return null;
       }
       return { color, size };
