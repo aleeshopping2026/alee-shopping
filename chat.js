@@ -421,7 +421,7 @@
   async function openNotificationConversation(){if(!pendingNotificationConversationId||!db)return;const{data,error}=await db.auth.getUser();if(error||!data?.user)return;const id=pendingNotificationConversationId;pendingNotificationConversationId=null;const url=new URL(location.href);url.searchParams.delete('openChat');history.replaceState(history.state,'',url.href);await openConversation(id,data.user);}
   window.aleeChat={openHome,openShop,openInbox,openConversation,prefetchInbox,setTheme};
   if(pendingNotificationConversationId){db?.auth?.getSession().then(()=>openNotificationConversation()).catch(()=>{});db?.auth?.onAuthStateChange((_event,session)=>{if(session?.user)window.setTimeout(()=>openNotificationConversation().catch(()=>{}),0);});}
-  if(db?.auth){db.auth.getSession().then(({data})=>{if(data?.session?.user)setupNotificationListener(data.session.user);}).catch(()=>{});db.auth.onAuthStateChange((_event,session)=>{if(session?.user)setupNotificationListener(session.user);else if(ui.notificationChannel){db.removeChannel(ui.notificationChannel);ui.notificationChannel=null;ui.notifiedMessageIds.clear();}});}
+  if(db?.auth){db.auth.getSession().then(({data})=>{if(data?.session?.user)setupNotificationListener(data.session.user);}).catch(()=>{});db.auth.onAuthStateChange((_event,session)=>{window.setTimeout(()=>{if(session?.user)setupNotificationListener(session.user);else if(ui.notificationChannel){db.removeChannel(ui.notificationChannel);ui.notificationChannel=null;ui.notifiedMessageIds.clear();}},0);});}
   async function restoreChatAfterReload(){
     let saved;try{saved=JSON.parse(sessionStorage.getItem('alee-chat-resume')||'null');}catch(_){}
     if(!saved?.id||!db)return;

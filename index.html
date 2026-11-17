@@ -3396,12 +3396,14 @@
         let authStateEventSeen=false;
         supabaseClient.auth.onAuthStateChange((event, session) => {
           authStateEventSeen=true;
-          setLoggedInUser(session?.user || null);
-          if (session?.user) {
-            closeAccountModal();
-            if(event==='SIGNED_IN')window.setTimeout(ensurePrivateAccountProfile,0);
-          } else {privateAccountProfile=null;document.getElementById('accountProfileSetup').classList.remove('show');}
-          window.setTimeout(()=>loadSellerCatalog(),0);
+          window.setTimeout(()=>{
+            setLoggedInUser(session?.user || null);
+            if (session?.user) {
+              closeAccountModal();
+              if(event==='SIGNED_IN')ensurePrivateAccountProfile();
+            } else {privateAccountProfile=null;document.getElementById('accountProfileSetup').classList.remove('show');}
+            loadSellerCatalog();
+          },0);
         });
         const { data, error } = await supabaseClient.auth.getSession();
         if(error)console.warn('Could not restore the saved account session yet.',error);
