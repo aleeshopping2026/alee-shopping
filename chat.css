@@ -327,3 +327,31 @@
   outline: 2px solid #e83e8c !important;
   outline-offset: 2px;
 }
+
+/* On desktop, keep the inbox docked to the right instead of centered. */
+@media (min-width: 721px) {
+  #aleeChatOverlay.alee-chat-launcher {
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 0;
+    background: #0f172a66;
+  }
+
+  #aleeChatOverlay .alee-chat-box {
+    width: min(820px, calc(100vw - 24px));
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 18px 0 0 18px;
+    animation: alee-chat-drawer-in 220ms ease-out both;
+  }
+}
+
+@keyframes alee-chat-drawer-in {
+  from { transform: translateX(28px); opacity: .8; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #aleeChatOverlay .alee-chat-box { animation: none; }
+}
