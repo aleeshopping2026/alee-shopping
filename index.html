@@ -3327,10 +3327,9 @@
       shop.style.display = 'block';
       shop.style.opacity = 1;
       if (supabaseClient) {
-        const { data } = await supabaseClient.auth.getSession();
-        setLoggedInUser(data.session?.user || null);
-        if(data.session?.user)ensurePrivateAccountProfile();
+        let authStateEventSeen=false;
         supabaseClient.auth.onAuthStateChange((event, session) => {
+          authStateEventSeen=true;
           setLoggedInUser(session?.user || null);
           if (session?.user) {
             closeAccountModal();
@@ -3338,6 +3337,10 @@
           } else {privateAccountProfile=null;document.getElementById('accountProfileSetup').classList.remove('show');}
           window.setTimeout(()=>loadSellerCatalog(),0);
         });
+        const { data, error } = await supabaseClient.auth.getSession();
+        if(error)console.warn('Could not restore the saved account session yet.',error);
+        if(data?.session?.user){setLoggedInUser(data.session.user);ensurePrivateAccountProfile();}
+        else if(!authStateEventSeen&&!error)setLoggedInUser(null);
       } else setLoggedInUser(null);
       if(openAccountAfterReturn)await openBuyerAccount();
       if(new URLSearchParams(location.search).has('chatShop')&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to message this shop. After signing in, your chat will open here.';}
