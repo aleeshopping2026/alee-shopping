@@ -548,6 +548,10 @@
       .feed-post .feed-post-details>.feed-comment-form{display:flex!important;position:sticky;bottom:0;padding:8px 0 4px;background:#fff}
       .feed-post-side .feed-share-options{padding:0 9px 10px}
       .feed-post-side .feed-view-product{width:calc(100% - 18px);margin:0 9px 9px}
+      .feed-product-actions{display:flex;align-items:center;gap:8px;margin:0 9px 9px}
+      .feed-product-actions .feed-action-button{display:inline-flex;width:36px;height:36px;flex:0 0 36px;align-items:center;justify-content:center;margin:0!important;padding:0;border:1px solid #e3e3e3;border-radius:50%;background:#fff;font-size:16px}
+      .feed-product-actions .feed-action-button.is-saved{color:#ff6b00}
+      .feed-product-actions .feed-view-product{width:auto;min-width:0;flex:1;margin:0;padding:8px 12px}
       .feed-post-main .feed-photo-wrap{height:clamp(340px,68vh,780px);min-height:0}
       .feed-post-main .feed-photo{width:100%;height:100%;object-fit:contain}
     }
@@ -3681,9 +3685,9 @@
         body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentsByPost.get(String(post.id))||[],likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId,viewMap.get(String(post.id))||0,followedShopIds.has(String(post.shop_id)))).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
         body.querySelectorAll('.feed-post').forEach(post=>{
           const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
-          if(window.matchMedia('(max-width:700px)').matches&&viewProduct&&bookmarkButton){bookmarkButton.before(viewProduct);bookmarkButton.style.marginLeft='0';}
+          if(viewProduct&&bookmarkButton){if(window.matchMedia('(max-width:700px)').matches){bookmarkButton.after(viewProduct);bookmarkButton.style.marginLeft='0';}else{const productActions=document.createElement('div');productActions.className='feed-product-actions';viewProduct.before(productActions);productActions.append(bookmarkButton,viewProduct);bookmarkButton.style.marginLeft='0';}}
           const main=document.createElement('div'),side=document.createElement('aside');main.className='feed-post-main';side.className='feed-post-side';
-          Array.from(post.children).forEach(child=>{if(child.matches('.feed-post-details,.feed-share-options,.feed-view-product'))side.append(child);else main.append(child);});
+          Array.from(post.children).forEach(child=>{if(child.matches('.feed-post-details,.feed-share-options,.feed-view-product,.feed-product-actions'))side.append(child);else main.append(child);});
           post.append(main,side);
         });
         applyFeedFilters();
