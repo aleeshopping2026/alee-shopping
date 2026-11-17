@@ -76,7 +76,8 @@
     const button = event.target.closest('[data-shop-action]'); if (!button || !shop) return;
     const action = button.dataset.shopAction;
     shopMenu.setAttribute('hidden',''); shopMenuToggle.setAttribute('aria-expanded','false');
-    if (action === 'block') { shopBlocked = !shopBlocked; setLocalShopFlag('blocked',shopBlocked); refreshShopVisibility(); }
+    if (action === 'favorite') toggleFavoriteShop();
+    else if (action === 'block') { shopBlocked = !shopBlocked; setLocalShopFlag('blocked',shopBlocked); refreshShopVisibility(); }
     else if (action === 'hold') { shopOnHold = !shopOnHold; setLocalShopFlag('hold',shopOnHold); refreshShopVisibility(); }
     else if (action === 'about') openProfileDialog('About this shop', `<p><strong>${esc(shop.name)}</strong></p><p>${esc(shop.bio||shop.shopCategory||'Business')}</p><p>${esc(shop.address||'')}</p>`);
     else if (action === 'report') { openProfileDialog('Report this shop', '<form id="shopReportForm" class="shop-report-form"><label>Reason<select name="reason" required><option value="">Choose a reason</option><option>Scam or fraud</option><option>Impersonation</option><option>Inappropriate content</option><option>Other</option></select></label><label>Details<textarea name="details" maxlength="1000" placeholder="Tell us what happened"></textarea></label><button type="submit">Send report</button><p role="status" aria-live="polite"></p></form>'); sendShopReport(); }
@@ -153,12 +154,12 @@
   function refreshShopAccountControls() {
     const ratingLink=document.getElementById('ratingToolLink');
     if(ratingLink)ratingLink.hidden=currentUserEmail.toLowerCase()!=='aleeshopping2026@gmail.com';
-    const button=document.getElementById('favoriteShopButton');
+    const button=document.getElementById('shopMenuFavorite');
     if(!button||!shop)return;
     let rows=[];
     try{rows=JSON.parse(localStorage.getItem('alee-favorites:'+(currentUser?.id||'guest'))||'[]');}catch(_){}
     const saved=Array.isArray(rows)&&rows.some(row=>row.type==='shop'&&String(row.id)===String(shop.id));
-    button.innerHTML=saved?'<i class="fa-solid fa-heart"></i>':'<i class="fa-regular fa-heart"></i>';
+    button.innerHTML=saved?'<i class="fa-solid fa-heart" aria-hidden="true"></i><span>Remove Favorite</span>':'<i class="fa-regular fa-heart" aria-hidden="true"></i><span>Add Favorite</span>';
     button.classList.toggle('is-saved',saved);
     button.setAttribute('aria-label',saved?'Remove shop from favorites':'Add shop to favorites');
     button.title=saved?'Remove from favorites':'Add to favorites';
@@ -288,7 +289,24 @@
 
 
   async function toggleFavoriteShop() {
-    const button=document.getElementById('favoriteShopButton'),key=currentUser?.id||'guest',storageKey='alee-favorites:'+key;let rows=[];try{rows=JSON.parse(localStorage.getItem(storageKey)||'[]');}catch(_){}if(!Array.isArray(rows))rows=[];const existing=rows.some(row=>row.type==='shop'&&String(row.id)===String(shop.id));if(existing){rows=rows.filter(row=>!(row.type==='shop'&&String(row.id)===String(shop.id)));button.innerHTML='<i class="fa-regular fa-heart"></i>';button.classList.remove('is-saved');button.setAttribute('aria-label','Add shop to favorites');button.title='Add to favorites';button.setAttribute('aria-pressed','false');if(currentUser&&supabase)try{await supabase.from('user_favorites').delete().eq('user_id',currentUser.id).eq('item_type','shop').eq('item_id',String(shop.id));}catch(_){}}else{const row={type:'shop',id:String(shop.id),title:shop.name,image:shop.logo||'assets/alee-logo.png',summary:'Shop profile',url:'shop.html?shop='+encodeURIComponent(shop.id),data:{id:String(shop.id),name:shop.name,logo:shop.logo||'assets/alee-logo.png'}};rows.unshift(row);button.innerHTML='<i class="fa-solid fa-heart"></i>';button.classList.add('is-saved');button.setAttribute('aria-label','Remove shop from favorites');button.title='Remove from favorites';button.setAttribute('aria-pressed','true');if(currentUser&&supabase)try{await supabase.from('user_favorites').upsert({user_id:currentUser.id,item_type:'shop',item_id:String(shop.id),item_data:row},{onConflict:'user_id,item_type,item_id'});}catch(_){}}try{localStorage.setItem(storageKey,JSON.stringify(rows.slice(0,300)));}catch(_){} }
+    const key=currentUser?.id||'guest',storageKey='alee-favorites:'+key;
+    let rows=[];
+    try{rows=JSON.parse(localStorage.getItem(storageKey)||'[]');}catch(_){}
+    if(!Array.isArray(rows))rows=[];
+    const existing=rows.some(row=>row.type==='shop'&&String(row.id)===String(shop.id));
+    if(existing){
+      rows=rows.filter(row=>!(row.type==='shop'&&String(row.id)===String(shop.id)));
+      try{localStorage.setItem(storageKey,JSON.stringify(rows.slice(0,300)));}catch(_){}
+      refreshShopAccountControls();
+      if(currentUser&&supabase)try{await supabase.from('user_favorites').delete().eq('user_id',currentUser.id).eq('item_type','shop').eq('item_id',String(shop.id));}catch(_){}
+      return;
+    }
+    const row={type:'shop',id:String(shop.id),title:shop.name,image:shop.logo||'assets/alee-logo.png',summary:'Shop profile',url:'shop.html?shop='+encodeURIComponent(shop.id),data:{id:String(shop.id),name:shop.name,logo:shop.logo||'assets/alee-logo.png'}};
+    rows.unshift(row);
+    try{localStorage.setItem(storageKey,JSON.stringify(rows.slice(0,300)));}catch(_){}
+    refreshShopAccountControls();
+    if(currentUser&&supabase)try{await supabase.from('user_favorites').upsert({user_id:currentUser.id,item_type:'shop',item_id:String(shop.id),item_data:row},{onConflict:'user_id,item_type,item_id'});}catch(_){}
+  }
 
   function renderProfile() {
     if (!shop) {
@@ -320,7 +338,7 @@
     shopBlocked = localShopFlag('blocked'); shopOnHold = localShopFlag('hold');
     document.getElementById('ratingToolLink').hidden = currentUserEmail.toLowerCase() !== 'aleeshopping2026@gmail.com';
     shopProducts=products.filter(item=>String(item.shopId||shops[0]?.id||'alee-shopping')===String(shop.id));
-    document.getElementById('shopProfile').innerHTML = `${shop.banner?`<div class="shop-profile-cover"><img src="${esc(shop.banner)}" alt="${esc(shop.name)} banner" onerror="this.parentElement.remove()"></div>`:''}<div class="profile-top"><div class="profile-avatar-wrap"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-rating-stars profile-stars" aria-label="${shopRating} out of 5 stars">${[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('')}</div></div><div class="profile-identity"><h2 class="profile-name"><span>${esc(shop.name)}</span>${shop.isVerified?'<img class="shop-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':''}<button id="favoriteShopButton" class="favorite-heart-button" type="button" aria-label="Add shop to favorites" title="Add to favorites" aria-pressed="false"><i class="fa-regular fa-heart"></i></button></h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${shopProducts.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><nav class="shop-content-tabs" aria-label="Shop listings"><button type="button" data-shop-tab="all" aria-pressed="true">All</button><button type="button" data-shop-tab="new" aria-pressed="false">New arrivals</button><button type="button" data-shop-tab="best" aria-pressed="false">Best selling</button><button type="button" data-shop-tab="jobs" aria-pressed="false">Jobs</button></nav><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
+    document.getElementById('shopProfile').innerHTML = `${shop.banner?`<div class="shop-profile-cover"><img src="${esc(shop.banner)}" alt="${esc(shop.name)} banner" onerror="this.parentElement.remove()"></div>`:''}<div class="profile-top"><div class="profile-avatar-wrap"><img class="profile-avatar" src="${esc(shop.logo||'assets/alee-logo.png')}" alt="${esc(shop.name)} logo" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-rating-stars profile-stars" aria-label="${shopRating} out of 5 stars">${[1,2,3,4,5].map(star=>`<span class="${star<=shopRating?'':'empty-star'}">★</span>`).join('')}</div></div><div class="profile-identity"><h2 class="profile-name"><span>${esc(shop.name)}</span>${shop.isVerified?'<img class="shop-verified-badge" src="assets/verified-badge.svg" alt="Verified shop">':''}</h2><div class="profile-stats"><button class="profile-stat" id="adsStat" type="button"><strong>${shopProducts.length}</strong><span>ads</span></button><button class="profile-stat" id="followersStat" type="button"><strong>${followerCount}</strong><span>followers</span></button><button class="profile-stat" id="followingStat" type="button"><strong>${followingCount}</strong><span>following</span></button></div></div></div><div class="profile-bio"><span class="bio-category">${esc(shop.shopCategory||'Business')}</span>${esc(shop.bio||'')}</div><div class="profile-buttons"><button class="follow-button ${isFollowing?'is-following':''}" id="followButton" type="button">${isFollowing?'Following':'Follow'}</button><button id="contactButton" type="button">Contact</button><button id="openShare" type="button">Share profile</button></div><nav class="shop-content-tabs" aria-label="Shop listings"><button type="button" data-shop-tab="all" aria-pressed="true">All</button><button type="button" data-shop-tab="new" aria-pressed="false">New arrivals</button><button type="button" data-shop-tab="best" aria-pressed="false">Best selling</button><button type="button" data-shop-tab="jobs" aria-pressed="false">Jobs</button></nav><div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>`;
     const jobsTab=document.querySelector('[data-shop-tab="jobs"]');
     if(jobsTab){const feedTab=document.createElement('button');feedTab.type='button';feedTab.dataset.shopTab='feed';feedTab.setAttribute('aria-pressed','false');feedTab.textContent='Feed';jobsTab.after(feedTab);}
     document.getElementById('followersStat').addEventListener('click', showFollowers);
@@ -328,7 +346,7 @@
     document.getElementById('adsStat').addEventListener('click', () => document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'}));
     document.getElementById('followButton').addEventListener('click', toggleFollow);
     refreshShopAccountControls();
-    document.getElementById('favoriteShopButton').addEventListener('click', toggleFavoriteShop);
+
     document.getElementById('contactButton').addEventListener('click', renderContact);
     document.getElementById('openShare').addEventListener('click', openShareDialog);
     document.querySelectorAll('[data-shop-tab]').forEach(button=>button.addEventListener('click',()=>{activeShopTab=button.dataset.shopTab;renderShopContent();}));
