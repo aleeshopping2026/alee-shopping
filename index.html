@@ -494,7 +494,7 @@
     .feed-action-button.is-liked{color:#ff2d55}
     .feed-action-button.is-saved{color:#ff6b00}
     .feed-post-details{padding:3px 12px 12px;font-size:12px;line-height:1.5}
-    .feed-toolbar{position:sticky;top:48px;z-index:5;margin:0 0 12px;padding:8px 0;background:#ffffffed;backdrop-filter:blur(10px)}
+    .feed-toolbar{position:sticky;top:48px;z-index:5;margin:0 0 12px;padding:8px 0;background:#fff}
     .feed-sort-tabs,.feed-category-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:none}
     .feed-sort-tabs::-webkit-scrollbar,.feed-category-tabs::-webkit-scrollbar{display:none}
     .feed-sort-tab,.feed-category-tab{flex:0 0 auto;min-height:34px;padding:7px 12px;border:1px solid #e8ebef;border-radius:999px;background:#fff;color:#475467;font:700 12px Inter,Poppins,Arial,sans-serif;white-space:nowrap;cursor:pointer}
@@ -536,7 +536,7 @@
     .feed-empty{padding:24px;border:1px solid #eee;border-radius:12px;color:#8a8a8a;text-align:center;background:#fff}
     @media(min-width:701px){
       .feed-page{width:min(100%,1560px);padding:14px clamp(16px,2vw,32px) 32px}
-      .feed-toolbar{top:0;margin:0 0 16px;padding:12px 0 10px;border-bottom:1px solid #eaecf0;background:#ffffffed}
+      .feed-toolbar{top:48px;margin:0 0 16px;padding:12px 0 10px;border-bottom:1px solid #eaecf0;background:#fff}
       .feed-sort-tabs,.feed-category-tabs{gap:9px;padding:3px 0 7px}
       .feed-sort-tab,.feed-category-tab{min-height:36px;padding:8px 15px;font-size:12px}
       .feed-post{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);align-items:stretch;overflow:hidden}
@@ -553,12 +553,13 @@
     }
     @media(min-width:701px) and (max-width:980px){.feed-post{grid-template-columns:minmax(0,1.05fr) minmax(260px,.95fr)}.feed-post-main .feed-photo-wrap{height:clamp(320px,62vh,620px)}}
     .feed-load-error{color:#b42318}
-    body.feed-section-open{overflow:hidden}
+    body.feed-section-open{overflow:hidden;background:#fff}
     body.feed-section-open #hubContentPanel{position:fixed;inset:0;z-index:1000;width:100%;height:100dvh;max-height:100dvh;overflow-y:auto;margin:0;padding:0;border:0;border-radius:0;background:#fff;color:#111}
     body.feed-section-open #hubContentBody{background:#fff;color:#111}
     body.feed-section-open #hubContentPanel{border-color:#e8e8e8}
     body.feed-section-open #shopsSection{display:none!important}
     @media(min-width:701px){body.feed-section-open #shopsSection{display:block!important}body.feed-section-open #hubContentPanel{left:140px;width:auto}}
+    @media(min-width:701px){body.feed-section-open #shopPageContent>.header,body.feed-section-open #shopPageContent>.search-bar{display:none!important}}
     @media(min-width:701px) and (max-width:1023px){body.feed-section-open #hubContentPanel{left:112px}}
     body.feed-section-open .hub-content-heading{position:sticky;top:0;z-index:8;margin:0;padding:10px 14px;color:#111;border-bottom:1px solid #eee;background:#fff}
     body.feed-section-open #hubContentBody{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
