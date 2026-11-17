@@ -1282,6 +1282,8 @@
     .search-bar { position:sticky!important; top:0!important; z-index:120!important; }
     .categories-bar { position:sticky!important; top:var(--search-sticky-height,59px)!important; z-index:119!important; border-bottom:1px solid #d0d5dd!important; }
     .recommendation-tabs-bar { position:sticky!important; top:calc(var(--search-sticky-height,59px) + 44px)!important; z-index:118!important; }
+    @media(min-width:701px){#recommendationTabsBar{width:calc(100% - 140px)!important;margin-left:140px!important;box-sizing:border-box!important}}
+    @media(min-width:701px) and (max-width:1023px){#recommendationTabsBar{width:calc(100% - 112px)!important;margin-left:112px!important}}
     body.has-top-searches .categories-bar { top:var(--search-sticky-height,59px)!important; }
     body.has-top-searches.search-extras-open .categories-bar { top:var(--search-sticky-height,59px)!important; }
     .shops-section.hub-nav-pinned { top:59px; }
