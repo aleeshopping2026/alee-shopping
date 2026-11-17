@@ -4264,12 +4264,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         if(!canRotateSearchHint())return;
         const next=rotatingSearchHints[rotatingSearchHintIndex];
         rotatingSearchHintIndex=(rotatingSearchHintIndex+1)%rotatingSearchHints.length;
-        if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){rotatingPlaceholder.textContent=searchHintText(next);return;}
-        const out=rotatingPlaceholder.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-25%)'}],{duration:110,easing:'ease-in',fill:'forwards'});
-        out.onfinish=()=>{
-          rotatingPlaceholder.textContent=searchHintText(next);
-          rotatingPlaceholder.animate([{opacity:0,transform:'translateY(25%)'},{opacity:1,transform:'translateY(0)'}],{duration:150,easing:'ease-out'});
-        };
+        rotatingPlaceholder.textContent=searchHintText(next);
       },1000);
     }
     const searchSuggestionBox=document.createElement('div');searchSuggestionBox.id='searchSuggestions';searchSuggestionBox.className='search-suggestions';searchSuggestionBox.setAttribute('role','listbox');searchInput.closest('.search-container').appendChild(searchSuggestionBox);let activeSuggestionIndex=-1;let suggestionRows=[];
