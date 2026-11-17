@@ -339,7 +339,7 @@
     .search-discovery-overlay.results-mode .search-filter-top { grid-column:1/-1; }
     .search-discovery-overlay.results-mode #discoverySearchTitle { display:block!important; margin:0 0 10px; color:var(--text-white); font-size:20px; }
     .search-discovery-overlay.results-mode #discoverySearchResults { display:grid!important; grid-template-columns:repeat(5,minmax(0,1fr))!important; justify-content:stretch; align-items:stretch; width:100%; max-width:none; gap:16px; }
-    .search-discovery-overlay.results-mode #discoverySearchResults > .card { min-width:0; width:100%; }
+    .search-discovery-overlay.results-mode #discoverySearchResults > .search-result-card { min-width:0; width:100%; }
     .discovery-history-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
     .discovery-history-grid .card { min-width:0; padding:4px; }
     .discovery-history-grid .card-image-wrap > img { height:auto; aspect-ratio:1; padding:4px; }
@@ -1142,7 +1142,7 @@
       .popup-main-grid { grid-template-columns:minmax(0,1.1fr) minmax(400px,.9fr); gap:28px; }
     }
     @media(min-width:701px) and (max-width:1023px){#sellerDashboard .seller-card{width:min(900px,calc(100vw - 32px));max-height:94vh;overflow-y:auto}}
-    @media(min-width:768px) and (max-width:1199px){.search-discovery-overlay.results-mode #discoverySearchResults{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px}}
+    @media(min-width:768px) and (max-width:1199px){.search-discovery-overlay.results-mode #discoverySearchResults{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:12px}}
     @media(max-width:767px){.search-discovery-overlay.results-mode #discoverySearchResults{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}.search-discovery-overlay.results-mode .search-discovery-body{padding:12px 10px calc(78px + env(safe-area-inset-bottom))}.search-discovery-overlay.results-mode .search-filter-panel{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px}.search-discovery-overlay.results-mode .search-filter-panel fieldset:first-of-type,.search-discovery-overlay.results-mode .search-filter-categories-fieldset{grid-column:1/-1}}
 
     .search-discovery-overlay { background:#fff; color:#111; font-family:Poppins,Inter,system-ui,sans-serif; }
@@ -1191,8 +1191,8 @@
     .search-discovery-overlay .search-suggestion:hover,.search-discovery-overlay .search-suggestion.active { background:#fafafa; }
     .search-discovery-overlay .search-suggestion i { width:24px; color:#111; font-size:20px; }
     .search-discovery-overlay .search-suggestion-image,.search-discovery-overlay .search-suggestion-copy small,.search-discovery-overlay .search-suggestion-price,.search-discovery-overlay .search-suggestion-type { display:none!important; }
-    .search-discovery-overlay.results-mode #discoverySearchResults { display:block!important; width:100%; max-width:none; columns:2; column-gap:8px; }
-    .search-result-card { position:relative; display:inline-block; width:100%; margin:0 0 9px; overflow:hidden; break-inside:avoid; border:1px solid #ededed; border-radius:12px; background:#fff; color:#111; vertical-align:top; cursor:pointer; }
+    .search-discovery-overlay.results-mode #discoverySearchResults { display:grid!important; width:100%; max-width:none; }
+    .search-result-card { position:relative; display:flex; flex-direction:column; min-width:0; width:100%; margin:0; overflow:hidden; border:1px solid #ededed; border-radius:12px; background:#fff; color:#111; cursor:pointer; }
     .search-result-photo { width:100%; background:#fff; }
     .search-result-photo img { display:block; width:100%; height:auto; object-fit:contain; }
     .search-result-copy { display:grid; gap:5px; padding:8px; }
@@ -1259,7 +1259,9 @@
       .search-filter-sheet-footer .search-filter-show { min-width:0; flex:1; }
     }
     @media(min-width:768px) {
-      .search-discovery-overlay.results-mode #discoverySearchResults { columns:2; column-gap:14px; }
+      .search-discovery-overlay.results-mode #discoverySearchResults { grid-template-columns:repeat(5,minmax(0,1fr))!important; gap:14px; }
+      .search-result-photo { aspect-ratio:1; overflow:hidden; }
+      .search-result-photo img { height:100%; }
       .search-filter-backdrop { align-items:center; }
       .search-filter-sheet { height:min(78dvh,720px); border-radius:16px; }
       .search-filter-sheet-main { grid-template-columns:190px minmax(0,1fr); }
