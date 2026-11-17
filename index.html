@@ -1073,7 +1073,23 @@
     .country-picker-empty{padding:14px;color:#77808b;text-align:center;font-size:13px}
     .phone-preview { color:#64748b; font-size:11px; font-weight:500; }
     .seller-panel input,.seller-panel textarea,.seller-panel select { width:100%; padding:11px; border:1px solid var(--glass-border); border-radius:9px; background:var(--card-bg); color:var(--text-white); font:inherit; }
-    #sellerProductCategory{color-scheme:light;background:#fff!important;color:#172033!important}#sellerProductCategory option,#sellerProductCategory optgroup{background:#fff;color:#172033}
+    #sellerProductCategory{display:none!important}
+    .seller-product-category-field{display:grid;align-content:start;gap:6px;min-width:0}
+    .seller-category-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;padding:10px 12px;border:1px solid #d0d5dd;border-radius:10px;background:#fff;color:#172033;font:inherit;text-align:left;cursor:pointer}
+    .seller-category-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.seller-category-trigger i{flex:0 0 auto;color:#667085;font-size:12px}.seller-category-trigger:hover,.seller-category-trigger:focus-visible{border-color:#f36b00;outline:none;box-shadow:0 0 0 3px #f36b0020}
+    .seller-category-dialog{width:min(560px,calc(100vw - 24px));max-width:none;max-height:min(84dvh,680px);margin:auto;padding:18px;border:1px solid #e1e5ea;border-radius:18px;background:#fff;color:#172033;box-shadow:0 24px 70px #10182835;color-scheme:light}
+    .seller-category-dialog[open]{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:12px}
+    .seller-category-dialog::backdrop{background:#10182870;backdrop-filter:blur(2px)}
+    .seller-category-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.seller-category-dialog-head h3{margin:0;color:#172033;font-size:18px}.seller-category-dialog-head p{margin:4px 0 0;color:#667085;font-size:12px}
+    .seller-category-dialog-close{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #e5e7eb;border-radius:50%;background:#f8fafc;color:#475467;font-size:23px;cursor:pointer}
+    .seller-category-search{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:1px solid #d0d5dd;border-radius:11px;background:#f8fafc;color:#667085}.seller-category-search:focus-within{border-color:#f36b00;box-shadow:0 0 0 3px #f36b0018}.seller-category-search input{width:100%;min-width:0;min-height:42px;padding:8px 0;border:0!important;outline:0;background:transparent!important;color:#172033!important;font:inherit}.seller-category-search input::placeholder{color:#98a2b3}
+    .seller-category-options{min-height:90px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:12px;background:#fff;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#cbd5e1 #fff}
+    .seller-category-option-group[hidden],.seller-category-option[hidden]{display:none!important}
+    .seller-category-option-group+.seller-category-option-group{border-top:1px solid #eef0f3}.seller-category-option-group h4{position:sticky;top:0;z-index:1;margin:0;padding:8px 12px;background:#f5f6f8;color:#667085;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+    .seller-category-option{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:9px 12px;border:0;border-bottom:1px solid #f1f2f4;background:#fff;color:#172033;font:inherit;font-size:13px;text-align:left;cursor:pointer}.seller-category-option:last-child{border-bottom:0}.seller-category-option:hover,.seller-category-option:focus-visible{background:#fff7ed;outline:none}.seller-category-option[aria-selected="true"]{background:#fff4e8;color:#c2410c;font-weight:750}.seller-category-option i{color:#f36b00}
+    .seller-category-no-results{margin:0;padding:16px;color:#667085;text-align:center;font-size:13px}
+    .seller-category-other{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:9px 12px;border:1px dashed #f36b00;border-radius:10px;background:#fff7ed;color:#c2410c;font:inherit;font-size:13px;font-weight:750;cursor:pointer}.seller-category-other:hover{background:#ffedd5}
+    .seller-category-custom{display:grid;gap:7px;padding:12px;border:1px solid #fed7aa;border-radius:12px;background:#fffaf5}.seller-category-custom[hidden]{display:none!important}.seller-category-custom>label{color:#344054;font-size:12px;font-weight:750}.seller-category-custom>div{display:flex;gap:8px}.seller-category-custom input{min-width:0;flex:1;padding:10px 11px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:#172033;font:inherit}.seller-category-custom button{flex:0 0 auto;padding:9px 13px;border:0;border-radius:9px;background:#f36b00;color:#fff;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.seller-category-custom small{color:#667085;font-size:11px}
     .seller-panel textarea { min-height:75px; resize:vertical; }
     .seller-panel input[type=file] { font-size:12px; }
     .seller-notice { min-height:20px; margin-top:8px; color:#fbbf24; font-size:13px; overflow-wrap:anywhere; }
@@ -1556,7 +1572,7 @@
       .popup-sticky-action{left:112px;width:min(900px,calc(100vw - 132px));max-width:900px}
     }
   </style>
-  <link rel="stylesheet" href="site-theme.css?v=20261116-close-controls">
+  <link rel="stylesheet" href="site-theme.css?v=20261116-seller-category-picker">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -2180,14 +2196,14 @@
           <label class="seller-free-shipping-option"><span>Delivery option</span><span><input name="freeShipping" type="checkbox"> Free shipping</span></label>
           <label>Condition<select name="condition" required><option value="New">New</option><option value="Used - Like New">Used - Like New</option><option value="Used - Good">Used - Good</option><option value="Used - Fair">Used - Fair</option></select></label>
           <label>Available colors<input name="colors" maxlength="250" placeholder="e.g. Black, Blue, Rose Gold"></label>
-          <label>Category<select name="category" id="sellerProductCategory" required><option value="" disabled selected hidden>Choose a category</option></select><small class="seller-muted" id="sellerProductCategorySuggestion" aria-live="polite">Start typing the item name for a category suggestion. You can still choose any category manually.</small></label>
+          <div class="seller-product-category-field"><label for="sellerProductCategoryButton">Category</label><input type="hidden" name="category" id="sellerProductCategory"><button class="seller-category-trigger" id="sellerProductCategoryButton" type="button" aria-haspopup="dialog" aria-controls="sellerProductCategoryDialog" aria-expanded="false" onclick="openSellerProductCategoryDialog()"><span id="sellerProductCategoryLabel">Choose a category</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button><small class="seller-muted" id="sellerProductCategorySuggestion" aria-live="polite">Start typing the item name for a category suggestion. You can still choose any category manually.</small></div>
           <label>Size options<input name="sizes" maxlength="250" placeholder="e.g. S, M, L, XL"></label>
         </div>
         <label>Description<textarea name="description" maxlength="2000" required></textarea></label>
         <label>Key features<textarea name="features" maxlength="1200" placeholder="One feature per line"></textarea></label>
         <div class="seller-action-row"><button class="seller-action-button primary" id="sellerProductSubmit" type="submit">Add Item</button><button class="seller-action-button" id="sellerProductCancel" type="button" onclick="cancelEditSellerProduct()" hidden>Cancel</button></div>
         <div class="seller-notice" id="sellerProductStatus" role="status" aria-live="polite"></div>
-      </form></section>
+      </form><dialog class="seller-category-dialog" id="sellerProductCategoryDialog" aria-labelledby="sellerProductCategoryDialogTitle"><header class="seller-category-dialog-head"><div><h3 id="sellerProductCategoryDialogTitle">Choose a category</h3><p>Search for a category or add your own.</p></div><button class="seller-category-dialog-close" type="button" onclick="closeSellerProductCategoryDialog()" aria-label="Close category picker">×</button></header><label class="seller-category-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="sellerProductCategorySearch" type="search" placeholder="Search categories…" autocomplete="off" aria-label="Search categories"></label><div class="seller-category-options" id="sellerProductCategoryOptions" role="listbox" aria-label="Product categories"></div><button class="seller-category-other" type="button" onclick="showSellerCustomCategoryEditor()"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Other — add a category</span></button><section class="seller-category-custom" id="sellerCustomCategoryEditor" hidden><label for="sellerCustomCategoryName">New category name</label><div><input id="sellerCustomCategoryName" type="text" maxlength="80" placeholder="Type the category name"><button type="button" onclick="addSellerCustomCategory()">Add category</button></div><small>The new category will be saved with this item.</small></section></dialog></section>
       <section class="seller-panel" id="sellerProductListPanel" hidden><h3>My Items</h3><div id="sellerProductList"></div></section>
       <section class="seller-panel" id="sellerJobsPanel" hidden><div class="seller-tab-panel-heading"><h3>Shop jobs</h3><button class="seller-action-button primary" type="button" onclick="openPlatformPostForm('job')"><i class="fa-solid fa-plus"></i> Add job</button></div><div id="sellerJobsList" class="seller-job-list"></div></section>
       <section class="seller-panel seller-feed-panel" id="sellerFeedPanel" hidden><div class="seller-tab-panel-heading"><h3>Shop Feed</h3><button class="seller-action-button primary" type="button" onclick="openFeedFromSellerDashboard()"><i class="fa-regular fa-images"></i> Create a photo post</button></div><p class="seller-muted">Create photo posts, link products, and add announcements or offers from the Feed page.</p><div class="seller-feed-manager-list" id="sellerFeedList"><p class="seller-muted">Your photo posts will appear here.</p></div></section>
@@ -3075,7 +3091,7 @@
       editingSellerProductId=Number(item.id);
       sellerProductCategoryManuallyChosen=true;sellerSuggestedCategoryId='';
       const form=document.getElementById('sellerProductForm');
-      form.elements.name.value=item.name||'';form.elements.price.value=item.price||'';form.elements.wholesalePrice.value=item.wholesale_price||'';form.elements.offerPrice.value=item.offer_price||'';form.elements.stock.value=item.stock??1;form.elements.deliveryDays.value=item.delivery_days||'';form.elements.freeShipping.checked=Boolean(item.free_shipping);form.elements.condition.value=item.condition||'New';form.elements.colors.value=Array.isArray(item.colors)?item.colors.join(', '):'';populateSellerProductCategories(getProductCategoryId({category:item.category,categoryLabel:item.category_label,name:item.name,description:item.description,features:item.features}));
+      form.elements.name.value=item.name||'';form.elements.price.value=item.price||'';form.elements.wholesalePrice.value=item.wholesale_price||'';form.elements.offerPrice.value=item.offer_price||'';form.elements.stock.value=item.stock??1;form.elements.deliveryDays.value=item.delivery_days||'';form.elements.freeShipping.checked=Boolean(item.free_shipping);form.elements.condition.value=item.condition||'New';form.elements.colors.value=Array.isArray(item.colors)?item.colors.join(', '):'';const rawCategory=String(item.category||'').trim(),legacyCategory=window.aleeLegacyCategoryMap?.[rawCategory.toLowerCase()],selectedCategory=categories.some(category=>String(category.id)===rawCategory)?rawCategory:legacyCategory||rawCategory,selectedCategoryLabel=categories.find(category=>String(category.id)===selectedCategory)?.label||item.category_label||rawCategory;populateSellerProductCategories(selectedCategory,selectedCategoryLabel);
       form.elements.sizes.value=Array.isArray(item.sizes)?item.sizes.join(', '):'';form.elements.description.value=item.description||'';form.elements.features.value=Array.isArray(item.features)?item.features.join('\n'):'';
       form.elements.photos.value='';form.elements.photos.required=false;
       document.getElementById('sellerProductFormTitle').textContent='Edit Item';document.getElementById('sellerProductSubmit').textContent='Save Item Changes';
@@ -3142,7 +3158,7 @@
       if(editingSellerProductId&&!editingItem){status.textContent='This item is no longer available. Reload your shop and try again.';return;}
       if((!editingItem&&!files.length)||files.length>10){status.textContent='Choose between 1 and 10 photos.';return;}
       if(files.some(file=>!file.type.startsWith('image/'))){status.textContent='Only image files are supported.';return;}
-      const name=form.elements.name.value.trim(),category=form.elements.category.value.trim(),categoryLabel=categories.find(item=>item.id===category)?.label||'';
+      const name=form.elements.name.value.trim(),category=form.elements.category.value.trim(),categoryLabel=categories.find(item=>String(item.id)===category)?.label||form.elements.category.dataset.categoryLabel||category;
       if(!category){status.textContent='Choose the category that best matches this item.';return;}
       const basePrice=Number(form.elements.price.value),offerPrice=Number(form.elements.offerPrice.value)||0,stockCount=Number(form.elements.stock.value),deliveryDays=Number(form.elements.deliveryDays.value)||null;if(offerPrice>basePrice){status.textContent='Offer price must be lower than or equal to the regular price.';return;}if(!Number.isInteger(stockCount)||stockCount<0){status.textContent='Stock must be a whole number of zero or more.';return;}if(deliveryDays!==null&&(!Number.isInteger(deliveryDays)||deliveryDays<1||deliveryDays>30)){status.textContent='Typical delivery time must be from 1 to 30 days.';return;}
       const whatsappPopup=editingItem?null:reserveWhatsappWindow(),button=document.getElementById('sellerProductSubmit');button.disabled=true;status.textContent='Uploading photos and saving item…';
@@ -4583,48 +4599,116 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       renderMobileCategoryList();
     }
 
-    function populateSellerProductCategories(selected='') {
-      const select=document.getElementById('sellerProductCategory');
-      if(!select)return;
-      const groups=categoryGroups.map(group=>{
-        const optionGroup=document.createElement('optgroup');optionGroup.label=group.label;
-        categories.filter(category=>category.parent===group.id).forEach(category=>optionGroup.appendChild(new Option(category.label,category.id)));
-        return optionGroup;
+    function setSellerProductCategory(value='',label='') {
+      const input=document.getElementById('sellerProductCategory');
+      if(!input)return;
+      const id=String(value||'').trim();
+      let category=categories.find(item=>String(item.id)===id);
+      if(id&&!category){category={id,label:String(label||id),parent:'__custom__',keywords:[]};categories.push(category);categoryById.set(id,category);}
+      input.value=id;
+      input.dataset.categoryLabel=id?String(category?.label||label||id):'';
+      const text=document.getElementById('sellerProductCategoryLabel');
+      const trigger=document.getElementById('sellerProductCategoryButton');
+      if(text)text.textContent=input.dataset.categoryLabel||'Choose a category';
+      trigger?.classList.toggle('has-value',Boolean(id));
+    }
+
+    function renderSellerProductCategoryOptions() {
+      const root=document.getElementById('sellerProductCategoryOptions'),selected=document.getElementById('sellerProductCategory')?.value||'';
+      if(!root)return;
+      root.replaceChildren();
+      const knownParents=new Set(categoryGroups.map(group=>String(group.id)));
+      const groups=categoryGroups.map(group=>({label:group.label,items:categories.filter(category=>String(category.parent)===String(group.id))})).filter(group=>group.items.length);
+      const extra=categories.filter(category=>!knownParents.has(String(category.parent||'')));
+      if(extra.length)groups.push({label:'Other categories',items:extra});
+      groups.forEach(group=>{
+        const section=document.createElement('section');section.className='seller-category-option-group';
+        const heading=document.createElement('h4');heading.textContent=group.label;section.appendChild(heading);
+        group.items.forEach(category=>{
+          const button=document.createElement('button');button.type='button';button.className='seller-category-option';button.setAttribute('role','option');button.setAttribute('aria-selected',String(String(category.id)===String(selected)));button.dataset.categoryValue=String(category.id);button.dataset.searchText=`${category.label} ${group.label} ${(category.keywords||[]).join(' ')}`.toLocaleLowerCase();
+          const label=document.createElement('span');label.textContent=category.label;button.appendChild(label);
+          if(String(category.id)===String(selected)){const check=document.createElement('i');check.className='fa-solid fa-check';check.setAttribute('aria-hidden','true');button.appendChild(check);}
+          button.addEventListener('click',()=>chooseSellerProductCategory(category.id));section.appendChild(button);
+        });
+        root.appendChild(section);
       });
-      const placeholder=new Option('Choose a category','',!selected,!selected);placeholder.disabled=true;placeholder.hidden=true;
-      select.replaceChildren(placeholder,...groups);
-      select.value=selected||'';
+      filterSellerProductCategories();
+    }
+
+    function filterSellerProductCategories() {
+      const query=(document.getElementById('sellerProductCategorySearch')?.value||'').trim().toLocaleLowerCase();
+      let matchCount=0;
+      document.querySelectorAll('#sellerProductCategoryOptions .seller-category-option-group').forEach(section=>{
+        let groupMatches=0;
+        section.querySelectorAll('.seller-category-option').forEach(button=>{const matches=!query||button.dataset.searchText.includes(query);button.hidden=!matches;if(matches)groupMatches++;});
+        section.hidden=groupMatches===0;matchCount+=groupMatches;
+      });
+      let empty=document.getElementById('sellerCategorySearchEmpty');
+      if(query&&!matchCount){if(!empty){empty=document.createElement('p');empty.id='sellerCategorySearchEmpty';empty.className='seller-category-no-results';empty.textContent='No matching categories. Choose Other to add one.';document.getElementById('sellerProductCategoryOptions')?.appendChild(empty);}}
+      else empty?.remove();
+    }
+
+    function populateSellerProductCategories(selected='',customLabel='') {
+      if(selected&&!categories.some(item=>String(item.id)===String(selected))){const custom={id:String(selected),label:String(customLabel||selected),parent:'__custom__',keywords:[]};categories.push(custom);categoryById.set(custom.id,custom);}
+      setSellerProductCategory(selected,customLabel);
+      renderSellerProductCategoryOptions();
     }
 
     let sellerProductCategoryManuallyChosen=false;
     let sellerSuggestedCategoryId='';
+    function openSellerProductCategoryDialog() {
+      const dialog=document.getElementById('sellerProductCategoryDialog'),button=document.getElementById('sellerProductCategoryButton');
+      if(!dialog)return;
+      const search=document.getElementById('sellerProductCategorySearch');if(search)search.value='';
+      const custom=document.getElementById('sellerCustomCategoryEditor');if(custom)custom.hidden=true;
+      const customInput=document.getElementById('sellerCustomCategoryName');if(customInput)customInput.value='';
+      renderSellerProductCategoryOptions();
+      if(!dialog.dataset.closeSyncReady){dialog.addEventListener('close',()=>button?.setAttribute('aria-expanded','false'));dialog.dataset.closeSyncReady='1';}
+      if(!dialog.open)dialog.showModal();
+      button?.setAttribute('aria-expanded','true');
+    }
+
+    function closeSellerProductCategoryDialog() {
+      const dialog=document.getElementById('sellerProductCategoryDialog');if(dialog?.open)dialog.close();
+      document.getElementById('sellerProductCategoryButton')?.setAttribute('aria-expanded','false');
+    }
+
+    function chooseSellerProductCategory(id) {
+      const category=categories.find(item=>String(item.id)===String(id));if(!category)return;
+      setSellerProductCategory(category.id,category.label);sellerProductCategoryManuallyChosen=true;sellerSuggestedCategoryId='';
+      const suggestion=document.getElementById('sellerProductCategorySuggestion');if(suggestion)suggestion.textContent=`Selected: ${category.label}. You can change it manually.`;
+      closeSellerProductCategoryDialog();
+    }
+
+    function showSellerCustomCategoryEditor() {
+      const editor=document.getElementById('sellerCustomCategoryEditor'),input=document.getElementById('sellerCustomCategoryName');
+      if(editor)editor.hidden=false;
+      input?.focus();editor?.scrollIntoView({block:'nearest'});
+    }
+
+    function addSellerCustomCategory() {
+      const input=document.getElementById('sellerCustomCategoryName'),status=document.getElementById('sellerProductStatus');
+      const label=String(input?.value||'').trim().replace(/\s+/g,' ');
+      if(label.length<2){if(status)status.textContent='Enter a category name with at least two characters.';input?.focus();return;}
+      let category=categories.find(item=>String(item.label||'').trim().toLocaleLowerCase()===label.toLocaleLowerCase());
+      if(!category){let slug=label.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');if(!slug)slug=Date.now().toString(36);const base=`custom-${slug}`;let id=base,index=2;while(categories.some(item=>String(item.id)===id))id=`${base}-${index++}`;category={id,label,parent:'__custom__',keywords:[]};categories.push(category);categoryById.set(id,category);}
+      setSellerProductCategory(category.id,category.label);sellerProductCategoryManuallyChosen=true;sellerSuggestedCategoryId='';
+      const suggestion=document.getElementById('sellerProductCategorySuggestion');if(suggestion)suggestion.textContent=`New category added: ${category.label}.`;
+      if(status)status.textContent='';closeSellerProductCategoryDialog();
+    }
+
     function setupSellerProductCategorySuggestions() {
-      const form=document.getElementById('sellerProductForm');
-      const nameInput=form?.elements.name;
-      const categorySelect=document.getElementById('sellerProductCategory');
-      const suggestion=document.getElementById('sellerProductCategorySuggestion');
-      if(!nameInput||!categorySelect||nameInput.dataset.categorySuggestionReady)return;
+      const form=document.getElementById('sellerProductForm'),nameInput=form?.elements.name,categoryInput=document.getElementById('sellerProductCategory'),suggestion=document.getElementById('sellerProductCategorySuggestion');
+      if(!nameInput||!categoryInput||nameInput.dataset.categorySuggestionReady)return;
       nameInput.dataset.categorySuggestionReady='1';
       nameInput.addEventListener('input',()=>{
         if(sellerProductCategoryManuallyChosen||editingSellerProductId)return;
-        const categoryId=window.aleeSuggestProductCategory(nameInput.value);
-        const category=categories.find(item=>item.id===categoryId);
-        if(category){
-          categorySelect.value=category.id;
-          sellerSuggestedCategoryId=category.id;
-          suggestion.textContent=`Suggested: ${category.label}. You can change it manually.`;
-        }else if(sellerSuggestedCategoryId){
-          categorySelect.value='';
-          sellerSuggestedCategoryId='';
-          suggestion.textContent='No category match yet. You can choose a category manually.';
-        }
+        const categoryId=window.aleeSuggestProductCategory(nameInput.value),category=categories.find(item=>item.id===categoryId);
+        if(category){setSellerProductCategory(category.id,category.label);sellerSuggestedCategoryId=category.id;suggestion.textContent=`Suggested: ${category.label}. You can change it manually.`;}
+        else if(sellerSuggestedCategoryId){setSellerProductCategory('');sellerSuggestedCategoryId='';suggestion.textContent='No category match yet. You can choose a category manually.';}
       });
-      categorySelect.addEventListener('change',()=>{
-        sellerProductCategoryManuallyChosen=true;
-        sellerSuggestedCategoryId='';
-        const category=categories.find(item=>item.id===categorySelect.value);
-        suggestion.textContent=category?`Selected: ${category.label}. You can change it manually.`:'Choose the category that best matches this item.';
-      });
+      document.getElementById('sellerProductCategorySearch')?.addEventListener('input',filterSellerProductCategories);
+      document.getElementById('sellerCustomCategoryName')?.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();addSellerCustomCategory();}});
     }
 
     function getProductCategoryId(product) {
