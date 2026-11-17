@@ -3571,35 +3571,37 @@
       try{
         const sessionResult=await supabaseClient.auth.getSession();if(sessionResult.error)throw sessionResult.error;
         const user=activeUser||sessionResult.data?.session?.user||null,userId=user?.id||null;
-        let ownedShop=null,shopProducts=[];
-        if(userId){
-          const ownerResult=await supabaseClient.from('seller_shops').select('id,shop_name,logo_url').eq('owner_id',userId).maybeSingle();
-          if(ownerResult.error)throw ownerResult.error;
-          ownedShop=ownerResult.data||null;
-          if(ownedShop){const productResult=await supabaseClient.from('seller_products').select('id,name,price').eq('shop_id',ownedShop.id).eq('owner_id',userId).order('created_at',{ascending:false}).limit(200);if(productResult.error)throw productResult.error;shopProducts=productResult.data||[];}
-        }
+        const ownerPromise=userId?supabaseClient.from('seller_shops').select('id,shop_name,logo_url').eq('owner_id',userId).maybeSingle():Promise.resolve({data:null,error:null});
+        const postsPromise=supabaseClient.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,category_id,created_at').order('created_at',{ascending:false}).limit(50);
+        const [ownerResult,postsResult]=await Promise.all([ownerPromise,postsPromise]);
+        if(ownerResult.error)throw ownerResult.error;
+        if(postsResult.error)throw postsResult.error;
+        const ownedShop=ownerResult.data||null,posts=postsResult.data||[];
         activeFeedShop=ownedShop;
-        const {data:posts,error}=await supabaseClient.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,category_id,created_at').order('created_at',{ascending:false}).limit(50);
-        if(error)throw error;
         const rows=posts||[],postIds=rows.map(post=>post.id),shopIds=[...new Set(rows.map(post=>String(post.shop_id)))];
         let shopRows=[],commentRows=[],countRows=[],viewRows=[],myLikes=[],mySaved=[],followRows=[];
-        if(postIds.length){
-          const requests=[
-            supabaseClient.from('seller_shops_profile_public').select('id,shop_name,logo_url,address,country_code').in('id',shopIds),
-            supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at').in('post_id',postIds).order('created_at',{ascending:true}).limit(500),
-            supabaseClient.rpc('get_feed_like_counts',{p_post_ids:postIds}),
-            supabaseClient.rpc('get_feed_view_counts',{p_post_ids:postIds}),
-            userId?supabaseClient.from('feed_likes').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
-            userId?supabaseClient.from('feed_saved').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
-            userId?supabaseClient.from('shop_follows').select('shop_id').eq('follower_id',userId):Promise.resolve({data:[],error:null})
-          ];
-          const [shopsResult,commentsResult,countsResult,viewsResult,likesResult,savedResult,followsResult]=await Promise.all(requests);
-          for(const result of [shopsResult,commentsResult,countsResult,viewsResult,likesResult,savedResult,followsResult])if(result.error)throw result.error;
+        const detailsPromise=postIds.length?Promise.all([
+          supabaseClient.from('seller_shops_profile_public').select('id,shop_name,logo_url,address,country_code').in('id',shopIds),
+          supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at').in('post_id',postIds).order('created_at',{ascending:true}).limit(500),
+          supabaseClient.rpc('get_feed_like_counts',{p_post_ids:postIds}),
+          supabaseClient.rpc('get_feed_view_counts',{p_post_ids:postIds}),
+          userId?supabaseClient.from('feed_likes').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
+          userId?supabaseClient.from('feed_saved').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
+          userId?supabaseClient.from('shop_follows').select('shop_id').eq('follower_id',userId):Promise.resolve({data:[],error:null})
+        ]):Promise.resolve(null);
+        const productPromise=ownedShop?supabaseClient.from('seller_products').select('id,name,price').eq('shop_id',ownedShop.id).eq('owner_id',userId).order('created_at',{ascending:false}).limit(200):Promise.resolve(null);
+        const [detailResults,productResult]=await Promise.all([detailsPromise,productPromise]);
+        let shopProducts=[];
+        if(detailResults){
+          const [shopsResult,commentsResult,countsResult,viewsResult,likesResult,savedResult,followsResult]=detailResults;
+          for(const result of detailResults)if(result.error)throw result.error;
           shopRows=shopsResult.data||[];commentRows=commentsResult.data||[];countRows=countsResult.data||[];viewRows=viewsResult.data||[];myLikes=likesResult.data||[];mySaved=savedResult.data||[];followRows=followsResult.data||[];
         }
+        if(productResult){if(productResult.error)throw productResult.error;shopProducts=productResult.data||[];}
+        const commentsByPost=new Map();for(const comment of commentRows){const key=String(comment.post_id);if(!commentsByPost.has(key))commentsByPost.set(key,[]);commentsByPost.get(key).push(comment);}
         const shopMap=new Map(shopRows.map(shop=>[String(shop.id),shop])),likeMap=new Map(countRows.map(row=>[String(row.post_id),Number(row.like_count)||0])),viewMap=new Map(viewRows.map(row=>[String(row.post_id),Number(row.view_count)||0])),likedIds=new Set(myLikes.map(row=>String(row.post_id))),savedIds=new Set(mySaved.map(row=>String(row.post_id))),followedShopIds=new Set(followRows.map(row=>String(row.shop_id)));
         const createCard=ownedShop?renderFeedCreateCard(ownedShop,shopProducts):'';
-        body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentRows.filter(row=>String(row.post_id)===String(post.id)),likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId,viewMap.get(String(post.id))||0,followedShopIds.has(String(post.shop_id)))).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
+        body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentsByPost.get(String(post.id))||[],likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId,viewMap.get(String(post.id))||0,followedShopIds.has(String(post.shop_id)))).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
         body.querySelectorAll('.feed-post').forEach(post=>{
           const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
           if(viewProduct&&bookmarkButton){bookmarkButton.before(viewProduct);bookmarkButton.style.marginLeft='0';}
