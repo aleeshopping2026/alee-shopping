@@ -461,8 +461,8 @@
     .feed-post-menu[open] .feed-more-button{position:absolute;top:calc(100% + 2px);right:0;z-index:3;white-space:nowrap}
     .feed-post-badge{display:inline-flex;margin:0 12px 8px;padding:4px 8px;border-radius:99px;background:#fff1e8;color:#ff6b00;font-size:10px;font-weight:800}
     .feed-post-badge.offer{background:#fff0f2;color:#ff2d55}
-    .feed-photo-wrap{position:relative;display:grid;place-items:center;overflow:hidden;width:100%;aspect-ratio:4/5;background:#fafafa;cursor:pointer}
-    .feed-photo{display:block;width:100%;height:100%;object-fit:contain}
+    .feed-photo-wrap{position:relative;overflow:hidden;width:100%;background:#fafafa;cursor:pointer}
+    .feed-photo{display:block;width:100%;height:auto}
     .feed-double-heart{position:absolute;top:50%;left:50%;color:#ff2d55;font-size:76px;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.3)}
     .feed-double-heart.show{animation:feed-heart-pop .75s ease-out}
     @keyframes feed-heart-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:.95;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
@@ -485,7 +485,9 @@
     .feed-share-options{display:flex;flex-wrap:wrap;gap:7px;padding:0 12px 10px}
     .feed-share-options[hidden]{display:none}
     .feed-share-options button{padding:6px 9px;border:1px solid #eee;border-radius:8px;background:#fff;color:#333;font:11px Inter,Poppins,Arial,sans-serif;cursor:pointer}
-    .feed-view-product{width:calc(100% - 24px);margin:0 12px 12px}
+    .feed-view-product{width:auto;min-height:32px;margin:0;padding:6px 10px;border-radius:8px;font-size:11px;white-space:nowrap}
+    .feed-post-actions .feed-view-product{margin-left:auto}
+    .feed-post-actions .feed-view-product+.feed-action-button{margin-left:0!important}
     .feed-status{min-height:16px;margin:7px 0 0;color:#777;font-size:11px}
     .feed-empty{padding:24px;border:1px solid #eee;border-radius:12px;color:#8a8a8a;text-align:center;background:#fff}
     .feed-load-error{color:#b42318}
@@ -3551,6 +3553,10 @@
         const shopMap=new Map(shopRows.map(shop=>[String(shop.id),shop])),likeMap=new Map(countRows.map(row=>[String(row.post_id),Number(row.like_count)||0])),likedIds=new Set(myLikes.map(row=>String(row.post_id))),savedIds=new Set(mySaved.map(row=>String(row.post_id)));
         const createCard=ownedShop?renderFeedCreateCard(ownedShop,shopProducts):'';
         body.innerHTML=`<div class="feed-page" data-feed-page>${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentRows.filter(row=>String(row.post_id)===String(post.id)),likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId)).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
+        body.querySelectorAll('.feed-post').forEach(post=>{
+          const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
+          if(viewProduct&&bookmarkButton){bookmarkButton.before(viewProduct);bookmarkButton.style.marginLeft='0';}
+        });
         if(ownedShop)wireFeedCreateForm();
         const targetId=new URLSearchParams(location.search).get('feedPost');
         if(targetId&&rows.some(post=>String(post.id)===targetId))requestAnimationFrame(()=>document.getElementById(`feed-post-${targetId}`)?.scrollIntoView({block:'start'}));
