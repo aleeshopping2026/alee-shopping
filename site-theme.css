@@ -184,6 +184,57 @@ html[data-theme="dark"] #productList.products > .card .product-shop-meta { color
 html[data-theme="dark"] .search-filter-panel,
 html[data-theme="dark"] .search-brand-all-panel { color: #eef1f5; background: #17191d; border-color: #343a46; }
 
+/* Keep close controls consistent and easy to tap across the site. */
+:is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button) {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  flex: 0 0 40px !important;
+  padding: 0 !important;
+  border: 1px solid #e2e6ec !important;
+  border-radius: 50% !important;
+  background: #f3f4f6 !important;
+  color: #344054 !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+:is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button):hover {
+  transform: none !important;
+  border-color: #ff6900 !important;
+  background: #fff0e5 !important;
+  color: #d95500 !important;
+}
+:is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button):focus-visible {
+  outline: 2px solid #ff6900 !important;
+  outline-offset: 2px;
+}
+html[data-theme="dark"] :is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button) {
+  border-color: #454c57 !important;
+  background: #202329 !important;
+  color: #f2f4f7 !important;
+}
+html[data-theme="dark"] :is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button):hover {
+  border-color: #ff9a57 !important;
+  background: #382417 !important;
+  color: #ff9a57 !important;
+}
+@media (max-width: 700px) {
+  :is(.close-popup,.image-zoom-close,.review-image-viewer>button) {
+    top: max(8px, env(safe-area-inset-top)) !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    z-index: 30 !important;
+  }
+}
+
 /* Keep product details and the fixed purchase bar readable in dark mode. */
 html[data-theme="dark"] #productPopup .detail-section,
 html[data-theme="dark"] #productPopup .reviews-section { color: #eef1f5; background: #14171b; border-color: #343a46; }

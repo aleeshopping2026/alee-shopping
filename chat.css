@@ -293,3 +293,37 @@
 #aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog [data-delete-mode],
 #aleeChatOverlay.alee-chat-dark .alee-chat-thread-dialog [data-dialog-close]:not(header [data-dialog-close]){border-color:#374151!important;background:#1f2937!important;color:#f9fafb!important}
 @media(max-width:720px){#aleeChatOverlay .alee-chat-thread-dialog{width:100%;max-width:100vw;max-height:88dvh;border-radius:22px 22px 0 0}#aleeChatOverlay .alee-chat-thread-dialog>header{padding:14px 16px}#aleeChatOverlay .alee-chat-thread-dialog-body{padding:14px 16px max(18px,env(safe-area-inset-bottom))}}
+
+/* Align close controls across chat screens and dialogs. */
+#aleeChatOverlay :is(#aleeChatClose,.alee-chat-sidebar-rail [data-side-action="close"],.alee-chat-thread-dialog>header [data-dialog-close],.alee-chat-wallpaper-card>header [data-wallpaper-close],.alee-call-brand>button[data-call-close],.alee-chat-close-inline) {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  flex: 0 0 40px !important;
+  padding: 0 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 50% !important;
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+#aleeChatOverlay :is(#aleeChatClose,.alee-chat-sidebar-rail [data-side-action="close"],.alee-chat-thread-dialog>header [data-dialog-close],.alee-chat-wallpaper-card>header [data-wallpaper-close],.alee-call-brand>button[data-call-close],.alee-chat-close-inline):hover {
+  border-color: #e83e8c !important;
+  background: #fff1f7 !important;
+  color: #be185d !important;
+}
+#aleeChatOverlay.alee-chat-dark :is(#aleeChatClose,.alee-chat-sidebar-rail [data-side-action="close"],.alee-chat-thread-dialog>header [data-dialog-close],.alee-chat-wallpaper-card>header [data-wallpaper-close],.alee-call-brand>button[data-call-close],.alee-chat-close-inline) {
+  border-color: #4b5563 !important;
+  background: #1f2937 !important;
+  color: #f9fafb !important;
+}
+#aleeChatOverlay :is(#aleeChatClose,.alee-chat-sidebar-rail [data-side-action="close"],.alee-chat-thread-dialog>header [data-dialog-close],.alee-chat-wallpaper-card>header [data-wallpaper-close],.alee-call-brand>button[data-call-close],.alee-chat-close-inline):focus-visible {
+  outline: 2px solid #e83e8c !important;
+  outline-offset: 2px;
+}

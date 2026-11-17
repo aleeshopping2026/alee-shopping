@@ -1405,7 +1405,7 @@
 @media (min-width:1024px){
     #productList.products{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
 }
-    .slider img { border-color:#111827!important; }
+    .slider img { border:0!important; }
     .popup-title-row .favorite-action { border:1px solid #111827!important;background:#fff!important;color:#111827!important;box-shadow:none!important; }
     .popup-title-row .favorite-action.is-saved { border-color:#111827!important;background:#111827!important;color:#fff!important; }
     /* Soften the header buttons while retaining the site palette. */
@@ -1523,7 +1523,7 @@
     #sellerDashboard.seller-editing-shop .seller-dashboard-header{position:sticky!important;top:0!important;z-index:40!important}
     @media(max-width:700px){#sellerDashboard.seller-editing-shop #sellerShopFormPanel:not([hidden]){width:100%;padding:16px 22px calc(28px + env(safe-area-inset-bottom))!important}}
   </style>
-  <link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme">
+  <link rel="stylesheet" href="site-theme.css?v=20261116-close-controls">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -1531,7 +1531,7 @@
   <!-- ================= ACCOUNT MODAL ================= -->
   <div id="accountModal" aria-hidden="true">
     <div class="account-card">
-      <span class="account-close" onclick="closeAccountModal()">&times;</span>
+      <button type="button" class="account-close" onclick="closeAccountModal()" aria-label="Close sign in">&times;</button>
       <h2>aleeshopping</h2>
       <div class="account-note">Sign in with Google, email, or a verified phone number.</div>
       <button class="btn" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
@@ -1904,7 +1904,7 @@
     <div class="product-popup" id="productPopup" onclick="popupBackdropClose(event)">
       <aside class="product-popup-ad-slot" id="productPopupAdSlot" aria-label="Sponsored advertisement"></aside>
       <div class="popup-content">
-        <span class="close-popup" onclick="closeProductPopup(false,true)">&times;</span>
+        <button type="button" class="close-popup" onclick="closeProductPopup(false,true)" aria-label="Close product details">&times;</button>
         <div class="popup-main-grid">
         <div class="popup-media"><div class="gallery-main-wrap">
           <button class="gallery-arrow prev" onclick="galleryPrev(event)" aria-label="Previous photo">&#10094;</button>
