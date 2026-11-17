@@ -534,6 +534,24 @@
     .feed-post-actions .feed-view-product+.feed-action-button{margin-left:0!important}
     .feed-status{min-height:16px;margin:7px 0 0;color:#777;font-size:11px}
     .feed-empty{padding:24px;border:1px solid #eee;border-radius:12px;color:#8a8a8a;text-align:center;background:#fff}
+    @media(min-width:701px){
+      .feed-page{width:min(100%,1560px);padding:14px clamp(16px,2vw,32px) 32px}
+      .feed-toolbar{top:0;margin:0 0 16px;padding:12px 0 10px;border-bottom:1px solid #eaecf0;background:#ffffffed}
+      .feed-sort-tabs,.feed-category-tabs{gap:9px;padding:3px 0 7px}
+      .feed-sort-tab,.feed-category-tab{min-height:36px;padding:8px 15px;font-size:12px}
+      .feed-post{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);align-items:stretch;overflow:hidden}
+      .feed-create-card{grid-column:1/-1}
+      .feed-post-main{min-width:0;padding-bottom:10px;border-right:1px solid #eaecf0}
+      .feed-post-side{display:flex;min-width:0;min-height:0;flex-direction:column;padding:8px;background:#fff}
+      .feed-post-side .feed-post-details{flex:1;min-height:0;overflow-y:auto;padding:8px 9px 12px}
+      .feed-post .feed-post-details>.feed-comments-list{display:grid!important;max-height:30vh;overflow-y:auto;padding-right:4px}
+      .feed-post .feed-post-details>.feed-comment-form{display:flex!important;position:sticky;bottom:0;padding:8px 0 4px;background:#fff}
+      .feed-post-side .feed-share-options{padding:0 9px 10px}
+      .feed-post-side .feed-view-product{width:calc(100% - 18px);margin:0 9px 9px}
+      .feed-post-main .feed-photo-wrap{height:clamp(340px,68vh,780px);min-height:0}
+      .feed-post-main .feed-photo{width:100%;height:100%;object-fit:contain}
+    }
+    @media(min-width:701px) and (max-width:980px){.feed-post{grid-template-columns:minmax(0,1.05fr) minmax(260px,.95fr)}.feed-post-main .feed-photo-wrap{height:clamp(320px,62vh,620px)}}
     .feed-load-error{color:#b42318}
     body.feed-section-open{overflow:hidden}
     body.feed-section-open #hubContentPanel{position:fixed;inset:0;z-index:1000;width:100%;height:100dvh;max-height:100dvh;overflow-y:auto;margin:0;padding:0;border:0;border-radius:0;background:#fff;color:#111}
@@ -3646,7 +3664,10 @@
         body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentsByPost.get(String(post.id))||[],likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId,viewMap.get(String(post.id))||0,followedShopIds.has(String(post.shop_id)))).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
         body.querySelectorAll('.feed-post').forEach(post=>{
           const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
-          if(viewProduct&&bookmarkButton){bookmarkButton.before(viewProduct);bookmarkButton.style.marginLeft='0';}
+          if(window.matchMedia('(max-width:700px)').matches&&viewProduct&&bookmarkButton){bookmarkButton.before(viewProduct);bookmarkButton.style.marginLeft='0';}
+          const main=document.createElement('div'),side=document.createElement('aside');main.className='feed-post-main';side.className='feed-post-side';
+          Array.from(post.children).forEach(child=>{if(child.matches('.feed-post-details,.feed-share-options,.feed-view-product'))side.append(child);else main.append(child);});
+          post.append(main,side);
         });
         applyFeedFilters();
         observeFeedPostViews(Boolean(userId));
