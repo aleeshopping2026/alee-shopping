@@ -1750,7 +1750,7 @@
       
       <div class="hub-shortcuts" role="navigation" aria-label="Shops and services">
         <button class="hub-shortcut desktop-sidebar-only" type="button" onclick="showDesktopHome(this)" aria-label="Items and home"><span class="hub-shortcut-icon"><i class="fa-solid fa-grip"></i></span><span class="hub-shortcut-label">Items</span></button>
-        <button class="hub-shortcut" type="button" onclick="openHubSection('shops',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></button>
+        <a class="hub-shortcut" href="shops.html"><span class="hub-shortcut-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="hub-shortcut-label">Shops</span></a>
         <button class="hub-shortcut" type="button" onclick="openHubSection('offers',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-tags"></i></span><span class="hub-shortcut-label"><span class="mobile-hub-label">Offers</span><span class="desktop-hub-label">Offer</span></span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('jobs',this)"><span class="hub-shortcut-icon"><i class="fa-solid fa-briefcase"></i></span><span class="hub-shortcut-label">Jobs</span></button>
         <button class="hub-shortcut" type="button" onclick="openHubSection('feed',this)"><span class="hub-shortcut-icon"><i class="fa-regular fa-images"></i></span><span class="hub-shortcut-label">Feed</span></button>
@@ -3403,7 +3403,7 @@
     }
 
     function openMobileShops() {
-      openHubSection('shops',document.querySelector('.hub-shortcut[onclick*="shops"]'));
+      location.href='shops.html';
     }
 
     function openAllShops() {
