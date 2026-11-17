@@ -1531,6 +1531,15 @@
     #sellerDashboard.seller-editing-shop #sellerShopFormTitle{margin:0 0 20px!important;color:#172033!important;font-size:22px!important}
     #sellerDashboard.seller-editing-shop .seller-dashboard-header{position:sticky!important;top:0!important;z-index:40!important}
     @media(max-width:700px){#sellerDashboard.seller-editing-shop #sellerShopFormPanel:not([hidden]){width:100%;padding:16px 22px calc(28px + env(safe-area-inset-bottom))!important}}
+    @media(min-width:701px){
+      #shopsSection .desktop-sidebar-action.active{background:#fff4e8;color:#c2410c}
+      #mobileCategorySheet{top:140px;right:0;bottom:0;left:140px;align-items:flex-start;justify-content:flex-start;padding:10px;background:#10182855}
+      #mobileCategorySheet .mobile-sheet{width:min(680px,calc(100vw - 160px));height:calc(100% - 20px);max-height:none;overflow:auto;padding:20px;border-radius:16px;box-shadow:0 14px 38px #1018282b}
+      #mobileCategorySheet .mobile-category-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+      #mobileCategorySheet .mobile-category-option.category-tile{min-height:126px;padding:11px 8px;font-size:12px}
+      #mobileCategorySheet .mobile-category-option.category-tile img{width:72px;height:72px}
+    }
+    @media(min-width:701px) and (max-width:1023px){#mobileCategorySheet{left:112px}#mobileCategorySheet .mobile-sheet{width:min(620px,calc(100vw - 132px))}}
   </style>
   <link rel="stylesheet" href="site-theme.css?v=20261116-close-controls">
 </head>
@@ -1797,6 +1806,7 @@
         <button class="desktop-sidebar-action" type="button" data-view="my-shop" onclick="openDesktopSidebarView('my-shop')"><i class="fa-solid fa-store"></i><span>My Shop</span></button>
         <button class="desktop-sidebar-action" type="button" data-view="messages" onclick="openDesktopSidebarView('messages')"><i class="fa-solid fa-comments"></i><span>Messages</span></button>
         <button class="desktop-sidebar-action" type="button" data-view="cart" onclick="openDesktopSidebarView('cart')"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></button>
+        <button class="desktop-sidebar-action" type="button" data-view="categories" aria-controls="mobileCategorySheet" aria-haspopup="dialog" aria-expanded="false" onclick="openDesktopSidebarView('categories')"><i class="fa-solid fa-layer-group"></i><span>Categories</span></button>
       </div>
       <div id="hubShopsPanel" hidden>
         <h2 class="shops-heading" style="margin-top:12px">Shops <span><small>Choose a shop to see its products</small> <a href="shops.html" style="margin-left:8px;color:var(--light-leaf);font-size:11px;font-weight:800;text-decoration:none">Search all →</a></span></h2>
@@ -3510,6 +3520,7 @@
       if(view==='my-shop')openAccountMyShop();
       else if(view==='messages')openMessagesForCurrentRole();
       else if(view==='cart')openCart();
+      else if(view==='categories')openMobileCategories();
     }
 
     function closeHubSection(fromHistory=false) {
@@ -4624,11 +4635,19 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     function openMobileCategories() {
       showMobileCategoryGroups();
       document.getElementById('mobileCategorySheet').classList.add('show');
+      const desktopCategoryButton=document.querySelector('#shopsSection .desktop-sidebar-action[data-view="categories"]');
+      desktopCategoryButton?.classList.add('active');
+      desktopCategoryButton?.setAttribute('aria-expanded','true');
       pushAppUiLayer('mobileCategorySheet',fromHistory=>closeMobileSheet('mobileCategorySheet',fromHistory),()=>document.getElementById('mobileCategorySheet').classList.add('show'));
     }
 
     function closeMobileSheet(id,fromHistory=false,preserveHistory=false) {
       document.getElementById(id)?.classList.remove('show');
+      if(id==='mobileCategorySheet'){
+        const desktopCategoryButton=document.querySelector('#shopsSection .desktop-sidebar-action[data-view="categories"]');
+        desktopCategoryButton?.classList.remove('active');
+        desktopCategoryButton?.setAttribute('aria-expanded','false');
+      }
       closeAppUiLayer(id,fromHistory,preserveHistory);
     }
 
