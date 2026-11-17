@@ -4267,7 +4267,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
           rotatingPlaceholder.textContent=searchHintText(next);
           rotatingPlaceholder.animate([{opacity:0,transform:'translateY(25%)'},{opacity:1,transform:'translateY(0)'}],{duration:150,easing:'ease-out'});
         };
-      },500);
+      },1000);
     }
     const searchSuggestionBox=document.createElement('div');searchSuggestionBox.id='searchSuggestions';searchSuggestionBox.className='search-suggestions';searchSuggestionBox.setAttribute('role','listbox');searchInput.closest('.search-container').appendChild(searchSuggestionBox);let activeSuggestionIndex=-1;let suggestionRows=[];
     const searchDiscoveryOverlay = document.getElementById('searchDiscoveryOverlay');
