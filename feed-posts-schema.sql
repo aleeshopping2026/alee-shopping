@@ -11,10 +11,13 @@ create table if not exists public.feed_posts (
   caption text not null default '' check (char_length(caption) <= 1000),
   post_tag text not null default 'standard'
     check (post_tag in ('standard', 'announcement', 'offer')),
+  category_id text not null default 'other',
   created_at timestamptz not null default now(),
   constraint feed_posts_owner_shop_fk foreign key (shop_id, owner_id)
     references public.seller_shops(id, owner_id) on delete cascade
 );
+alter table public.feed_posts
+  add column if not exists category_id text not null default 'other';
 
 create or replace function public.validate_feed_product_link()
 returns trigger language plpgsql set search_path = public, pg_temp
@@ -133,6 +136,45 @@ drop policy if exists "Users can remove their own Saved Posts" on public.feed_sa
 create policy "Users can remove their own Saved Posts" on public.feed_saved
   for delete to authenticated using (user_id = (select auth.uid()));
 grant select, insert, delete on public.feed_saved to authenticated;
+
+create table if not exists public.feed_post_views (
+  post_id uuid not null references public.feed_posts(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (post_id, user_id)
+);
+alter table public.feed_post_views enable row level security;
+revoke all on public.feed_post_views from anon, authenticated;
+
+create or replace function public.get_feed_view_counts(p_post_ids uuid[])
+returns table (post_id uuid, view_count bigint)
+language sql stable security definer set search_path = public, pg_temp
+as $$
+  select views.post_id, count(*)::bigint
+  from public.feed_post_views views
+  where views.post_id = any(p_post_ids)
+  group by views.post_id;
+$$;
+revoke all on function public.get_feed_view_counts(uuid[]) from public;
+grant execute on function public.get_feed_view_counts(uuid[]) to anon, authenticated;
+
+create or replace function public.record_feed_view(p_post_id uuid)
+returns boolean
+language plpgsql security definer set search_path = public, pg_temp
+as $$
+declare
+  inserted_count integer;
+begin
+  if auth.uid() is null then raise exception 'Sign in to record Feed views.'; end if;
+  insert into public.feed_post_views(post_id, user_id)
+  values (p_post_id, auth.uid())
+  on conflict (post_id, user_id) do nothing;
+  get diagnostics inserted_count = row_count;
+  return inserted_count > 0;
+end;
+$$;
+revoke all on function public.record_feed_view(uuid) from public;
+grant execute on function public.record_feed_view(uuid) to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('feed-posts', 'feed-posts', true, 10485760,
