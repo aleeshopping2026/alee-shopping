@@ -2337,6 +2337,7 @@
     // The old Buyer/Seller chooser is now the required, owner-only ALEE Profile setup.
     async function ensurePrivateAccountProfile() {
       if(!activeUser||!supabaseClient)return false;
+      if(privateAccountProfile)return true;
       if(accountProfileCheckPromise)return accountProfileCheckPromise;
       accountProfileCheckPromise=(async()=>{
         const user=activeUser;
@@ -2436,15 +2437,15 @@
       privateAccountProfile=data;shopperCountryCode=data.country_code||shopperCountryCode;try{localStorage.setItem('alee-shopper-country',shopperCountryCode);}catch(_){}setShopperCurrency(shopperCountryCode);displayProducts(products);document.getElementById('buyerProfileName').textContent=data.full_name;document.getElementById('buyerPrivateMobile').textContent=data.mobile;document.getElementById('buyerPrivateAddress').textContent=data.address;document.getElementById('buyerPrivateCountry').textContent=countryCatalog.find(country=>country.code===data.country_code)?.name||data.country_code;document.getElementById('buyerDetailsForm').hidden=true;status.textContent='Private details saved.';
     }
 
-    async function openSellerAccount() {
+    async function openSellerAccount({profileReady=false,shopData=null}={}) {
       document.getElementById('profileDropdown')?.classList.remove('show');
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to create and manage your shop.';return;}
-      if(!await ensurePrivateAccountProfile())return;
+      if(!profileReady&&!await ensurePrivateAccountProfile())return;
       try{localStorage.setItem(`alee-account-role:${activeUser.id}`,'seller');}catch(error){}
       closeBuyerAccount(false,true);document.getElementById('sellerDashboard').classList.add('show');
       pushAppUiLayer('sellerDashboard',fromHistory=>closeSellerAccount(fromHistory),()=>document.getElementById('sellerDashboard').classList.add('show'));
       document.getElementById('sellerAccountEmail').textContent=activeUser.email||'Signed in';
-      await loadSellerWorkspace();
+      await loadSellerWorkspace(shopData);
     }
     function closeSellerAccount(fromHistory=false,preserveHistory=false) { document.getElementById('sellerDashboard').classList.remove('show');closeAppUiLayer('sellerDashboard',fromHistory,preserveHistory); }
 
@@ -2812,13 +2813,13 @@
       root._sellerJobsLoadFor=shopId;root._sellerJobsLoadPromise=request;
       try{await request;}finally{if(root._sellerJobsLoadPromise===request){root._sellerJobsLoadPromise=null;root._sellerJobsLoadFor='';}}
     }
-    async function loadSellerWorkspace() {
+    async function loadSellerWorkspace(shopData=null) {
       const status=document.getElementById('sellerDashboardStatus');
       status.textContent='Loading your shop…';
       if(!supabaseClient){status.textContent='Supabase is not configured.';return;}
       try {
         const [shopResult,itemsResult]=await Promise.all([
-          supabaseClient.from('seller_shops').select('*').eq('owner_id',activeUser.id).maybeSingle(),
+          shopData?Promise.resolve({data:shopData,error:null}):supabaseClient.from('seller_shops').select('*').eq('owner_id',activeUser.id).maybeSingle(),
           supabaseClient.from('seller_products').select('*').eq('owner_id',activeUser.id).order('created_at',{ascending:false})
         ]);
         const {data:shop,error:shopError}=shopResult;
@@ -4683,7 +4684,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
     function openSavedFeedPost(id){closeAccountLibrary(false,true);const url=new URL(location.href);url.searchParams.set('feedPost',id);history.replaceState(history.state,'',`${url.pathname}${url.search}${url.hash}`);openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));}
     function closeAccountLibrary(fromHistory=false,preserveHistory=false){document.getElementById('accountLibraryOverlay').classList.remove('show');if(accountLibraryReturnToHub){document.getElementById('buyerDashboard').classList.add('show');accountLibraryReturnToHub=false;}closeAppUiLayer('accountLibrary',fromHistory,preserveHistory);}
-    async function openAccountMyShop(){if(!activeUser){openAccountModal();return;}if(!supabaseClient){openAccountModal();document.getElementById('accountStatus').textContent='Connect Supabase to manage your shop.';return;}const result=await supabaseClient.from('seller_shops').select('id').eq('owner_id',activeUser.id).maybeSingle();if(result.error){alert('Could not check your shop. Please try again or check the seller database setup.');return;}if(!result.data){openCreateShopPrompt();return;}if(document.getElementById('accountLibraryOverlay').classList.contains('show'))closeAccountLibrary(false,true);accountLibraryReturnToHub=false;await openSellerAccount();}
+    async function openAccountMyShop(){if(!activeUser){openAccountModal();return;}if(!supabaseClient){openAccountModal();document.getElementById('accountStatus').textContent='Connect Supabase to manage your shop.';return;}const user=activeUser,[result,profileReady]=await Promise.all([supabaseClient.from('seller_shops').select('*').eq('owner_id',user.id).maybeSingle(),privateAccountProfile?Promise.resolve(true):ensurePrivateAccountProfile()]);if(activeUser?.id!==user.id)return;if(result.error){alert('Could not check your shop. Please try again or check the seller database setup.');return;}if(!profileReady)return;if(!result.data){openCreateShopPrompt();return;}if(document.getElementById('accountLibraryOverlay').classList.contains('show'))closeAccountLibrary(false,true);accountLibraryReturnToHub=false;await openSellerAccount({profileReady:true,shopData:result.data});}
     function openCreateShopPrompt(){const overlay=document.getElementById('createShopPrompt');overlay.classList.add('show');pushAppUiLayer('createShopPrompt',fromHistory=>closeCreateShopPrompt(fromHistory),()=>overlay.classList.add('show'));}
     function closeCreateShopPrompt(fromHistory=false,preserveHistory=false){document.getElementById('createShopPrompt').classList.remove('show');closeAppUiLayer('createShopPrompt',fromHistory,preserveHistory);}
     async function createShopFromPrompt(){document.getElementById('createShopPrompt').classList.remove('show');if(appUiHistoryLayers.at(-1)?.key==='createShopPrompt'){appUiHistoryLayers.pop();history.replaceState({...history.state,aleeUiLayer:appUiHistoryLayers.at(-1)?.key||null},'',location.href);}await openSellerAccount();}
