@@ -1544,6 +1544,17 @@
       #mobileCategorySheet .mobile-category-option.category-tile img{width:72px;height:72px}
     }
     @media(min-width:701px) and (max-width:1023px){#mobileCategorySheet{left:112px}#mobileCategorySheet .mobile-sheet{width:min(620px,calc(100vw - 132px))}}
+    @media(min-width:701px){
+      #productPopup{top:0;right:0;bottom:0;left:140px;padding:0;background:var(--card-bg);backdrop-filter:none}
+      #productPopup .popup-content{width:100%;max-width:none;min-height:100%;margin:0;padding:18px 24px 112px;overflow:visible;border:0;border-radius:0;box-shadow:none}
+      #productPopup .product-popup-ad-slot{width:100%;margin:0 0 8px;border:0;border-radius:0}
+      #productPopup .close-popup{position:fixed;top:12px;right:16px}
+      .popup-sticky-action{left:140px;width:min(1000px,calc(100vw - 160px));max-width:1000px}
+    }
+    @media(min-width:701px) and (max-width:1023px){
+      #productPopup{left:112px}
+      .popup-sticky-action{left:112px;width:min(900px,calc(100vw - 132px));max-width:900px}
+    }
   </style>
   <link rel="stylesheet" href="site-theme.css?v=20261116-close-controls">
 </head>
