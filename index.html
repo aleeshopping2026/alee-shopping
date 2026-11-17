@@ -3615,7 +3615,7 @@
     function renderFeedCreateCard(shop,items){
       const options=(items||[]).map(item=>`<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)} · LKR ${Number(item.price||0).toLocaleString()}</option>`).join('');
       const categoryOptions=(window.aleeCategoryGroups||[]).map(category=>`<option value="${escapeHTML(category.id)}">${escapeHTML(category.label)}</option>`).join('');
-      return `<section class="feed-create-card"><h3 class="feed-create-heading">Create Post</h3><form id="feedCreateForm" onsubmit="submitFeedPost(event)"><input id="feedPhotoInput" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><button class="feed-photo-button" type="button" onclick="document.getElementById('feedPhotoInput').click()"><i class="fa-regular fa-image" aria-hidden="true"></i> Photo එකක් දාන්න</button><img id="feedPhotoPreview" class="feed-create-preview" alt="Photo preview" hidden><div class="feed-create-fields" id="feedCreateFields" hidden><textarea name="caption" maxlength="1000" placeholder="Write a caption…"></textarea><select name="categoryId" aria-label="Post category" required><option value="" selected disabled>Choose a category</option><option value="other">Other</option>${categoryOptions}</select><select name="productId" aria-label="Link a product"><option value="">Link a product (optional)</option>${options}</select><select name="postTag" aria-label="Post type"><option value="standard">Standard post</option><option value="announcement">Announcement</option><option value="offer">Offer</option></select><button class="feed-photo-button" type="submit">Post</button></div><p class="feed-status" id="feedCreateStatus" role="status" aria-live="polite"></p></form></section>`;
+      return `<section class="feed-create-card"><h3 class="feed-create-heading">Create Post</h3><form id="feedCreateForm" onsubmit="submitFeedPost(event)"><input id="feedPhotoInput" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><button class="feed-photo-button" type="button" onclick="document.getElementById('feedPhotoInput').click()"><i class="fa-regular fa-image" aria-hidden="true"></i> Add a photo</button><img id="feedPhotoPreview" class="feed-create-preview" alt="Photo preview" hidden><div class="feed-create-fields" id="feedCreateFields" hidden><textarea name="caption" maxlength="1000" placeholder="Write a caption…"></textarea><select name="categoryId" aria-label="Post category" required><option value="" selected disabled>Choose a category</option><option value="other">Other</option>${categoryOptions}</select><select name="productId" aria-label="Link a product"><option value="">Link a product (optional)</option>${options}</select><select name="postTag" aria-label="Post type"><option value="standard">Standard post</option><option value="announcement">Announcement</option><option value="offer">Offer</option></select><button class="feed-photo-button" type="submit">Post</button></div><p class="feed-status" id="feedCreateStatus" role="status" aria-live="polite"></p></form></section>`;
     }
     function renderFeedCard(post,shop,comments,likeCount,liked,saved,userId,viewCount,following){
       const shopName=shop?.shop_name||'Shop',avatar=shop?.logo_url||'assets/alee-logo.png',locationText=shop?.address||shop?.country_code||'ALEE Shopping';
@@ -5337,13 +5337,13 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
 
     const searchSynonymGroups=[
-      ['tea','teas','තේ'],['cinnamon','cinnamun','cinnamomum','කුරුඳු','kurundu','kurundhu'],
-      ['kurakkan','කුරක්කන්','ragi','finger millet'],['fashion','clothing','apparel','dress','wear','ඇඳුම්','ඇදුම්','වස්ත්‍ර'],
-      ['saree','sari','සාරි','සාය'],['shirt','shirts','tshirt','tee','කමිස','ෂර්ට්'],
-      ['phone','phones','mobile','smartphone','cellphone','ෆෝන්','දුරකථන','ජංගම'],
-      ['shoe','shoes','footwear','සපත්තු'],['charger','charging adapter','චාජර්'],
-      ['electronics','electronic','gadget','device','ඉලෙක්ට්‍රොනික','ගැජට්'],
-      ['sale','discount','11.11','වට්ටම්']
+      ['tea','teas'],['cinnamon','cinnamun','cinnamomum','kurundu','kurundhu'],
+      ['kurakkan','ragi','finger millet'],['fashion','clothing','apparel','dress','wear'],
+      ['saree','sari'],['shirt','shirts','tshirt','tee'],
+      ['phone','phones','mobile','smartphone','cellphone'],
+      ['shoe','shoes','footwear'],['charger','charging adapter'],
+      ['electronics','electronic','gadget','device'],
+      ['sale','discount','11.11']
     ];
     let productSearchIndexCache=new WeakMap();
     let productSearchIndexDirty=true;
@@ -5573,17 +5573,17 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const results = document.getElementById('finderResults');
       results.replaceChildren();
       if (!query) { status.textContent = 'Describe a product or need first.'; return; }
-      const budgetMatch = query.match(/(?:under|below|less than|budget|under\s*lkr|රු\.?\s*|lkr\s*)(\d[\d,]*)|([\d,]+)\s*(?:ට\s*අඩු|adu|below)/i);
+      const budgetMatch = query.match(/(?:under|below|less than|budget|under\s*lkr|lkr\s*)(\d[\d,]*)|([\d,]+)\s*(?:adu|below)/i);
       const budget = budgetMatch ? Number((budgetMatch[1] || budgetMatch[2]).replace(/,/g,'')) : null;
       const categoryTerms = {
-        gadgets:['earbud','earphone','headphone','speaker','audio','bluetooth','ගීත','සින්දු','කනට','ear'],
-        watches:['watch','wrist','smartwatch','clock','ඔරලෝසු','watch'],
-        beauty:['trimmer','hair','beauty','groom','dryer','සැලෝන්','කොණ්ඩ','රැවුල'],
-        power:['charger','cable','power bank','tool','vacuum','fan','torch','charge','චාජ්','කේබල්'],
-        phone:['phone','mobile','case','screen','cover','ෆෝන්','දුරකථන'],
-        health:['health','scale','weight','torch','සෞඛ්‍ය','බර']
+        gadgets:['earbud','earphone','headphone','speaker','audio','bluetooth','ear'],
+        watches:['watch','wrist','smartwatch','clock'],
+        beauty:['trimmer','hair','beauty','groom','dryer'],
+        power:['charger','cable','power bank','tool','vacuum','fan','torch','charge'],
+        phone:['phone','mobile','case','screen','cover'],
+        health:['health','scale','weight','torch']
       };
-      const terms = query.split(/[^a-z0-9\u0D80-\u0DFF]+/i).filter(word => word.length > 1 && !/^\d+$/.test(word));
+      const terms = query.split(/[^a-z0-9]+/i).filter(word => word.length > 1 && !/^\d+$/.test(word));
       let ranked = products.map((product,index) => {
         const corpus = `${product.name} ${product.category} ${product.desc || ''} ${(product.features || []).join(' ')}`.toLowerCase();
         let score = 0;

@@ -170,17 +170,17 @@ Deno.serve(async (request) => {
 
     if (action === "broadcast") {
       if (String(user.email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
-        return response(403, { error: "මෙම පාලකය භාවිත කළ හැක්කේ ALEE ප්‍රධාන පරිපාලක ගිණුමට පමණයි." }, siteUrl.origin);
+        return response(403, { error: "Only the ALEE administrator account can use this control." }, siteUrl.origin);
       }
       const title = String(body?.title || "").trim().slice(0, 70);
       const message = String(body?.message || "").trim().slice(0, 220);
-      if (!title || !message) return response(400, { error: "මාතෘකාව සහ පණිවිඩය දෙකම පුරවන්න." }, siteUrl.origin);
+      if (!title || !message) return response(400, { error: "Enter both a title and a message." }, siteUrl.origin);
 
       const destination = validateDestination(body?.destinationUrl, siteUrl);
       const imageUrl = typeof body?.imageUrl === "string" ? body.imageUrl.trim() : "";
       if (imageUrl) {
         const image = new URL(imageUrl);
-        if (image.protocol !== "https:") return response(400, { error: "ඡායාරූප සබැඳිය HTTPS විය යුතුයි." }, siteUrl.origin);
+        if (image.protocol !== "https:") return response(400, { error: "The image link must use HTTPS." }, siteUrl.origin);
       }
       const payload: Json = {
         included_segments: ["Subscribed Users"],
