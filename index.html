@@ -5786,6 +5786,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       startProductPopupAds();
       const stickyActions=document.querySelector('.popup-sticky-action');if(stickyActions){if(stickyActions.parentElement!==document.body)document.body.appendChild(stickyActions);stickyActions.style.display='grid';}
       popup.style.display = "block";
+      popup.scrollTop = 0;
       document.body.style.overflow = 'hidden';
       window.setTimeout(() => {
         if (renderToken !== productPopupRenderToken) return;
