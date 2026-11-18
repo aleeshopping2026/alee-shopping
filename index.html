@@ -642,9 +642,6 @@
     .recommendation-shelf { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:2px 2px 8px; align-items:stretch; }
     .recommendation-shelf:not(.is-horizontal) { display:block; column-count:2; column-gap:8px; }
     .recommendation-shelf:not(.is-horizontal)>.recommendation-card-wrap { display:inline-block; width:100%; margin:0 0 8px; break-inside:avoid; vertical-align:top; }
-    #newArrivalsProducts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-count:initial; gap:8px; align-items:start; }
-    #newArrivalsProducts>.recommendation-card-wrap { display:flex; width:auto; margin:0; break-inside:auto; }
-    #newArrivalsProducts>.recommendation-card-wrap>.card { width:100%; }
     .recommendation-shelf:not(.is-horizontal)>.recommendation-empty { column-span:all; }
     #topRatedProducts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-count:initial; gap:8px; align-items:start; }
     .recommendation-shelf.is-horizontal { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(150px,190px); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:thin; align-items:stretch; }
