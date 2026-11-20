@@ -931,7 +931,7 @@
     .input-field { width:100%; min-height:48px; padding:12px; background:var(--bg-dark); border:1px solid var(--glass-border); color:var(--text-white); border-radius:10px; font-size:14px; outline:none; }
     .input-field:focus { border-color:var(--light-leaf); }
     .clear-checkout-details { display:block; margin:7px 0 8px auto; padding:7px 10px; border:1px solid var(--glass-border); border-radius:8px; background:transparent; color:var(--text-white); font-size:12px; cursor:pointer; }
-    .cart-footer { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px max(18px,calc((100vw - 1040px)/2)) max(14px,env(safe-area-inset-bottom)); border-top:1px solid var(--glass-border); background:var(--card-bg); box-shadow:0 -8px 24px #1018280d; }
+    .cart-footer { position:sticky; bottom:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px max(18px,calc((100vw - 1040px)/2)) max(14px,env(safe-area-inset-bottom)); border-top:1px solid var(--glass-border); background:var(--card-bg); box-shadow:0 -8px 24px #1018280d; }
     .cart-footer[hidden] { display:none!important; }
     .cart-total-copy { display:grid; gap:3px; }
     .cart-total-copy span { color:var(--detail-copy); font-size:12px; }
@@ -943,10 +943,6 @@
     .cart-footer-actions .cart-back-button { min-width:100px; border-color:var(--glass-border); background:var(--bg-dark); color:var(--text-white); }
     .cart-footer-actions [hidden] { display:none!important; }
     .cart-stage-status { min-height:20px; margin:10px 0 0; color:var(--detail-copy); font-size:13px; }
-    .order-whatsapp-actions { display:grid; gap:7px; margin-top:12px; }
-    .order-whatsapp-actions[hidden] { display:none; }
-    .order-whatsapp-link { display:block; padding:11px 12px; border-radius:9px; background:#25d366; color:#073b1d; font-size:13px; font-weight:800; text-align:center; text-decoration:none; }
-    .order-whatsapp-link:hover { background:#20bd5a; }
 
     .footer { background: var(--card-bg); color: #737373; text-align: center; padding: 25px 15px; margin-top: 40px; border-top: 1px solid var(--glass-border); font-size: 13px; }
     .social-icons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
@@ -1528,6 +1524,8 @@
     .seller-dashboard-product-card>div{display:grid;gap:4px;padding:9px}.seller-dashboard-product-card strong{overflow:hidden;font-size:12px;text-overflow:ellipsis;white-space:nowrap}.seller-dashboard-product-card small{color:#667085;font-size:11px}
     .seller-dashboard-product-add{display:grid;width:min(180px,100%);justify-self:start;place-items:center;min-height:118px;border:1px dashed #f36b00;border-radius:13px;background:#fff8f2;color:#c84f00;font:inherit;font-weight:800;cursor:pointer}.seller-dashboard-product-add i{font-size:24px}
     .seller-dashboard-product-card-actions{display:flex;gap:5px;padding:0 8px 8px}.seller-dashboard-product-card-actions button{flex:1;min-width:0;min-height:32px;padding:4px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#344054;font-size:11px;font-weight:750;cursor:pointer}
+    #sellerDashboard.seller-shop-locked .seller-profile-edit-button,#sellerDashboard.seller-shop-locked .seller-banner-camera,#sellerDashboard.seller-shop-locked #sellerAddItemToggle,#sellerDashboard.seller-shop-locked .seller-dashboard-product-add,#sellerDashboard.seller-shop-locked .seller-dashboard-product-card-actions,#sellerDashboard.seller-shop-locked #sellerJobsPanel .seller-tab-panel-heading button,#sellerDashboard.seller-shop-locked #sellerFeedPanel .seller-tab-panel-heading button{display:none!important}
+    #sellerDashboard.seller-shop-locked #sellerDashboardStatus{padding:10px 12px;border:1px solid #fecdca;border-radius:10px;background:#fef3f2;color:#b42318}
     .seller-job-list{display:grid;gap:9px}.seller-job-card{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border:1px solid #e5e9ef;border-radius:12px}.seller-job-card img{width:58px;height:58px;border-radius:9px;object-fit:cover;background:#f3f5f7}.seller-job-card strong,.seller-job-card small{display:block}.seller-job-card small{margin-top:3px;color:#667085;font-size:11px}.seller-job-actions{display:flex;gap:5px}.seller-job-actions button{padding:7px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;color:#344054;font:inherit;font-size:11px;cursor:pointer}
     .seller-viewer-list{display:grid;gap:8px}.seller-viewer-row{display:flex;align-items:center;gap:11px;min-height:62px;padding:8px;border:1px solid #e8ebef;border-radius:12px;background:#fff;color:#172033}.seller-viewer-row img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#eef1f4}.seller-viewer-row span{flex:1;font-weight:750}.seller-viewer-row small{color:#667085;font-size:11px}.seller-tab-panel-heading>button:first-child:not(.seller-action-button){display:grid;place-items:center;width:36px;height:36px;border:1px solid #e5e7eb;border-radius:50%;background:#fff;color:#344054;cursor:pointer}
     .seller-product-detail-dialog{position:fixed;width:min(620px,calc(100vw - 24px));max-height:88dvh;margin:auto;padding:18px;overflow:auto;border:1px solid #e1e6ed;border-radius:20px;background:#fff;color:#172033;box-shadow:0 24px 80px #10182845}.seller-product-detail-dialog::backdrop{background:#10182899;backdrop-filter:blur(3px)}.seller-product-detail-close{position:sticky;top:0;float:right;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:#f3f4f6;color:#172033;font-size:25px;cursor:pointer}.seller-product-detail-hero{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center}.seller-product-detail-hero img{width:120px;height:120px;border-radius:13px;object-fit:cover;background:#f3f5f7}.seller-product-detail-hero h2{margin:0 0 6px;font-size:20px}.seller-product-detail-hero p{margin:4px 0;color:#667085}.seller-product-detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.seller-product-detail-reviews{display:grid;gap:8px}.seller-product-review{padding:11px;border:1px solid #e6e9ee;border-radius:11px}.seller-product-review p{margin:6px 0;line-height:1.5}.seller-product-review small{color:#667085}
@@ -2109,7 +2107,6 @@
             <small class="cart-saved-details-note">Your delivery details and note are saved on this device for your next order. You can edit them anytime. Order details are also sent to the relevant shop’s Orders inbox and Messages.</small>
             <button class="clear-checkout-details" type="button" onclick="clearCheckoutDetails()">Clear saved details</button>
             <div id="orderStatus" class="cart-stage-status" role="status" aria-live="polite"></div>
-            <div id="orderWhatsappActions" class="order-whatsapp-actions" hidden></div>
           </section>
         </div>
         <footer class="cart-footer" id="cartFooter">
@@ -2117,13 +2114,12 @@
           <div class="cart-footer-actions">
             <button class="cart-back-button" id="cartFooterBack" type="button" onclick="setCartStage('items')" hidden>Back</button>
             <button id="cartNextButton" type="button" onclick="goToCartCheckout()">Next</button>
-            <button id="cartConfirmButton" type="button" onclick="openOrderConfirmation()" hidden>Confirm order</button>
+            <button id="cartConfirmButton" type="button" onclick="openOrderConfirmation()" hidden>Place order</button>
           </div>
         </footer>
       </section>
     </div>
-    <dialog class="order-confirm-dialog" id="orderConfirmDialog"><div class="order-confirm-icon">✓</div><h2>Confirm your order</h2><p>Check your delivery details and confirm that you want to place this order.</p><div class="order-confirm-actions"><button type="button" onclick="closeOrderConfirmation()">Go back</button><button class="confirm" id="confirmOrderButton" type="button" onclick="confirmOrderFromDialog(this)">Confirm order</button></div></dialog>
-    <dialog class="order-confirm-dialog order-success-dialog" id="orderSuccessDialog"><div class="order-confirm-icon" aria-hidden="true">✓</div><h2>Your order is confirmed!</h2><p id="orderSuccessMessage">Your order was saved for the shop.</p><div id="orderSuccessWhatsappActions" class="order-whatsapp-actions" hidden></div><div class="order-confirm-actions"><button class="confirm" type="button" onclick="finishConfirmedOrder()">Confirmed order</button></div></dialog>
+    <dialog class="order-confirm-dialog order-success-dialog" id="orderSuccessDialog"><div class="order-confirm-icon" aria-hidden="true">✓</div><h2>Thank you!</h2><p id="orderSuccessMessage">Your order was sent to the shop.</p></dialog>
 
   </div>
 
@@ -2382,7 +2378,6 @@
     async function copySellerShopLink(){const link=shopPublicUrl(currentSellerShop.id),status=document.getElementById('sellerShopShareStatus');try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(link);else{const input=document.createElement('textarea');input.value=link;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();const copied=document.execCommand('copy');input.remove();if(!copied)throw new Error('copy failed');}status.textContent='Shop link copied.';}catch(_){status.textContent='Copy is unavailable here. Select the link above to copy it.';}}
     async function nativeShareSellerShop(){const link=shopPublicUrl(currentSellerShop.id);if(navigator.share){try{await navigator.share({title:currentSellerShop.shop_name,text:`Visit ${currentSellerShop.shop_name} on aleeshopping`,url:link});}catch(error){if(error.name!=='AbortError')document.getElementById('sellerShopShareStatus').textContent='Could not open the share menu.';}}else await copySellerShopLink();}
     const splitSellerList = value => String(value||'').split(/[,\n]/).map(item=>item.trim()).filter(Boolean).slice(0,30);
-    function reserveWhatsappWindow() { const popup=window.open('about:blank','_blank'); if(popup) popup.opener=null; return popup; }
     async function signInWithGoogle() {
       const status=document.getElementById('accountStatus');
       if(!supabaseClient){status.textContent='Supabase login is not configured. See the setup guide.';return;}
@@ -2564,6 +2559,7 @@
       if(result.error){alert('Could not load your shop. Please try again.');return;}
       const shop=result.data;currentSellerShop=shop||null;
       if(!shop){document.getElementById('accountDeleteShopMenu').hidden=true;if(document.getElementById('mobileDeleteShopMenu'))document.getElementById('mobileDeleteShopMenu').hidden=true;alert('There is no shop to delete.');return;}
+      if(shop.is_locked){alert('This shop is locked by ALEE. Contact ALEE support before requesting deletion.');return;}
       const confirmed=window.confirm(`Permanently delete “${shop.shop_name}” and all related shop data, including products, Feed posts, chats, followers and order records? This cannot be undone.`);
       if(!confirmed)return;
       const sellerDashboardWasOpen=document.getElementById('sellerDashboard').classList.contains('show');
@@ -2911,6 +2907,7 @@
         const {data:shop,error:shopError}=shopResult;
         if(shopError) throw shopError;
         currentSellerShop=shop||null;
+        document.getElementById('sellerDashboard').classList.toggle('seller-shop-locked',Boolean(currentSellerShop?.is_locked));
         const deleteShopMenu=document.getElementById('accountDeleteShopMenu'),mobileDeleteShopMenu=document.getElementById('mobileDeleteShopMenu');if(deleteShopMenu)deleteShopMenu.hidden=!currentSellerShop;if(mobileDeleteShopMenu)mobileDeleteShopMenu.hidden=!currentSellerShop;
         const profile=document.getElementById('sellerShopProfile'), formPanel=document.getElementById('sellerShopFormPanel');
         const productPanel=document.getElementById('sellerProductPanel'),listPanel=document.getElementById('sellerProductListPanel');
@@ -2953,13 +2950,20 @@
           fillSellerShopCategories('');
           populateCountrySelect(document.getElementById('sellerShopCountry'),shopperCountryCode||'LK');document.getElementById('sellerShopCountry').value=shopperCountryCode||'LK';populateSellerCurrencies(currencyForCountry(shopperCountryCode));
         }
-        status.textContent='';
+        status.textContent=currentSellerShop?.is_locked?'This shop is locked by ALEE. It is hidden from customers, and shop updates and new orders are disabled. Contact ALEE support for help.':'';
       } catch(error) { console.error(error);status.textContent='Could not load your shop. Run seller-marketplace-schema.sql in Supabase, then reload.'; }
+    }
+
+    function denyLockedShopAction(){
+      if(!currentSellerShop?.is_locked)return false;
+      document.getElementById('sellerDashboardStatus').textContent='This shop is locked by ALEE. Shop changes are disabled. Contact ALEE support for help.';
+      return true;
     }
 
     function sellerDashboardBack(){if(document.getElementById('sellerDashboard')?.classList.contains('seller-editing-shop'))cancelEditSellerShop();else closeSellerAccount();}
     function editSellerShop() {
       if(!currentSellerShop)return;
+      if(denyLockedShopAction())return;
       const form=document.getElementById('sellerShopForm');
       form.elements.shopName.value=currentSellerShop.shop_name||'';form.elements.bio.value=currentSellerShop.bio||'';fillPhoneField('phone',currentSellerShop.phone||'');fillPhoneField('phone2',currentSellerShop.phone2||'');
       form.elements.address.value=currentSellerShop.address||'';form.elements.externalLink.value=currentSellerShop.external_link||'';
@@ -2973,6 +2977,7 @@
 
     document.getElementById('sellerShopBannerFile')?.addEventListener('change',async event=>{
       const file=event.currentTarget.files?.[0];event.currentTarget.value='';if(!file||!activeUser||!currentSellerShop||!supabaseClient)return;
+      if(denyLockedShopAction())return;
       const status=document.getElementById('sellerDashboardStatus');if(!['image/jpeg','image/png','image/webp','image/gif','image/avif'].includes(file.type)||file.size>10*1024*1024){status.textContent='Choose a JPG, PNG, WEBP, GIF, or AVIF banner up to 10 MB.';return;}
       status.textContent='Uploading shop banner…';let uploaded=null;
       try{uploaded=await uploadSellerImage(file,`${activeUser.id}/shop-banners`);const {data,error}=await supabaseClient.from('seller_shops').update({banner_url:uploaded.url}).eq('id',currentSellerShop.id).eq('owner_id',activeUser.id).select().single();if(error)throw error;const old=currentSellerShop.banner_url;currentSellerShop=data;const image=document.getElementById('sellerShopBanner');image.src=data.banner_url;image.hidden=false;if(old)try{await removeSellerImages([old]);}catch(cleanupError){console.warn('Previous banner could not be removed.',cleanupError);}await loadSellerCatalog();status.textContent='Shop banner updated.';}
@@ -2990,6 +2995,7 @@
     async function saveSellerShop(event) {
       event.preventDefault();
       if(!activeUser||!supabaseClient)return;
+      if(denyLockedShopAction())return;
       const form=event.currentTarget,status=document.getElementById('sellerShopStatus');
       const name=form.elements.shopName.value.trim(),phone=normalizeShopPhone(form.elements.phone.value,form.elements.phoneCountry.value),address=form.elements.address.value.trim(),externalLink=form.elements.externalLink.value.trim(),selectedShopCategory=form.elements.shopCategory.value,customShopCategory=form.elements.shopCategoryCustom.value.trim(),shopCategory=selectedShopCategory==='Other'?customShopCategory:selectedShopCategory;
       const socialValues={facebook_url:form.elements.facebook.value.trim(),instagram_url:form.elements.instagram.value.trim(),tiktok_url:form.elements.tiktok.value.trim(),youtube_url:form.elements.youtube.value.trim()};
@@ -3113,6 +3119,7 @@
     }
 
     function toggleSellerProductForm() {
+      if(denyLockedShopAction())return;
       const form=document.getElementById('sellerProductForm');
       form.hidden=!form.hidden;
       document.getElementById('sellerAddItemToggle').hidden=!form.hidden;
@@ -3122,6 +3129,7 @@
     }
 
     function editSellerProduct(id) {
+      if(denyLockedShopAction())return;
       const item=sellerProducts.find(product=>Number(product.id)===Number(id));
       if(!item)return;
       editingSellerProductId=Number(item.id);
@@ -3147,6 +3155,7 @@
     }
 
     async function deleteSellerProduct(id) {
+      if(denyLockedShopAction())return;
       const item=sellerProducts.find(product=>Number(product.id)===Number(id));
       if(!item||!activeUser||!supabaseClient)return;
       if(!confirm(`Delete “${item.name}” from your shop? This cannot be undone.`))return;
@@ -3182,6 +3191,7 @@
       const root=document.getElementById('sellerFeedList');if(root)delete root.dataset.loadedAt;await loadSellerFeedManager({force:true});
     }
     function openFeedFromSellerDashboard(){
+      if(denyLockedShopAction())return;
       closeSellerAccount(false,true);
       openHubSection('feed',document.querySelector('.hub-shortcut[onclick*="feed"]'));
     }
@@ -3189,6 +3199,7 @@
     async function saveSellerProduct(event) {
       event.preventDefault();
       if(!activeUser||!supabaseClient||!currentSellerShop)return;
+      if(denyLockedShopAction())return;
       const form=event.currentTarget,status=document.getElementById('sellerProductStatus'),files=[...form.elements.photos.files];
       const editingItem=editingSellerProductId?sellerProducts.find(item=>Number(item.id)===editingSellerProductId):null;
       if(editingSellerProductId&&!editingItem){status.textContent='This item is no longer available. Reload your shop and try again.';return;}
@@ -3626,6 +3637,7 @@
       form.elements.description.required=job||ad;
     }
     async function openPlatformPostForm(defaultType='app'){
+      if(defaultType==='job'&&denyLockedShopAction())return;
       if(!supabaseClient){alert('Run platform-posts-schema.sql in Supabase first.');return;}
       if(!activeUser){const {data}=await supabaseClient.auth.getUser();activeUser=data?.user||null;}
       if(!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to post your own app, ad, or job.';return;}
@@ -4245,62 +4257,6 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     const checkoutDetailsKey = 'aleeCheckoutDetails';
     const checkoutDetailFields = ['customerName','customerAddress','customerPhone1','customerPhone2','customerNote'];
     const whatsappNumber = "94761389936";
-    function normalizeWhatsappNumber(value) {
-      let digits=String(value||'').replace(/\D/g,'');
-      if(digits.startsWith('00'))digits=digits.slice(2);
-      if(digits.startsWith('0'))digits=`94${digits.slice(1)}`;
-      return digits.length>=9&&digits.length<=15?digits:'';
-    }
-    function whatsappOrderUrl(phone,message) {
-      const recipient=normalizeWhatsappNumber(phone);
-      return recipient?`https://wa.me/${recipient}?${new URLSearchParams({text:message})}`:'';
-    }
-    function renderOrderWhatsappActions(orderGroups,customer) {
-      const containers=['orderWhatsappActions','orderSuccessWhatsappActions'].map(id=>document.getElementById(id)).filter(Boolean);
-      containers.forEach(container=>{container.replaceChildren();container.hidden=true;});
-      const adminPhone=normalizeWhatsappNumber(whatsappNumber);
-      const links=[];
-      const itemLines=group=>group.items.map(item=>{
-        const variants=[item.color&&`Color: ${item.color}`,item.size&&`Size: ${item.size}`].filter(Boolean).join(', ');
-        return `• ${item.name} × ${item.quantity}${variants?` (${variants})`:''} — ${formatCurrencyAmount(Number(item.price)*Number(item.quantity),item.currency_code||group.currency_code||'LKR')}`;
-      }).join('\n');
-      const shopName=group=>shops.find(item=>String(item.id)===String(group.shop_id))?.name||'aleeshopping';
-      const buildMessage=(group,includeShop=true)=>[
-        `aleeshopping — New order${includeShop?` for ${shopName(group)}`:''}`,
-        `Customer: ${customer.name}`,
-        `Address: ${customer.address}`,
-        `Phone: ${customer.phone}`,
-        customer.phone2?`Second phone: ${customer.phone2}`:'',
-        `Items:\n${itemLines(group)}`,
-        `Total: ${formatCurrencyAmount(group.total,group.currency_code||'LKR')}`,
-        'Payment: Cash on Delivery',
-        customer.note?`Note: ${customer.note}`:''
-      ].filter(Boolean).join('\n');
-      const addLink=(phone,label,message)=>{
-        const url=whatsappOrderUrl(phone,message);
-        if(!url)return false;
-        links.push({url,label});return true;
-      };
-
-      const hasSellerShopOrder=orderGroups.some(group=>group.shop_id&&String(group.shop_id)!=='alee-shopping');
-      for(const group of orderGroups){
-        const shop=group.shop_id?shops.find(item=>String(item.id)===String(group.shop_id)):null;
-        const isAleeShop=!group.shop_id||String(group.shop_id)==='alee-shopping';
-        if(isAleeShop&&hasSellerShopOrder)continue;
-        const recipient=normalizeWhatsappNumber(shop?.phone)||(isAleeShop?adminPhone:'');
-        const label=shop?.name||'aleeshopping';
-        if(recipient)addLink(recipient,label,buildMessage(group));
-      }
-      const missingSellerPhone=orderGroups.some(group=>group.shop_id&&String(group.shop_id)!=='alee-shopping'&&!normalizeWhatsappNumber(shops.find(item=>String(item.id)===String(group.shop_id))?.phone));
-
-      containers.forEach(container=>{
-        links.forEach(({url,label})=>{const link=document.createElement('a');link.className='order-whatsapp-link';link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=`WhatsApp — ${label}`;container.append(link);});
-        if(missingSellerPhone){const hint=document.createElement('span');hint.textContent='A shop contact number is missing, so a WhatsApp message could not be prepared for that shop.';container.append(hint);}
-        if(!links.length&&orderGroups.some(group=>group.shop_id)){const hint=document.createElement('span');hint.textContent='WhatsApp links are unavailable because a shop contact number is missing.';container.append(hint);}
-        container.hidden=!links.length&&!missingSellerPhone;
-      });
-      return links;
-    }
     const productList = document.getElementById("productList");
 
     document.addEventListener('wheel',event=>{
@@ -6373,34 +6329,22 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     function openOrderConfirmation(){
       const order=selectedCartItems();
-      if(!order.length){document.getElementById('orderStatus').textContent='Select at least one item before confirming.';return;}
+      if(!order.length){document.getElementById('orderStatus').textContent='Select at least one item before placing your order.';return;}
       for(const [id,label] of [['customerName','Enter your name first.'],['customerAddress','Enter your delivery address first.'],['customerPhone1','Enter your phone number first.']]){const field=document.getElementById(id);if(!field.value.trim()){document.getElementById('orderStatus').textContent=label;field.focus();return;}}
-      const summary=formatCartTotals(order);
-      document.querySelector('#orderConfirmDialog p').textContent=`Confirm your order for ${summary}? Prices are charged in each shop’s selected currency.`;
-      const dialog=document.getElementById('orderConfirmDialog');
-      if(dialog?.showModal){dialog.showModal();pushAppUiLayer('orderConfirm',fromHistory=>closeOrderConfirmation(fromHistory),()=>dialog.showModal());}
-      else if(confirm(`Confirm your order for ${summary}?`))confirmOrderFromDialog();
+      submitOrder(document.getElementById('cartConfirmButton'));
     }
 
-    function closeOrderConfirmation(fromHistory=false,preserveHistory=false){const dialog=document.getElementById('orderConfirmDialog');if(dialog?.open)dialog.close();closeAppUiLayer('orderConfirm',fromHistory,preserveHistory);}
-    document.getElementById('orderConfirmDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeOrderConfirmation();});
-
-    async function confirmOrderFromDialog(button) {
-      if(cartSubmitting)return;
-      const whatsappPopup=reserveWhatsappWindow();
-      closeOrderConfirmation();
-      await submitOrder(whatsappPopup,button);
-    }
-
+    let orderSuccessReturnTimer=0;
     function showOrderSuccess(message) {
       document.getElementById('orderSuccessMessage').textContent=message;
       const dialog=document.getElementById('orderSuccessDialog');
       if(dialog?.showModal){dialog.showModal();pushAppUiLayer('orderSuccess',fromHistory=>closeOrderSuccess(fromHistory),()=>dialog.showModal());}
+      window.clearTimeout(orderSuccessReturnTimer);
+      orderSuccessReturnTimer=window.setTimeout(finishConfirmedOrder,1800);
     }
 
     function closeOrderSuccess(fromHistory=false,preserveHistory=false){const dialog=document.getElementById('orderSuccessDialog');if(dialog?.open)dialog.close();closeAppUiLayer('orderSuccess',fromHistory,preserveHistory);}
-    function finishConfirmedOrder(){closeOrderSuccess(false,true);closeCart(false,true);mobileGoHome();history.go(-2);}
-    document.getElementById('orderSuccessDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeOrderSuccess();});
+    function finishConfirmedOrder(){window.clearTimeout(orderSuccessReturnTimer);closeOrderSuccess(false,true);closeCart(false,true);mobileGoHome();history.go(-2);}
 
     function openCart(replaceCurrentHistory=false) { checkoutItems=null;cartStage='items';activeOrdersTab='cart';showCartOverlay(replaceCurrentHistory);setOrdersTab('cart'); }
     function closeCart(fromHistory=false,preserveHistory=false) { document.getElementById('cartOverlay').classList.remove('show');document.getElementById('cartOverlay').setAttribute('aria-hidden','true');document.body.style.overflow=cartPreviousBodyOverflow;checkoutItems=null;cartStage='items';if(ordersRefreshTimer){clearInterval(ordersRefreshTimer);ordersRefreshTimer=null;}closeAppUiLayer('cartOverlay',fromHistory,preserveHistory); }
@@ -6427,24 +6371,24 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       syncCartCount();
     }
 
-    async function submitOrder(whatsappPopup=null,confirmationButton=null) {
-      if(cartSubmitting){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();return;}
+    async function submitOrder(placeButton=null) {
+      if(cartSubmitting)return;
       const orderItems=selectedCartItems();
-      if(orderItems.length===0){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();document.getElementById('orderStatus').textContent='Select at least one item before placing your order.';return;}
+      if(orderItems.length===0){document.getElementById('orderStatus').textContent='Select at least one item before placing your order.';return;}
       saveCheckoutDetails();
       const name=document.getElementById('customerName').value;
       const address=document.getElementById('customerAddress').value;
       const phone1=document.getElementById('customerPhone1').value;
       const phone2=document.getElementById('customerPhone2').value.trim();
       const note=document.getElementById('customerNote').value.trim();
-      if(name.trim()===''||address.trim()===''||phone1.trim()===''){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();document.getElementById('orderStatus').textContent='Enter your name, delivery address and first phone number to continue.';return;}
+      if(name.trim()===''||address.trim()===''||phone1.trim()===''){document.getElementById('orderStatus').textContent='Enter your name, delivery address and first phone number to continue.';return;}
 
-      const status=document.getElementById('orderStatus'),confirmButton=document.getElementById('cartConfirmButton');
-      if(orderItems.length>50){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();status.textContent='Please place no more than 50 different cart items per order.';return;}
-      if(supabaseClient&&!activeUser){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();openAccountModal();document.getElementById('accountStatus').textContent='Sign in before placing an order. Your order will appear in aleeshopping and the shop owner’s Messages.';status.textContent='Please sign in first. Your cart and delivery details will stay here.';return;}
-      if(!supabaseClient){if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();status.textContent='Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';return;}
+      const status=document.getElementById('orderStatus'),confirmButton=placeButton||document.getElementById('cartConfirmButton');
+      if(orderItems.length>50){status.textContent='Please place no more than 50 different cart items per order.';return;}
+      if(supabaseClient&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in before placing an order. Your order will appear in aleeshopping and the shop owner’s Messages.';status.textContent='Please sign in first. Your cart and delivery details will stay here.';return;}
+      if(!supabaseClient){status.textContent='Order inbox is not configured yet. Run seller-orders-schema.sql in Supabase, then publish the updated site.';return;}
 
-      cartSubmitting=true;confirmButton.disabled=true;if(confirmationButton)confirmationButton.disabled=true;status.textContent='Saving your order…';
+      cartSubmitting=true;confirmButton.disabled=true;status.textContent='Sending your order to the shop…';
       try {
         const groups=new Map();
         orderItems.forEach(item=>{
@@ -6463,18 +6407,13 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
         orderItems.forEach(item=>recordRecommendationEvent(item.product.id,'buy'));
         const orderedKeys=new Set(orderItems.map(item=>String(item._cartKey||'')));
         cart=cart.filter(item=>!orderedKeys.has(String(item._cartKey||'')));saveCartItems();updateCart();
-        const whatsappLinks=renderOrderWhatsappActions([...groups.values()],{name:name.trim(),address:address.trim(),phone:phone1.trim(),phone2:phone2||'',note});
-        let whatsappMessage='';
-        if(whatsappLinks.length===1&&whatsappPopup&&!whatsappPopup.closed){whatsappPopup.location.href=whatsappLinks[0].url;whatsappMessage='WhatsApp opened with the shop order ready. Tap Send there to send it.';}
-        else if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();
-        if(whatsappLinks.length>1)whatsappMessage='Use the WhatsApp buttons below to send the order to each shop.';
-        else if(!whatsappLinks.length)whatsappMessage='A shop WhatsApp number is missing, so the order is saved in the website inboxes.';
-        status.textContent='Order saved. Your items moved to Pending orders for 4 days. '+whatsappMessage;
-        showOrderSuccess(`Your order is saved and moved to Pending orders. It will move to Order History after 4 days. A copy is sent to the shop and aleeshopping Messages when inbox messaging is enabled.${whatsappMessage?` ${whatsappMessage}`:''}`);
+        status.textContent='Order sent. Your items moved to Pending orders for 4 days.';
+        setOrdersTab('pending');
+        showOrderSuccess('Your order details were sent to the relevant shop through Messages. Your items are now in Pending orders. Returning to Home…');
       } catch(error) {
-        console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();status.textContent=error.message||'Could not save your order. Please try again.';
+        console.error(error);status.textContent=error.message||'Could not save your order. Please try again.';
       } finally {
-        cartSubmitting=false;confirmButton.disabled=false;if(confirmationButton)confirmationButton.disabled=false;
+        cartSubmitting=false;confirmButton.disabled=false;
       }
     }
 

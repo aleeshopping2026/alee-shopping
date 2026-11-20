@@ -107,8 +107,22 @@ begin
     || E'\nCustomer: ' || new.customer_name
     || E'\nAddress: ' || new.customer_address
     || E'\nPhone: ' || new.customer_phone
+    || case when nullif(new.customer_phone2, '') is not null then E'\nSecond phone: ' || new.customer_phone2 else '' end
     || E'\nItems: ' || coalesce((
-      select string_agg(coalesce(item->>'name','Item') || ' × ' || coalesce(item->>'quantity','1'), ', ')
+      select string_agg(
+        coalesce(item->>'name','Item') || ' × ' || coalesce(item->>'quantity','1')
+        || case when nullif(item->>'color','') is not null then ' · Color: ' || (item->>'color') else '' end
+        || case when nullif(item->>'size','') is not null then ' · Size: ' || (item->>'size') else '' end
+        || case when coalesce(item->>'price','') ~ '^[0-9]+(\.[0-9]{1,2})?$'
+          then ' · ' || coalesce(item->>'currency_code',new.currency_code) || ' ' || to_char(
+            (item->>'price')::numeric * case when coalesce(item->>'quantity','') ~ '^[0-9]+$'
+              then (item->>'quantity')::numeric else 1 end,
+            'FM999,999,999,990.00'
+          )
+          else ''
+        end,
+        E'\n'
+      )
       from jsonb_array_elements(new.items) as item
     ), '')
     || E'\nTotal: ' || new.currency_code || ' ' || to_char(new.total, 'FM999,999,999,990.00')

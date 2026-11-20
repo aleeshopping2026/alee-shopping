@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ff6900">
+  <title>Shop Access Manager | aleeshopping</title>
+  <link rel="stylesheet" href="site-theme.css?v=20261114-account-only-theme">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f4f6f8;color:#172033;font:15px system-ui,Arial}
+    .wrap{width:min(1040px,100%);margin:28px auto;padding:0 16px}
+    .top,.panel,.shop-card{border:1px solid #e5e7eb;border-radius:16px;background:#fff}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;margin-bottom:16px}
+    .top a,.button{color:#f36b00;text-decoration:none;font-weight:800}
+    h1{margin:0;font-size:22px}
+    .panel{padding:18px;margin-bottom:16px}
+    .panel p{margin:6px 0 14px;color:#667085;line-height:1.5}
+    .tools{display:flex;gap:10px;align-items:center}
+    .tools input{flex:1;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #d0d5dd;border-radius:10px;font:inherit}
+    .status{min-height:22px;margin:8px 0;color:#475467}
+    .status.error{color:#b42318}
+    .list{display:grid;gap:10px}
+    .shop-card{display:grid;grid-template-columns:54px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px}
+    .shop-card img{width:54px;height:54px;border:1px solid #e5e7eb;border-radius:50%;object-fit:cover;background:#fff}
+    .shop-copy{min-width:0}
+    .shop-copy strong,.shop-copy span{display:block;overflow-wrap:anywhere}
+    .shop-copy strong{font-size:15px}
+    .shop-copy span{margin-top:3px;color:#667085;font-size:13px}
+    .shop-copy .email{color:#344054}
+    .badge{display:inline-block;margin-top:7px;padding:4px 8px;border-radius:999px;background:#ecfdf3;color:#027a48;font-size:12px;font-weight:800}
+    .badge.locked{background:#fef3f2;color:#b42318}
+    .actions{display:grid;justify-items:end;gap:7px}
+    .actions small{max-width:240px;color:#667085;text-align:right;line-height:1.4}
+    .button{border:0;border-radius:10px;padding:10px 14px;background:#ff6900;color:#fff;cursor:pointer;font:inherit;font-weight:800;white-space:nowrap}
+    .button.unlock{background:#157347}
+    .button:disabled{opacity:.6;cursor:wait}
+    .empty{padding:24px;border:1px dashed #d0d5dd;border-radius:14px;color:#667085;text-align:center}
+    #content[hidden],#gate[hidden]{display:none!important}
+    @media(max-width:600px){.wrap{margin:12px auto;padding:0 10px}.top{align-items:flex-start;flex-wrap:wrap}.top h1{order:3;flex-basis:100%}.shop-card{grid-template-columns:44px minmax(0,1fr);gap:10px}.shop-card img{width:44px;height:44px}.actions{grid-column:2;justify-items:start}.actions small{text-align:left}.tools{align-items:stretch;flex-direction:column}}
+  </style>
+</head>
+<body data-shared-theme="site">
+  <main class="wrap">
+    <header class="top"><a href="manager-center.html">← Back to Content Managers</a><h1>Shop Access Manager</h1><span id="adminEmail">Checking access…</span></header>
+    <section class="panel" id="gate" hidden><h2 id="gateTitle">Admin access only</h2><p id="gateMessage">Sign in with an approved ALEE host account, then reopen this manager.</p><a class="button" href="index.html">Go to site</a></section>
+    <section id="content" hidden>
+      <section class="panel"><h2>Shop owners and access</h2><p>Shop Gmail addresses are visible only to the two approved ALEE host accounts. Locking hides the shop and its items from public pages and stops new listings and orders. Unlocking restores shop access.</p><div class="tools"><input id="search" type="search" placeholder="Search shop name or Gmail" aria-label="Search shops"><button class="button" type="button" id="reload">Refresh</button></div><div id="status" class="status" role="status" aria-live="polite"></div></section>
+      <div class="list" id="shops"></div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backend-config.js"></script>
+  <script>
+    (()=>{
+      const admins=['aleeshopping2026@gmail.com','aleeshopping@gmail.com'];
+      const gate=document.getElementById('gate'),content=document.getElementById('content'),status=document.getElementById('status'),list=document.getElementById('shops');
+      let client=null,shops=[];
+      const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+      function showError(message){status.textContent=message;status.classList.add('error');}
+      function draw(){
+        const query=document.getElementById('search').value.trim().toLowerCase();
+        const rows=shops.filter(shop=>`${shop.shop_name||''} ${shop.owner_email||''}`.toLowerCase().includes(query));
+        list.innerHTML=rows.length?rows.map(shop=>{
+          const locked=Boolean(shop.is_locked),logo=/^https?:\/\//i.test(String(shop.logo_url||''))?shop.logo_url:'assets/alee-logo.png';
+          const lockInfo=locked?[shop.locked_at?`Locked ${new Date(shop.locked_at).toLocaleString()}`:'Shop is locked',shop.lock_reason].filter(Boolean).join(' · '):'Public shop access is active';
+          return `<article class="shop-card"><img src="${escapeHtml(logo)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="shop-copy"><strong>${escapeHtml(shop.shop_name||'Unnamed shop')}</strong><span>${escapeHtml(shop.shop_category||'Other')} · Created ${shop.created_at?new Date(shop.created_at).toLocaleDateString():'—'}</span><span class="email">${escapeHtml(shop.owner_email||'No owner email')}</span><span class="badge ${locked?'locked':''}">${locked?'Locked':'Active'}</span></div><div class="actions"><button class="button ${locked?'unlock':''}" type="button" data-shop-id="${escapeHtml(shop.shop_id)}" data-locked="${locked}">${locked?'Unlock shop':'Lock shop'}</button><small>${escapeHtml(lockInfo)}</small></div></article>`;
+        }).join(''):'<div class="empty">No shops match this search.</div>';
+        list.querySelectorAll('button[data-shop-id]').forEach(button=>button.addEventListener('click',()=>setLock(button)));
+      }
+      async function load(){
+        const refresh=document.getElementById('reload');refresh.disabled=true;status.classList.remove('error');status.textContent='Loading shops…';list.replaceChildren();
+        const {data,error}=await client.rpc('admin_list_shop_access');
+        refresh.disabled=false;
+        if(error){showError(`${error.message||'Could not load shops.'} Run seller-shop-access-admin-schema.sql in Supabase.`);return;}
+        shops=data||[];status.textContent=`${shops.length} shop${shops.length===1?'':'s'} found.`;draw();
+      }
+      async function setLock(button){
+        const shop=shops.find(item=>String(item.shop_id)===String(button.dataset.shopId));if(!shop)return;
+        const lock=!Boolean(shop.is_locked);
+        if(!window.confirm(`${lock?'Lock':'Unlock'} “${shop.shop_name}”? ${lock?'The shop and its listings will be hidden and new orders blocked.':'The shop and listings will become public again.'}`))return;
+        const reason=lock?window.prompt('Reason for locking this shop (optional):','')||'':'';
+        button.disabled=true;status.classList.remove('error');status.textContent=lock?'Locking shop…':'Unlocking shop…';
+        const {error}=await client.rpc('admin_set_shop_lock',{p_shop_id:shop.shop_id,p_locked:lock,p_reason:reason});
+        if(error){button.disabled=false;showError(error.message||'Could not update shop access.');return;}
+        status.textContent=`${shop.shop_name} is ${lock?'locked':'unlocked'}.`;
+        await load();
+      }
+      async function init(){
+        const label=document.getElementById('adminEmail');
+        try{
+          client=window.aleeSupabase;
+          for(let attempt=0;!client&&attempt<20;attempt++){await new Promise(resolve=>setTimeout(resolve,100));client=window.aleeSupabase;}
+          if(!client)throw new Error('Supabase could not be initialized. Reload the page.');
+          const result=await Promise.race([client.auth.getSession(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Sign-in check timed out. Reload the page.')),8000))]);
+          const email=String(result?.data?.session?.user?.email||'').trim().toLowerCase();label.textContent=email||'Not signed in';
+          if(!admins.includes(email)){gate.hidden=false;document.getElementById('gateTitle').textContent=email?'Admin access only':'Sign in required';document.getElementById('gateMessage').textContent=email?'This manager is limited to aleeshopping2026@gmail.com and aleeshopping@gmail.com.':'Sign in with an approved ALEE host account, then reopen Shop Access Manager.';return;}
+          content.hidden=false;document.getElementById('reload').addEventListener('click',load);document.getElementById('search').addEventListener('input',draw);await load();
+        }catch(error){gate.hidden=false;document.getElementById('gateTitle').textContent='Could not check admin access';document.getElementById('gateMessage').textContent=error?.message||'Reload the page and try again.';label.textContent='Access check failed';}
+      }
+      init();
+    })();
+  </script>
+  <script src="notification-manager-link.js?v=20261111"></script>
+  <script src="manager-navigation.js?v=20260620"></script>
+  <script src="site-theme.js?v=20261114-account-only-theme"></script>
+</body>
+</html>
