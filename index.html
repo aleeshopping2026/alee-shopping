@@ -883,6 +883,7 @@
     .orders-tab { min-height:44px; padding:9px 12px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); color:var(--detail-copy); font:inherit; font-size:14px; font-weight:750; cursor:pointer; }
     .orders-tab.active { border-color:#ff6900; background:#fff3e8; color:#c65300; }
     .cart-main { width:min(100%,1040px); min-height:0; margin:0 auto; padding:22px 20px; overflow-y:auto; overscroll-behavior:contain; }
+    .cart-overlay.cart-footer-fixed .cart-main { padding-bottom:calc(112px + env(safe-area-inset-bottom)); }
     .cart-stage[hidden] { display:none!important; }
     .cart-stage-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
     .cart-stage-toolbar h3,.cart-checkout-heading { margin:0; font-size:20px; }
@@ -931,7 +932,7 @@
     .input-field { width:100%; min-height:48px; padding:12px; background:var(--bg-dark); border:1px solid var(--glass-border); color:var(--text-white); border-radius:10px; font-size:14px; outline:none; }
     .input-field:focus { border-color:var(--light-leaf); }
     .clear-checkout-details { display:block; margin:7px 0 8px auto; padding:7px 10px; border:1px solid var(--glass-border); border-radius:8px; background:transparent; color:var(--text-white); font-size:12px; cursor:pointer; }
-    .cart-footer { position:sticky; bottom:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px max(18px,calc((100vw - 1040px)/2)) max(14px,env(safe-area-inset-bottom)); border-top:1px solid var(--glass-border); background:var(--card-bg); box-shadow:0 -8px 24px #1018280d; }
+    .cart-footer { position:fixed; right:0; bottom:0; left:0; z-index:10001; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px max(18px,calc((100vw - 1040px)/2)) max(14px,env(safe-area-inset-bottom)); border-top:1px solid var(--glass-border); background:var(--card-bg); box-shadow:0 -8px 24px #1018280d; }
     .cart-footer[hidden] { display:none!important; }
     .cart-total-copy { display:grid; gap:3px; }
     .cart-total-copy span { color:var(--detail-copy); font-size:12px; }
@@ -988,6 +989,7 @@
       .orders-tabs { gap:6px; padding:10px 13px 0; }
       .orders-tab { min-height:42px; padding:8px 5px; border-radius:10px; font-size:12px; }
       .cart-main { padding:16px 13px; }
+      .cart-overlay.cart-footer-fixed .cart-main { padding-bottom:calc(116px + env(safe-area-inset-bottom)); }
       .cart-item-card { grid-template-columns:24px 76px minmax(0,1fr); gap:9px; padding:10px; border-radius:13px; }
       .cart-item-photo { width:76px; height:82px; }
       .order-history-card { gap:9px; padding:10px; border-radius:13px; }
@@ -6249,6 +6251,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       document.getElementById('ordersListStage').hidden=next==='cart';
       document.getElementById('cartCheckoutStage').hidden=true;
       document.getElementById('cartFooter').hidden=next!=='cart';
+      document.getElementById('cartOverlay').classList.toggle('cart-footer-fixed',next==='cart');
       document.getElementById('cartFooterBack').hidden=true;
       document.getElementById('cartNextButton').hidden=next!=='cart';
       document.getElementById('cartConfirmButton').hidden=true;
@@ -6290,6 +6293,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const itemsStage=document.getElementById('cartItemsStage'),ordersStage=document.getElementById('ordersListStage'),checkoutStage=document.getElementById('cartCheckoutStage');
       itemsStage.hidden=cartStage!=='items'||activeOrdersTab!=='cart';ordersStage.hidden=cartStage!=='items'||activeOrdersTab==='cart';checkoutStage.hidden=cartStage!=='checkout';
       document.getElementById('ordersTabs').hidden=cartStage==='checkout';document.getElementById('cartFooter').hidden=cartStage!=='checkout'&&activeOrdersTab!=='cart';
+      document.getElementById('cartOverlay').classList.toggle('cart-footer-fixed',cartStage==='checkout'||activeOrdersTab==='cart');
       checkoutStage.querySelector('.cart-back-button').hidden=Boolean(checkoutItems);
       document.getElementById('cartStepLabel').textContent=checkoutItems?'Checkout':'Step '+(cartStage==='items'?'1':'2')+' of 2 · '+(cartStage==='items'?'Your items':'Delivery details');
       document.getElementById('cartTitle').textContent=cartStage==='items'?(activeOrdersTab==='cart'?'Cart':activeOrdersTab==='pending'?'Pending orders':'Order History'):'Checkout';
