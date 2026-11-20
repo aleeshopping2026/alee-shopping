@@ -28,10 +28,16 @@ ALEE SHOPPING — Supabase SQL ගොනු ධාවනය කරන පිළ�
 24. shop-directory-order-schema.sql — Shop directory order manager.
 25. banner-pricing-schema.sql — Host-managed banner ad prices.
 26. alee-push-schema.sql — OneSignal subscriptions සහ chat push dispatch. Seller chat සහ group chat පසුව.
+27. buyer-orders-history-schema.sql — Shopper කෙනෙකුට තමන්ගේ Cart orders සහ Pending/Order History පෙන්වීමට අවසර. seller-orders-schema.sql පසුව.
+28. seller-product-notifications-schema.sql — Shop එකට අලුත් item එකක් දැම්මම ALEE Messages inbox එකට copy එකක් යවන RPC එක. seller-marketplace-schema.sql, seller-chat-schema.sql සහ seller-group-chat-schema.sql පසුව.
 
 දැනටමත් භාවිත කරන Supabase project එකක් නම්
 
 සියලු files අනිවාර්යයෙන් නැවත run කරන්න එපා. දැනටමත් ඇති tables/policies/functions නැවත හදන්න අවශ්‍ය නැති අතර, වැඩ කරන production project එකක අදාළ නැති migrations ධාවනය කිරීමෙන් වළකින්න. අලුත් photo Feed එක සඳහා අවශ්‍ය file එක `feed-posts-schema.sql` යි; එය `seller-marketplace-schema.sql` ධාවනය කළ පසු වෙනම run කරන්න. `seller-community-schema.sql` යනු පැරණි video Feed එකේ schema එකක් වන අතර නව photo Feed එකට භාවිතා නොවේ. අලුත් Seller Dashboard වෙනස්කම් සඳහා අවශ්‍ය file එක `seller-dashboard-profile-schema.sql` යි; එය 2, 16, 17, 18 සහ 19 files දැනටමත් run කර ඇති පසු තනිව run කරන්න. Site එකේ වෙනත් අංගයක් SQL error පෙන්වන්නේ නම් ඒ feature එකට අදාළ file එක සහ ඊට පෙර ඇති dependency files පමණක් බලන්න.
+
+Orders tabs සහ seller item notifications
+
+`buyer-orders-history-schema.sql` එක shopper කෙනෙකුට තමන්ගේ order rows පමණක් කියවීමට අවසර දෙයි. Orders තැබූ වෙලාවේ සිට පැය 96ක් Pending තුළ පෙන්වා, ඉන්පසු Order History තුළ පෙන්වයි. Seller කෙනෙක් අලුත් item එකක් දැමූ විට WhatsApp විවෘත නොකර ALEE Messages inbox එකට item විස්තර යැවීමට `seller-product-notifications-schema.sql` ධාවනය කරන්න.
 
 Search database එක ගැන
 

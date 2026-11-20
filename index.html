@@ -872,12 +872,16 @@
     /* Full-screen cart and checkout */
     .cart-overlay { display:none; position:fixed; inset:0; z-index:10000; width:100vw; height:100vh; height:100dvh; background:var(--card-bg); color:var(--text-white); }
     .cart-overlay.show { display:flex; }
-    .cart-box { display:grid; grid-template-rows:auto minmax(0,1fr) auto; width:100%; max-width:none; height:100%; min-height:0; padding:0; overflow:hidden; border:0; background:var(--card-bg); color:var(--text-white); }
+    .cart-box { display:grid; grid-template-rows:auto auto minmax(0,1fr) auto; width:100%; max-width:none; height:100%; min-height:0; padding:0; overflow:hidden; border:0; background:var(--card-bg); color:var(--text-white); }
     .cart-header { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:78px; padding:14px max(18px,calc((100vw - 1040px)/2)); border-bottom:1px solid var(--glass-border); background:var(--card-bg); }
     .cart-header-copy { display:grid; gap:3px; }
     .cart-step-label { color:var(--light-leaf); font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
     .cart-header h2 { margin:0; font-size:23px; }
     .close-cart { display:grid; place-items:center; flex:0 0 42px; width:42px; height:42px; border:1px solid var(--glass-border); border-radius:50%; background:var(--bg-dark); color:var(--text-white); font-size:27px; cursor:pointer; }
+    .orders-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; width:min(100%,1040px); margin:0 auto; padding:12px 20px 0; background:var(--card-bg); }
+    .orders-tabs[hidden] { display:none!important; }
+    .orders-tab { min-height:44px; padding:9px 12px; border:1px solid var(--glass-border); border-radius:12px; background:var(--bg-dark); color:var(--detail-copy); font:inherit; font-size:14px; font-weight:750; cursor:pointer; }
+    .orders-tab.active { border-color:#ff6900; background:#fff3e8; color:#c65300; }
     .cart-main { width:min(100%,1040px); min-height:0; margin:0 auto; padding:22px 20px; overflow-y:auto; overscroll-behavior:contain; }
     .cart-stage[hidden] { display:none!important; }
     .cart-stage-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
@@ -899,6 +903,19 @@
     .delete-item-btn { flex:0 0 auto; padding:7px 9px; border:1px solid rgba(239,68,68,.3); border-radius:8px; background:rgba(239,68,68,.1); color:#ef4444; cursor:pointer; }
     .delete-item-btn:hover { background:#ef4444; color:#fff; }
     .cart-empty-state { padding:44px 18px; border:1px dashed var(--glass-border); border-radius:16px; color:var(--detail-copy); text-align:center; }
+    .order-history-card { display:grid; gap:12px; padding:14px; border:1px solid var(--glass-border); border-radius:16px; background:var(--bg-dark); }
+    .order-history-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .order-history-heading strong,.order-history-heading small { display:block; }
+    .order-history-heading small { margin-top:4px; color:var(--detail-copy); font-size:12px; }
+    .order-history-status { flex:0 0 auto; padding:6px 10px; border-radius:999px; background:#fff3e8; color:#b84f00; font-size:12px; font-weight:800; }
+    .order-history-lines { display:grid; gap:8px; }
+    .order-history-line { display:grid; grid-template-columns:58px minmax(0,1fr) auto; align-items:center; gap:10px; padding:8px; border:1px solid var(--glass-border); border-radius:11px; background:var(--card-bg); }
+    .order-history-line img { width:58px; height:58px; object-fit:cover; border-radius:8px; background:#fff; }
+    .order-history-line strong,.order-history-line small { display:block; }
+    .order-history-line small { margin-top:4px; color:var(--detail-copy); font-size:12px; }
+    .order-history-price { color:var(--light-leaf); font-weight:800; white-space:nowrap; }
+    .order-history-total { display:flex; justify-content:space-between; gap:12px; padding-top:10px; border-top:1px solid var(--glass-border); font-size:14px; }
+    .order-history-total span { color:var(--detail-copy); }
     .cart-checkout-heading { margin:14px 0 5px; }
     .cart-checkout-summary { display:grid; gap:8px; margin:16px 0 24px; }
     .cart-checkout-summary-row { display:grid; grid-template-columns:52px minmax(0,1fr) auto; align-items:center; gap:10px; padding:9px; border:1px solid var(--glass-border); border-radius:11px; background:var(--bg-dark); }
@@ -915,6 +932,7 @@
     .input-field:focus { border-color:var(--light-leaf); }
     .clear-checkout-details { display:block; margin:7px 0 8px auto; padding:7px 10px; border:1px solid var(--glass-border); border-radius:8px; background:transparent; color:var(--text-white); font-size:12px; cursor:pointer; }
     .cart-footer { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px max(18px,calc((100vw - 1040px)/2)) max(14px,env(safe-area-inset-bottom)); border-top:1px solid var(--glass-border); background:var(--card-bg); box-shadow:0 -8px 24px #1018280d; }
+    .cart-footer[hidden] { display:none!important; }
     .cart-total-copy { display:grid; gap:3px; }
     .cart-total-copy span { color:var(--detail-copy); font-size:12px; }
     .cart-total-copy strong { font-size:19px; }
@@ -971,9 +989,15 @@
     @media(max-width:620px) {
       .cart-header { min-height:68px; padding:10px 15px; }
       .cart-header h2 { font-size:20px; }
+      .orders-tabs { gap:6px; padding:10px 13px 0; }
+      .orders-tab { min-height:42px; padding:8px 5px; border-radius:10px; font-size:12px; }
       .cart-main { padding:16px 13px; }
       .cart-item-card { grid-template-columns:24px 76px minmax(0,1fr); gap:9px; padding:10px; border-radius:13px; }
       .cart-item-photo { width:76px; height:82px; }
+      .order-history-card { gap:9px; padding:10px; border-radius:13px; }
+      .order-history-line { grid-template-columns:48px minmax(0,1fr) auto; gap:8px; padding:7px; }
+      .order-history-line img { width:48px; height:48px; }
+      .order-history-price { font-size:12px; }
       .cart-item-title { font-size:14px; }
       .cart-item-shop,.cart-item-variant,.cart-item-quantity { font-size:11px; }
       .cart-item-price { gap:4px; font-size:12px; }
@@ -2051,14 +2075,24 @@
     <div class="cart-overlay" id="cartOverlay" aria-hidden="true">
       <section class="cart-box" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
         <header class="cart-header">
-          <div class="cart-header-copy"><span class="cart-step-label" id="cartStepLabel">Step 1 of 2 · Your items</span><h2 id="cartTitle">Your Cart</h2></div>
+          <div class="cart-header-copy"><span class="cart-step-label" id="cartStepLabel">Your cart and orders</span><h2 id="cartTitle">Cart</h2></div>
           <button class="close-cart" type="button" onclick="closeCart()" aria-label="Close cart">&times;</button>
         </header>
+        <nav class="orders-tabs" id="ordersTabs" aria-label="Orders">
+          <button class="orders-tab active" type="button" data-orders-tab="cart" onclick="setOrdersTab('cart')">Cart <span id="ordersCartCount"></span></button>
+          <button class="orders-tab" type="button" data-orders-tab="pending" onclick="setOrdersTab('pending')">Pending</button>
+          <button class="orders-tab" type="button" data-orders-tab="history" onclick="setOrdersTab('history')">Order History</button>
+        </nav>
         <div class="cart-main">
           <section class="cart-stage" id="cartItemsStage">
             <div class="cart-stage-toolbar"><div><h3>Review your items</h3><p>Select the products you want to order.</p></div><button class="cart-select-all" id="cartSelectAll" type="button" onclick="toggleAllCartItems()">Deselect all</button></div>
             <div class="cart-item-list" id="cartItems" aria-live="polite"></div>
             <p class="cart-stage-status" id="cartListStatus" role="status" aria-live="polite"></p>
+          </section>
+          <section class="cart-stage" id="ordersListStage" hidden>
+            <div class="cart-stage-toolbar"><div><h3 id="ordersListTitle">Pending orders</h3><p id="ordersListIntro">Orders placed in the last 4 days.</p></div></div>
+            <div class="cart-item-list" id="ordersList" aria-live="polite"></div>
+            <p class="cart-stage-status" id="ordersListStatus" role="status" aria-live="polite"></p>
           </section>
           <section class="cart-stage" id="cartCheckoutStage" hidden>
             <button class="cart-back-button" type="button" onclick="setCartStage('items')"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to cart</button>
@@ -2078,7 +2112,7 @@
             <div id="orderWhatsappActions" class="order-whatsapp-actions" hidden></div>
           </section>
         </div>
-        <footer class="cart-footer">
+        <footer class="cart-footer" id="cartFooter">
           <div class="cart-total-copy"><span id="cartTotalLabel">Selected total · 0 items</span><strong id="total">LKR 0.00</strong></div>
           <div class="cart-footer-actions">
             <button class="cart-back-button" id="cartFooterBack" type="button" onclick="setCartStage('items')" hidden>Back</button>
@@ -2089,7 +2123,7 @@
       </section>
     </div>
     <dialog class="order-confirm-dialog" id="orderConfirmDialog"><div class="order-confirm-icon">✓</div><h2>Confirm your order</h2><p>Check your delivery details and confirm that you want to place this order.</p><div class="order-confirm-actions"><button type="button" onclick="closeOrderConfirmation()">Go back</button><button class="confirm" id="confirmOrderButton" type="button" onclick="confirmOrderFromDialog(this)">Confirm order</button></div></dialog>
-    <dialog class="order-confirm-dialog order-success-dialog" id="orderSuccessDialog"><div class="order-confirm-icon" aria-hidden="true">✓</div><h2>Your order is confirmed!</h2><p id="orderSuccessMessage">Your order was saved for the shop.</p><div id="orderSuccessWhatsappActions" class="order-whatsapp-actions" hidden></div><div class="order-confirm-actions"><button class="confirm" type="button" onclick="closeOrderSuccess()">Continue</button></div></dialog>
+    <dialog class="order-confirm-dialog order-success-dialog" id="orderSuccessDialog"><div class="order-confirm-icon" aria-hidden="true">✓</div><h2>Your order is confirmed!</h2><p id="orderSuccessMessage">Your order was saved for the shop.</p><div id="orderSuccessWhatsappActions" class="order-whatsapp-actions" hidden></div><div class="order-confirm-actions"><button class="confirm" type="button" onclick="finishConfirmedOrder()">Confirmed order</button></div></dialog>
 
   </div>
 
@@ -2113,6 +2147,7 @@
       <div class="seller-header account-hub-header"><button class="account-back" type="button" onclick="goBackFromAccount()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button><div><h2 id="buyerDashboardTitle">Account</h2><div class="seller-subtitle" id="accountHubEmail">Your aleeshopping account</div></div><button class="seller-close account-theme-trigger" id="accountThemeToggleBtn" type="button" data-open-theme-settings onclick="openThemeSettings(this)" aria-label="Appearance settings" title="Appearance settings" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-gear" style="font-size:18px"></i></button></div>
       <section class="seller-panel account-feature-panel"><div class="account-country-heading"><div><span class="account-kicker">SHOP AROUND THE WORLD</span><h3>Featured ads by country</h3></div><button class="seller-action-button" id="accountCountryAdManagerButton" type="button" onclick="openPlatformPostForm('ad')" hidden><i class="fa-solid fa-plus"></i> Add country ad</button></div><div class="account-country-filters" id="accountCountryFilters" aria-label="Filter companies by country"></div><div class="account-country-rail" id="accountCountryRail" aria-label="Explore company ads by country"></div></section>
       <section class="seller-panel"><div class="account-menu-grid">
+        <button type="button" onclick="openAccountOrders()"><i class="fa-solid fa-box-open"></i><span>Orders</span><small>Cart, pending orders and order history</small></button>
         <button type="button" onclick="editAccountDetails()"><i class="fa-solid fa-user"></i><span>My Profile</span><small>View or edit your private details</small></button>
         <button type="button" id="accountMyShopButton" onclick="openAccountMyShop()"><i class="fa-solid fa-store"></i><span>My Shop</span><small>Create or manage your shop</small></button>
         <button type="button" onclick="openMyAds()"><i class="fa-solid fa-rectangle-ad"></i><span>My Ads</span><small>Posts, jobs, apps and games</small></button>
@@ -2348,12 +2383,6 @@
     async function nativeShareSellerShop(){const link=shopPublicUrl(currentSellerShop.id);if(navigator.share){try{await navigator.share({title:currentSellerShop.shop_name,text:`Visit ${currentSellerShop.shop_name} on aleeshopping`,url:link});}catch(error){if(error.name!=='AbortError')document.getElementById('sellerShopShareStatus').textContent='Could not open the share menu.';}}else await copySellerShopLink();}
     const splitSellerList = value => String(value||'').split(/[,\n]/).map(item=>item.trim()).filter(Boolean).slice(0,30);
     function reserveWhatsappWindow() { const popup=window.open('about:blank','_blank'); if(popup) popup.opener=null; return popup; }
-    function sendSellerWhatsappDraft(popup,message,statusElement) {
-      const url=`https://wa.me/${whatsappNumber}?${new URLSearchParams({text:message})}`;
-      if(popup&&!popup.closed) { popup.location.href=url; statusElement.textContent='Saved. WhatsApp opened with the message ready; tap Send there to deliver it.'; }
-      else { statusElement.innerHTML=`Saved. <a href="${escapeHTML(url)}" target="_blank" rel="noopener">Open WhatsApp message</a> and tap Send.`; }
-    }
-
     async function signInWithGoogle() {
       const status=document.getElementById('accountStatus');
       if(!supabaseClient){status.textContent='Supabase login is not configured. See the setup guide.';return;}
@@ -3168,7 +3197,7 @@
       const name=form.elements.name.value.trim(),category=form.elements.category.value.trim(),categoryLabel=categories.find(item=>String(item.id)===category)?.label||form.elements.category.dataset.categoryLabel||category;
       if(!category){status.textContent='Choose the category that best matches this item.';return;}
       const basePrice=Number(form.elements.price.value),offerPrice=Number(form.elements.offerPrice.value)||0,stockCount=Number(form.elements.stock.value),deliveryDays=Number(form.elements.deliveryDays.value)||null;if(offerPrice>basePrice){status.textContent='Offer price must be lower than or equal to the regular price.';return;}if(!Number.isInteger(stockCount)||stockCount<0){status.textContent='Stock must be a whole number of zero or more.';return;}if(deliveryDays!==null&&(!Number.isInteger(deliveryDays)||deliveryDays<1||deliveryDays>30)){status.textContent='Typical delivery time must be from 1 to 30 days.';return;}
-      const whatsappPopup=editingItem?null:reserveWhatsappWindow(),button=document.getElementById('sellerProductSubmit');button.disabled=true;status.textContent='Uploading photos and saving item…';
+      const button=document.getElementById('sellerProductSubmit');button.disabled=true;status.textContent='Uploading photos and saving item…';
       const uploaded=[];
       try {
         let imageUrls=editingItem?[...(editingItem.image_urls||[])]:[];
@@ -3182,11 +3211,12 @@
           :supabaseClient.from('seller_products').insert(payload).select().single();
         const {data,error}=await query;if(error)throw error;
         if(editingItem&&files.length)try{await removeSellerImages(editingItem.image_urls||[]);}catch(cleanupError){console.warn('Old item photos could not be removed.',cleanupError);}
-        const publicUrl=productPublicUrl(data.id),isEdit=Boolean(editingItem);
+        const isEdit=Boolean(editingItem);let notificationError=null,notificationSkipped=false;
+        if(!isEdit){try{const notification=await supabaseClient.rpc('notify_alee_new_seller_product',{p_product_id:data.id});notificationError=notification.error||null;notificationSkipped=!notificationError&&notification.data===false;}catch(error){notificationError=error;}if(notificationError)console.warn('The item was saved, but the ALEE Messages notification failed. Run seller-product-notifications-schema.sql.',notificationError);}
         await loadSellerCatalog();await loadSellerWorkspace();cancelEditSellerProduct();
         if(isEdit){status.textContent='Item updated successfully.';}
-        else sendSellerWhatsappDraft(whatsappPopup,`aleeshopping — New item submission\nShop: ${currentSellerShop.shop_name}\nItem: ${name}\nPrice: ${formatCurrencyAmount(payload.price,currentSellerShop.currency_code||'LKR')}\nCategory: ${categoryLabel}\nDescription: ${payload.description}\nKey features: ${payload.features.join(', ')||'Not provided'}\nSizes: ${payload.sizes.join(', ')||'Not provided'}\nPhotos: ${imageUrls.length}\nProduct link: ${publicUrl}\nOwner email: ${activeUser.email||'Not provided'}`,status);
-      } catch(error) { console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();if(uploaded.length)try{await supabaseClient.storage.from('seller-uploads').remove(uploaded.map(item=>item.path));}catch(cleanupError){}status.textContent=`Could not save the item. Check Supabase database/storage setup and try again. ${error.message||''}`; }
+        else status.textContent=notificationError?'Item saved, but the ALEE Messages copy could not be sent. Run seller-product-notifications-schema.sql in Supabase.':notificationSkipped?'Item saved.':'Item saved. A copy was sent to ALEE Messages.';
+      } catch(error) { console.error(error);if(uploaded.length)try{await supabaseClient.storage.from('seller-uploads').remove(uploaded.map(item=>item.path));}catch(cleanupError){}status.textContent=`Could not save the item. Check Supabase database/storage setup and try again. ${error.message||''}`; }
       finally {button.disabled=false;}
     }
 
@@ -4138,6 +4168,9 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     let cart = restoreCartItems();
     let checkoutItems = null;
     let cartStage = 'items';
+    let activeOrdersTab = 'cart';
+    let ordersRequestId = 0;
+    let ordersRefreshTimer = null;
     let cartSubmitting = false;
     let cartPreviousBodyOverflow = '';
     const productSearchCounts = {};
@@ -6212,7 +6245,9 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
 
     function syncCartCount() {
       const counter=document.getElementById('cartCount');
-      if(counter)counter.textContent=String(cart.reduce((sum,item)=>sum+Number(item.quantity||0),0));
+      const quantity=cart.reduce((sum,item)=>sum+Number(item.quantity||0),0);
+      if(counter)counter.textContent=String(quantity);
+      const ordersCount=document.getElementById('ordersCartCount');if(ordersCount)ordersCount.textContent=quantity?`(${quantity})`:'';
     }
 
     function selectedCartItems() { return checkoutItems?[...checkoutItems]:cart.filter(item=>item.selected!==false); }
@@ -6240,17 +6275,72 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       pushAppUiLayer('cartOverlay',fromHistory=>closeCart(fromHistory),()=>{overlay.classList.add('show');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';},replaceCurrentHistory);
     }
 
+    function openAccountOrders(){
+      if(!activeUser){closeBuyerAccount(false,true);openAccountModal();document.getElementById('accountStatus').textContent='Sign in to view your cart and orders.';return;}
+      closeBuyerAccount(false,true);checkoutItems=null;cartStage='items';activeOrdersTab='pending';showCartOverlay(true);setOrdersTab('pending');
+    }
+
+    function setOrdersTab(tab){
+      const next=['cart','pending','history'].includes(tab)?tab:'cart';
+      if(next!=='cart'&&!activeUser){openAccountModal();document.getElementById('accountStatus').textContent='Sign in to view your orders.';return;}
+      activeOrdersTab=next;cartStage='items';checkoutItems=null;
+      document.querySelectorAll('[data-orders-tab]').forEach(button=>button.classList.toggle('active',button.dataset.ordersTab===next));
+      const title=next==='cart'?'Cart':next==='pending'?'Pending orders':'Order History';
+      document.getElementById('cartTitle').textContent=title;
+      document.getElementById('cartStepLabel').textContent=next==='cart'?'Your cart and orders':next==='pending'?'Orders placed in the last 4 days':'Orders older than 4 days';
+      document.getElementById('ordersTabs').hidden=false;
+      document.getElementById('cartItemsStage').hidden=next!=='cart';
+      document.getElementById('ordersListStage').hidden=next==='cart';
+      document.getElementById('cartCheckoutStage').hidden=true;
+      document.getElementById('cartFooter').hidden=next!=='cart';
+      document.getElementById('cartFooterBack').hidden=true;
+      document.getElementById('cartNextButton').hidden=next!=='cart';
+      document.getElementById('cartConfirmButton').hidden=true;
+      if(ordersRefreshTimer){clearInterval(ordersRefreshTimer);ordersRefreshTimer=null;}
+      if(next==='cart')updateCart();else{loadCustomerOrders(next);ordersRefreshTimer=window.setInterval(()=>{if(document.getElementById('cartOverlay').classList.contains('show')&&activeOrdersTab!=='cart')loadCustomerOrders(activeOrdersTab);},60_000);}
+    }
+
+    async function loadCustomerOrders(tab=activeOrdersTab){
+      const requestId=++ordersRequestId,status=document.getElementById('ordersListStatus'),list=document.getElementById('ordersList');
+      const heading=document.getElementById('ordersListTitle'),intro=document.getElementById('ordersListIntro');
+      const isPending=tab==='pending';heading.textContent=isPending?'Pending orders':'Order History';intro.textContent=isPending?'Orders placed in the last 4 days.':'Orders move here after 4 days.';status.textContent='Loading your orders…';list.innerHTML='';
+      if(!supabaseClient||!activeUser){status.textContent='Sign in to view your orders.';return;}
+      const userId=activeUser.id;
+      const {data,error}=await supabaseClient.from('store_orders').select('id,shop_id,items,total,currency_code,status,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(1000);
+      if(requestId!==ordersRequestId||activeOrdersTab!==tab||activeUser?.id!==userId)return;
+      if(error){status.textContent='Could not load your orders. Run buyer-orders-history-schema.sql in Supabase, then reload the site.';console.warn('Buyer order history could not be loaded.',error);return;}
+      const cutoff=Date.now()-4*24*60*60*1000;
+      const filtered=(data||[]).filter(order=>{const created=Date.parse(order.created_at)||0;return isPending?created>=cutoff:created<cutoff;});
+      if(!filtered.length){list.innerHTML=`<div class="cart-empty-state"><strong>${isPending?'No pending orders':'No order history yet'}</strong><p>${isPending?'Orders placed in the last 4 days will appear here.':'Orders move here after they have been pending for 4 days.'}</p></div>`;status.textContent='';return;}
+      const shopIds=[...new Set(filtered.map(order=>order.shop_id).filter(Boolean))];let shopNames=new Map();
+      if(shopIds.length){const shopsResult=await supabaseClient.from('seller_shops_profile_public').select('id,shop_name').in('id',shopIds);if(!shopsResult.error)shopNames=new Map((shopsResult.data||[]).map(shop=>[String(shop.id),shop.shop_name]));}
+      if(requestId!==ordersRequestId||activeOrdersTab!==tab||activeUser?.id!==userId)return;
+      const statusNames={new:'Pending',confirmed:'Confirmed',processing:'Processing',shipped:'Shipped',completed:'Completed',cancelled:'Cancelled'};
+      list.innerHTML=filtered.map(order=>{
+        const lines=Array.isArray(order.items)?order.items:[],created=new Date(order.created_at),orderCode=String(order.id||'').replace(/-/g,'').slice(0,8).toUpperCase();
+        const itemMarkup=lines.map(line=>{
+          const product=products.find(item=>String(item.sellerProductId||item.id)===String(line.product_id))||{};
+          const image=line.image_url||line.image||product.images?.[0]||'assets/alee-logo.png',quantity=Math.max(1,Number(line.quantity)||1),currency=line.currency_code||order.currency_code||'LKR';
+          const options=[line.color&&`Color: ${line.color}`,line.size&&`Size: ${line.size}`].filter(Boolean).join(' · ');
+          return `<div class="order-history-line"><img src="${escapeHTML(image)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><span><strong>${escapeHTML(line.name||'Item')}</strong><small>Qty ${quantity}${options?` · ${escapeHTML(options)}`:''}</small></span><span class="order-history-price">${formatCurrencyAmount(Number(line.price||0)*quantity,currency)}</span></div>`;
+        }).join('');
+        const shopName=lines.find(line=>line.shop_name)?.shop_name||shopNames.get(String(order.shop_id))||'alee shopping';
+        return `<article class="order-history-card"><div class="order-history-heading"><span><strong>${escapeHTML(shopName)} · Order #${escapeHTML(orderCode)}</strong><small>${Number.isNaN(created.getTime())?'':created.toLocaleString()}</small></span><span class="order-history-status">${escapeHTML(statusNames[order.status]||'Pending')}</span></div><div class="order-history-lines">${itemMarkup||'<small>Order details unavailable.</small>'}</div><div class="order-history-total"><span>${lines.reduce((sum,line)=>sum+Math.max(1,Number(line.quantity)||1),0)} items · Cash on Delivery</span><strong>${formatCurrencyAmount(Number(order.total)||0,order.currency_code||'LKR')}</strong></div></article>`;
+      }).join('');status.textContent='';
+    }
+
     function setCartStage(stage) {
       cartStage=stage==='checkout'?'checkout':'items';
-      const itemsStage=document.getElementById('cartItemsStage'),checkoutStage=document.getElementById('cartCheckoutStage');
-      itemsStage.hidden=cartStage!=='items';checkoutStage.hidden=cartStage!=='checkout';
+      const itemsStage=document.getElementById('cartItemsStage'),ordersStage=document.getElementById('ordersListStage'),checkoutStage=document.getElementById('cartCheckoutStage');
+      itemsStage.hidden=cartStage!=='items'||activeOrdersTab!=='cart';ordersStage.hidden=cartStage!=='items'||activeOrdersTab==='cart';checkoutStage.hidden=cartStage!=='checkout';
+      document.getElementById('ordersTabs').hidden=cartStage==='checkout';document.getElementById('cartFooter').hidden=cartStage!=='checkout'&&activeOrdersTab!=='cart';
       checkoutStage.querySelector('.cart-back-button').hidden=Boolean(checkoutItems);
       document.getElementById('cartStepLabel').textContent=checkoutItems?'Checkout':'Step '+(cartStage==='items'?'1':'2')+' of 2 · '+(cartStage==='items'?'Your items':'Delivery details');
-      document.getElementById('cartTitle').textContent=cartStage==='items'?'Your Cart':'Checkout';
+      document.getElementById('cartTitle').textContent=cartStage==='items'?(activeOrdersTab==='cart'?'Cart':activeOrdersTab==='pending'?'Pending orders':'Order History'):'Checkout';
       document.getElementById('cartFooterBack').hidden=cartStage!=='checkout'||Boolean(checkoutItems);
-      document.getElementById('cartNextButton').hidden=cartStage!=='items'||Boolean(checkoutItems);
+      document.getElementById('cartNextButton').hidden=cartStage!=='items'||Boolean(checkoutItems)||activeOrdersTab!=='cart';
       document.getElementById('cartConfirmButton').hidden=cartStage!=='checkout';
-      updateCart();
+      if(activeOrdersTab==='cart'||cartStage==='checkout')updateCart();
       if(cartStage==='checkout')document.getElementById('orderStatus').textContent='';
     }
 
@@ -6309,10 +6399,11 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     }
 
     function closeOrderSuccess(fromHistory=false,preserveHistory=false){const dialog=document.getElementById('orderSuccessDialog');if(dialog?.open)dialog.close();closeAppUiLayer('orderSuccess',fromHistory,preserveHistory);}
+    function finishConfirmedOrder(){closeOrderSuccess(false,true);closeCart(false,true);mobileGoHome();history.go(-2);}
     document.getElementById('orderSuccessDialog')?.addEventListener('cancel',event=>{event.preventDefault();closeOrderSuccess();});
 
-    function openCart(replaceCurrentHistory=false) { checkoutItems=null;cartStage='items';showCartOverlay(replaceCurrentHistory);setCartStage('items'); }
-    function closeCart(fromHistory=false,preserveHistory=false) { document.getElementById('cartOverlay').classList.remove('show');document.getElementById('cartOverlay').setAttribute('aria-hidden','true');document.body.style.overflow=cartPreviousBodyOverflow;checkoutItems=null;cartStage='items';closeAppUiLayer('cartOverlay',fromHistory,preserveHistory); }
+    function openCart(replaceCurrentHistory=false) { checkoutItems=null;cartStage='items';activeOrdersTab='cart';showCartOverlay(replaceCurrentHistory);setOrdersTab('cart'); }
+    function closeCart(fromHistory=false,preserveHistory=false) { document.getElementById('cartOverlay').classList.remove('show');document.getElementById('cartOverlay').setAttribute('aria-hidden','true');document.body.style.overflow=cartPreviousBodyOverflow;checkoutItems=null;cartStage='items';if(ordersRefreshTimer){clearInterval(ordersRefreshTimer);ordersRefreshTimer=null;}closeAppUiLayer('cartOverlay',fromHistory,preserveHistory); }
 
     function updateCart(items=cart) {
       const sourceItems=checkoutItems||items;
@@ -6362,21 +6453,24 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
           const key=shopId||'alee-main';
           if(!groups.has(key))groups.set(key,{shop_id:shopId,currency_code:cartCurrencyCode(item.product),items:[],total:0});
           const group=groups.get(key);
-          group.items.push({product_id:item.product.sellerProductId||item.product.id,name:item.product.name,price:Number(item.product.price),currency_code:cartCurrencyCode(item.product),quantity:Number(item.quantity),color:item.color||null,size:item.size||null});
+          const productShop=getShopForProduct(item.product);
+          group.items.push({product_id:item.product.sellerProductId||item.product.id,name:item.product.name,price:Number(item.product.price),currency_code:cartCurrencyCode(item.product),quantity:Number(item.quantity),color:item.color||null,size:item.size||null,image_url:item.product.images?.[0]||null,shop_name:productShop.name||'alee shopping'});
           group.total+=Number(item.product.price)*Number(item.quantity);
         });
         const payloads=[...groups.values()].map(group=>({shop_id:group.shop_id,user_id:activeUser?.id||null,customer_name:name.trim(),customer_address:address.trim(),customer_phone:phone1.trim(),customer_phone2:phone2||null,customer_note:note||null,items:group.items,total:group.total,currency_code:group.currency_code||'LKR',payment_method:'Cash on Delivery',status:'new'}));
         const {error}=await supabaseClient.from('store_orders').insert(payloads);
         if(error)throw new Error(`Could not save the order to the website (${error.message}). Check the Supabase order setup.`);
         orderItems.forEach(item=>recordRecommendationEvent(item.product.id,'buy'));
+        const orderedKeys=new Set(orderItems.map(item=>String(item._cartKey||'')));
+        cart=cart.filter(item=>!orderedKeys.has(String(item._cartKey||'')));saveCartItems();updateCart();
         const whatsappLinks=renderOrderWhatsappActions([...groups.values()],{name:name.trim(),address:address.trim(),phone:phone1.trim(),phone2:phone2||'',note});
         let whatsappMessage='';
         if(whatsappLinks.length===1&&whatsappPopup&&!whatsappPopup.closed){whatsappPopup.location.href=whatsappLinks[0].url;whatsappMessage='WhatsApp opened with the shop order ready. Tap Send there to send it.';}
         else if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();
         if(whatsappLinks.length>1)whatsappMessage='Use the WhatsApp buttons below to send the order to each shop.';
         else if(!whatsappLinks.length)whatsappMessage='A shop WhatsApp number is missing, so the order is saved in the website inboxes.';
-        status.textContent='Order saved. It remains in your cart until you remove it yourself. '+whatsappMessage;
-        showOrderSuccess(`Your order was saved for the shop. A copy is sent to the shop and aleeshopping Messages when inbox messaging is enabled. Your cart items are kept until you remove them.${whatsappMessage?` ${whatsappMessage}`:''}`);
+        status.textContent='Order saved. Your items moved to Pending orders for 4 days. '+whatsappMessage;
+        showOrderSuccess(`Your order is saved and moved to Pending orders. It will move to Order History after 4 days. A copy is sent to the shop and aleeshopping Messages when inbox messaging is enabled.${whatsappMessage?` ${whatsappMessage}`:''}`);
       } catch(error) {
         console.error(error);if(whatsappPopup&&!whatsappPopup.closed)whatsappPopup.close();status.textContent=error.message||'Could not save your order. Please try again.';
       } finally {
