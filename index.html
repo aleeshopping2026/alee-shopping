@@ -177,6 +177,8 @@
     .mobile-sheet-backdrop.show { display:flex; }
     .mobile-sheet { width:100%; max-height:75vh; overflow:auto; padding:18px 16px calc(18px + env(safe-area-inset-bottom)); background:var(--card-bg); color:var(--text-white); border-radius:18px 18px 0 0; box-shadow:0 -8px 30px #0003; }
     .mobile-sheet h2 { margin:0 0 14px; font-size:18px; }
+    .mobile-category-dialog-header { display:contents; }
+    .mobile-category-dialog-back { display:none; }
     .mobile-category-list { display:grid; gap:10px; }
     .mobile-category-group { padding:10px; border:1px solid var(--glass-border); border-radius:13px; background:var(--bg-dark); }
     .mobile-category-group h3 { margin:0 0 8px; color:var(--light-leaf); font-size:12px; letter-spacing:.04em; }
@@ -1584,13 +1586,24 @@
     @media(max-width:700px){#sellerDashboard.seller-editing-shop #sellerShopFormPanel:not([hidden]){width:100%;padding:16px 22px calc(28px + env(safe-area-inset-bottom))!important}}
     @media(min-width:701px){
       #shopsSection .desktop-sidebar-action.active{background:#fff4e8;color:#c2410c}
-      #mobileCategorySheet{top:140px;right:0;bottom:0;left:140px;align-items:flex-start;justify-content:flex-start;padding:10px;background:#10182855}
-      #mobileCategorySheet .mobile-sheet{width:min(680px,calc(100vw - 160px));height:calc(100% - 20px);max-height:none;overflow:auto;padding:20px;border-radius:16px;box-shadow:0 14px 38px #1018282b}
-      #mobileCategorySheet .mobile-category-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-      #mobileCategorySheet .mobile-category-option.category-tile{min-height:126px;padding:11px 8px;font-size:12px}
-      #mobileCategorySheet .mobile-category-option.category-tile img{width:72px;height:72px}
+      #mobileCategorySheet{top:140px;right:0;bottom:0;left:140px;align-items:center;justify-content:center;padding:24px;background:rgba(16,24,40,.42);backdrop-filter:blur(3px)}
+      #mobileCategorySheet .mobile-sheet{display:flex;flex-direction:column;width:min(960px,calc(100vw - 210px));height:auto;max-height:calc(100dvh - 190px);overflow:hidden;padding:0;border:1px solid var(--glass-border);border-radius:18px;box-shadow:0 24px 70px rgba(16,24,40,.24)}
+      #mobileCategorySheet .mobile-category-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 24px;border-bottom:1px solid var(--glass-border)}
+      #mobileCategorySheet .mobile-category-dialog-header h2{margin:0;font-size:21px;font-weight:750;letter-spacing:-.02em}
+      #mobileCategorySheet .mobile-category-dialog-back{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid var(--glass-border);border-radius:10px;background:var(--card-bg);color:var(--text-white);font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background .16s ease,border-color .16s ease,color .16s ease}
+      #mobileCategorySheet .mobile-category-dialog-back:hover{border-color:#ff6900;background:#fff4e8;color:#c2410c}
+      #mobileCategorySheet .mobile-category-back{align-self:flex-start;margin:14px 24px 0}
+      #mobileCategoryList{min-height:0;overflow:auto;padding:18px 24px 24px;overscroll-behavior:contain}
+      #mobileCategorySheet .mobile-category-list{display:block}
+      #mobileCategorySheet .mobile-category-options{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px}
+      #mobileCategorySheet .mobile-category-option.category-tile,#mobileCategorySheet .category-all-products{display:grid;align-content:center;justify-items:center;gap:10px;min-height:150px;padding:14px 10px;border:1px solid var(--glass-border);border-radius:15px;background:var(--bg-dark);color:var(--text-white);text-align:center;font-size:13px;font-weight:650;line-height:1.3;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease}
+      #mobileCategorySheet .mobile-category-option.category-tile:hover,#mobileCategorySheet .category-all-products:hover{transform:translateY(-2px);border-color:rgba(255,105,0,.7);background:var(--card-bg);box-shadow:0 8px 20px rgba(16,24,40,.09)}
+      #mobileCategorySheet .mobile-category-option.category-tile.active{border-color:#ff6900;background:#fff4e8;color:#c2410c}
+      #mobileCategorySheet .mobile-category-option.category-tile img,#mobileCategorySheet .category-all-icon{display:grid;width:76px;height:76px;place-items:center;object-fit:cover;border-radius:50%;background:#f2f4f7;color:#e85d04;font-size:27px}
+      #mobileCategorySheet .mobile-category-option.category-tile span,#mobileCategorySheet .category-all-products span{max-width:100%;line-height:1.3}
+      #mobileCategorySheet .category-all-products{width:100%;text-align:center}
     }
-    @media(min-width:701px) and (max-width:1023px){#mobileCategorySheet{left:112px}#mobileCategorySheet .mobile-sheet{width:min(620px,calc(100vw - 132px))}}
+    @media(min-width:701px) and (max-width:1023px){#mobileCategorySheet{left:112px;padding:18px}#mobileCategorySheet .mobile-sheet{width:min(760px,calc(100vw - 166px))}#mobileCategorySheet .mobile-category-options{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}#mobileCategorySheet .mobile-category-option.category-tile,#mobileCategorySheet .category-all-products{min-height:136px}#mobileCategorySheet .mobile-category-option.category-tile img,#mobileCategorySheet .category-all-icon{width:66px;height:66px}}
     @media(min-width:701px){
       #productPopup{top:0;right:0;bottom:0;left:140px;padding:0;background:var(--card-bg);backdrop-filter:none}
       #productPopup .popup-content{width:100%;max-width:none;min-height:100%;margin:0;padding:18px 24px 112px;overflow:visible;border:0;border-radius:0;box-shadow:none}
@@ -1907,7 +1920,7 @@
 
     <div class="mobile-sheet-backdrop" id="mobileCategorySheet" onclick="if(event.target===this)closeMobileSheet('mobileCategorySheet')">
       <section class="mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileCategoryTitle">
-        <h2 id="mobileCategoryTitle">Categories</h2>
+        <header class="mobile-category-dialog-header"><h2 id="mobileCategoryTitle">Categories</h2><button type="button" class="mobile-category-dialog-back" onclick="closeMobileSheet('mobileCategorySheet')" aria-label="Back to previous page"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Back</span></button></header>
         <button type="button" class="mobile-category-back" id="mobileCategoryBack" onclick="showMobileCategoryGroups()" hidden>← All categories</button>
         <div class="mobile-category-list" id="mobileCategoryList"></div>
       </section>
@@ -4572,7 +4585,10 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       grid.className = 'mobile-category-options';
       if (!mobileCategoryGroupId) {
         const allButton = document.createElement('button');
-        allButton.type = 'button'; allButton.className = 'mobile-category-option'; allButton.textContent = 'All Products';
+        allButton.type = 'button'; allButton.className = 'mobile-category-option category-all-products';
+        const allIcon = document.createElement('i'); allIcon.className = 'fa-solid fa-layer-group category-all-icon'; allIcon.setAttribute('aria-hidden','true');
+        const allLabel = document.createElement('span'); allLabel.textContent = 'All Products';
+        allButton.append(allIcon,allLabel);
         allButton.onclick = () => selectMobileCategory('all', allButton);
         grid.appendChild(allButton);
         categoryGroups.forEach(group => grid.appendChild(createCategoryTile(group, { mobile:true, onClick:() => openMobileCategoryGroup(group.id) })));
