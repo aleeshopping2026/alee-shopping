@@ -213,6 +213,13 @@ html[data-theme="dark"] .recommendation-shelf > .card .product-shop-meta,
 html[data-theme="dark"] #productList.products > .card .product-shop-meta { color: #d8dee8 !important; }
 html[data-theme="dark"] .search-filter-panel,
 html[data-theme="dark"] .search-brand-all-panel { color: #eef1f5; background: #17191d; border-color: #343a46; }
+html[data-theme="dark"] .hub-offer-card { color: #eef1f5; background: #15171b; border-color: #343a46; box-shadow: 0 2px 8px #0005; }
+html[data-theme="dark"] .hub-offer-heading strong { color: #eef1f5; }
+html[data-theme="dark"] .hub-offer-heading small,
+html[data-theme="dark"] .hub-offer-description { color: #aab2bf; }
+html[data-theme="dark"] .hub-offer-media-frame { background: #202329; }
+html[data-theme="dark"] .hub-offer-cta { color: #ff9a57; background: #382417; }
+html[data-theme="dark"] .hub-offer-cta:hover { background: #4a2e1c; }
 
 /* Keep the mobile navigation readable in dark mode and preserve a clear active item. */
 @media (max-width: 700px) {

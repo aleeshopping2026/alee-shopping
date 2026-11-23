@@ -424,6 +424,18 @@
     .hub-content-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 12px; color:var(--text-white); font-size:18px; }
     .hub-content-heading button { border:0; background:transparent; color:var(--light-leaf); font:inherit; cursor:pointer; }
     .hub-app-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:12px; }
+    .hub-offers-list { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; width:min(100%,820px); margin:0 auto; }
+    .hub-offer-card { overflow:hidden; border:1px solid #e1e4e8; border-radius:14px; background:#fff; color:#172033; box-shadow:0 2px 7px #10182812; }
+    .hub-offer-card-header { display:flex; align-items:center; gap:10px; padding:11px 13px; }
+    .hub-offer-avatar { display:grid; place-items:center; width:38px; height:38px; flex:0 0 38px; border-radius:50%; background:#ed3b73; color:#fff; font-size:16px; }
+    .hub-offer-heading { display:grid; gap:2px; min-width:0; }
+    .hub-offer-heading strong { overflow:hidden; color:inherit; font-size:14px; line-height:1.25; text-overflow:ellipsis; }
+    .hub-offer-heading small { display:flex; flex-wrap:wrap; align-items:center; gap:5px; color:#7b8492; font-size:11px; }
+    .hub-offer-media-frame { overflow:hidden; width:calc(100% - 20px); aspect-ratio:3 / 1; margin:0 10px; border-radius:9px; background:#f2f4f7; }
+    .hub-offer-media { display:block; width:100%; height:100%; border:0; object-fit:contain; }
+    .hub-offer-description { padding:9px 13px 12px; color:#5f6875; font-size:13px; line-height:1.45; white-space:pre-line; overflow-wrap:anywhere; }
+    .hub-offer-cta { display:inline-flex; align-items:center; gap:7px; margin:0 13px 12px; padding:8px 12px; border-radius:999px; background:#fff0e5; color:#d95700; font-size:12px; font-weight:800; text-decoration:none; }
+    .hub-offer-cta:hover { background:#ffe2cc; }
     .hub-app-card { display:flex; flex-direction:column; align-items:center; gap:7px; padding:10px 7px; border:1px solid var(--glass-border); border-radius:15px; background:var(--bg-dark); color:var(--text-white); text-align:center; text-decoration:none; }
     .hub-app-card img { width:62px; height:62px; border-radius:16px; object-fit:cover; background:#fff; }
     .hub-app-card strong { font-size:12px; line-height:1.25; }
@@ -1632,7 +1644,7 @@
       .popup-sticky-action{left:112px;width:min(900px,calc(100vw - 132px));max-width:900px}
     }
   </style>
-  <link rel="stylesheet" href="site-theme.css?v=20261123-dark-mobile-navigation">
+  <link rel="stylesheet" href="site-theme.css?v=20261123-offer-feed-cards">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>
@@ -3720,11 +3732,17 @@
     async function renderHubApps(kind,body) {
       const isOffers=kind==='offers',isApps=kind==='apps',data=isOffers?[]:isApps?(window.aleeApps||[]):(window.aleeGames||[]),type=isOffers?'ad':isApps?'app':'game';
       let items=data.map(item=>({title:item.name,url:item.url,image:item.icon,category:item.category,post_type:type,localGame:Boolean(item.localGame)}));
-      if(supabaseClient){let query=supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,sort_order,ad_type').in('post_type',isOffers?['ad']:isApps?['app']:['game']);if(isOffers)query=query.eq('ad_type','offer').order('sort_order',{ascending:true}).order('created_at',{ascending:false});else query=query.order('created_at',{ascending:false});const {data:posts,error}=await query.limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
+      if(supabaseClient){let query=supabaseClient.from('platform_posts').select('id,post_type,title,category,description,link_url,media_url,sort_order,ad_type,created_at').in('post_type',isOffers?['ad']:isApps?['app']:['game']);if(isOffers)query=query.eq('ad_type','offer').order('sort_order',{ascending:true}).order('created_at',{ascending:false});else query=query.order('created_at',{ascending:false});const {data:posts,error}=await query.limit(100);if(!error)items=[...(posts||[]),...items];else console.warn('Platform listings are not configured yet.',error);}
       if(isApps){const ads=[];if(ads.length){let seen=[];try{seen=JSON.parse(localStorage.getItem(`alee-seen-ads:${activeUser?.id||'guest'}`)||'[]');}catch(_){}const unseen=ads.filter(ad=>!seen.includes(String(ad.id)));const next=unseen.length?unseen:ads;items=[...items.filter(item=>item.post_type!=='ad'),next[Math.floor(Math.random()*next.length)]];}}
       const localGamePath=/^(?:\.\/)?games\/[a-z0-9-]+\.html(?:#[\w-]+)?$/i;
       items=items.filter(item=>item.post_type==='ad'||/^https:\/\//i.test(String(item.link_url||item.url||''))||(!isApps&&localGamePath.test(String(item.url||''))));
-      if(!items.length){body.innerHTML=`<div class="hub-empty">No ${isApps?'apps':'games'} have been added yet.</div>`;return;}
+      if(!items.length){body.innerHTML=`<div class="hub-empty">${isOffers?'No offers have been posted yet.':`No ${isApps?'apps':'games'} have been added yet.`}</div>`;return;}
+      if(isOffers){
+        const offerTime=value=>{const date=new Date(value);if(!Number.isFinite(date.getTime()))return 'Recently';const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime(),day=new Date(date.getFullYear(),date.getMonth(),date.getDate()).getTime(),days=Math.floor((today-day)/86400000);if(days===0)return date.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});if(days===1)return 'Yesterday';if(days>1&&days<7)return date.toLocaleDateString([],{weekday:'long'});return date.toLocaleDateString([],{month:'short',day:'numeric'});};
+        body.innerHTML=`<div class="hub-offers-list">${items.map(item=>{const title=escapeHTML(item.title||'Special offer'),category=escapeHTML(item.category||'Offer'),description=String(item.description||'').trim(),mediaUrl=String(item.media_url||'assets/alee-app-icon-192.png'),video=/\.(mp4|webm|mov)(?:\?|$)/i.test(mediaUrl),safeUrl=/^https:\/\//i.test(String(item.link_url||''))?escapeHTML(item.link_url):'',media=video?`<video class="hub-offer-media" src="${escapeHTML(mediaUrl)}" controls playsinline preload="metadata" aria-label="${title}"></video>`:`<img class="hub-offer-media" src="${escapeHTML(mediaUrl)}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-app-icon-192.png'">`,posted=item.created_at?escapeHTML(new Date(item.created_at).toISOString()):'',timestamp=offerTime(item.created_at);return `<article class="hub-offer-card" ${item.id?`data-ad-id="${escapeHTML(item.id)}"`:''}><header class="hub-offer-card-header"><span class="hub-offer-avatar" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span><span class="hub-offer-heading"><strong>${title}</strong><small><span>${category}</span><span aria-hidden="true">·</span><time${posted?` datetime="${posted}"`:''}>${escapeHTML(timestamp)}</time></small></span></header><div class="hub-offer-media-frame">${media}</div>${description?`<p class="hub-offer-description">${escapeHTML(description)}</p>`:''}${safeUrl?`<a class="hub-offer-cta" href="${safeUrl}" target="_blank" rel="noopener">Shop offer <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>`:''}</article>`;}).join('')}</div>`;
+        body.querySelectorAll('.hub-offer-card[data-ad-id]').forEach(card=>card.addEventListener('click',()=>{try{const key=`alee-seen-ads:${activeUser?.id||'guest'}`,seen=JSON.parse(localStorage.getItem(key)||'[]');if(!seen.includes(card.dataset.adId))seen.push(card.dataset.adId);localStorage.setItem(key,JSON.stringify(seen));}catch(_){}}));
+        return;
+      }
       body.innerHTML=`<div class="hub-app-grid">${items.map(item=>{const url=item.link_url||item.url||'',isLocalGame=!isApps&&localGamePath.test(String(url)),content=`<img src="${escapeHTML(item.media_url||item.image||'assets/alee-app-icon-192.png')}" alt="" onerror="this.src='assets/alee-app-icon-192.png'"><strong>${escapeHTML(item.title||item.name)}</strong><small>${item.post_type==='ad'?'Offer · ':''}${escapeHTML(item.category||'')}</small>${isLocalGame?'<span class="game-play-label"><i class="fa-solid fa-play"></i> Tap to play</span>':''}`,validExternal=/^https:\/\//i.test(String(url||''));return url&& (validExternal||isLocalGame)?`<a class="hub-app-card ${!isApps&&!isOffers?'hub-game-card':''}" href="${escapeHTML(url)}" ${item.post_type==='ad'?`data-ad-id="${escapeHTML(item.id)}"`:''} ${validExternal?'target="_blank" rel="noopener"':''}>${content}</a>`:`<div class="hub-app-card ${!isApps?'hub-game-card':''}">${content}</div>`;}).join('')}</div>`;
       body.querySelectorAll('[data-ad-id]').forEach(card=>card.addEventListener('click',()=>{try{const key=`alee-seen-ads:${activeUser?.id||'guest'}`,seen=JSON.parse(localStorage.getItem(key)||'[]');if(!seen.includes(card.dataset.adId))seen.push(card.dataset.adId);localStorage.setItem(key,JSON.stringify(seen));}catch(_){}}));
     }
