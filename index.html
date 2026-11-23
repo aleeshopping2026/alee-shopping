@@ -6428,7 +6428,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
     async function loadCustomerOrders(tab=activeOrdersTab){
       const requestId=++ordersRequestId,status=document.getElementById('ordersListStatus'),list=document.getElementById('ordersList');
       const heading=document.getElementById('ordersListTitle'),intro=document.getElementById('ordersListIntro');
-      const isPending=tab==='pending';heading.textContent=isPending?'Pending orders':'Order History';intro.textContent=isPending?'Orders placed in the last 4 days.':'Orders move here after 4 days.';status.textContent='Loading your orders…';list.innerHTML='';
+      const isPending=tab==='pending';heading.textContent=isPending?'Pending orders':'Order History';intro.hidden=!isPending;intro.textContent=isPending?'Orders placed in the last 4 days.':'';status.textContent='Loading your orders…';list.innerHTML='';
       if(!supabaseClient||!activeUser){status.textContent='Sign in to view your orders.';return;}
       const userId=activeUser.id;
       const {data,error}=await supabaseClient.from('store_orders').select('id,shop_id,items,total,currency_code,status,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(1000);
