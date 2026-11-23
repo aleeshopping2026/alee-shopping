@@ -1491,10 +1491,10 @@
     [data-theme="dark"] .mobile-bottom-nav .mobile-nav-button,[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button i,[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button span,[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button.active span{color:#fff!important}
     [data-theme="dark"] .mobile-bottom-nav .mobile-nav-button svg{stroke:#fff!important}
     @media(max-width:700px){
-      .mobile-bottom-nav{background:#fff!important;border-top-color:#e5e7eb!important}
-      .mobile-bottom-nav .mobile-nav-button,.mobile-bottom-nav .mobile-nav-button i,.mobile-bottom-nav .mobile-nav-button span,.mobile-bottom-nav .mobile-nav-button.active span{color:#111827!important}
-      .mobile-bottom-nav .mobile-nav-button svg{stroke:#111827!important}
-      .mobile-bottom-nav .mobile-nav-button.active:first-child svg{stroke:#ff6900!important}
+      html:not([data-theme="dark"]) .mobile-bottom-nav{background:#fff!important;border-top-color:#e5e7eb!important}
+      html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button,html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button i,html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button span,html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button.active span{color:#111827!important}
+      html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button svg{stroke:#111827!important}
+      html:not([data-theme="dark"]) .mobile-bottom-nav .mobile-nav-button.active:first-child svg{stroke:#ff6900!important}
     }
     /* Seller profile dashboard refresh */
     #sellerDashboard{align-items:flex-start!important;overflow-y:auto!important;padding:0!important;background:rgba(10,18,28,.68)!important;backdrop-filter:blur(8px)}
@@ -1632,7 +1632,7 @@
       .popup-sticky-action{left:112px;width:min(900px,calc(100vw - 132px));max-width:900px}
     }
   </style>
-  <link rel="stylesheet" href="site-theme.css?v=20261116-seller-category-picker">
+  <link rel="stylesheet" href="site-theme.css?v=20261123-dark-mobile-navigation">
 </head>
 <body class="has-top-searches">
   <div class="site-loader" id="siteLoader" aria-live="polite"><div class="site-loader-ring"><img src="assets/alee-logo.png" alt=""></div><span>Loading aleeshopping…</span></div>

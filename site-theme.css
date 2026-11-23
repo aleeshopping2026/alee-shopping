@@ -198,6 +198,11 @@ html[data-theme="dark"] #productList.products > .card {
   border-color: #343a46 !important;
   box-shadow: 0 2px 8px #0005 !important;
 }
+html[data-theme="dark"] #productList.products > .card {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
 html[data-theme="dark"] #searchHistoryGrid > .card h3,
 html[data-theme="dark"] #discoverySearchResults > .card h3,
 html[data-theme="dark"] .recommendation-shelf > .card h3,
@@ -208,6 +213,30 @@ html[data-theme="dark"] .recommendation-shelf > .card .product-shop-meta,
 html[data-theme="dark"] #productList.products > .card .product-shop-meta { color: #d8dee8 !important; }
 html[data-theme="dark"] .search-filter-panel,
 html[data-theme="dark"] .search-brand-all-panel { color: #eef1f5; background: #17191d; border-color: #343a46; }
+
+/* Keep the mobile navigation readable in dark mode and preserve a clear active item. */
+@media (max-width: 700px) {
+  html[data-theme="dark"] .mobile-bottom-nav {
+    background: #111318 !important;
+    border-top: 1px solid #343a46 !important;
+    box-shadow: 0 -4px 16px rgb(0 0 0 / 35%) !important;
+  }
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button,
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button i,
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button span {
+    color: #e5e7eb !important;
+  }
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button svg {
+    stroke: #e5e7eb !important;
+  }
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button.active,
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button.active i,
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button.active span,
+  html[data-theme="dark"] .mobile-bottom-nav .mobile-nav-button.active svg {
+    color: #ff7900 !important;
+    stroke: #ff7900 !important;
+  }
+}
 
 /* Keep close controls consistent and easy to tap across the site. */
 :is(.account-close,.finder-close,.job-dialog-close,.close-popup,.image-zoom-close,.close-cart,button.seller-close[aria-label="Close"],.seller-product-detail-close,.search-filter-close,.share-close,.hub-content-heading>button,.feed-comments-header>button,.review-image-viewer>button) {
