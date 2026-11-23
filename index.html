@@ -504,26 +504,37 @@
     .feed-post-category{display:inline-flex;margin:0 12px 8px;padding:4px 9px;border-radius:999px;background:#f2f4f7;color:#475467;font-size:10px;font-weight:800}
     .feed-post-following{margin-left:5px;color:#ff6900;font-size:10px;font-weight:800}
     .feed-post-stats{display:flex;gap:12px;margin-top:3px;color:#667085;font-size:11px}
-    .feed-comments-dialog{position:fixed;inset:auto 0 0;width:100%;max-width:none;max-height:min(78dvh,680px);margin:0;padding:0;overflow:hidden;border:1px solid #e5e7eb;border-radius:18px 18px 0 0;background:#fff;color:#172033;box-shadow:0 -12px 36px #10182826}
+    .feed-comments-dialog{position:fixed;inset:auto 0 0;width:100%;max-width:none;height:min(92dvh,900px);max-height:calc(100dvh - 8px);margin:0;padding:0;overflow:hidden;border:1px solid #e5e7eb;border-radius:22px 22px 0 0;background:#fff;color:#172033;box-shadow:0 -12px 36px #10182826}
     .feed-comments-dialog::backdrop{background:#10182880;backdrop-filter:blur(2px)}
-    .feed-comments-dialog-inner{display:flex;flex-direction:column;max-height:min(78dvh,680px)}
-    .feed-comments-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;border-bottom:1px solid #eaecf0}
-    .feed-comments-header h3{margin:0;font-size:15px}
+    .feed-comments-dialog-inner{display:flex;height:100%;min-height:0;flex-direction:column}
+    .feed-comments-grabber{display:flex;flex:0 0 auto;justify-content:center;padding:10px 0 7px}
+    .feed-comments-grabber span{width:42px;height:5px;border-radius:999px;background:#8b9095}
+    .feed-comments-header{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:10px;padding:7px 16px 12px;border-bottom:1px solid #eaecf0}
+    .feed-comments-heading{display:flex;min-width:0;flex-direction:column;gap:3px}
+    .feed-comments-header h3{margin:0;font-size:16px}
+    .feed-comments-sort{width:max-content;padding:0;border:0;background:transparent;color:#65676b;font:600 12px Inter,Poppins,Arial,sans-serif}
     .feed-comments-header button{width:34px;height:34px;border:0;border-radius:50%;background:#f2f4f7;color:#344054;font-size:20px;cursor:pointer}
-    .feed-comments-dialog-list{min-height:90px;overflow:auto;padding:12px 16px}
-    .feed-comments-dialog-list:empty::after{content:'No comments yet';color:#98a2b3;font-size:13px}
-    .feed-comments-dialog-form{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eaecf0;background:#fff}
-    .feed-comments-dialog-form input{min-width:0;flex:1;padding:10px;border:1px solid #e4e7ec;border-radius:999px;font:13px Inter,Poppins,Arial,sans-serif}
-    .feed-comments-dialog-form button{padding:0 15px;border:0;border-radius:999px;background:#ff6900;color:#fff;font-weight:800;cursor:pointer}
+    .feed-comments-dialog-list{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px 20px}
+    .feed-comments-dialog-list:empty::after{content:'No comments yet';display:block;padding:24px 4px;color:#65676b;font-size:14px;text-align:center}
+    .feed-comment{display:flex;align-items:flex-start;gap:10px;margin:0;padding:7px 0;overflow-wrap:anywhere;color:#333}
+    .feed-comment-avatar{display:flex;width:38px;height:38px;flex:0 0 38px;align-items:center;justify-content:center;border-radius:50%;background:#f1f3f5;color:#344054;font-size:13px;font-weight:800}
+    .feed-comment-content{min-width:0;flex:1}
+    .feed-comment-bubble{display:flex;flex-direction:column;gap:3px;width:fit-content;max-width:100%;padding:9px 12px;border-radius:16px;background:#f0f2f5;font-size:14px;line-height:1.4}
+    .feed-comment-bubble strong{font-size:13px}
+    .feed-comment-meta{display:flex;align-items:center;gap:12px;padding:4px 11px;color:#65676b;font-size:11px}
+    .feed-comment-meta button{padding:0;border:0;background:transparent;color:#65676b;font-size:11px;font-weight:700;cursor:pointer}
+    .feed-comments-reactions{display:flex;flex:0 0 auto;justify-content:space-between;gap:4px;padding:8px 14px 4px}
+    .feed-comments-reactions button{padding:2px;border:0;background:transparent;font-size:23px;cursor:pointer}
+    .feed-comments-dialog-form{display:flex;flex:0 0 auto;align-items:center;gap:8px;padding:7px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eaecf0;background:#fff}
+    .feed-comments-dialog-form input{min-width:0;flex:1;padding:11px 14px;border:0;border-radius:999px;background:#f0f2f5;color:#172033;font:14px Inter,Poppins,Arial,sans-serif;outline:none}
+    .feed-comments-dialog-form button{display:flex;width:38px;height:38px;flex:0 0 38px;align-items:center;justify-content:center;padding:0;border:0;border-radius:50%;background:#ff6900;color:#fff;font-size:16px;font-weight:800;cursor:pointer}
     .feed-comments-dialog-status{padding:0 15px;color:#b42318;font-size:12px}
-    @media(min-width:701px){.feed-comments-dialog{inset:0;width:min(100% - 32px,560px);max-height:min(78vh,680px);margin:auto;border-radius:18px}.feed-comments-dialog-inner{max-height:min(78vh,680px)}}
+    @media(min-width:701px){.feed-comments-dialog{inset:0;width:min(100% - 32px,600px);height:min(82vh,760px);max-height:82vh;margin:auto;border-radius:18px}.feed-comments-grabber{padding-top:9px}.feed-comments-reactions{padding-top:6px}}
     .feed-likes-count{font-weight:800}
     .feed-caption{margin-top:5px;overflow-wrap:anywhere;white-space:pre-line}
     .feed-comment-link{display:block;margin-top:5px;padding:0;border:0;background:transparent;color:#8a8a8a;font:12px Inter,Poppins,Arial,sans-serif;text-align:left;cursor:pointer}
     .feed-comments-list{display:grid;gap:4px;margin-top:7px}
     .feed-post-details>.feed-comments-list,.feed-post-details>.feed-comment-form{display:none!important}
-    .feed-comment{overflow-wrap:anywhere;color:#333}
-    .feed-comment button{margin-left:7px;padding:0;border:0;background:transparent;color:#8a8a8a;font-size:10px;cursor:pointer}
     .feed-comment-form{display:flex;align-items:center;gap:8px;margin-top:9px}
     .feed-comment-form input{min-width:0;flex:1;padding:8px 0;border:0;border-bottom:1px solid #eee;outline:0;color:#111;font:12px Inter,Poppins,Arial,sans-serif}
     .feed-comment-form button{padding:7px 10px;border:0;border-radius:7px;background:#ff6b00;color:#fff;font-weight:700;cursor:pointer}
@@ -1907,12 +1918,14 @@
     <section class="hub-content-panel" id="hubContentPanel" hidden aria-live="polite"><h2 class="hub-content-heading"><span id="hubContentTitle"></span><button type="button" onclick="closeHubSection()" aria-label="Close section">✕</button></h2><div id="hubContentBody"></div></section>
     <dialog class="feed-comments-dialog" id="feedCommentsDialog" aria-labelledby="feedCommentsTitle">
       <div class="feed-comments-dialog-inner">
-        <header class="feed-comments-header"><h3 id="feedCommentsTitle">Comments</h3><button type="button" onclick="closeFeedComments()" aria-label="Close comments">×</button></header>
-        <div class="feed-comments-dialog-list" id="feedCommentsDialogList"></div>
+        <div class="feed-comments-grabber" aria-hidden="true"><span></span></div>
+        <header class="feed-comments-header"><div class="feed-comments-heading"><h3 id="feedCommentsTitle">Comments (0)</h3><select class="feed-comments-sort" id="feedCommentsSort" aria-label="Sort comments" onchange="sortFeedComments(this.value)"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div><button type="button" onclick="closeFeedComments()" aria-label="Close comments">×</button></header>
+        <div class="feed-comments-dialog-list" id="feedCommentsDialogList" aria-live="polite"></div>
         <p class="feed-comments-dialog-status" id="feedCommentsDialogStatus" role="status" aria-live="polite"></p>
+        <div class="feed-comments-reactions" aria-label="Quick reactions"><button type="button" onclick="insertFeedDialogEmoji('❤️')" aria-label="Add heart">❤️</button><button type="button" onclick="insertFeedDialogEmoji('🙌')" aria-label="Add celebration">🙌</button><button type="button" onclick="insertFeedDialogEmoji('🔥')" aria-label="Add fire">🔥</button><button type="button" onclick="insertFeedDialogEmoji('👏')" aria-label="Add applause">👏</button><button type="button" onclick="insertFeedDialogEmoji('😢')" aria-label="Add sad face">😢</button><button type="button" onclick="insertFeedDialogEmoji('😍')" aria-label="Add heart eyes">😍</button><button type="button" onclick="insertFeedDialogEmoji('😮')" aria-label="Add surprised face">😮</button><button type="button" onclick="insertFeedDialogEmoji('😂')" aria-label="Add laughing face">😂</button></div>
         <form class="feed-comments-dialog-form" onsubmit="postFeedComment(event,document.getElementById('feedCommentsDialog').dataset.postId)">
-          <input name="comment" maxlength="500" placeholder="Add a comment…" aria-label="Add a comment" required>
-          <button type="submit">Post</button>
+          <input name="comment" maxlength="500" placeholder="Write a public comment…" aria-label="Write a public comment" required>
+          <button type="submit" aria-label="Post comment"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>
         </form>
       </div>
     </dialog>
@@ -3756,64 +3769,117 @@
       const categoryOptions=(window.aleeCategoryGroups||[]).map(category=>`<option value="${escapeHTML(category.id)}">${escapeHTML(category.label)}</option>`).join('');
       return `<section class="feed-create-card"><h3 class="feed-create-heading">Create Post</h3><form id="feedCreateForm" onsubmit="submitFeedPost(event)"><input id="feedPhotoInput" name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden><button class="feed-photo-button" type="button" onclick="document.getElementById('feedPhotoInput').click()"><i class="fa-regular fa-image" aria-hidden="true"></i> Add a photo</button><img id="feedPhotoPreview" class="feed-create-preview" alt="Photo preview" hidden><div class="feed-create-fields" id="feedCreateFields" hidden><textarea name="caption" maxlength="1000" placeholder="Write a caption…"></textarea><select name="categoryId" aria-label="Post category" required><option value="" selected disabled>Choose a category</option><option value="other">Other</option>${categoryOptions}</select><select name="productId" aria-label="Link a product"><option value="">Link a product (optional)</option>${options}</select><select name="postTag" aria-label="Post type"><option value="standard">Standard post</option><option value="announcement">Announcement</option><option value="offer">Offer</option></select><button class="feed-photo-button" type="submit">Post</button></div><p class="feed-status" id="feedCreateStatus" role="status" aria-live="polite"></p></form></section>`;
     }
+    function renderFeedComment(row,userId,postId){
+      const name=String(row.display_name||'Shopper'),initials=name.trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase()||'S';
+      const remove=userId&&String(row.user_id)===String(userId)?`<button type="button" onclick="deleteFeedComment('${escapeHTML(row.id)}','${escapeHTML(postId)}')" aria-label="Delete your comment">Delete</button>`:'';
+      return `<article class="feed-comment"><span class="feed-comment-avatar" aria-hidden="true">${escapeHTML(initials)}</span><div class="feed-comment-content"><div class="feed-comment-bubble"><strong>${escapeHTML(name)}</strong><span>${escapeHTML(row.body)}</span></div><div class="feed-comment-meta"><time>${escapeHTML(feedTimeLabel(row.created_at))}</time>${remove}</div></div></article>`;
+    }
     function renderFeedCard(post,shop,comments,likeCount,liked,saved,userId,viewCount,following){
       const shopName=shop?.shop_name||'Shop',avatar=shop?.logo_url||'assets/alee-logo.png',locationText=shop?.address||shop?.country_code||'ALEE Shopping';
       const badge=post.post_tag==='announcement'?'<span class="feed-post-badge">Announcement</span>':post.post_tag==='offer'?'<span class="feed-post-badge offer">Offer</span>':'';
       const categoryId=String(post.category_id||'other'),categoryLabel=categoryId==='other'?'Other':window.aleeCategoryGroups?.find(category=>category.id===categoryId)?.label||categoryId;
-      const commentRows=comments.map(row=>`<p class="feed-comment"><strong>${escapeHTML(row.display_name||'Shopper')}</strong> ${escapeHTML(row.body)}${userId&&String(row.user_id)===String(userId)?`<button type="button" onclick="deleteFeedComment('${escapeHTML(row.id)}','${escapeHTML(post.id)}')" aria-label="Delete your comment">Delete</button>`:''}</p>`).join('');
+      const commentRows=comments.map(row=>renderFeedComment(row,userId,post.id)).join('');
       const hasProduct=post.product_id!==null&&post.product_id!==undefined;
-      return `<article class="feed-post" id="feed-post-${escapeHTML(post.id)}" data-feed-category="${escapeHTML(categoryId)}" data-feed-following="${following?'true':'false'}" data-feed-likes="${Number(likeCount)||0}" data-feed-views="${Number(viewCount)||0}" data-feed-time="${Date.parse(post.created_at)||0}"><header class="feed-post-head"><img class="feed-shop-avatar" src="${escapeHTML(avatar)}" alt="" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="feed-shop-copy"><strong class="feed-shop-name">${escapeHTML(shopName)}${following?'<small class="feed-post-following">Following</small>':''}</strong><span class="feed-shop-location">${escapeHTML(locationText)} · ${escapeHTML(feedTimeLabel(post.created_at))}</span></div><button class="feed-message-button" type="button" onclick="messageFeedShop('${escapeHTML(post.shop_id)}','${escapeHTML(shopName)}')">Message</button><details class="feed-post-menu"><summary aria-label="Post options">•••</summary><button class="feed-more-button" type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy link</button></details></header><span class="feed-post-category">${escapeHTML(categoryLabel)}</span>${badge}<div class="feed-photo-wrap" ondblclick="toggleFeedLike('${escapeHTML(post.id)}',true)"><img class="feed-photo" src="${escapeHTML(post.image_url)}" alt="${escapeHTML(post.caption||shopName)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><span class="feed-double-heart" data-feed-heart aria-hidden="true">♥</span></div><div class="feed-post-actions"><button class="feed-action-button${liked?' is-liked':''}" type="button" onclick="toggleFeedLike('${escapeHTML(post.id)}')" aria-label="${liked?'Unlike':'Like'}"><i class="${liked?'fa-solid':'fa-regular'} fa-heart"></i></button><button class="feed-action-button" type="button" onclick="openFeedComments('${escapeHTML(post.id)}')" aria-label="Comment"><i class="fa-regular fa-comment"></i></button><button class="feed-action-button" type="button" onclick="toggleFeedShare('${escapeHTML(post.id)}')" aria-label="Share"><i class="fa-regular fa-paper-plane"></i></button><button class="feed-action-button${saved?' is-saved':''}" style="margin-left:auto" type="button" onclick="toggleFeedSave('${escapeHTML(post.id)}')" aria-label="${saved?'Unsave post':'Save post'}"><i class="${saved?'fa-solid':'fa-regular'} fa-bookmark"></i></button></div><div class="feed-post-details"><strong class="feed-likes-count">${Number(likeCount||0).toLocaleString()} Likes</strong>${post.caption?`<div class="feed-caption"><strong>${escapeHTML(shopName)}</strong> ${escapeHTML(post.caption)}</div>`:''}<div class="feed-post-stats"><span><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-feed-view-count>${Number(viewCount)||0}</b> views</span><button class="feed-comment-link" type="button" onclick="openFeedComments('${escapeHTML(post.id)}')">View all ${comments.length} comments</button></div><div class="feed-comments-list">${commentRows}</div><form class="feed-comment-form" onsubmit="postFeedComment(event,'${escapeHTML(post.id)}')"><button class="feed-emoji-button" type="button" onclick="insertFeedEmoji(this)" aria-label="Add emoji">☺</button><input name="comment" maxlength="500" placeholder="Add a comment…" aria-label="Add a comment" required><button type="submit">Post</button></form><div class="feed-status" data-feed-status role="status" aria-live="polite"></div></div><div class="feed-share-options" data-feed-share hidden><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','whatsapp')">WhatsApp</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','facebook')">Facebook</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy Link</button></div><button class="feed-view-product" type="button" onclick="openFeedProduct('${escapeHTML(hasProduct?post.product_id:'')}','${escapeHTML(post.shop_id)}')">View Product</button></article>`;
+      return `<article class="feed-post" id="feed-post-${escapeHTML(post.id)}" data-feed-category="${escapeHTML(categoryId)}" data-feed-following="${following?'true':'false'}" data-feed-likes="${Number(likeCount)||0}" data-feed-views="${Number(viewCount)||0}" data-feed-time="${Date.parse(post.created_at)||0}"><header class="feed-post-head"><img class="feed-shop-avatar" src="${escapeHTML(avatar)}" alt="" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><div class="feed-shop-copy"><strong class="feed-shop-name">${escapeHTML(shopName)}${following?'<small class="feed-post-following">Following</small>':''}</strong><span class="feed-shop-location">${escapeHTML(locationText)} · ${escapeHTML(feedTimeLabel(post.created_at))}</span></div><button class="feed-message-button" type="button" onclick="messageFeedShop('${escapeHTML(post.shop_id)}','${escapeHTML(shopName)}')">Message</button><details class="feed-post-menu"><summary aria-label="Post options">•••</summary><button class="feed-more-button" type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy link</button></details></header><span class="feed-post-category">${escapeHTML(categoryLabel)}</span>${badge}<div class="feed-photo-wrap" ondblclick="toggleFeedLike('${escapeHTML(post.id)}',true)"><img class="feed-photo" src="${escapeHTML(post.image_url)}" alt="${escapeHTML(post.caption||shopName)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/alee-logo.png'"><span class="feed-double-heart" data-feed-heart aria-hidden="true">♥</span></div><div class="feed-post-actions"><button class="feed-action-button${liked?' is-liked':''}" type="button" onclick="toggleFeedLike('${escapeHTML(post.id)}')" aria-label="${liked?'Unlike':'Like'}" aria-pressed="${liked?'true':'false'}"><i class="${liked?'fa-solid':'fa-regular'} fa-heart"></i></button><button class="feed-action-button" type="button" onclick="openFeedComments('${escapeHTML(post.id)}')" aria-label="Comment"><i class="fa-regular fa-comment"></i></button><button class="feed-action-button" type="button" onclick="toggleFeedShare('${escapeHTML(post.id)}')" aria-label="Share"><i class="fa-regular fa-paper-plane"></i></button><button class="feed-action-button${saved?' is-saved':''}" style="margin-left:auto" type="button" onclick="toggleFeedSave('${escapeHTML(post.id)}')" aria-label="${saved?'Unsave post':'Save post'}" aria-pressed="${saved?'true':'false'}"><i class="${saved?'fa-solid':'fa-regular'} fa-bookmark"></i></button></div><div class="feed-post-details"><strong class="feed-likes-count">${Number(likeCount||0).toLocaleString()} Likes</strong>${post.caption?`<div class="feed-caption"><strong>${escapeHTML(shopName)}</strong> ${escapeHTML(post.caption)}</div>`:''}<div class="feed-post-stats"><span><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-feed-view-count>${Number(viewCount)||0}</b> views</span><button class="feed-comment-link" type="button" onclick="openFeedComments('${escapeHTML(post.id)}')">View all ${comments.length} comments</button></div><div class="feed-comments-list">${commentRows}</div><form class="feed-comment-form" onsubmit="postFeedComment(event,'${escapeHTML(post.id)}')"><button class="feed-emoji-button" type="button" onclick="insertFeedEmoji(this)" aria-label="Add emoji">☺</button><input name="comment" maxlength="500" placeholder="Add a comment…" aria-label="Add a comment" required><button type="submit">Post</button></form><div class="feed-status" data-feed-status role="status" aria-live="polite"></div></div><div class="feed-share-options" data-feed-share hidden><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','whatsapp')">WhatsApp</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','facebook')">Facebook</button><button type="button" onclick="shareFeedPost('${escapeHTML(post.id)}','copy')">Copy Link</button></div><button class="feed-view-product" type="button" onclick="openFeedProduct('${escapeHTML(hasProduct?post.product_id:'')}','${escapeHTML(post.shop_id)}')">View Product</button></article>`;
+    }
+    let feedLoadSequence=0;
+    function arrangeFeedCards(body){
+      body.querySelectorAll('.feed-post').forEach(post=>{
+        const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
+        if(viewProduct&&bookmarkButton){if(window.matchMedia('(max-width:700px)').matches){bookmarkButton.after(viewProduct);bookmarkButton.style.marginLeft='0';}else{const productActions=document.createElement('div');productActions.className='feed-product-actions';viewProduct.before(productActions);productActions.append(bookmarkButton,viewProduct);bookmarkButton.style.marginLeft='0';}}
+        const main=document.createElement('div'),side=document.createElement('aside');main.className='feed-post-main';side.className='feed-post-side';
+        Array.from(post.children).forEach(child=>{if(child.matches('.feed-post-details,.feed-share-options,.feed-view-product,.feed-product-actions'))side.append(child);else main.append(child);});
+        post.append(main,side);
+      });
+    }
+    function setFeedCommentRows(card,comments,userId){
+      if(!card)return;
+      card._feedComments=comments;
+      const list=card.querySelector('.feed-comments-list');if(list)list.innerHTML=comments.map(row=>renderFeedComment(row,userId,card.id.replace(/^feed-post-/,''))).join('');
+      const link=card.querySelector('.feed-comment-link');if(link)link.textContent=`View all ${Number(card.dataset.feedCommentCount??comments.length).toLocaleString()} comments`;
+    }
+    function setFeedLikeState(card,liked){
+      const button=card?.querySelector('.feed-post-actions .feed-action-button[onclick^="toggleFeedLike"]');if(!button)return;
+      button.classList.toggle('is-liked',liked);button.setAttribute('aria-label',liked?'Unlike':'Like');button.setAttribute('aria-pressed',String(liked));
+      const icon=button.querySelector('i');if(icon)icon.className=`${liked?'fa-solid':'fa-regular'} fa-heart`;
+    }
+    function setFeedSaveState(card,saved){
+      const button=card?.querySelector('.feed-action-button[onclick^="toggleFeedSave"]');if(!button)return;
+      button.classList.toggle('is-saved',saved);button.setAttribute('aria-label',saved?'Unsave post':'Save post');button.setAttribute('aria-pressed',String(saved));
+      const icon=button.querySelector('i');if(icon)icon.className=`${saved?'fa-solid':'fa-regular'} fa-bookmark`;
     }
     async function loadHubFeed(body){
+      const loadId=++feedLoadSequence;
       body.innerHTML='<div class="feed-page"><div class="feed-empty">Loading Feed…</div></div>';
       if(!supabaseClient){body.innerHTML='<div class="feed-page"><div class="feed-empty feed-load-error">Feed needs Supabase. Run feed-posts-schema.sql after seller-marketplace-schema.sql.</div></div>';return;}
+      activeFeedShop=null;
       try{
-        const sessionResult=await supabaseClient.auth.getSession();if(sessionResult.error)throw sessionResult.error;
-        const user=activeUser||sessionResult.data?.session?.user||null,userId=user?.id||null;
-        const ownerPromise=userId?supabaseClient.from('seller_shops').select('id,shop_name,logo_url').eq('owner_id',userId).maybeSingle():Promise.resolve({data:null,error:null});
-        const postsPromise=supabaseClient.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,category_id,created_at').order('created_at',{ascending:false}).limit(50);
-        const [ownerResult,postsResult]=await Promise.all([ownerPromise,postsPromise]);
-        if(ownerResult.error)throw ownerResult.error;
+        const sessionPromise=supabaseClient.auth.getSession().catch(error=>({data:null,error}));
+        const postsResult=await supabaseClient.from('feed_posts').select('id,shop_id,product_id,image_url,caption,post_tag,category_id,created_at').order('created_at',{ascending:false}).limit(50);
         if(postsResult.error)throw postsResult.error;
-        const ownedShop=ownerResult.data||null,posts=postsResult.data||[];
-        activeFeedShop=ownedShop;
-        const rows=posts||[],postIds=rows.map(post=>post.id),shopIds=[...new Set(rows.map(post=>String(post.shop_id)))];
-        let shopRows=[],commentRows=[],countRows=[],viewRows=[],myLikes=[],mySaved=[],followRows=[];
-        const detailsPromise=postIds.length?Promise.all([
-          supabaseClient.from('seller_shops_profile_public').select('id,shop_name,logo_url,address,country_code').in('id',shopIds),
-          supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at').in('post_id',postIds).order('created_at',{ascending:true}).limit(500),
-          supabaseClient.rpc('get_feed_like_counts',{p_post_ids:postIds}),
-          supabaseClient.rpc('get_feed_view_counts',{p_post_ids:postIds}),
-          userId?supabaseClient.from('feed_likes').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
-          userId?supabaseClient.from('feed_saved').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
-          userId?supabaseClient.from('shop_follows').select('shop_id').eq('follower_id',userId):Promise.resolve({data:[],error:null})
-        ]):Promise.resolve(null);
-        const productPromise=ownedShop?supabaseClient.from('seller_products').select('id,name,price').eq('shop_id',ownedShop.id).eq('owner_id',userId).order('created_at',{ascending:false}).limit(200):Promise.resolve(null);
-        const [detailResults,productResult]=await Promise.all([detailsPromise,productPromise]);
-        let shopProducts=[];
-        if(detailResults){
-          const [shopsResult,commentsResult,countsResult,viewsResult,likesResult,savedResult,followsResult]=detailResults;
-          for(const result of detailResults)if(result.error)throw result.error;
-          shopRows=shopsResult.data||[];commentRows=commentsResult.data||[];countRows=countsResult.data||[];viewRows=viewsResult.data||[];myLikes=likesResult.data||[];mySaved=savedResult.data||[];followRows=followsResult.data||[];
-        }
-        if(productResult){if(productResult.error)throw productResult.error;shopProducts=productResult.data||[];}
-        const commentsByPost=new Map();for(const comment of commentRows){const key=String(comment.post_id);if(!commentsByPost.has(key))commentsByPost.set(key,[]);commentsByPost.get(key).push(comment);}
-        const shopMap=new Map(shopRows.map(shop=>[String(shop.id),shop])),likeMap=new Map(countRows.map(row=>[String(row.post_id),Number(row.like_count)||0])),viewMap=new Map(viewRows.map(row=>[String(row.post_id),Number(row.view_count)||0])),likedIds=new Set(myLikes.map(row=>String(row.post_id))),savedIds=new Set(mySaved.map(row=>String(row.post_id))),followedShopIds=new Set(followRows.map(row=>String(row.shop_id)));
-        const createCard=ownedShop?renderFeedCreateCard(ownedShop,shopProducts):'';
-        body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${createCard}${rows.length?rows.map(post=>renderFeedCard(post,shopMap.get(String(post.shop_id)),commentsByPost.get(String(post.id))||[],likeMap.get(String(post.id))||0,likedIds.has(String(post.id)),savedIds.has(String(post.id)),userId,viewMap.get(String(post.id))||0,followedShopIds.has(String(post.shop_id)))).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
-        body.querySelectorAll('.feed-post').forEach(post=>{
-          const viewProduct=post.querySelector('.feed-view-product'),bookmarkButton=post.querySelector('.feed-post-actions .fa-bookmark')?.closest('.feed-action-button');
-          if(viewProduct&&bookmarkButton){if(window.matchMedia('(max-width:700px)').matches){bookmarkButton.after(viewProduct);bookmarkButton.style.marginLeft='0';}else{const productActions=document.createElement('div');productActions.className='feed-product-actions';viewProduct.before(productActions);productActions.append(bookmarkButton,viewProduct);bookmarkButton.style.marginLeft='0';}}
-          const main=document.createElement('div'),side=document.createElement('aside');main.className='feed-post-main';side.className='feed-post-side';
-          Array.from(post.children).forEach(child=>{if(child.matches('.feed-post-details,.feed-share-options,.feed-view-product,.feed-product-actions'))side.append(child);else main.append(child);});
-          post.append(main,side);
-        });
-        applyFeedFilters();
-        observeFeedPostViews(Boolean(userId));
-        if(ownedShop)wireFeedCreateForm();
+        const rows=postsResult.data||[],postIds=rows.map(post=>post.id),shopIds=[...new Set(rows.map(post=>String(post.shop_id)))];
+        if(loadId!==feedLoadSequence)return;
+        const shopMap=new Map();
+        body.innerHTML=`<div class="feed-page" data-feed-page>${renderFeedToolbar(rows)}${rows.length?rows.map(post=>renderFeedCard(post,null,[],0,false,false,null,0,false)).join(''):'<div class="feed-empty">No photo posts yet.</div>'}</div>`;
+        const page=body.querySelector('[data-feed-page]');if(!page)return;
+        arrangeFeedCards(body);applyFeedFilters();observeFeedPostViews(false);
         const targetId=new URLSearchParams(location.search).get('feedPost');
         if(targetId&&rows.some(post=>String(post.id)===targetId))requestAnimationFrame(()=>document.getElementById(`feed-post-${targetId}`)?.scrollIntoView({block:'start'}));
-      }catch(error){console.error('Could not load photo Feed:',error);body.innerHTML=`<div class="feed-page"><div class="feed-empty feed-load-error">Feed could not load. Check feed-posts-schema.sql in Supabase. ${escapeHTML(error.message||'')}</div></div>`;}
+
+        const hydrateFeed=async()=>{
+          try{
+            const sessionResult=await sessionPromise;if(sessionResult.error)throw sessionResult.error;
+            const user=activeUser||sessionResult.data?.session?.user||null,userId=user?.id||null;
+            const ownerPromise=userId?supabaseClient.from('seller_shops').select('id,shop_name,logo_url').eq('owner_id',userId).maybeSingle():Promise.resolve({data:null,error:null});
+            const detailPromises=postIds.length?[
+              shopIds.length?supabaseClient.from('seller_shops_profile_public').select('id,shop_name,logo_url,address,country_code').in('id',shopIds):Promise.resolve({data:[],error:null}),
+              supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at').in('post_id',postIds).order('created_at',{ascending:false}).limit(500),
+              supabaseClient.rpc('get_feed_like_counts',{p_post_ids:postIds}),
+              supabaseClient.rpc('get_feed_view_counts',{p_post_ids:postIds}),
+              userId?supabaseClient.from('feed_likes').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
+              userId?supabaseClient.from('feed_saved').select('post_id').in('post_id',postIds).eq('user_id',userId):Promise.resolve({data:[],error:null}),
+              userId?supabaseClient.from('shop_follows').select('shop_id').eq('follower_id',userId):Promise.resolve({data:[],error:null})
+            ]:[];
+            const ownerSettledPromise=Promise.resolve(ownerPromise).then(value=>({status:'fulfilled',value}),reason=>({status:'rejected',reason}));
+            const [ownerSettled,...detailSettled]=await Promise.all([ownerSettledPromise,...detailPromises.map(promise=>Promise.resolve(promise).then(value=>({status:'fulfilled',value}),reason=>({status:'rejected',reason}))) ]);
+            if(loadId!==feedLoadSequence||!body.contains(page))return;
+            const ownerResult=ownerSettled.status==='fulfilled'?ownerSettled.value:{data:null,error:ownerSettled.reason};
+            if(ownerResult.error)console.warn('Could not load the Feed shop form.',ownerResult.error);
+            const [shopsSettled,commentsSettled,countsSettled,viewsSettled,likesSettled,savedSettled,followsSettled]=detailSettled;
+            const readResult=(settled,label)=>{
+              if(!settled)return [];
+              if(settled.status==='rejected'){console.warn(`Could not load Feed ${label}.`,settled.reason);return [];}
+              if(settled.value.error){console.warn(`Could not load Feed ${label}.`,settled.value.error);return [];}
+              return settled.value.data||[];
+            };
+            const shops=readResult(shopsSettled,'shop profiles'),comments=readResult(commentsSettled,'comments'),counts=readResult(countsSettled,'like counts'),views=readResult(viewsSettled,'view counts'),likes=readResult(likesSettled,'likes'),saved=readResult(savedSettled,'saved posts'),follows=readResult(followsSettled,'followed shops');
+            shops.forEach(shop=>shopMap.set(String(shop.id),shop));
+            const commentsByPost=new Map();comments.forEach(row=>{const key=String(row.post_id);if(!commentsByPost.has(key))commentsByPost.set(key,[]);commentsByPost.get(key).push(row);});
+            const likeMap=new Map(counts.map(row=>[String(row.post_id),Number(row.like_count)||0])),viewMap=new Map(views.map(row=>[String(row.post_id),Number(row.view_count)||0])),likedIds=new Set(likes.map(row=>String(row.post_id))),savedIds=new Set(saved.map(row=>String(row.post_id))),followedShopIds=new Set(follows.map(row=>String(row.shop_id)));
+            rows.forEach(post=>{
+              const card=document.getElementById(`feed-post-${post.id}`);if(!card)return;
+              const shop=shopMap.get(String(post.shop_id));if(shop){const avatar=card.querySelector('.feed-shop-avatar'),location=card.querySelector('.feed-shop-location'),message=card.querySelector('.feed-message-button');if(avatar)avatar.src=shop.logo_url||'assets/alee-logo.png';if(location)location.textContent=`${shop.address||shop.country_code||'ALEE Shopping'} · ${feedTimeLabel(post.created_at)}`;if(message){message.setAttribute('onclick',`messageFeedShop('${escapeHTML(post.shop_id)}','${escapeHTML(shop.shop_name||'Shop')}')`);}}
+              if(likeMap.has(String(post.id))){const count=likeMap.get(String(post.id));card.dataset.feedLikes=String(count);const label=card.querySelector('.feed-likes-count');if(label)label.textContent=`${count.toLocaleString()} Likes`;}
+              if(viewMap.has(String(post.id))){const count=viewMap.get(String(post.id));card.dataset.feedViews=String(count);const label=card.querySelector('[data-feed-view-count]');if(label)label.textContent=String(count);}
+              if(userId){setFeedLikeState(card,likedIds.has(String(post.id)));setFeedSaveState(card,savedIds.has(String(post.id)));}
+              const isFollowing=followedShopIds.has(String(post.shop_id));card.dataset.feedFollowing=String(isFollowing);
+              const shopName=shop?.shop_name||'Shop',name=card.querySelector('.feed-shop-name');if(name){name.innerHTML=`${escapeHTML(shopName)}${isFollowing?'<small class="feed-post-following">Following</small>':''}`;}
+              const postComments=commentsByPost.get(String(post.id))||[];card.dataset.feedCommentCount=String(postComments.length);setFeedCommentRows(card,postComments,userId);
+            });
+            applyFeedFilters();
+            observeFeedPostViews(Boolean(userId));
+            const ownedShop=ownerResult.data||null;activeFeedShop=ownedShop;
+            if(ownedShop){
+              const createHost=document.createElement('div');createHost.innerHTML=renderFeedCreateCard(ownedShop,[]);const createCard=createHost.firstElementChild;
+              if(createCard){page.querySelector('.feed-toolbar')?.after(createCard);wireFeedCreateForm();}
+              const productResult=await supabaseClient.from('seller_products').select('id,name,price').eq('shop_id',ownedShop.id).eq('owner_id',userId).order('created_at',{ascending:false}).limit(200);
+              if(productResult.error)console.warn('Could not load Feed product options.',productResult.error);
+              else if(loadId===feedLoadSequence&&body.contains(page)){const select=createCard?.querySelector('select[name="productId"]');if(select)select.insertAdjacentHTML('beforeend',(productResult.data||[]).map(item=>`<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)} · LKR ${Number(item.price||0).toLocaleString()}</option>`).join(''));}
+            }else activeFeedShop=null;
+          }catch(error){console.warn('Feed detail data could not be loaded.',error);}
+        };
+        void hydrateFeed();
+      }catch(error){console.error('Could not load photo Feed:',error);if(loadId===feedLoadSequence)body.innerHTML=`<div class="feed-page"><div class="feed-empty feed-load-error">Feed could not load. Check feed-posts-schema.sql in Supabase. ${escapeHTML(error.message||'')}</div></div>`;}
     }
     function setFeedSort(sort,button){activeFeedSort=sort;document.querySelectorAll('.feed-sort-tab').forEach(tab=>tab.classList.toggle('active',tab===button));applyFeedFilters();}
     function setFeedCategory(category,button){activeFeedCategory=category;document.querySelectorAll('.feed-category-tab').forEach(tab=>tab.classList.toggle('active',tab===button));applyFeedFilters();}
@@ -3843,13 +3909,40 @@
       },{threshold:.6});
       document.querySelectorAll('#hubContentBody .feed-post').forEach(card=>feedPostViewObserver.observe(card));
     }
+    function feedCommentsInOrder(comments,sort='newest'){
+      return [...(comments||[])].sort((a,b)=>sort==='oldest'?Date.parse(a.created_at)-Date.parse(b.created_at):Date.parse(b.created_at)-Date.parse(a.created_at));
+    }
+    function renderFeedCommentsInDialog(card){
+      const dialog=document.getElementById('feedCommentsDialog');if(!dialog||dialog.dataset.postId!==card?.id.replace(/^feed-post-/,''))return;
+      const comments=feedCommentsInOrder(card._feedComments||[],dialog.dataset.commentSort||'newest');
+      document.getElementById('feedCommentsDialogList').innerHTML=comments.map(row=>renderFeedComment(row,activeUser?.id,dialog.dataset.postId)).join('');
+      document.getElementById('feedCommentsTitle').textContent=`Comments (${Number(card.dataset.feedCommentCount??comments.length).toLocaleString()})`;
+    }
+    function sortFeedComments(sort){
+      const dialog=document.getElementById('feedCommentsDialog'),card=document.getElementById(`feed-post-${dialog?.dataset.postId}`);if(!dialog||!card)return;
+      dialog.dataset.commentSort=sort==='oldest'?'oldest':'newest';renderFeedCommentsInDialog(card);
+    }
+    async function refreshFeedComments(id){
+      const card=document.getElementById(`feed-post-${id}`),dialog=document.getElementById('feedCommentsDialog');if(!card||!supabaseClient)return;
+      const requestId=(Number(card.dataset.feedCommentsRequest)||0)+1;card.dataset.feedCommentsRequest=String(requestId);
+      const status=document.getElementById('feedCommentsDialogStatus');
+      try{
+        const {data,count,error}=await supabaseClient.from('feed_comments').select('id,post_id,user_id,display_name,body,created_at',{count:'exact'}).eq('post_id',id).order('created_at',{ascending:false}).limit(100);
+        if(error)throw error;
+        if(!document.getElementById(`feed-post-${id}`)||card.dataset.feedCommentsRequest!==String(requestId))return;
+        const comments=data||[];card.dataset.feedCommentCount=String(count??comments.length);setFeedCommentRows(card,comments,activeUser?.id);renderFeedCommentsInDialog(card);
+        if(dialog?.dataset.postId===String(id)&&status)status.textContent='';
+      }catch(error){if(card.dataset.feedCommentsRequest===String(requestId)&&dialog?.dataset.postId===String(id)&&status)status.textContent=`Could not load comments. ${error.message||''}`;}
+    }
     function openFeedComments(id){
       const card=document.getElementById(`feed-post-${id}`),dialog=document.getElementById('feedCommentsDialog');if(!card||!dialog)return;
-      dialog.dataset.postId=id;document.getElementById('feedCommentsTitle').textContent=`Comments (${card.querySelectorAll('.feed-comment').length})`;
-      document.getElementById('feedCommentsDialogList').innerHTML=card.querySelector('.feed-comments-list')?.innerHTML||'';
+      dialog.dataset.postId=id;dialog.dataset.commentSort='newest';document.getElementById('feedCommentsSort').value='newest';
+      document.getElementById('feedCommentsTitle').textContent=`Comments (${Number(card.dataset.feedCommentCount??card.querySelectorAll('.feed-comment').length).toLocaleString()})`;
+      document.getElementById('feedCommentsDialogList').innerHTML=feedCommentsInOrder(card._feedComments||[],dialog.dataset.commentSort).map(row=>renderFeedComment(row,activeUser?.id,id)).join('');
       document.getElementById('feedCommentsDialogStatus').textContent='';
       if(!dialog.open)dialog.showModal();
       dialog.querySelector('input[name="comment"]')?.focus({preventScroll:true});
+      void refreshFeedComments(id);
     }
     function closeFeedComments(){const dialog=document.getElementById('feedCommentsDialog');if(dialog?.open)dialog.close();}
     function wireFeedCreateForm(){
@@ -3885,30 +3978,42 @@
       const user=activeUser||result.data?.session?.user;if(!user){openAccountModal();return null;}return user;
     }
     async function toggleFeedLike(id,forceLike=false){
+      const card=document.getElementById(`feed-post-${id}`),button=card?.querySelector('.feed-post-actions .feed-action-button[onclick^="toggleFeedLike"]');if(!card||!button||card.dataset.feedLikePending==='true')return;
+      let previousCount=Number(card.dataset.feedLikes)||0;
       try{
         const user=await feedCurrentUser();if(!user)return;
-        const query=supabaseClient.from('feed_likes').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle(),{data:existing,error:queryError}=await query;if(queryError)throw queryError;
-        if(forceLike&&existing){feedAnimateHeart(id);return;}
-        const result=existing?await supabaseClient.from('feed_likes').delete().eq('post_id',id).eq('user_id',user.id):await supabaseClient.from('feed_likes').insert({post_id:id,user_id:user.id});
+        previousCount=Number(card.dataset.feedLikes)||0;
+        card.dataset.feedLikePending='true';button.disabled=true;
+        const {data:existing,error:findError}=await supabaseClient.from('feed_likes').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();if(findError)throw findError;
+        const wasLiked=Boolean(existing);if(forceLike&&wasLiked){feedAnimateHeart(id);return;}
+        const nextLiked=forceLike?true:!wasLiked,nextCount=Math.max(0,previousCount+(Number(nextLiked)-Number(wasLiked)));
+        const result=nextLiked?await supabaseClient.from('feed_likes').insert({post_id:id,user_id:user.id}):await supabaseClient.from('feed_likes').delete().eq('post_id',id).eq('user_id',user.id);
         if(result.error)throw result.error;
-        await loadHubFeed(document.getElementById('hubContentBody'));
+        setFeedLikeState(card,nextLiked);card.dataset.feedLikes=String(nextCount);
+        const countLabel=card.querySelector('.feed-likes-count');if(countLabel)countLabel.textContent=`${nextCount.toLocaleString()} Likes`;
         if(forceLike)feedAnimateHeart(id);
-      }catch(error){alert(`Could not update the like. ${error.message||''}`);}
+      }catch(error){
+        alert(`Could not update the like. ${error.message||''}`);
+      }finally{if(card){delete card.dataset.feedLikePending;const button=card.querySelector('.feed-post-actions .feed-action-button[onclick^="toggleFeedLike"]');if(button)button.disabled=false;}}
     }
     async function postFeedComment(event,id){
       event.preventDefault();const form=event.currentTarget,body=form.elements.comment.value.trim(),status=document.getElementById('feedCommentsDialogStatus'),button=form.querySelector('button[type="submit"]');if(!body)return;
-      try{const user=await feedCurrentUser();if(!user)return;button.disabled=true;const name=String(user.user_metadata?.full_name||user.user_metadata?.name||user.email?.split('@')[0]||'Shopper').slice(0,80);const {error}=await supabaseClient.from('feed_comments').insert({post_id:id,user_id:user.id,display_name:name,body});if(error)throw error;form.reset();await loadHubFeed(document.getElementById('hubContentBody'));openFeedComments(id);}
+      try{const user=await feedCurrentUser();if(!user)return;button.disabled=true;const name=String(user.user_metadata?.full_name||user.user_metadata?.name||user.email?.split('@')[0]||'Shopper').slice(0,80);const {data,error}=await supabaseClient.from('feed_comments').insert({post_id:id,user_id:user.id,display_name:name,body}).select('id,post_id,user_id,display_name,body,created_at').single();if(error)throw error;form.reset();const card=document.getElementById(`feed-post-${id}`);if(card){card._feedComments=[data,...(card._feedComments||[])];card.dataset.feedCommentCount=String((Number(card.dataset.feedCommentCount)||0)+1);setFeedCommentRows(card,card._feedComments,user.id);renderFeedCommentsInDialog(card);}if(status)status.textContent='';void refreshFeedComments(id);}
       catch(error){if(status)status.textContent=`Could not post your comment. ${error.message||''}`;}
       finally{button.disabled=false;}
     }
     async function deleteFeedComment(commentId,postId){
-      try{const user=await feedCurrentUser();if(!user)return;const {error}=await supabaseClient.from('feed_comments').delete().eq('id',commentId).eq('user_id',user.id);if(error)throw error;await loadHubFeed(document.getElementById('hubContentBody'));openFeedComments(postId);}
+      try{const user=await feedCurrentUser();if(!user)return;const {error}=await supabaseClient.from('feed_comments').delete().eq('id',commentId).eq('user_id',user.id);if(error)throw error;const card=document.getElementById(`feed-post-${postId}`);if(card){card._feedComments=(card._feedComments||[]).filter(comment=>String(comment.id)!==String(commentId));card.dataset.feedCommentCount=String(Math.max(0,(Number(card.dataset.feedCommentCount)||0)-1));setFeedCommentRows(card,card._feedComments,user.id);renderFeedCommentsInDialog(card);}void refreshFeedComments(postId);}
       catch(error){const status=document.getElementById('feedCommentsDialogStatus');if(status)status.textContent=`Could not delete the comment. ${error.message||''}`;}
     }
     async function toggleFeedSave(id){
-      try{const user=await feedCurrentUser();if(!user)return;const {data:existing,error:findError}=await supabaseClient.from('feed_saved').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();if(findError)throw findError;const result=existing?await supabaseClient.from('feed_saved').delete().eq('post_id',id).eq('user_id',user.id):await supabaseClient.from('feed_saved').insert({post_id:id,user_id:user.id});if(result.error)throw result.error;await loadHubFeed(document.getElementById('hubContentBody'));}
-      catch(error){alert(`Could not save this post. ${error.message||''}`);}
+      const card=document.getElementById(`feed-post-${id}`),button=card?.querySelector('.feed-action-button[onclick^="toggleFeedSave"]');if(!card||!button||card.dataset.feedSavePending==='true')return;
+      let previousSaved=button.classList.contains('is-saved');
+      try{const user=await feedCurrentUser();if(!user)return;previousSaved=button.classList.contains('is-saved');card.dataset.feedSavePending='true';button.disabled=true;const {data:existing,error:findError}=await supabaseClient.from('feed_saved').select('post_id').eq('post_id',id).eq('user_id',user.id).maybeSingle();if(findError)throw findError;const saved=Boolean(existing),nextSaved=!saved;const result=nextSaved?await supabaseClient.from('feed_saved').insert({post_id:id,user_id:user.id}):await supabaseClient.from('feed_saved').delete().eq('post_id',id).eq('user_id',user.id);if(result.error)throw result.error;setFeedSaveState(card,nextSaved);}
+      catch(error){if(card?.dataset.feedSavePending==='true')setFeedSaveState(card,previousSaved);alert(`Could not save this post. ${error.message||''}`);}
+      finally{if(card){delete card.dataset.feedSavePending;const button=card.querySelector('.feed-action-button[onclick^="toggleFeedSave"]');if(button)button.disabled=false;}}
     }
+    function insertFeedDialogEmoji(emoji){const input=document.querySelector('#feedCommentsDialog input[name="comment"]');if(input){input.value+=emoji;input.focus();}}
     function feedAnimateHeart(id){const heart=document.getElementById(`feed-post-${id}`)?.querySelector('[data-feed-heart]');if(heart){heart.classList.remove('show');void heart.offsetWidth;heart.classList.add('show');}}
     function focusFeedComment(id){openFeedComments(id);}
     function insertFeedEmoji(button){const input=button.closest('.feed-comment-form')?.elements.comment;if(input){input.value+=' 😊';input.focus();}}
