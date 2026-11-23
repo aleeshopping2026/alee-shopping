@@ -53,3 +53,10 @@ Product ranking hourly update
 `product-recommendations-schema.sql` එක දැන් ranking refresh එකක් කරයි. Supabase තුළ `pg_cron` extension එක enable කර තිබේ නම් hourly refresh එක schedule කරයි; extension එක නැත්නම් SQL Editor notice එක පෙන්වයි. එවිට Supabase Dashboard → Database → Extensions තුළ `pg_cron` enable කර `product-recommendations-schema.sql` නැවත වෙනම run කරන්න.
 
 මෙම site files static website hosting එකට upload කළාට Supabase SQL ස්වයංක්‍රීයව ධාවනය වෙන්නේ නැහැ. SQL Editor එකේ ඔබ වෙනම run කළ යුතුයි. Site ZIP එකේ `.sql` files සහ මේ guide එක ඇතුළත්.
+
+
+Homepage banner සහ product popup manager ගැන
+
+දැනටමත් භාවිත වන Supabase project එකට site-promotions-schema.sql එක පමණක් එක වරක් SQL Editor එකෙන් run කරන්න. මුළු SQL run order එක නැවත ධාවනය කරන්න අවශ්‍ය නැහැ. මෙම file එක public promotions table එක සහ admin Gmail දෙකට පමණක් upload/edit/delete අවසර ඇති media bucket එක සකසයි.
+
+ඉන්පසු Homepage Banner Manager හෝ Product Popup Manager එකෙන් media එක add කළාම, අනුපිළිවෙළ වෙනස් කළාම, හෝ delete කළාම Supabase එකටම save වෙනවා. ZIP download කරලා GitHub එකට නැවත upload කිරීම අවශ්‍ය නැහැ.

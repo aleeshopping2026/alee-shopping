@@ -4137,9 +4137,10 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       return `<a class="hero-slide" href="${safeLink}" ${external ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="Open banner link">${media}</a>`;
     }
     function renderActiveBanner() {
-      if (!bannerList.length) return;
+      if (!bannerList.length) { heroTrack.replaceChildren(); heroDots.replaceChildren(); heroDots.hidden = true; return; }
       heroTrack.innerHTML = bannerSlideMarkup(bannerList[activeBannerIndex], activeBannerIndex);
       heroDots.innerHTML = `<span class="hero-counter" aria-live="polite">${activeBannerIndex + 1} / ${bannerList.length}</span>`;
+      heroDots.hidden = bannerList.length < 2;
       const video = heroTrack.querySelector('video');
       if (video) video.play().catch(() => {});
     }
@@ -5875,6 +5876,27 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       if(productPopupAdTimer){clearInterval(productPopupAdTimer);productPopupAdTimer=null;}
       const slot=document.getElementById('productPopupAdSlot');if(slot){slot.classList.remove('show');slot.replaceChildren();}
     }
+
+    async function loadSitePromotions() {
+      if(!supabaseClient)return;
+      try {
+        const {data,error}=await supabaseClient.from('site_promotions').select('placement,media_type,media_url,title,alt,link,sort_order').order('sort_order',{ascending:true}).order('created_at',{ascending:true}).limit(2000);
+        if(error)throw error;
+        const toAd=row=>{const entry={title:row.title||'',alt:row.alt||row.title||'',link:row.link||''};entry[row.media_type==='video'?'video':'image']=row.media_url;return entry;};
+        const homepage=(data||[]).filter(row=>row.placement==='homepage').map(toAd);
+        const productAds=(data||[]).filter(row=>row.placement==='product_popup').map(toAd);
+        bannerList.splice(0,bannerList.length,...homepage);
+        productPopupAds.splice(0,productPopupAds.length,...productAds);
+        activeBannerIndex=0;
+        chooseUnseenBannerFor(activeUser);
+        heroDots.hidden=bannerList.length<2;
+        activeProductPopupAdIndex=0;
+        if(document.getElementById('productPopup')?.style.display==='block'&&productPopupAds.length)startProductPopupAds();
+      } catch(error) {
+        console.info('Using the bundled site promotions until the promotions schema is available.',error?.message||error);
+      }
+    }
+    loadSitePromotions();
 
     async function shareProductFromPopup(){
       const product=activeGalleryProduct;if(!product)return;
