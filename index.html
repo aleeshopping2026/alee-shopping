@@ -95,6 +95,9 @@
     .account-form.active { display:block; }
     .account-form input { width:100%; padding:12px; margin:0 0 10px; border:1px solid var(--glass-border); border-radius:10px; background:var(--bg-dark); color:var(--text-white); font:inherit; }
     .account-form .btn { width:100%; }
+    #accountModal .account-tabs[hidden],#accountModal .account-card>.btn[hidden]{display:none!important}
+    #accountModal .account-helper{margin:-2px 0 10px;color:#747982;font-size:11px;line-height:1.45}
+    #accountPasswordMenu[hidden],#mobileAccountPassword[hidden]{display:none!important}
     .account-tabs { display:flex; gap:8px; margin-bottom:15px; }
     .account-tab { flex:1; padding:10px; border:1px solid var(--glass-border); background:var(--bg-dark); color:var(--text-white); border-radius:10px; cursor:pointer; font-weight:700; }
     .account-tab.active { background:var(--light-leaf); color:#fff; border-color:var(--light-leaf); }
@@ -192,6 +195,7 @@
       padding: 10px 15px; font-size: 12px; color: var(--text-white); cursor: pointer;
       display: flex; align-items: center; gap: 8px; transition: 0.2s;
     }
+    .dropdown-item[hidden],.mobile-sheet-action[hidden]{display:none!important}
     .dropdown-item:hover { background: rgba(249, 115, 22, 0.15); color: var(--light-leaf); }
     .dropdown-item i { font-size: 13px; }
 
@@ -1648,21 +1652,27 @@
     <div class="account-card">
       <button type="button" class="account-close" onclick="closeAccountModal()" aria-label="Close sign in">&times;</button>
       <h2>aleeshopping</h2>
-      <div class="account-note">Sign in with Google or email.</div>
-      <button class="btn" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
-      <div class="account-tabs" role="tablist" aria-label="Account access">
+      <div class="account-note" id="accountNote">Sign in with Google or email.</div>
+      <button class="btn" id="accountGoogleButton" type="button" onclick="signInWithGoogle()" style="margin:0 0 14px"><i class="fa-brands fa-google"></i> Continue with Google</button>
+      <div class="account-tabs" id="accountTabs" role="tablist" aria-label="Account access">
         <button class="account-tab active" id="signInTab" type="button" onclick="showAccountForm('signin')">Sign In</button>
         <button class="account-tab" id="signUpTab" type="button" onclick="showAccountForm('signup')">Create Account</button>
       </div>
       <form id="signInForm" class="account-form active" onsubmit="signInWithEmail(event)">
         <input id="signInEmail" type="email" placeholder="Email address" autocomplete="email" required>
         <input id="signInPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+        <div class="account-helper">Use your ALEE password here. Your Google password is only entered on Google's sign-in page.</div>
         <button class="btn" type="submit">Sign In</button>
       </form>
       <form id="signUpForm" class="account-form" onsubmit="signUpWithEmail(event)">
         <input id="signUpEmail" type="email" placeholder="Email address" autocomplete="email" required>
         <input id="signUpPassword" type="password" placeholder="Create a password (at least 6 characters)" autocomplete="new-password" minlength="6" required>
         <button class="btn" type="submit">Create Account</button>
+      </form>
+      <form id="setPasswordForm" class="account-form" onsubmit="saveAccountPassword(event)">
+        <input id="accountNewPassword" type="password" placeholder="Create an ALEE password (at least 8 characters)" autocomplete="new-password" minlength="8" required>
+        <input id="accountConfirmPassword" type="password" placeholder="Confirm ALEE password" autocomplete="new-password" minlength="8" required>
+        <button class="btn" id="saveAccountPasswordButton" type="submit">Save Password</button>
       </form>
       <div class="account-status" id="accountStatus" role="status" aria-live="polite"></div>
     </div>
@@ -1704,6 +1714,7 @@
           <div class="dropdown-item" onclick="switchAccountSurface()"><i class="fa-solid fa-repeat"></i> Switch profile</div>
           <div class="dropdown-item" id="accountDeleteShopMenu" onclick="deleteSellerShop()" hidden style="color:#ef4444"><i class="fa-solid fa-trash"></i> Delete Shop</div>
           <div class="dropdown-item" onclick="editAccountDetails()"><i class="fa-solid fa-user-pen"></i> Edit Details</div>
+          <div class="dropdown-item" id="accountPasswordMenu" onclick="openAccountPasswordSetup()" hidden><i class="fa-solid fa-key"></i> Set Password</div>
           <div class="dropdown-item" id="accountSignInMenu" onclick="openAccountModal()">
             <i class="fa-solid fa-right-to-bracket"></i> Sign In / Create Account
           </div>
@@ -1954,6 +1965,7 @@
         <h2 id="mobileAccountTitle">My Account</h2>
         <div class="mobile-account-email" id="mobileAccountEmail"></div>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openBuyerAccount()"><i class="fa-solid fa-user"></i> My Profile</button>
+        <button type="button" class="mobile-sheet-action" id="mobileAccountPassword" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountPasswordSetup()" hidden><i class="fa-solid fa-key"></i> Set Password</button>
         <button type="button" class="mobile-sheet-action" id="mobileBannerAdsButton" style="display:none" onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountManagerPage('banner-ads.html')"><i class="fa-solid fa-bullhorn"></i> Banner Ads</button>
         <button type="button" class="mobile-sheet-action" id="mobileSponsoredProductsManagerButton" hidden onclick="closeMobileSheet('mobileAccountSheet',false,true);openAccountManagerPage('sponsored-products-manager.html')"><i class="fa-solid fa-rectangle-ad"></i> Sponsored Products Manager</button>
         <button type="button" class="mobile-sheet-action" onclick="closeMobileSheet('mobileAccountSheet',false,true);openMyAds()"><i class="fa-solid fa-rectangle-ad"></i> My Ads</button>
@@ -3261,10 +3273,18 @@
 
     function showAccountForm(mode) {
       const signIn = mode === 'signin';
+      const signUp = mode === 'signup';
+      const setPassword = mode === 'password';
       document.getElementById('signInForm').classList.toggle('active', signIn);
-      document.getElementById('signUpForm').classList.toggle('active', mode === 'signup');
+      document.getElementById('signUpForm').classList.toggle('active', signUp);
+      document.getElementById('setPasswordForm').classList.toggle('active', setPassword);
+      document.getElementById('accountTabs').hidden = setPassword;
+      document.getElementById('accountGoogleButton').hidden = setPassword;
       document.getElementById('signInTab').classList.toggle('active', signIn);
-      document.getElementById('signUpTab').classList.toggle('active', mode === 'signup');
+      document.getElementById('signUpTab').classList.toggle('active', signUp);
+      document.getElementById('accountNote').textContent = setPassword
+        ? 'Create a separate ALEE password. Then use this Gmail and that password to sign in from any device.'
+        : 'Sign in with Google or email.';
       document.getElementById('accountStatus').textContent = '';
     }
 
@@ -3275,6 +3295,19 @@
       document.getElementById('accountModal').setAttribute('aria-hidden', 'false');
       showAccountForm('signin');
       if (!supabaseClient) document.getElementById('accountStatus').textContent = 'Online sign-in is not configured yet. See SETUP.txt in the project folder.';
+    }
+
+    function openAccountPasswordSetup() {
+      document.getElementById('profileDropdown').classList.remove('show');
+      if (!activeUser) {
+        openAccountModal();
+        document.getElementById('accountStatus').textContent = 'Sign in with Google first, then choose Set Password from your account menu.';
+        return;
+      }
+      document.getElementById('accountModal').classList.add('show');
+      pushAppUiLayer('accountModal',fromHistory=>closeAccountModal(fromHistory),()=>document.getElementById('accountModal').classList.add('show'));
+      document.getElementById('accountModal').setAttribute('aria-hidden', 'false');
+      showAccountForm('password');
     }
 
     function closeAccountModal(fromHistory=false,preserveHistory=false) {
@@ -3297,7 +3330,7 @@
         return 'This email may already have an account. Try Sign In, or use Continue with Google if you originally registered with Google.';
       }
       if (action === 'signin') {
-        return 'Could not sign in. Check the email and password, confirm your email address, or use Continue with Google if that is how you registered.' + (message ? ` Details: ${message}` : '');
+        return 'Could not sign in. If you first registered with Google, sign in with Google on a device where that account is available, then choose Set Password from the account menu. Use that separate ALEE password here.' + (message ? ` Details: ${message}` : '');
       }
       return 'Could not create the account.' + (message ? ` Details: ${message}` : ' Check the email and password, then try again.');
     }
@@ -3340,11 +3373,43 @@
           closeAccountModal();
           await loadSellerCatalog();
           ensurePrivateAccountProfile();
+        } else if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          status.textContent = 'This email may already be registered. If it uses Google sign-in, choose Continue with Google, then Set Password from the account menu.';
         } else {
           status.textContent = 'Account created. Check your email and confirm your account before signing in.';
         }
       } catch (err) {
         status.textContent = getEmailAuthErrorMessage(err, 'signup');
+      } finally { button.disabled = false; }
+    }
+
+    async function saveAccountPassword(event) {
+      event.preventDefault();
+      const status = document.getElementById('accountStatus');
+      const button = document.getElementById('saveAccountPasswordButton');
+      const password = document.getElementById('accountNewPassword').value;
+      const confirmation = document.getElementById('accountConfirmPassword').value;
+      if (!supabaseClient || !activeUser) {
+        status.textContent = 'Sign in with Google first, then set your ALEE password.';
+        return;
+      }
+      if (password.length < 8) {
+        status.textContent = 'Choose a password with at least 8 characters.';
+        return;
+      }
+      if (password !== confirmation) {
+        status.textContent = 'The passwords do not match. Please enter them again.';
+        return;
+      }
+      button.disabled = true;
+      status.textContent = 'Saving your ALEE password...';
+      try {
+        const { error } = await supabaseClient.auth.updateUser({ password });
+        if (error) throw error;
+        document.getElementById('setPasswordForm').reset();
+        status.textContent = 'Password saved. On another device, choose Sign In and enter this Gmail with your new ALEE password.';
+      } catch (err) {
+        status.textContent = 'Could not save the password. Please sign in with Google again and retry.' + (err?.message ? ` Details: ${err.message}` : '');
       } finally { button.disabled = false; }
     }
 
@@ -3377,6 +3442,8 @@
       badge.classList.toggle('guest', !user);
       if(identityChanged)window.setTimeout(()=>refreshAccountShopActions(),0);
       document.getElementById('accountSignInMenu').hidden=Boolean(user);
+      document.getElementById('accountPasswordMenu').hidden=!user;
+      document.getElementById('mobileAccountPassword').hidden=!user;
       document.getElementById('mobileAccountEmail').textContent=user?.email||'';
       document.getElementById('mobileAccountSignIn').hidden=Boolean(user);document.getElementById('mobileAccountLogout').hidden=!user;
       if(!user){document.getElementById('accountProfileSetup').classList.remove('show');document.getElementById('accountDeleteShopMenu').hidden=true;document.getElementById('mobileDeleteShopMenu').hidden=true;}
@@ -3425,8 +3492,10 @@
           window.setTimeout(()=>{
             setLoggedInUser(session?.user || null);
             if (session?.user) {
-              closeAccountModal();
-              if(event==='SIGNED_IN')ensurePrivateAccountProfile();
+              if(event==='SIGNED_IN'){
+                closeAccountModal();
+                ensurePrivateAccountProfile();
+              }
             } else {privateAccountProfile=null;document.getElementById('accountProfileSetup').classList.remove('show');}
             loadSellerCatalog();
           },0);
