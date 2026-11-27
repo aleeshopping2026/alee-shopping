@@ -5970,9 +5970,16 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       input.focus();
     }
 
+    function safePublicImageUrl(value) {
+      try {
+        const url = new URL(String(value || ''), location.href);
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : 'assets/alee-logo.png';
+      } catch (_) { return 'assets/alee-logo.png'; }
+    }
+
     function makeImage(url, cls='') {
-      const safe = String(url).replace(/\"/g,'&quot;');
-      return `<img class="${cls}" src="${safe}" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`;
+      const safe = escapeHTML(safePublicImageUrl(url));
+      return `<img class="${escapeHTML(cls)}" src="${safe}" loading="lazy" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`;
     }
 
     let activeProductPopupAdIndex=0;
@@ -6197,7 +6204,7 @@ function openReviewPhotoChooser(){const chooser=document.getElementById('reviewP
       const images = (activeGalleryProduct.images || []).slice(0, 20);
       const slider = document.getElementById('popupSlider');
       const thumbs = document.getElementById('popupThumbs');
-      slider.innerHTML = images.map((img,i) => `<img src="${img}" loading="${i===activeGalleryIndex?'eager':'lazy'}" decoding="async" alt="${activeGalleryProduct.name} photo ${i+1}" onclick="openImageZoom(${i},event)" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`).join('');
+      slider.innerHTML = images.map((img,i) => `<img src="${escapeHTML(safePublicImageUrl(img))}" loading="${i===activeGalleryIndex?'eager':'lazy'}" decoding="async" alt="${escapeHTML(activeGalleryProduct.name)} photo ${i+1}" onclick="openImageZoom(${i},event)" onerror="this.onerror=null;this.src='assets/alee-logo.png'">`).join('');
       thumbs.innerHTML = images.map((img,i) => `<button class="thumb ${i===activeGalleryIndex?'active':''}" onclick="goToGallery(${i},event)">${makeImage(img)}</button>`).join('');
       requestAnimationFrame(() => {
         const slide = slider.children[activeGalleryIndex];
