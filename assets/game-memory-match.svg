@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-labelledby="title">
+  <title id="title">Memory Match</title>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#282c46"/><stop offset="1" stop-color="#5550a8"/></linearGradient></defs>
+  <rect width="480" height="320" rx="28" fill="url(#bg)"/>
+  <g transform="translate(98 48)" font-family="Arial,sans-serif" font-size="50" text-anchor="middle">
+    <rect x="0" y="0" width="112" height="104" rx="20" fill="#fff"/><text x="56" y="70">👜</text>
+    <rect x="132" y="0" width="112" height="104" rx="20" fill="#ffdfbd"/><text x="188" y="70">👟</text>
+    <rect x="264" y="0" width="112" height="104" rx="20" fill="#fff"/><text x="320" y="70">👜</text>
+    <rect x="0" y="120" width="112" height="104" rx="20" fill="#ffdfbd"/><text x="56" y="190">🎧</text>
+    <rect x="132" y="120" width="112" height="104" rx="20" fill="#fff"/><text x="188" y="190">✨</text>
+    <rect x="264" y="120" width="112" height="104" rx="20" fill="#ffdfbd"/><text x="320" y="190">🎧</text>
+  </g>
+  <text x="240" y="300" fill="#fff" font-family="Arial,sans-serif" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="3">ALEE · MEMORY MATCH</text>
+</svg>

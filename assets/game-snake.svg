@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-labelledby="title">
+  <title id="title">Snake Dash</title>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#102c2d"/><stop offset="1" stop-color="#176c54"/></linearGradient></defs>
+  <rect width="480" height="320" rx="28" fill="url(#bg)"/>
+  <g fill="#b6f36a"><rect x="112" y="80" width="58" height="58" rx="16"/><rect x="176" y="80" width="58" height="58" rx="16"/><rect x="240" y="80" width="58" height="58" rx="16"/><rect x="304" y="80" width="58" height="58" rx="16"/><rect x="304" y="144" width="58" height="58" rx="16"/><rect x="240" y="144" width="58" height="58" rx="16"/><rect x="176" y="144" width="58" height="58" rx="16"/></g>
+  <circle cx="135" cy="223" r="20" fill="#ff7e54"/><circle cx="128" cy="216" r="5" fill="#fff"/>
+  <text x="240" y="284" fill="#fff" font-family="Arial,sans-serif" font-size="23" font-weight="700" text-anchor="middle" letter-spacing="4">ALEE · SNAKE DASH</text>
+</svg>

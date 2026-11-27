@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f4ff">
+  <title>Memory Match · ALEE Games</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#272438;background:#f6f4ff;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 16px 36px;background:radial-gradient(circle at 90% 0,#e7ddff 0,transparent 26rem),#f6f4ff}.wrap{width:min(100%,520px);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}.back{color:#5c5572;text-decoration:none;font-weight:700}.brand{color:#f26322;font-size:13px;font-weight:900;letter-spacing:.18em}.intro{text-align:center}.intro h1{margin:0;font-size:clamp(34px,9vw,52px);letter-spacing:-.055em}.intro p{margin:8px 0 22px;color:#77738a}.stats{display:flex;justify-content:center;gap:10px;margin-bottom:18px}.stat{min-width:90px;padding:9px 16px;border:1px solid #e4e0f2;border-radius:14px;background:#fff}.stat small{display:block;color:#858097;font-size:10px;font-weight:800;letter-spacing:.12em}.stat strong{font-size:20px}.restart{border:0;border-radius:12px;padding:11px 18px;background:#5b54ad;color:#fff;font-weight:800;cursor:pointer}.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:440px;margin:18px auto 0;perspective:900px}.card{position:relative;aspect-ratio:1;border:0;padding:0;background:transparent;cursor:pointer;transform-style:preserve-3d;transition:transform .35s;touch-action:manipulation}.card.flip{transform:rotateY(180deg)}.face{position:absolute;inset:0;display:grid;place-items:center;border-radius:17px;backface-visibility:hidden;box-shadow:0 5px 14px #39316512}.back-face{background:linear-gradient(145deg,#6d63c8,#4b469f);color:#fff;font-size:clamp(24px,7vw,38px);font-weight:900}.front-face{transform:rotateY(180deg);border:1px solid #e5e1f4;background:#fff;font-size:clamp(31px,10vw,55px)}.card.matched .front-face{background:#e8faee;border-color:#b4e6c1}.status{min-height:30px;margin:14px 0 0;color:#625c78;text-align:center;font-weight:700}.help{text-align:center;color:#928da2;font-size:12px}@media(max-width:390px){.board{gap:7px}.face{border-radius:13px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top"><a class="back" href="../index.html">← Back to ALEE Shopping</a><span class="brand">ALEE GAMES</span></nav>
+    <header class="intro"><h1>Memory Match</h1><p>Find all 8 matching pairs.</p></header>
+    <section class="stats" aria-label="Game stats"><div class="stat"><small>MOVES</small><strong id="moves">0</strong></div><div class="stat"><small>TIME</small><strong id="time">00:00</strong></div><button class="restart" id="restart" type="button">Restart</button></section>
+    <section class="board" id="board" aria-label="Memory match cards"></section>
+    <p class="status" id="status" aria-live="polite">Tap a card to begin.</p><p class="help">Made for a quick, fun brain break ✨</p>
+  </main>
+  <script>
+  (()=>{
+    const icons=['👜','👟','🕶️','👗','🎧','🎒','💄','🧢'],boardEl=document.getElementById('board'),movesEl=document.getElementById('moves'),timeEl=document.getElementById('time'),statusEl=document.getElementById('status');
+    let first=null,locked=false,moves=0,matched=0,seconds=0,timer=null;
+    function timeLabel(value){return`${String(Math.floor(value/60)).padStart(2,'0')}:${String(value%60).padStart(2,'0')}`}
+    function startTimer(){if(timer)return;timer=setInterval(()=>{seconds++;timeEl.textContent=timeLabel(seconds)},1000)}
+    function reset(){clearInterval(timer);timer=null;first=null;locked=false;moves=0;matched=0;seconds=0;movesEl.textContent='0';timeEl.textContent='00:00';statusEl.textContent='Tap a card to begin.';const deck=[...icons,...icons].map((icon,index)=>({icon,id:index})).sort(()=>Math.random()-.5);boardEl.innerHTML='';deck.forEach((item,index)=>{const button=document.createElement('button');button.type='button';button.className='card';button.dataset.icon=item.icon;button.dataset.index=index;button.setAttribute('aria-label',`Card ${index+1}, face down`);button.innerHTML=`<span class="face back-face" aria-hidden="true">?</span><span class="face front-face" aria-hidden="true">${item.icon}</span>`;button.addEventListener('click',()=>flip(button));boardEl.append(button)})}
+    function flip(card){if(locked||card.classList.contains('flip')||card.classList.contains('matched'))return;startTimer();card.classList.add('flip');card.setAttribute('aria-label',`Card ${Number(card.dataset.index)+1}, ${card.dataset.icon}`);if(!first){first=card;statusEl.textContent='Choose another card.';return}moves++;movesEl.textContent=String(moves);if(first.dataset.icon===card.dataset.icon){first.classList.add('matched');card.classList.add('matched');first.setAttribute('aria-label',`Matched ${first.dataset.icon}`);card.setAttribute('aria-label',`Matched ${card.dataset.icon}`);first=null;matched+=2;if(matched===16){clearInterval(timer);timer=null;statusEl.textContent=`You matched them all in ${moves} moves and ${timeLabel(seconds)}! 🎉`}else statusEl.textContent='Match! Find another pair.';return}locked=true;statusEl.textContent='Not a match. Try to remember them!';const previous=first;first=null;setTimeout(()=>{for(const item of [previous,card]){item.classList.remove('flip');item.setAttribute('aria-label',`Card ${Number(item.dataset.index)+1}, face down`)}locked=false},850)}
+    document.getElementById('restart').addEventListener('click',reset);reset();
+  })();
+  </script>
+</body>
+</html>
