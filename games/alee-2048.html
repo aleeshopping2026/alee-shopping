@@ -5,20 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff7ef">
   <title>2048 ALEE Tiles</title>
+  <link rel="stylesheet" href="../game-coins.css">
   <style>
     :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#24232a;background:#fff7ef;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 16px 36px;background:radial-gradient(circle at 50% 0,#ffe6ce 0,transparent 34rem),#fff7ef}.wrap{width:min(100%,520px);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.back{color:#594b43;text-decoration:none;font-weight:700}.brand{font-size:13px;font-weight:900;letter-spacing:.18em;color:#f26322}.hero{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:16px}.hero h1{font-size:clamp(42px,12vw,68px);line-height:.9;letter-spacing:-.07em;margin:0;color:#33271f}.hero p{margin:10px 0 0;color:#76685f;font-size:14px}.scores{display:flex;gap:8px}.score{min-width:76px;padding:8px 12px;border-radius:14px;background:#f2e2d4;text-align:center}.score span{display:block;color:#8b7768;font-size:10px;font-weight:800;letter-spacing:.12em}.score b{font-size:20px;color:#4d392b}.toolbar{display:flex;justify-content:space-between;align-items:center;margin:14px 0}.hint{color:#77665a;font-size:13px}.restart{border:0;border-radius:12px;padding:10px 15px;background:#f26322;color:#fff;font-weight:800;cursor:pointer}.board{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:10px;border-radius:18px;background:#cbb8a7;touch-action:none;user-select:none}.cell{display:grid;place-items:center;aspect-ratio:1;border-radius:12px;background:#e8dacc;color:#403329;font-size:clamp(27px,9vw,48px);font-weight:900;letter-spacing:-.06em}.cell.v2{background:#fff7ed}.cell.v4{background:#ffead2}.cell.v8{background:#ffbd73;color:#fff}.cell.v16{background:#ff9c50;color:#fff}.cell.v32{background:#f8793c;color:#fff}.cell.v64{background:#ed5a31;color:#fff}.cell.high{background:#564c8a;color:#fff;font-size:clamp(21px,7vw,36px)}.message{min-height:28px;padding-top:12px;color:#594c42;font-weight:700;text-align:center}.controls{display:grid;grid-template-columns:repeat(3,56px);gap:7px;justify-content:center;margin:8px auto 0}.controls button{width:56px;height:48px;border:1px solid #ead6c4;border-radius:13px;background:#fff;color:#51443a;font-size:21px;font-weight:900;touch-action:manipulation}.controls button:active,.restart:active{transform:scale(.96)}.controls .empty{visibility:hidden}.foot{margin:18px 0 0;text-align:center;font-size:12px;color:#938278}@media(min-width:600px){body{padding-top:36px}.board{gap:12px;padding:12px}.cell{border-radius:16px}}
   </style>
 </head>
-<body>
+<body data-game-key="alee_2048">
   <main class="wrap">
     <nav class="top"><a class="back" href="../index.html">← Back to ALEE Shopping</a><span class="brand">ALEE GAMES</span></nav>
     <section class="hero"><div><h1>2048</h1><p>Merge matching tiles. Reach 2048!</p></div><div class="scores"><div class="score"><span>SCORE</span><b id="score">0</b></div><div class="score"><span>BEST</span><b id="best">0</b></div></div></section>
     <div class="toolbar"><span class="hint">Use arrow keys, WASD, or swipe</span><button class="restart" id="restart" type="button">New game</button></div>
     <div class="board" id="board" role="grid" aria-label="2048 game board"></div>
     <div class="message" id="message" aria-live="polite">Join the tiles and make 2048.</div>
+    <section class="game-coin-wallet" aria-label="ALEE game coins"><div><strong>🪙 ALEE Coins</strong><b id="coinBalance">—</b></div><a id="coinLogin" href="../index.html" hidden>Sign in to save coins</a><p id="coinStatus" role="status" aria-live="polite">Checking your account…</p></section>
     <div class="controls" aria-label="Touch controls"><span class="empty"></span><button type="button" data-dir="up" aria-label="Move up">↑</button><span class="empty"></span><button type="button" data-dir="left" aria-label="Move left">←</button><button type="button" data-dir="down" aria-label="Move down">↓</button><button type="button" data-dir="right" aria-label="Move right">→</button></div>
     <p class="foot">A little ALEE brain break ✨</p>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../backend-config.js"></script>
+  <script src="../game-coins.js"></script>
   <script>
   (()=>{
     const boardEl=document.getElementById('board'),scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),messageEl=document.getElementById('message');
@@ -32,7 +37,7 @@
     function canMove(){for(let i=0;i<16;i++){if(!board[i])return true;const r=Math.floor(i/4),c=i%4;if(c<3&&board[i]===board[i+1]||r<3&&board[i]===board[i+4])return true}return false;}
     function move(direction){if(over)return;const before=board.join(','),lines=[];for(let n=0;n<4;n++){const line=[];for(let p=0;p<4;p++){const row=direction==='up'?p:direction==='down'?3-p:n;const col=direction==='left'?p:direction==='right'?3-p:n;line.push(row*4+col)}lines.push(line)}
       for(const line of lines){const values=line.map(index=>board[index]).filter(Boolean),merged=[];for(let i=0;i<values.length;i++){if(values[i]===values[i+1]){merged.push(values[i]*2);score+=values[i]*2;i++}else merged.push(values[i])}line.forEach((index,i)=>board[index]=merged[i]||0)}
-      if(before===board.join(','))return;addTile();if(score>getBest())saveBest(score);if(!won&&board.includes(2048)){won=true;messageEl.textContent='2048! Brilliant. Keep playing or start a new game.'}else if(!canMove()){over=true;messageEl.textContent='No moves left. Tap New game to try again.'}else if(!won){messageEl.textContent=''}draw();
+      if(before===board.join(','))return;addTile();if(score>getBest())saveBest(score);if(!won&&board.includes(2048)){won=true;messageEl.textContent='2048! Brilliant. Keep playing or start a new game.';window.aleeGameCoins?.claim()}else if(!canMove()){over=true;messageEl.textContent='No moves left. Tap New game to try again.'}else if(!won){messageEl.textContent=''}draw();
     }
     const dirs={ArrowUp:'up',w:'up',W:'up',ArrowDown:'down',s:'down',S:'down',ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right'};
     document.addEventListener('keydown',event=>{const direction=dirs[event.key];if(direction){event.preventDefault();move(direction)}});

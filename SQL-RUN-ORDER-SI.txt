@@ -28,6 +28,7 @@ ALEE SHOPPING — Supabase SQL ගොනු ධාවනය කරන පිළ�
 24. shop-directory-order-schema.sql — Shop directory order manager.
 25. banner-pricing-schema.sql — Host-managed banner ad prices.
 26. alee-push-schema.sql — OneSignal subscriptions සහ chat push dispatch. Seller chat සහ group chat පසුව.
+27. game-coins-schema.sql — Signed-in users සඳහා game coin balance සහ දිනකට එක් game එකකට එක් coin reward එක. වෙනත් schema එකකට dependency නැත; ක්‍රීඩකයන්ගේ coins Supabase එකේ save කිරීමට අවශ්‍යයි.
 27. buyer-orders-history-schema.sql — Shopper කෙනෙකුට තමන්ගේ Cart orders සහ Pending/Order History පෙන්වීමට අවසර. seller-orders-schema.sql පසුව.
 28. seller-product-notifications-schema.sql — Shop එකට අලුත් item එකක් දැම්මම ALEE Messages inbox එකට copy එකක් යවන RPC එක. seller-marketplace-schema.sql, seller-chat-schema.sql සහ seller-group-chat-schema.sql පසුව.
 29. seller-shop-access-admin-schema.sql — Adminට පමණක් shop owner Gmail පෙන්වීම සහ shop lock/unlock කිරීම. Lock කළ shop එකේ items, Feed posts, jobs සහ අලුත් orders ද public site එකෙන් සඟවා අලුත් කිරීම නවත්වයි. Seller marketplace, orders, listing options, product recommendations, verified badges, seller dashboard profile, platform posts සහ Feed SQL දැනටමත් run කර තිබිය යුතුයි.
